@@ -49,8 +49,21 @@ detect_distro() {
     log_info "توزیع شناسایی شده: ${PRETTY_NAME:-$DISTRO_ID}"
 }
 
+check_docker_installed() {
+    if command -v docker &> /dev/null && (docker compose version &> /dev/null || command -v docker-compose &> /dev/null); then
+        return 0
+    else
+        return 1
+    fi
+}
+
 # Distro-specific Installation Functions
 install_debian_ubuntu() {
+    if check_docker_installed; then
+        log_warn "داکر و داکر کامپوز قبلاً نصب شده‌اند. از مراحل نصب صرف‌نظر شد."
+        return
+    fi
+
     log_info "در حال حذف نسخه‌های قدیمی احتمالی داکر..."
     sudo apt-get remove -y docker docker-engine docker.io containerd runc &> /dev/null || true
 
@@ -73,13 +86,17 @@ install_debian_ubuntu() {
       ${CODENAME} stable" | \
       sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-
     log_info "نصب Docker Engine و Docker Compose Plugin..."
     sudo apt-get update -y
     sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 }
 
 install_arch_garuda() {
+    if check_docker_installed; then
+        log_warn "داکر و داکر کامپوز قبلاً نصب شده‌اند. از مراحل نصب صرف‌نظر شد."
+        return
+    fi
+
     log_info "به‌روزرسانی مخازن و نصب داکر و داکر کامپوز..."
     sudo pacman -Syu --noconfirm docker docker-compose openssl
 
@@ -88,6 +105,11 @@ install_arch_garuda() {
 }
 
 install_fedora_rhel() {
+    if check_docker_installed; then
+        log_warn "داکر و داکر کامپوز قبلاً نصب شده‌اند. از مراحل نصب صرف‌نظر شد."
+        return
+    fi
+
     log_info "نصب پیش‌نیازها و افزودن مخزن رسمی داکر..."
     sudo dnf -y install dnf-plugins-core openssl
 
@@ -113,10 +135,14 @@ configure_user_group() {
         return
     fi
 
-    log_info "اضافه کردن کاربر '$TARGET_USER' به گروه docker..."
-    sudo groupadd docker &> /dev/null || true
-    sudo usermod -aG docker "$TARGET_USER"
-    log_success "کاربر '$TARGET_USER' با موفقیت به گروه docker اضافه شد."
+    if id -nG "$TARGET_USER" | grep -qw "docker"; then
+        log_warn "کاربر '$TARGET_USER' قبلاً عضو گروه docker بوده است."
+    else
+        log_info "اضافه کردن کاربر '$TARGET_USER' به گروه docker..."
+        sudo groupadd docker &> /dev/null || true
+        sudo usermod -aG docker "$TARGET_USER"
+        log_success "کاربر '$TARGET_USER' با موفقیت به گروه docker اضافه شد."
+    fi
 }
 
 # Dynamic Resource Calculation
@@ -166,6 +192,16 @@ generate_env_and_config() {
     echo -e "${CYAN}----------------------------------------------------${NC}"
     echo -e "${CYAN}  تنظیم اطلاعات پایگاه داده و امنیت Odoo            ${NC}"
     echo -e "${CYAN}----------------------------------------------------${NC}"
+
+    # Check for existing config files to prevent accidental overwrite
+    if [ -f .env ] || [ -f odoo.conf ]; then
+        log_warn "فایل‌های .env یا odoo.conf قبلاً وجود دارند."
+        read -p "آیا می‌خواهید آن‌ها را بازنویسی (Overwrite) کنید؟ (y/N): " overwrite_files
+        if [[ ! "$overwrite_files" =~ ^[Yy]$ ]]; then
+            log_info "ساخت فایل‌های پیکربندی لغو شد. فایل‌های موجود حفظ شدند."
+            return
+        fi
+    fi
 
     # Generate default random passwords
     RANDOM_PG_PASS=$(generate_random_password)
@@ -237,7 +273,7 @@ main() {
     detect_distro
 
     echo
-    read -p "آیا مایل به شروع فرآیند نصب داکر و تنظیمات هستید؟ (y/N): " confirm
+    read -p "آیا مایل به شروع فرآیند بررسی و نصب تنظیمات هستید؟ (y/N): " confirm
     if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
         log_warn "عملیات توسط کاربر لغو شد."
         exit 0
@@ -274,7 +310,7 @@ main() {
 
     echo
     echo -e "${GREEN}====================================================${NC}"
-    log_success "تمام پیش‌نیازها و فایل‌های پیکربندی با موفقیت ساخته شدند!"
+    log_success "بررسی و آماده‌سازی سیستم با موفقیت به پایان رسید!"
     echo -e "${GREEN}====================================================${NC}"
     echo
     log_warn "نکته مهم: برای اعمال دسترسی گروه داکر بدون خروج از سیستم، لایه جدیدی اجرا می‌شود."
