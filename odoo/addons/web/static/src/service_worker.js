@@ -2,7 +2,7 @@
 
 /* eslint-disable no-restricted-globals */
 const cacheName = "odoo-sw-cache";
-const homepageURL = "/odoo";
+const homepageURL = "/shaka";
 const offLineURL = `${homepageURL}/offline`;
 
 let sessionInfo = null;
@@ -106,7 +106,7 @@ const navigateOrDisplayOfflinePage = async (request) => {
 
 const serveShareTarget = (event) => {
     // Redirect so the user can refresh the page without resending data.
-    event.respondWith(Response.redirect("/odoo?share_target=trigger"));
+    event.respondWith(Response.redirect("/shaka?share_target=trigger"));
     event.waitUntil(
         (async () => {
             // The page sends this message to tell the service worker it's ready to receive the file.

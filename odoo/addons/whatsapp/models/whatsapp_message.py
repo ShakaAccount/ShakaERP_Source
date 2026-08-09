@@ -394,7 +394,7 @@ class WhatsappMessage(models.Model):
         else:
             if self.mail_message_id.model and self.mail_message_id.res_id:
                 record_name = self.mail_message_id.record_name
-                url = f"{self.get_base_url()}/odoo/{self.mail_message_id.model}/{self.mail_message_id.res_id}"
+                url = f"{self.get_base_url()}/shaka/{self.mail_message_id.model}/{self.mail_message_id.res_id}"
                 record_link = f"<a target='_blank' href='{url}'>{escape(record_name)}</a>"
             else:
                 record_link = _("another document")

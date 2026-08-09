@@ -6,6 +6,7 @@ import { useService } from "@web/core/utils/hooks";
 import { registry } from "@web/core/registry";
 import { debounce } from "@web/core/utils/timing";
 import { ErrorHandler } from "@web/core/utils/components";
+import { startUrl } from "@web/core/browser/router";
 
 import {
     Component,
@@ -208,7 +209,7 @@ export class NavBar extends Component {
     }
 
     getMenuItemHref(payload) {
-        return `/odoo/${payload.actionPath || "action-" + payload.actionID}`;
+        return `${startUrl()}/${payload.actionPath || "action-" + payload.actionID}`;
     }
 
     _closeAppMenuSidebar() {

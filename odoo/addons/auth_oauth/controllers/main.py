@@ -142,13 +142,13 @@ class OAuthController(http.Controller):
             action = state.get('a')
             menu = state.get('m')
             redirect = werkzeug.urls.url_unquote_plus(state['r']) if state.get('r') else False
-            url = '/odoo'
+            url = '/shaka'
             if redirect:
                 url = redirect
             elif action:
-                url = '/odoo/action-%s' % action
+                url = '/shaka/action-%s' % action
             elif menu:
-                url = '/odoo?menu_id=%s' % menu
+                url = '/shaka?menu_id=%s' % menu
 
             credential = {'login': login, 'token': key, 'type': 'oauth_token'}
             auth_info = request.session.authenticate(request.env, credential)

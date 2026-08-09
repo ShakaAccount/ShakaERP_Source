@@ -6,6 +6,8 @@
  * @param {Function} cb
  * @param {[Object]} [parents] the ancestors of the tree root, if any
  */
+import { startUrl } from "@web/core/browser/router";
+
 function traverseMenuTree(tree, cb, parents = []) {
     cb(tree, parents);
     tree.childrenTree.forEach((c) => traverseMenuTree(c, cb, parents.concat([tree])));
@@ -34,7 +36,7 @@ export function computeAppsAndMenuItems(menuTree) {
             id: menuItem.id,
             xmlid: menuItem.xmlid,
             actionID: menuItem.actionID,
-            href: `/odoo/${menuItem.actionPath || "action-" + menuItem.actionID}`,
+            href: `${startUrl()}/${menuItem.actionPath || "action-" + menuItem.actionID}`,
             appID: menuItem.appID,
         };
         if (isApp) {

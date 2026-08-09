@@ -222,7 +222,7 @@ class HrApplicant(models.Model):
                     gained=gained_points,
                     new_line=Markup('<br/>'),
                     total=available_points,
-                    link1=Markup('<a href="/odoo/action-hr_referral.action_hr_referral_reward?active_model=hr.referral.reward">'),
+                    link1=Markup('<a href="/shaka/action-hr_referral.action_hr_referral_reward?active_model=hr.referral.reward">'),
                     link2=Markup('</a>'),
                 )
             if new_state.use_in_referral:

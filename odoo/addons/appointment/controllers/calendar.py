@@ -34,7 +34,7 @@ class AppointmentCalendarController(CalendarController):
 
         # If user is internal and logged, redirect to form view of event
         if request.env.user._is_internal():
-            return request.redirect(f'/odoo/{attendee.event_id._name}/{id}?db={request.env.cr.dbname}')
+            return request.redirect(f'/shaka/{attendee.event_id._name}/{id}?db={request.env.cr.dbname}')
 
         request.session['timezone'] = attendee.partner_id.tz
         if not attendee.event_id.access_token:

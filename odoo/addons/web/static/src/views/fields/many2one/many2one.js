@@ -8,6 +8,7 @@ import { usePopover } from "@web/core/popover/popover_hook";
 import { evaluateBooleanExpr } from "@web/core/py_js/py";
 import { useService } from "@web/core/utils/hooks";
 import { getFieldDomain } from "@web/model/relational_model/utils";
+import { startUrl } from "@web/core/browser/router";
 import { Many2XAutocomplete, useOpenMany2XRecord } from "../relational_utils";
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -231,7 +232,7 @@ export class Many2One extends Component {
         const relation = this.props.relation.includes(".")
             ? this.props.relation
             : `m-${this.props.relation}`;
-        return `/odoo/${relation}/${this.props.value.id}`;
+        return `${startUrl()}/${relation}/${this.props.value.id}`;
     }
 
     async openBarcodeScanner() {
