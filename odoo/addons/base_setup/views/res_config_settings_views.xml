@@ -199,7 +199,7 @@
                         <widget name='res_config_dev_tool'/>
                         <div id='about'>
                             <block title="About" name="about_setting_container">
-                                <widget name='res_config_edition'/>
+                                <div class="d-none"><widget name='res_config_edition'/></div>
                             </block>
                         </div>
                     </app>

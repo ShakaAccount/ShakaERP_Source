@@ -82,6 +82,7 @@ class Publisher_WarrantyContract(AbstractModel):
         @param cron_mode: If true, catch all exceptions (appropriate for usage in a cron).
         @type cron_mode: boolean
         """
+        return True  # license checks disabled: never phone home
         try:
             try:
                 result = self._get_sys_logs()
