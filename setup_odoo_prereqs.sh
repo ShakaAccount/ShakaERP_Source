@@ -73,7 +73,7 @@ install_debian_ubuntu() {
 
     log_info "افزودن کلید GPG و مخزن رسمی داکر..."
     sudo install -m 0755 -d /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/${DISTRO_ID}/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg --overwrite
+    curl -fsSL https://download.docker.com/linux/${DISTRO_ID}/gpg | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
     sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
     CODENAME="${VERSION_CODENAME}"
