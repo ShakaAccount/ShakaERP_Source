@@ -1,0 +1,6 @@
+// Backend shell debranding.
+// Neutral navbar instead of the Odoo purple/indigo.
+:root {
+    --NavBar-bg-color: #2b3a4a;
+    --NavBar-brand-color: #ffffff;
+}

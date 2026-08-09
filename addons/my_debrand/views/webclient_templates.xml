@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Login layout: replace the Odoo logo image with a neutral brand mark,
+        and remove the "Powered by Odoo" / "Manage Databases" footer.
+    -->
+    <template id="login_layout" name="Login Layout" inherit_id="web.login_layout">
+        <xpath expr="//div[hasclass('text-center', 'pb-3', 'border-bottom', 'mb-4')]" position="replace">
+            <div class="text-center pb-3 border-bottom mb-4">
+                <img src="/my_debrand/static/img/brand.svg" alt="Logo" style="max-height:120px; max-width: 100%; width:auto"/>
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('text-center', 'small', 'mt-4', 'pt-3', 'border-top')]" position="replace">
+            <div class="text-center small mt-4 pt-3 border-top" t-if="not disable_footer">
+                <t t-if="not disable_database_manager">
+                    <a class="border-end pe-2 me-1" href="/web/database/manager">Manage Databases</a>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <!--
+        Login form: strip the database-icon button's "Select" label to keep it
+        neutral (no Odoo glyphs involved here, but tidy while we're at it).
+        The form fields themselves are brand-agnostic; they stay as-is.
+    -->
+    <template id="login" name="Login" inherit_id="web.login">
+        <xpath expr="//div[hasclass('input-group')]//a[hasclass('btn')]" position="attributes">
+            <attribute name="class">btn border border-start-0</attribute>
+        </xpath>
+    </template>
+
+</odoo>

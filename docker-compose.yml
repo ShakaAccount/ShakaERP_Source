@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: odoo_19_db
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - odoo_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: odoo_19_web
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    # Internal ports exposed only inside the docker network (not to host machine)
+    expose:
+      - "8069"
+      - "8072"
+    env_file:
+      - .env
+    volumes:
+      - .:/opt/odoo:z
+      - ./odoo.conf:/etc/odoo/odoo.conf:ro
+      - odoo_data:/var/lib/odoo
+      - odoo_web_data:/home/odoo/.local
+    networks:
+      - odoo_net
+    command: ./odoo-bin -c /etc/odoo/odoo.conf --db_host=db -r ${POSTGRES_USER} -w ${POSTGRES_PASSWORD} -u estate
+
+  nginx:
+    image: nginx:alpine
+    container_name: odoo_19_nginx
+    restart: unless-stopped
+    depends_on:
+      - web
+    ports:
+      - "80:80"     # Web traffic available at http://localhost
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - odoo_net
+
+volumes:
+  pg_data:
+    name: odoo_19_pg_data
+  odoo_data:
+    name: odoo_19_data
+  odoo_web_data:
+    name: odoo_19_web_data
+
+networks:
+  odoo_net:
+    driver: bridge
