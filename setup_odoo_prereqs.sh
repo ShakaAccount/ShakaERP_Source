@@ -73,6 +73,7 @@ install_debian_ubuntu() {
       ${CODENAME} stable" | \
       sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
+
     log_info "نصب Docker Engine و Docker Compose Plugin..."
     sudo apt-get update -y
     sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
