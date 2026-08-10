@@ -20,7 +20,7 @@ const addAnswerComment = (commentText) => [{
 }];
 
 registry.category('web_tour.tours').add('knowledge_article_comments', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [
         stepUtils.showAppsMenuItem(), { // Open Knowledge App
             trigger: '.o_app[data-menu-xmlid="knowledge.knowledge_menu_root"]',

@@ -328,7 +328,7 @@ export class WebsiteBuilderClientAction extends Component {
     }
 
     /**
-     * This replaces the browser url (/odoo/website...) with
+     * This replaces the browser url (/shaka/website...) with
      * the iframe's url (it is clearer for the user).
      */
     replaceBrowserUrl() {
@@ -348,7 +348,7 @@ export class WebsiteBuilderClientAction extends Component {
             // loads "about:blank"), do not push that into the history
             // state as that could prevent the user from going back and could
             // trigger a traceback.
-            history.replaceState(history.state, document.title, "/odoo");
+            history.replaceState(history.state, document.title, "/shaka");
             return;
         }
         const currentTitle = iframe.contentDocument.title;
@@ -569,7 +569,7 @@ export class WebsiteBuilderClientAction extends Component {
         const currentPath = encodeURIComponent(window.location.pathname);
         const websiteId = this.websiteService.currentWebsite.id;
         redirect(
-            `/odoo/action-website.website_preview?website_id=${encodeURIComponent(
+            `/shaka/action-website.website_preview?website_id=${encodeURIComponent(
                 websiteId
             )}&path=${currentPath}&enable_editor=1`
         );
@@ -713,7 +713,7 @@ export class WebsiteBuilderClientAction extends Component {
         const path = this.websiteService.contentWindow.location;
         const debugMode = this.env.debug ? `&debug=${this.env.debug}` : "";
         redirect(
-            `/odoo/action-website.website_preview?path=${encodeURIComponent(path)}${debugMode}`
+            `/shaka/action-website.website_preview?path=${encodeURIComponent(path)}${debugMode}`
         );
     }
 
@@ -766,13 +766,13 @@ function isTopWindowURL({ host, pathname }) {
 registry
     .category("isTopWindowURL")
     .add("html_builder.website_builder_action", ({ host, pathname }) => {
-        const backendRoutes = ["/web", "/web/session/logout", "/odoo"];
+        const backendRoutes = ["/web", "/web/session/logout", "/shaka"];
         return (
             host !== window.location.host ||
             (pathname &&
                 (backendRoutes.includes(pathname) ||
                     pathname.startsWith("/@/") ||
-                    pathname.startsWith("/odoo/") ||
+                    pathname.startsWith("/shaka/") ||
                     pathname.startsWith("/web/content/") ||
                     pathname.startsWith("/document/share/")))
         );

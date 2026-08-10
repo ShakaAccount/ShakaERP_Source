@@ -6,7 +6,7 @@ import { DEBOUNCED_DELAY } from "@web/core/select_menu/select_menu";
 registry
     .category("web_tour.tours")
     .add("web_studio_test_form_view_not_altered_by_studio_xml_edition", {
-        url: "/odoo?debug=1",
+        url: "/shaka?debug=1",
         steps: () => [
             {
                 trigger: "a[data-menu-xmlid='web_studio.studio_test_partner_menu']",
@@ -41,7 +41,7 @@ registry
 
 /* global ace */
 registry.category("web_tour.tours").add("web_studio_test_edit_with_xml_editor", {
-    url: "/odoo?debug=1",
+    url: "/shaka?debug=1",
     steps: () => [
         {
             trigger: "a[data-menu-xmlid='web_studio.studio_test_partner_menu']",
@@ -1407,7 +1407,7 @@ registry.category("web_tour.tours").add("web_studio_test_new_field_rename_descri
 });
 
 registry.category("web_tour.tours").add("web_studio_test_edit_digits_option", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         {
             trigger: "a[data-menu-xmlid='web_studio.studio_test_partner_menu']",

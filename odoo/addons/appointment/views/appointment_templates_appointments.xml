@@ -152,7 +152,7 @@
                                                     This appointment type has no availabilities because it does not have any opening hours configured
                                                 </t>
                                             </t>
-                                            <a t-attf-href="/odoo/{{main_object._name}}/{{main_object.id}}?menu_id={{backend_menu_id}}" class="d-block">
+                                            <a t-attf-href="/shaka/{{main_object._name}}/{{main_object.id}}?menu_id={{backend_menu_id}}" class="d-block">
                                                 <i class="oi oi-arrow-right me-2"/><em>Configure <t t-out="appointment_type.name"/></em>
                                             </a>
                                         </div>
@@ -308,7 +308,7 @@
 
     <template id="appointment_edit_in_backend" name="Appointment portal preview alert">
         <t t-call="portal.portal_back_in_edit_mode">
-            <t t-set="backend_url" t-value="'/odoo/action-appointment.appointment_type_action/%s' % appointment_type.id"/>
+            <t t-set="backend_url" t-value="'/shaka/action-appointment.appointment_type_action/%s' % appointment_type.id"/>
             <t t-set="custom_html">This is a preview of the customer appointment form.</t>
         </t>
     </template>

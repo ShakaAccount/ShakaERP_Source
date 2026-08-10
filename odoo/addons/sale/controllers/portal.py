@@ -167,7 +167,7 @@ class CustomerPortal(payment_portal.PaymentPortal):
                     subtype_xmlid="sale.mt_order_viewed",
                 )
 
-        backend_url = f'/odoo/action-{order_sudo._get_portal_return_action().id}/{order_sudo.id}'
+        backend_url = f'/shaka/action-{order_sudo._get_portal_return_action().id}/{order_sudo.id}'
         values = {
             'sale_order': order_sudo,
             'product_documents': order_sudo._get_product_documents(),

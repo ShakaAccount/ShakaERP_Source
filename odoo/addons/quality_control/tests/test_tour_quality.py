@@ -25,5 +25,5 @@ class TestQualitySpreadsheetTemplate(HttpCase, TestQualityCommon, SpreadsheetTes
             'spreadsheet_template_id': spreadsheet_template.id,
         })
 
-        url = f"/odoo/{quality_point._name}/{quality_point.id}"
+        url = f"/shaka/{quality_point._name}/{quality_point.id}"
         self.start_tour(url, "test_create_new_spreadsheet_from_quality_form", login='admin')

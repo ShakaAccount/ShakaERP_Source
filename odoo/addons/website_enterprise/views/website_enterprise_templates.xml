@@ -3,7 +3,7 @@
 
 <template id="layout" inherit_id="website.layout">
     <xpath expr="//a[hasclass('o_frontend_to_backend_apps_btn')]" position="attributes">
-        <attribute name="href">/odoo</attribute>
+        <attribute name="href">/shaka</attribute>
         <attribute name="data-bs-toggle"/>
     </xpath>
     <xpath expr="//div[hasclass('o_frontend_to_backend_apps_menu')]" position="replace"/>

@@ -61,7 +61,7 @@ class TestShopFloorQuality(TestShopFloor, TestQualityCommon):
             'bom_id': bom.id,
         })
         mo.action_confirm()
-        self.start_tour('/odoo/shop-floor', 'test_shop_floor_spreadsheet', login='admin')
+        self.start_tour('/shaka/shop-floor', 'test_shop_floor_spreadsheet', login='admin')
         self.assertRecordValues(mo.workorder_ids[0].check_ids, [
             {'quality_state': 'fail'},
         ])
@@ -171,4 +171,4 @@ class TestShopFloorQuality(TestShopFloor, TestQualityCommon):
             'bom_id': bom_finished_product.id,
         }).action_confirm()
 
-        self.start_tour('/odoo/shop-floor', 'test_quality_fail_message', login='admin')
+        self.start_tour('/shaka/shop-floor', 'test_quality_fail_message', login='admin')

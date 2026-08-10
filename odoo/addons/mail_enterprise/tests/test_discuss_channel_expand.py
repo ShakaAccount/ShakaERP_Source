@@ -28,4 +28,4 @@ class TestDiscussChannelExpand(HttpCase, MailCommon):
         # clear all bus notifications, so that tour does not replay old notifications
         # on a more recent state with init_messaging
         self._reset_bus()
-        self.start_tour("/odoo", 'mail_enterprise/static/tests/tours/discuss_channel_expand_test_tour.js', login='testuser')
+        self.start_tour("/shaka", 'mail_enterprise/static/tests/tours/discuss_channel_expand_test_tour.js', login='testuser')

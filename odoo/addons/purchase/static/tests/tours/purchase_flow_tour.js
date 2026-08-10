@@ -4,7 +4,7 @@ import { registry } from "@web/core/registry";
 registry.category("web_tour.tours").add("test_basic_purchase_flow_with_minimal_access_rights", {
     steps: () => [
         {
-            trigger: ".o_menuitem[href='/odoo/purchase']",
+            trigger: ".o_menuitem[href='/shaka/purchase']",
             run: "click",
         },
         {

@@ -21,13 +21,13 @@ class TestUi(TestMxEdiPosCommon, TestPointOfSaleHttpCommon):
         })
 
     def test_mx_pos_invoice_order_and_refund(self):
-        self.start_tour("/odoo", "l10n_mx_edi_pos.test_mx_pos_invoice_order_and_refund", login=self.env.user.login)
+        self.start_tour("/shaka", "l10n_mx_edi_pos.test_mx_pos_invoice_order_and_refund", login=self.env.user.login)
 
     def test_mx_pos_invoice_order_default_usage(self):
-        self.start_tour("/odoo", "l10n_mx_edi_pos.tour_invoice_order_default_usage", login=self.env.user.login)
+        self.start_tour("/shaka", "l10n_mx_edi_pos.tour_invoice_order_default_usage", login=self.env.user.login)
 
     def test_mx_pos_invoice_previous_order(self):
-        self.start_tour("/odoo", "l10n_mx_edi_pos.tour_invoice_previous_order", login=self.env.user.login)
+        self.start_tour("/shaka", "l10n_mx_edi_pos.tour_invoice_previous_order", login=self.env.user.login)
         invoice = self.env['account.move'].search([('move_type', '=', 'out_invoice')], order='id desc', limit=1)
         self.assertRecordValues(invoice, [{
             'partner_id': self.partner_mx.id,
@@ -36,7 +36,7 @@ class TestUi(TestMxEdiPosCommon, TestPointOfSaleHttpCommon):
         }])
 
     def test_mx_pos_invoice_previous_order_default_usage(self):
-        self.start_tour("/odoo", "l10n_mx_edi_pos.tour_invoice_previous_order_default_usage", login=self.env.user.login)
+        self.start_tour("/shaka", "l10n_mx_edi_pos.tour_invoice_previous_order_default_usage", login=self.env.user.login)
         invoice = self.env['account.move'].search([('move_type', '=', 'out_invoice')], order='id desc', limit=1)
         self.assertRecordValues(invoice, [{
             'partner_id': self.partner_mx.id,
@@ -92,7 +92,7 @@ class TestUi(TestMxEdiPosCommon, TestPointOfSaleHttpCommon):
         })
         self.make_payment(self.pos_order, self.main_pos_config.payment_method_ids[0], 9.90)
         self.config.current_session_id.action_pos_session_closing_control()
-        self.start_tour("/odoo", "l10n_mx_edi_pos.tour_refund_discount_order", login=self.env.user.login)
+        self.start_tour("/shaka", "l10n_mx_edi_pos.tour_refund_discount_order", login=self.env.user.login)
 
     def test_qr_code_receipt_mx(self):
         """This test make sure that no user is created when a partner is set on the PoS order.

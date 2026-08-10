@@ -13,5 +13,5 @@ class TestProjectUpdateUi(HttpCase):
         # As it is too complicated to determine this value from the tour itself, we avoid this page reload completely.
         self.env.ref('base.group_user').implied_ids |= self.env.ref('project.group_project_milestone')
 
-        self.start_tour("/odoo", 'project_update_tour', login="admin")
-        self.start_tour("/odoo", 'project_tour', login="admin")
+        self.start_tour("/shaka", 'project_update_tour', login="admin")
+        self.start_tour("/shaka", 'project_tour', login="admin")

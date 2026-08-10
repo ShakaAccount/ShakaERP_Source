@@ -4160,7 +4160,7 @@
                     groups="base.group_system"
                     target="_blank"
                     aria-label="Edit"
-                    t-attf-href="/odoo/action-payment.action_payment_provider/{{tx_sudo.provider_id.id}}"
+                    t-attf-href="/shaka/action-payment.action_payment_provider/{{tx_sudo.provider_id.id}}"
                 >
                     <i class="fa fa-pencil"/>
                 </a>

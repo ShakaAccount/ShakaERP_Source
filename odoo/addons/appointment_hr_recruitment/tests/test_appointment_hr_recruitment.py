@@ -28,6 +28,6 @@ class AppointmentHrRecruitmentTest(HttpCase):
                 'job_id': job_developer.id,
             })
             appointment_type = self.env['appointment.type'].create({'name': "Test AppointmentHrRecruitment"})
-            self.start_tour('/odoo', 'appointment_hr_recruitment_tour', login='admin')
+            self.start_tour('/shaka', 'appointment_hr_recruitment_tour', login='admin')
             calendar_event = self.env['calendar.event'].search([('applicant_id', '=', applicant.id)])
             self.assertIn('Ana Tourelle', calendar_event.name)

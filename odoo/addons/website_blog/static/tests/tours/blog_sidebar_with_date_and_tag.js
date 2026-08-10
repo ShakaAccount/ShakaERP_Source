@@ -56,7 +56,7 @@ registerWebsitePreviewTour(
         {
             content:
                 "Verify that 'Add some' button has the correct URL for navigating to the backend.",
-            trigger: ":iframe #edit-in-backend[href*='/odoo/website/blog.post/']",
+            trigger: ":iframe #edit-in-backend[href*='/shaka/website/blog.post/']",
         },
     ]
 );

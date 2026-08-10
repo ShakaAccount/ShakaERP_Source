@@ -143,7 +143,7 @@ class TestUi(odoo.tests.HttpCase):
             'x_studio_image': image_data,
         })
 
-        self.start_tour("/odoo", 'website_studio_listing_and_page', login="admin", timeout=3600)
+        self.start_tour("/shaka", 'website_studio_listing_and_page', login="admin", timeout=3600)
         created_pages = self.env["website.controller.page"].search([])
         self.assertEqual(len(created_pages), 1)
 
@@ -197,7 +197,7 @@ class TestUi(odoo.tests.HttpCase):
             'x_studio_image': image_data,
         })
 
-        self.start_tour("/odoo", 'website_studio_listing_without_page', login="admin", watch=False, timeout=3600)
+        self.start_tour("/shaka", 'website_studio_listing_without_page', login="admin", watch=False, timeout=3600)
         created_pages = self.env["website.controller.page"].search([])
         self.assertEqual(len(created_pages), 1)
         self.assertEqual(created_pages[0].name_slugified, 'mycustom-name')

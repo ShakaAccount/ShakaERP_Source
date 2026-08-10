@@ -2093,7 +2093,7 @@ class TestErrorManagement(HttpCase):
         })
 
         with mute_logger('odoo.addons.base.models.assetsbundle'):
-            self.start_tour('/odoo', 'css_error_tour', login='admin')
+            self.start_tour('/shaka', 'css_error_tour', login='admin')
 
     def test_assets_bundle_css_error_frontend(self):
         whatever = {'website_id': website.search([], limit=1).id} if (website := self.env.get('website')) else {}

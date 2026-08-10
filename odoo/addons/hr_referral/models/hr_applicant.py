@@ -147,7 +147,7 @@ class HrApplicant(models.Model):
                 subject = _('Referral: %(partner)s (%(applicant)s)', partner=self.partner_name, applicant=self.display_name)
             else:
                 subject = _('Referral: %s', self.display_name)
-            action_url = f'/odoo/action-{action_value}?active_model={self._name}'
+            action_url = f'/shaka/action-{action_value}?active_model={self._name}'
             body = Markup("<a class='o_document_link' href=%s>%s</a><br>%s") % (action_url, subject, body)
             odoobot = self.env.ref('base.partner_root')
             # Do *not* notify on `self` as it will lead to unintended behavior.
@@ -345,7 +345,7 @@ class HrApplicant(models.Model):
             if message.onclick == 'url':
                 msg['url'] = message.url
             elif message.onclick == 'all_jobs':
-                msg['url'] = '/odoo/action-hr_referral.action_hr_job_employee_referral'
+                msg['url'] = '/shaka/action-hr_referral.action_hr_job_employee_referral'
             result['message'].append(msg)
 
         return result

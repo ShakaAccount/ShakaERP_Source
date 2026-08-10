@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add('account_reports_rounding_unit', {
-    url: '/odoo/action-account_reports.action_account_report_bs',
+    url: '/shaka/action-account_reports.action_account_report_bs',
     steps: () => [
         {
             content: 'Test the value of `Receivables` line in decimals',

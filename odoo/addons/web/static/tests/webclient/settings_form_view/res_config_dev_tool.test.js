@@ -24,7 +24,7 @@ test("Simple render", async () => {
     onRpc("/base_setup/demo_active", () => {
         return true;
     });
-    redirect("/odoo");
+    redirect("/shaka");
     await mountView({
         type: "form",
         arch: /* xml */ `
@@ -54,7 +54,7 @@ test("Activate the developer mode", async () => {
             expect.step("location reload");
         },
     });
-    redirect("/odoo");
+    redirect("/shaka");
     await mountView({
         type: "form",
         arch: /* xml */ `
@@ -81,7 +81,7 @@ test("Activate the developer mode (with assets)", async () => {
             expect.step("location reload");
         },
     });
-    redirect("/odoo");
+    redirect("/shaka");
     await mountView({
         type: "form",
         arch: /* xml */ `
@@ -108,7 +108,7 @@ test("Activate the developer mode (with tests assets)", async () => {
             expect.step("location reload");
         },
     });
-    redirect("/odoo");
+    redirect("/shaka");
     await mountView({
         type: "form",
         arch: /* xml */ `
@@ -137,7 +137,7 @@ test("Activate the developer modeddd (with tests assets)", async () => {
             expect.step("location reload");
         },
     });
-    redirect("/odoo?debug=assets%2Ctests");
+    redirect("/shaka?debug=assets%2Ctests");
     await mountView({
         type: "form",
         arch: /* xml */ `

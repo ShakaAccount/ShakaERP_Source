@@ -353,7 +353,7 @@ class StockPickingBatch(models.Model):
                 'message': '%s',
                 'links': [{
                     'label': target_batch.name,
-                    'url': f"/odoo/action-stock_picking_batch.{'action_picking_tree_wave' if target_batch.is_wave else 'stock_picking_batch_action'}/{target_batch.id}",
+                    'url': f"/shaka/action-stock_picking_batch.{'action_picking_tree_wave' if target_batch.is_wave else 'stock_picking_batch_action'}/{target_batch.id}",
                 }],
                 'sticky': False,
                 'next': {'type': 'ir.actions.act_window_close'},

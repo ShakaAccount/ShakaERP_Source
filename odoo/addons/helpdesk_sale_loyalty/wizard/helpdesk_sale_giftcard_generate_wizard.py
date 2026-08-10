@@ -28,7 +28,7 @@ class HelpdeskSaleGiftcardGenerateWizard(models.TransientModel):
             self.ticket_id.message_post(body=message.body, attachment_ids=message.attachment_ids.ids)
 
         action_id = self.env.ref('helpdesk_sale_loyalty.loyalty_open_card_action').id
-        url = f'/odoo/helpdesk/{self.ticket_id.team_id.id}/tickets/{self.ticket_id.id}/action-{action_id}/{coupon.id}'
+        url = f'/shaka/helpdesk/{self.ticket_id.team_id.id}/tickets/{self.ticket_id.id}/action-{action_id}/{coupon.id}'
         url = Markup("<a href='%s'>%s</a>") % (url, coupon.display_name)
         self.ticket_id.message_post(body=self.env._('%s Gift Card created', url))
 

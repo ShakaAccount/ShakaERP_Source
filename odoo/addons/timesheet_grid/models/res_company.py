@@ -203,7 +203,7 @@ class ResCompany(models.Model):
             :param template_xmlid : xml id of the reminder mail template
         """
         action_url = (
-            f"{self.get_base_url()}/odoo/action-{action_xmlid}"
+            f"{self.get_base_url()}/shaka/action-{action_xmlid}"
             f"?menu_id={self.env.ref('hr_timesheet.timesheet_menu_root').id}"
         )
 

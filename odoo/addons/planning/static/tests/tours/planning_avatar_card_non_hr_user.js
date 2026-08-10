@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add('planning_avatar_card_non_hr_user', {
-    url: '/odoo?debug=tests',
+    url: '/shaka?debug=tests',
     steps: () => [{
     trigger: '.o_app[data-menu-xmlid="planning.planning_menu_root"]',
     content: "Open the Planning app",

@@ -70,7 +70,7 @@ class ProductReplenish(models.TransientModel):
         if order_line._name == 'purchase.order.line':
             return [{
                 'label': order_line.order_id.display_name,
-                'url': f'/odoo/action-purchase.action_rfq_form/{order_line.order_id.id}',
+                'url': f'/shaka/action-purchase.action_rfq_form/{order_line.order_id.id}',
             }]
         return super()._get_replenishment_order_notification_link(order_line)
 

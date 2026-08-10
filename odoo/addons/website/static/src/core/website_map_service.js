@@ -69,7 +69,7 @@ export const websiteMapService = {
                                 notification.add(
                                     markup`<div>
                                         <span>${message}</span><br/>
-                                        <a href="/odoo/action-website.action_website_configuration">${urlTitle}</a>
+                                        <a href="/shaka/action-website.action_website_configuration">${urlTitle}</a>
                                     </div>`,
                                     { type: "warning", sticky: true }
                                 );

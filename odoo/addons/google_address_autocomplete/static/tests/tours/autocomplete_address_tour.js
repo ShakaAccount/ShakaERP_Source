@@ -2,7 +2,7 @@ import { registry } from "@web/core/registry";
 import { stepUtils } from "@web_tour/tour_utils";
 
 registry.category("web_tour.tours").add("autocomplete_address_tour", {
-    url: "/odoo/companies",
+    url: "/shaka/companies",
     steps: () => [
         {
             content: "click on new button to create a new record",

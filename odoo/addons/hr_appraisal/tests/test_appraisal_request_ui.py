@@ -25,4 +25,4 @@ class TestHrAppraisalRequestUi(HttpCase):
     def test_send_appraisal_request_by_email_flow(self):
         self.env['hr.appraisal'].search([]).write({'active': False})
         self.env['hr.appraisal'].create({'employee_id': self.employee.id, 'manager_ids': self.employee.parent_id})
-        self.start_tour('/odoo', 'test_send_appraisal_request_by_email_flow', login=self.manager_user.login)
+        self.start_tour('/shaka', 'test_send_appraisal_request_by_email_flow', login=self.manager_user.login)

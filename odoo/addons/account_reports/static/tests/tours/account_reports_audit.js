@@ -2,7 +2,7 @@ import { Asserts } from "./asserts";
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("account_reports_audit", {
-    url: "/odoo/action-account_reports.action_view_account_audit",
+    url: "/shaka/action-account_reports.action_view_account_audit",
     steps: () => [
         {
             trigger: "button.o-kanban-button-new",

@@ -17,7 +17,7 @@
                     <a
                         t-foreach="recentConversations" t-as="thread" t-key="thread.localId"
                         class="o-livechat-LivechatChannelInfoList-recentConversation btn btn-sm btn-secondary btn-group-item d-flex align-items-center justify-content-start gap-1 w-100 m-0 px-3 py-1"
-                        t-attf-href="/odoo/discuss?active_id={{thread.model}}_{{thread.id}}"
+                        t-attf-href="/shaka/discuss?active_id={{thread.model}}_{{thread.id}}"
                         target="_blank"
                         t-att-class="{
                             'o-rounded-top-bubble': thread_first,

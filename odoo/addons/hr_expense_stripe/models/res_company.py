@@ -143,7 +143,7 @@ class ResCompany(models.Model):
         :rtype: dict[str, str]
         """
         self.ensure_one()
-        return_url = f"{self._get_stripe_issuing_base_url()}/odoo/settings#hr_expense"
+        return_url = f"{self._get_stripe_issuing_base_url()}/shaka/settings#hr_expense"
         return {
             'account': self.stripe_id,
             'refresh_url': return_url,

@@ -47,10 +47,10 @@ class TestFsmSaleProducts(HttpCase, TestFsmFlowCommon):
         cls.task.partner_id = cls.partner_1
 
     def test_industry_fsm_sale_products_tour(self):
-        self.start_tour("/odoo", 'industry_fsm_sale_products_tour', login="admin")
+        self.start_tour("/shaka", 'industry_fsm_sale_products_tour', login="admin")
 
     def test_industry_fsm_sale_quantity_products_tour(self):
-        self.start_tour("/odoo", 'industry_fsm_sale_quantity_products_tour', login="admin")
+        self.start_tour("/shaka", 'industry_fsm_sale_quantity_products_tour', login="admin")
 
     def test_industry_fsm_sale_products_from_fsm_tour(self):
         """
@@ -84,7 +84,7 @@ class TestFsmSaleProducts(HttpCase, TestFsmFlowCommon):
                 'list_price': 100.0,
         })
         super_product.product_tmpl_id.is_favorite = True
-        self.start_tour("/odoo", 'industry_fsm_sale_products_compute_catalog_tour', login="admin")
+        self.start_tour("/shaka", 'industry_fsm_sale_products_compute_catalog_tour', login="admin")
         self.assertTrue(main_so.order_line.filtered(lambda sol: 'task 1' in sol.task_id.name and sol.product_id == super_product))
         self.assertTrue(main_so.order_line.filtered(lambda sol: 'task 2' in sol.task_id.name and sol.product_id == super_product))
         self.assertTrue(main_so.order_line.filtered(lambda sol: 'task 3' in sol.task_id.name and sol.product_id == super_product))
@@ -147,4 +147,4 @@ class TestFsmSaleProducts(HttpCase, TestFsmFlowCommon):
         })
         sale_order_1.action_confirm()
         sale_order_1._create_invoices()
-        self.start_tour("/odoo/field-service", 'test_industry_fsm_sale_add_product_on_invoice_tour', login="admin")
+        self.start_tour("/shaka/field-service", 'test_industry_fsm_sale_add_product_on_invoice_tour', login="admin")

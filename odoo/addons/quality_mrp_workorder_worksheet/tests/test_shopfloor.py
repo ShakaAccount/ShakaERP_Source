@@ -56,5 +56,5 @@ class TestShopFloorWorksheet(TestShopFloor, TestQualityWorksheet):
         mo.action_assign()
         self.assertEqual(mo.reservation_state, 'assigned')
         mo.button_plan()
-        self.start_tour('/odoo/shop-floor', "test_worksheet_quality_check", login='admin')
+        self.start_tour('/shaka/shop-floor', "test_worksheet_quality_check", login='admin')
         self.assertEqual(mo.workorder_ids.state, "done")

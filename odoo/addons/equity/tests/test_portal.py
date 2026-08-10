@@ -258,7 +258,7 @@ class TestEquityPortal(TestEquityCommon, HttpCase):
                 'auth_rep_role': 'chairman',
             },
         ])
-        self.start_tour(f'/odoo/action-base.action_partner_form/{self.company.id}', 'request_ubo_portal_form_tour', login='admin')
+        self.start_tour(f'/shaka/action-base.action_partner_form/{self.company.id}', 'request_ubo_portal_form_tour', login='admin')
 
         ubo_activity = self.company.activity_search(['equity.equity_ubo_form_mail_activity'])
         self.assertEqual(len(ubo_activity), 1)

@@ -63,7 +63,7 @@ class TestHrRecruitmentSign(HttpCase):
         wizard.validate_signature()
 
         # create the employee
-        self.start_tour("/odoo", 'applicant_sign_request_tour', login='admin', timeout=300)
+        self.start_tour("/shaka", 'applicant_sign_request_tour', login='admin', timeout=300)
 
         self.assertEqual(self.applicant.sign_request_count, 1)
         self.assertEqual(self.applicant.employee_id.sign_request_count, 1)

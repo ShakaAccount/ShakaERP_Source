@@ -25,4 +25,4 @@ class TestTourAccountAnalyticFilters(AccountTestInvoicingHttpCommon):
         })
 
     def test_tour_account_report_analytic_filters(self):
-        self.start_tour("/odoo", 'account_reports_analytic_filters', login=self.env.user.login)
+        self.start_tour("/shaka", 'account_reports_analytic_filters', login=self.env.user.login)

@@ -32,4 +32,4 @@ class TestWorkEntryReset(HttpCase):
     def test_work_entry_reset_from_payslip(self):
         if self.env['ir.module.module']._get('l10n_ch_hr_payroll').state == 'installed':
             self.skipTest("Skipping test because Switzerland doesn't use Work Entries.")
-        self.start_tour("/odoo/payslips", 'hr_payroll_work_entry_reset_tour', login='admin')
+        self.start_tour("/shaka/payslips", 'hr_payroll_work_entry_reset_tour', login='admin')

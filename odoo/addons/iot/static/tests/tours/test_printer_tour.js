@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("iot_device_test_printer", {
-    url: "/odoo/iot",
+    url: "/shaka/iot",
     steps: () =>
         [
             {

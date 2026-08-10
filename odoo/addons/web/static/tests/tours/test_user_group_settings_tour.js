@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("test_user_group_settings", {
-    url: "/odoo/settings?debug=assets,tests",
+    url: "/shaka/settings?debug=assets,tests",
     steps: () => [
         // create new privileges
         {

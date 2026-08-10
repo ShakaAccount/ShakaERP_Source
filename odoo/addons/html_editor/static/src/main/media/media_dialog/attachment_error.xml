@@ -7,7 +7,7 @@
                 following pages or views:</p>
             <ul t-foreach="props.views" t-as="view" t-key="view.id">
                 <li>
-                    <a t-att-href="'/odoo/ir.ui.view/' + window.encodeURIComponent(view.id)">
+                    <a t-att-href="'/shaka/ir.ui.view/' + window.encodeURIComponent(view.id)">
                         <t t-esc="view.name"/>
                     </a>
                 </li>

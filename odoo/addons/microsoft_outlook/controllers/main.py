@@ -132,5 +132,5 @@ class MicrosoftOutlookController(http.Controller):
             or record != request.env.user.outgoing_mail_server_id)
             and request.env.user.has_group('base.group_system')
         ):
-            return f'/odoo/{record._name}/{record.id}'
-        return f'/odoo/my-preferences/{request.env.user.id}'
+            return f'/shaka/{record._name}/{record.id}'
+        return f'/shaka/my-preferences/{request.env.user.id}'

@@ -54,7 +54,7 @@ function dragDate(el, target) {
 }
 
 registry.category("web_tour.tours").add('knowledge_calendar_command_tour', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [stepUtils.showAppsMenuItem(), { // open the Knowledge App
     trigger: '.o_app[data-menu-xmlid="knowledge.knowledge_menu_root"]',
     run: "click",

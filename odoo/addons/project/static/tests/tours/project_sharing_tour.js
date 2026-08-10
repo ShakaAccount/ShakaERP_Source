@@ -132,7 +132,7 @@ const projectSharingSteps = [...stepUtils.goToAppSteps("project.menu_main_pm", '
 }];
 
 registry.category("web_tour.tours").add('project_sharing_tour', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => {
         return projectSharingSteps;
     }

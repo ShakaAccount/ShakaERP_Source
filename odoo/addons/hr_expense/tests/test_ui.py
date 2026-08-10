@@ -19,7 +19,7 @@ class TestUi(TestExpenseCommon, HttpCase):
             'product_id': self.product_c.id,
             'total_amount': 1,
         })
-        self.start_tour('/odoo', 'create_expense_no_employee_access_tour', login=self.expense_user_manager.login)
+        self.start_tour('/shaka', 'create_expense_no_employee_access_tour', login=self.expense_user_manager.login)
         self.assertEqual(expense.employee_id.id, employee_1.id, "Employee should have been changed by tour")
 
     def test_no_zero_amount_expense_in_expense(self):
@@ -29,5 +29,5 @@ class TestUi(TestExpenseCommon, HttpCase):
         """
         expense = self.create_expenses({'name': 'expense_for_tour'})
         with mute_logger("odoo.http"):
-            self.start_tour('/odoo', 'do_not_create_zero_amount_expense', login=self.expense_user_manager.login)
+            self.start_tour('/shaka', 'do_not_create_zero_amount_expense', login=self.expense_user_manager.login)
         self.assertEqual(expense.total_amount_currency, 10.0, "Expense amount should have been set by tour")

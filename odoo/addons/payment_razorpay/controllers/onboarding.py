@@ -45,7 +45,7 @@ class RazorpayController(Controller):
 
         # Request and set the OAuth tokens on the provider.
         action = request.env.ref('payment.action_payment_provider')
-        redirect_url = f'/odoo/action-{action.id}/{int(provider_sudo.id)}'
+        redirect_url = f'/shaka/action-{action.id}/{int(provider_sudo.id)}'
         if not authorization_code:  # The user cancelled the authorization.
             return request.redirect(redirect_url)
 

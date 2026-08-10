@@ -17,7 +17,7 @@ class TestEmployeeUi(HttpCase):
             'user_id': user.id,
         }])
 
-        self.start_tour("/odoo", 'hr_employee_tour', login="davidelora")
+        self.start_tour("/shaka", 'hr_employee_tour', login="davidelora")
 
     @freeze_time('2024-01-01')
     def test_version_timeline_auto_save_tour(self):
@@ -43,5 +43,5 @@ class TestEmployeeUi(HttpCase):
             'contract_date_end': False,
         })
 
-        self.start_tour("/odoo", 'version_timeline_auto_save_tour', login="alice")
+        self.start_tour("/shaka", 'version_timeline_auto_save_tour', login="alice")
         self.assertFalse(bob_employee.version_ids[-1].contract_date_start)

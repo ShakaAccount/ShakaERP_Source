@@ -62,7 +62,7 @@ class TestUi(AccountTestInvoicingHttpCommon):
             ('state', '=', 'draft'),
         ]).unlink()
 
-        self.start_tour("/odoo", 'account_tour', login="admin")
+        self.start_tour("/shaka", 'account_tour', login="admin")
 
     def test_01_account_tax_groups_tour(self):
         self.env.ref('base.user_admin').write({
@@ -87,14 +87,14 @@ class TestUi(AccountTestInvoicingHttpCommon):
         })
         product.supplier_taxes_id = new_tax
 
-        self.start_tour("/odoo", 'account_tax_group', login="admin")
+        self.start_tour("/shaka", 'account_tax_group', login="admin")
 
     def test_use_product_catalog_on_invoice(self):
         self.product.write({
             'is_favorite': True,
             'default_code': '0',
         })
-        self.start_tour("/odoo/customer-invoices/new", 'test_use_product_catalog_on_invoice', login="admin")
+        self.start_tour("/shaka/customer-invoices/new", 'test_use_product_catalog_on_invoice', login="admin")
 
     def test_deductible_amount_column(self):
         self.assertFalse(self.env.user.has_group('account.group_partial_purchase_deductibility'))
@@ -107,12 +107,12 @@ class TestUi(AccountTestInvoicingHttpCommon):
         })
         move.action_post()
         self.assertTrue(self.env.user.has_group('account.group_partial_purchase_deductibility'))
-        self.start_tour("/odoo/vendor-bills/new", 'deductible_amount_column', login=self.env.user.login)
+        self.start_tour("/shaka/vendor-bills/new", 'deductible_amount_column', login=self.env.user.login)
 
     def test_add_section_from_product_catalog_on_invoice_tour(self):
         self.product.write({'is_favorite': True})
         self.start_tour(
-            '/odoo/customer-invoices/new',
+            '/shaka/customer-invoices/new',
             'test_add_section_from_product_catalog_on_invoice',
             login='admin',
         )

@@ -187,7 +187,7 @@ test("link redirection should be prefixed for url of website pages only", async 
     });
     onRpc("/html_editor/link_preview_internal", () => ({}));
     onRpc("/contactus", () => ({}));
-    onRpc("/odoo/project/1", () => ({}));
+    onRpc("/shaka/project/1", () => ({}));
     onRpc("/web/project/1", () => ({}));
 
     // website pages should be prefixed with /@
@@ -197,9 +197,9 @@ test("link redirection should be prefixed for url of website pages only", async 
     expect.verifySteps(["website page url prefixed"]);
 
     // other backend urls and external urls should not be prefixed
-    setContent(el, `<p>this is a[] <a href="/odoo/project/1">link</a></p>`);
+    setContent(el, `<p>this is a[] <a href="/shaka/project/1">link</a></p>`);
     await waitForNone(".o-we-linkpopover");
-    setContent(el, `<p>this is a <a href="/odoo/project/1">li[]nk</a></p>`);
+    setContent(el, `<p>this is a <a href="/shaka/project/1">li[]nk</a></p>`);
     await waitFor(".o-we-linkpopover");
     await click(".o-we-linkpopover a");
     expect.verifySteps([]);
@@ -226,8 +226,8 @@ test("link redirection should not be prefixed when the current page is not a web
             expect(url.pathname.startsWith("/@")).toBe(true);
         },
         location: {
-            // simulating being on a non-website page (eg. backend) by using /odoo/ URL
-            href: browser.location.origin + "/odoo/contactus",
+            // simulating being on a non-website page (eg. backend) by using /shaka/ URL
+            href: browser.location.origin + "/shaka/contactus",
             hostname: browser.location.hostname,
         },
     });

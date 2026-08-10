@@ -4,7 +4,7 @@ import configuratorTourUtils from "@sale/js/tours/product_configurator_tour_util
 import tourUtils from "@sale/js/tours/tour_utils";
 
 registry.category("web_tour.tours").add("event_sale_with_product_configurator_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         ...stepUtils.goToAppSteps("sale.sale_menu_root", "Go to the Sales App"),
         ...tourUtils.createNewSalesOrder(),

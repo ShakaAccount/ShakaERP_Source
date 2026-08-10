@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add('applicant_sign_request_tour', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [
         {
             content: "Access on the recruitment app",

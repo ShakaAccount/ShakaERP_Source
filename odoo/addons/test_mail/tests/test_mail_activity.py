@@ -960,7 +960,7 @@ class TestTours(HttpCase):
             """,
         })
         self.start_tour(
-            "/odoo?debug=1",
+            "/shaka?debug=1",
             "mail_activity_view",
             login="admin",
         )

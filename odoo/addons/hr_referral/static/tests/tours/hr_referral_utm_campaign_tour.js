@@ -2,7 +2,7 @@ import { stepUtils } from "@web_tour/tour_utils";
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("hr_referral_utm_campaign_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         {
             trigger: ".o_app[data-menu-xmlid='hr_recruitment.menu_hr_recruitment_root']",

@@ -65,7 +65,7 @@ class AmazonController(http.Controller):
         account.seller_key = seller_key
 
         # Craft the URL of the Amazon account.
-        account_url = f'/odoo/action-sale_amazon.list_amazon_account_action/{account_id}'
+        account_url = f'/shaka/action-sale_amazon.list_amazon_account_action/{account_id}'
 
         # Request and set the refresh token on the account and finalize the set up.
         try:

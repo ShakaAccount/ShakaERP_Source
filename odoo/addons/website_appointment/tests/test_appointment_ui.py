@@ -37,7 +37,7 @@ class WebsiteAppointmentUITest(AppointmentCommon):
             self.env, login='user_portal', groups='base.group_portal', name='Portal User',
             company_id=self.company_admin.id, email='portal@example.com')
         self.assertFalse(self.apt_manager.partner_id.phone)
-        self.start_tour('/odoo', 'website_appointment_tour', login='apt_manager')
+        self.start_tour('/shaka', 'website_appointment_tour', login='apt_manager')
         self.assertEqual(self.apt_manager.partner_id.phone, '0123456789')
         guest_names = [
             'Raoul', 'new_zeadland2@test.example.com', 'def@gmail.example.com', 'test1@gmail.com', 'test2@gmail.com',

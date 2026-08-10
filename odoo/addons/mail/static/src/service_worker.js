@@ -129,11 +129,11 @@ async function storeLogs(logs, { download = false } = {}) {
  * @param {Client | ServiceWorker | MessagePort} [source] if set, will not open the channel on the source
  */
 async function openDiscussChannel(channelId, { action, joinCall = false, source } = {}) {
-    const discussURLRegexes = [new RegExp("/odoo/discuss")];
+    const discussURLRegexes = [new RegExp("/shaka/discuss")];
     if (action) {
         discussURLRegexes.push(
-            new RegExp(`/odoo/\\d+/action-${action}`),
-            new RegExp(`/odoo/action-${action}`)
+            new RegExp(`/shaka/\\d+/action-${action}`),
+            new RegExp(`/shaka/action-${action}`)
         );
     }
     let targetClient;
@@ -154,7 +154,7 @@ async function openDiscussChannel(channelId, { action, joinCall = false, source 
         return;
     }
     if (action) {
-        const url = new URL(`/odoo/action-${action}`, location.origin);
+        const url = new URL(`/shaka/action-${action}`, location.origin);
         url.searchParams.set("active_id", `discuss.channel_${channelId}`);
         if (joinCall) {
             url.searchParams.set("call", "accept");
@@ -193,7 +193,7 @@ self.addEventListener("notificationclick", (event) => {
             );
         } else {
             const modelPath = model.includes(".") ? model : `m-${model}`;
-            event.waitUntil(clients.openWindow(`/odoo/${modelPath}/${res_id}`));
+            event.waitUntil(clients.openWindow(`/shaka/${modelPath}/${res_id}`));
         }
     }
 });

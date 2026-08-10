@@ -187,7 +187,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
             ],
         })
         delivery.action_confirm()
-        self.start_tour('/odoo/barcode', 'test_delivery_kit_with_tracked_compo', login='admin')
+        self.start_tour('/shaka/barcode', 'test_delivery_kit_with_tracked_compo', login='admin')
 
     def test_picking_kit_variant_packaging(self):
         """ Test packaging related to a specific variant.
@@ -234,7 +234,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
             ],
         })
         picking.action_confirm()
-        self.start_tour('/odoo/barcode', 'test_picking_kit_variant_packaging', login='admin')
+        self.start_tour('/shaka/barcode', 'test_picking_kit_variant_packaging', login='admin')
 
     def test_only_mo_of_current_operation_are_visible(self):
         """Test that it only returns manufacturing orders for the given picking type."""

@@ -36,7 +36,7 @@
         <a t-attf-href="/calendar/meeting/join?token={{ object.access_token }}"
             t-attf-style="display: inline-block; padding: 7px 14px; color: {{user.company_id.email_primary_color or '#FFFFFF'}}; text-decoration: none; background-color: {{user.company_id.email_secondary_color or '#875A7B'}}; border-radius: 3px">
             Join</a>
-        <a t-attf-href="/odoo/calendar.event/{{ object.id }}"
+        <a t-attf-href="/shaka/calendar.event/{{ object.id }}"
             t-attf-style="display: inline-block; margin-left: 12px; padding: 7px 14px; color: #111827; text-decoration: none; background-color: #E7E9ED; border-radius: 3px;">
             View</a>
     </div>

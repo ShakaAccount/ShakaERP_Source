@@ -32,6 +32,6 @@ export class ApiKeyModal extends Component {
     }
 
     async openAPIKeyForm() {
-        window.open(`${window.location.origin}/odoo/action-doc_api_key_wizard`, "_blank");
+        window.open(`${window.location.origin}/shaka/action-doc_api_key_wizard`, "_blank");
     }
 }

@@ -3,7 +3,7 @@ import { registry } from "@web/core/registry";
 const today = luxon.DateTime.now();
 
 registry.category("web_tour.tours").add('planning_test_tour', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [{
     trigger: '.o_app[data-menu-xmlid="planning.planning_menu_root"]',
     content: "Let's start managing your employees' schedule!",
@@ -125,7 +125,7 @@ registry.category("web_tour.tours").add('planning_test_tour', {
 }]});
 
 registry.category("web_tour.tours").add('planning_test_tour_no_email', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [{
     trigger: '.o_app[data-menu-xmlid="planning.planning_menu_root"]',
     content: "Open the planning app, should land in the gantt view",
@@ -162,7 +162,7 @@ registry.category("web_tour.tours").add('planning_test_tour_no_email', {
 },]});
 
 registry.category("web_tour.tours").add('planning_shift_switching_backend', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [{
     trigger: '.o_app[data-menu-xmlid="planning.planning_menu_root"]',
     content: "Get in the planning app",
@@ -204,7 +204,7 @@ registry.category("web_tour.tours").add('planning_shift_switching_backend', {
 }]});
 
 registry.category("web_tour.tours").add('planning_assigning_unwanted_shift_backend', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [{
     trigger: '.o_app[data-menu-xmlid="planning.planning_menu_root"]',
     content: "Get in the planning app",

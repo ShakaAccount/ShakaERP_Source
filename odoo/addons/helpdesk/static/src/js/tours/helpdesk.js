@@ -3,7 +3,7 @@ import { registry } from "@web/core/registry";
 import { markup } from "@odoo/owl";
 
 registry.category("web_tour.tours").add("helpdesk_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         {
     trigger: '.o_app[data-menu-xmlid="helpdesk.menu_helpdesk_root"]',

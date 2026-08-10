@@ -17,7 +17,7 @@ class TestEventCrmHttp(TestEventCrmCommon, HttpCase):
             "name": "Answer test",
             "question_id": question.id,
         })
-        self.start_tour("/odoo", "event_question_answers_rule_creation_tour", login="admin")
+        self.start_tour("/shaka", "event_question_answers_rule_creation_tour", login="admin")
         # Check that a rule has been created for the answer.
         self.assertEqual(
             len(self.env["event.lead.rule"].search([("name", "=", "event_question_answer_rule")])),

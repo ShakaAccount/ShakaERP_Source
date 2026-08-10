@@ -2,7 +2,7 @@ import { registry } from "@web/core/registry";
 import { Asserts } from "../../../../account_reports/static/tests/tours/asserts";
 
 registry.category("web_tour.tours").add("trial_balance_month_13_date_filter", {
-    url: "/odoo/action-account_reports.action_account_report_coa",
+    url: "/shaka/action-account_reports.action_account_report_coa",
     steps: () => [
         //--------------------------------------------------------------------------------------------------------------
         // Foldable

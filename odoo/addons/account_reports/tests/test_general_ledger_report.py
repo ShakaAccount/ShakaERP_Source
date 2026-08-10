@@ -609,7 +609,7 @@ class TestGeneralLedgerReport(TestAccountReportsCommon, odoo.tests.HttpCase):
         })
         move_07_2017.action_post()
 
-        self.start_tour("/odoo", 'account_reports_search', login=self.env.user.login)
+        self.start_tour("/shaka", 'account_reports_search', login=self.env.user.login)
 
     def test_general_ledger_hierarchy_non_numerical_column_value(self):
         """

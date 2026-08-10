@@ -760,7 +760,7 @@ class TestSpecificStudioExports_Website(StudioExportCase):
         )
 
         # should have only function to unlink the default main menu
-        nodes = self.get_xml_nodes("data/website_menu.xml", "/odoo/*")
+        nodes = self.get_xml_nodes("data/website_menu.xml", "/shaka/*")
         self.assertEqual(len(nodes), 1 + len(menus), "has a child for each menu + 1")
         self.assertEqual([n.tag for n in nodes], ["function"] + ["record"] * len(menus))
         self.assertXML(

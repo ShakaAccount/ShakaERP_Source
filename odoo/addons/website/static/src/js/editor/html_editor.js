@@ -146,7 +146,7 @@ patch(LinkPopover.prototype, {
             (browser.location.hostname === parsedUrl.hostname ||
                 // Also check if the odoo-hosted domain is the current domain of the url
                 new RegExp(`^https?://${session.db}\\.odoo\\.com(/.*)?$`).test(parsedUrl.origin)) &&
-            !parsedUrl.pathname.startsWith("/odoo") &&
+            !parsedUrl.pathname.startsWith("/shaka") &&
             !parsedUrl.pathname.startsWith("/web") &&
             !parsedUrl.pathname.startsWith("/@/")
         );

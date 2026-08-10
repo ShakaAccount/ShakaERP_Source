@@ -176,7 +176,7 @@ class TestWebsiteHelpdeskLivechat(HttpCase, HelpdeskCommon):
             ]
         )
         self.start_tour(
-            f"/odoo/discuss?active_id=discuss.channel_{discuss_channel.id}",
+            f"/shaka/discuss?active_id=discuss.channel_{discuss_channel.id}",
             "helpdesk_livechat_info_panel_tour",
             login="hm",
         )

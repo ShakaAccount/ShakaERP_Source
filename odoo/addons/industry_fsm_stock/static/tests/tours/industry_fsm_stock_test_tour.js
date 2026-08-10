@@ -71,7 +71,7 @@ const AddTrackingLineAndValidateSteps = [
  *   moves from another warehouse than the current user's default one are muted and readonly.
  */
 registry.category("web_tour.tours").add('industry_fsm_stock_test_tour', {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
     stepUtils.showAppsMenuItem(),
     ...StepToFSMProductsKanbanWithFavoritesFilterSteps,

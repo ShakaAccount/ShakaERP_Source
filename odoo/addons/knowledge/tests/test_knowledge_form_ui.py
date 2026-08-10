@@ -34,7 +34,7 @@ class TestKnowledgeUI(TestKnowledgeUICommon):
 
     def test_knowledge_history(self):
         """This tour will check that the history works properly."""
-        self.start_tour('/odoo?debug=1', 'knowledge_history_tour', login='demo')
+        self.start_tour('/shaka?debug=1', 'knowledge_history_tour', login='demo')
 
     def test_knowledge_load_template(self):
         """This tour will check that the user can create a new article by using
@@ -56,7 +56,7 @@ class TestKnowledgeUI(TestKnowledgeUICommon):
             'template_body': Markup('<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>'),
         })
 
-        self.start_tour('/odoo', 'knowledge_load_template', login='admin')
+        self.start_tour('/shaka', 'knowledge_load_template', login='admin')
         article = self.env['knowledge.article'].search([('id', '!=', template.id)], limit=1)
         self.assertTrue(bool(article))
 
@@ -98,7 +98,7 @@ class TestKnowledgeUI(TestKnowledgeUICommon):
             'is_article_visible_by_everyone': True,
         })
         with self.mock_mail_gateway(), self.mock_mail_app():
-            self.start_tour('/odoo', 'knowledge_main_flow_tour', login='admin')
+            self.start_tour('/shaka', 'knowledge_main_flow_tour', login='admin')
 
         # check our articles were correctly created
         # with appropriate default values (section / internal_permission)
@@ -204,7 +204,7 @@ class TestKnowledgeUI(TestKnowledgeUICommon):
     def test_knowledge_pick_emoji(self):
         """This tour will check that the emojis of the form view are properly updated
            when the user picks an emoji from an emoji picker."""
-        self.start_tour('/odoo', 'knowledge_pick_emoji_tour', login='admin')
+        self.start_tour('/shaka', 'knowledge_pick_emoji_tour', login='admin')
 
     def test_knowledge_cover_selector(self):
         """Check the behaviour of the cover selector when unsplash credentials
@@ -221,7 +221,7 @@ class TestKnowledgeUI(TestKnowledgeUICommon):
             'res_id': 0,
         })
         self.env['knowledge.cover'].create({'attachment_id': attachment.id})
-        self.start_tour('/odoo', 'knowledge_cover_selector_tour', login='admin')
+        self.start_tour('/shaka', 'knowledge_cover_selector_tour', login='admin')
 
     def test_knowledge_readonly_favorite(self):
         """Make sure that a user can add readonly articles to its favorites and
@@ -297,22 +297,22 @@ class TestKnowledgeUI(TestKnowledgeUICommon):
             'name': 'ChildArticle',
             'parent_id': parent_article.id
         })
-        self.start_tour('/odoo', 'knowledge_properties_tour', login='admin')
+        self.start_tour('/shaka', 'knowledge_properties_tour', login='admin')
 
     def test_knowledge_items_search_favorites_tour(self):
         """Test search favorites for items view"""
         self.env['knowledge.article'].create([{'name': 'Article 1', 'is_article_visible_by_everyone': True}])
-        self.start_tour('/odoo', 'knowledge_items_search_favorites_tour', login='admin')
+        self.start_tour('/shaka', 'knowledge_items_search_favorites_tour', login='admin')
 
     def test_knowledge_search_favorites_tour(self):
         """Test search favorites with searchModel state"""
         self.env['knowledge.article'].create([{'name': 'Article 1', 'is_article_visible_by_everyone': True}])
-        self.start_tour('/odoo', 'knowledge_search_favorites_tour', login='admin')
+        self.start_tour('/shaka', 'knowledge_search_favorites_tour', login='admin')
 
     @users('admin')
     def test_knowledge_sidebar(self):
         # This tour checks that the features of the sidebar work as expected
-        self.start_tour('/odoo', 'knowledge_sidebar_tour', login='admin', timeout=100)
+        self.start_tour('/shaka', 'knowledge_sidebar_tour', login='admin', timeout=100)
 
         # Check section create button and article icon button
         workspace_article = self.env['knowledge.article'].search([('name', '=', 'Workspace Article')])
@@ -371,7 +371,7 @@ class TestKnowledgeUI(TestKnowledgeUICommon):
         workspace_article.write({
             'is_article_visible_by_everyone': True,
         })
-        self.start_tour('/odoo', 'knowledge_sidebar_readonly_tour', login='demo')
+        self.start_tour('/shaka', 'knowledge_sidebar_readonly_tour', login='demo')
 
         # Check that articles did not move
         self.assertFalse(workspace_article.parent_id)
@@ -394,4 +394,4 @@ class TestKnowledgeUIWithUnsplash(TestKnowledgeUICommon):
         """Check the behaviour of the cover selector when unsplash credentials
         are set.
         """
-        self.start_tour('/odoo', 'knowledge_random_cover_tour', login='demo')
+        self.start_tour('/shaka', 'knowledge_random_cover_tour', login='demo')

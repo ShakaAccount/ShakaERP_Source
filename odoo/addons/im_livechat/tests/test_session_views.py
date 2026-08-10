@@ -27,7 +27,7 @@ class TestImLivechatSessionViews(TestImLivechatCommon):
         self._reset_bus()
         action = self.env.ref("im_livechat.discuss_channel_action_from_livechat_channel")
         self.start_tour(
-            f"/odoo/livechat/{self.livechat_channel.id}/action-{action.id}",
+            f"/shaka/livechat/{self.livechat_channel.id}/action-{action.id}",
             "im_livechat_history_back_and_forth_tour",
             login="operator",
         )
@@ -66,7 +66,7 @@ class TestImLivechatSessionViews(TestImLivechatCommon):
         )
         action = self.env.ref("im_livechat.discuss_channel_action_from_livechat_channel")
         self.start_tour(
-            f"/odoo/livechat/{self.livechat_channel.id}/action-{action.id}",
+            f"/shaka/livechat/{self.livechat_channel.id}/action-{action.id}",
             "im_livechat_session_history_open",
             login="operator",
         )
@@ -118,7 +118,7 @@ class TestImLivechatLookingForHelpViews(TestImLivechatSessionViews):
     def test_looking_for_help_list_real_time_update(self):
         self.start_needhelp_session()
         self.start_tour(
-            f"/odoo/action-{self.looking_for_help_action.id}",
+            f"/shaka/action-{self.looking_for_help_action.id}",
             "im_livechat.looking_for_help_list_real_time_update_tour",
             login="bob_looking_for_help",
         )
@@ -126,7 +126,7 @@ class TestImLivechatLookingForHelpViews(TestImLivechatSessionViews):
     def test_looking_for_help_kanban_real_time_update(self):
         self.start_needhelp_session()
         self.start_tour(
-            f"/odoo/action-{self.looking_for_help_action.id}?view_type=kanban",
+            f"/shaka/action-{self.looking_for_help_action.id}?view_type=kanban",
             "im_livechat.looking_for_help_kanban_real_time_update_tour",
             login="bob_looking_for_help",
         )
@@ -134,7 +134,7 @@ class TestImLivechatLookingForHelpViews(TestImLivechatSessionViews):
     def test_looking_for_help_tags_real_time_update(self):
         self.start_needhelp_session()
         self.start_tour(
-            f"/odoo/action-{self.looking_for_help_action.id}",
+            f"/shaka/action-{self.looking_for_help_action.id}",
             "im_livechat.looking_for_help_tags_real_time_update_tour",
             login="bob_looking_for_help",
         )
@@ -152,5 +152,5 @@ class TestImLivechatLookingForHelpViews(TestImLivechatSessionViews):
         sales_chat.livechat_expertise_ids = sales_expertise
         self._reset_bus()
         self.start_tour(
-            "/odoo/discuss", "im_livechat.looking_for_help_discuss_category_tour", login="agent"
+            "/shaka/discuss", "im_livechat.looking_for_help_discuss_category_tour", login="agent"
         )

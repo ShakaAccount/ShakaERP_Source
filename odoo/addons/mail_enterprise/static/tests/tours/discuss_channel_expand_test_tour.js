@@ -9,7 +9,7 @@ import { registry } from "@web/core/registry";
 registry
     .category("web_tour.tours")
     .add("mail_enterprise/static/tests/tours/discuss_channel_expand_test_tour.js", {
-        url: "/odoo",
+        url: "/shaka",
         steps: () => [
             {
                 trigger: ".o-mail-DiscussSystray-class .fa-comments",

@@ -113,7 +113,7 @@ class TestBarcodeClientAction(HttpCase):
         super(TestBarcodeClientAction, self).tearDown()
 
     def _get_client_action_url(self, picking_id):
-        return f'/odoo/{picking_id}/action-stock_barcode.stock_barcode_picking_client_action'
+        return f'/shaka/{picking_id}/action-stock_barcode.stock_barcode_picking_client_action'
 
     def _reset_package_sequence(self, next_number=1):
         """ Resets package sequence to be sure we'll have the attended packages name."""

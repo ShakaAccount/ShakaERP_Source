@@ -117,7 +117,7 @@ export class WebsiteGeneratorScreen extends Component {
         if (result) {
             this.action.doAction({
                 type: "ir.actions.act_url",
-                url: "/odoo/action-website_generator.website_generator_screen?reload=true",
+                url: "/shaka/action-website_generator.website_generator_screen?reload=true",
                 target: "self",
             });
         } else {

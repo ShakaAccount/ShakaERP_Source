@@ -143,7 +143,7 @@ def generate_views(action):
 def get_action(env, path_part):
     """
     Get a ir.actions.actions() given an action typically found in a
-    "/odoo"-like url.
+    "/shaka"-like url.
 
     The action can take one of the following forms:
     * "action-" followed by a record id
@@ -187,7 +187,7 @@ def get_action(env, path_part):
 
 def get_action_triples(env, path, *, start_pos=0):
     """
-    Extract the triples (active_id, action, record_id) from a "/odoo"-like path.
+    Extract the triples (active_id, action, record_id) from a "/shaka"-like path.
 
     >>> env = ...
     >>> list(get_action_triples(env, "/all-tasks/5/project.project/1/tasks"))

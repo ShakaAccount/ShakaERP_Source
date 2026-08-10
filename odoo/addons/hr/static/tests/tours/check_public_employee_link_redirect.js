@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("check_public_employee_link_redirect", {
-    // starts at /odoo/employee/<employee_id>
+    // starts at /shaka/employee/<employee_id>
     steps: () => {
         /* ignoring inactive modals since the modal may appear multiple times
           thus hiding the inactive ones and playwright doesn't like doing

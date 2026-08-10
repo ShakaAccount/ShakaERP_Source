@@ -28,7 +28,7 @@
             </p>
             <p t-if="expense.employee_id.user_id">
                 <br/>
-                <a t-att-href="'/odoo/hr.expense/%s' % (expense.id)" class="o_expense_button_mail">View Expense</a>
+                <a t-att-href="'/shaka/hr.expense/%s' % (expense.id)" class="o_expense_button_mail">View Expense</a>
             </p>
         </template>
 

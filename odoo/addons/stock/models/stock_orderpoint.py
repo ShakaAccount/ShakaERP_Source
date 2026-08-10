@@ -657,7 +657,7 @@ class StockWarehouseOrderpoint(models.Model):
                     'message': '%s',
                     'links': [{
                         'label': move.picking_id.name,
-                        'url': f'/odoo/action-stock.stock_picking_action_picking_type/{move.picking_id.id}'
+                        'url': f'/shaka/action-stock.stock_picking_action_picking_type/{move.picking_id.id}'
                     }],
                     'sticky': False,
                     'next': {'type': 'ir.actions.act_window_close'},

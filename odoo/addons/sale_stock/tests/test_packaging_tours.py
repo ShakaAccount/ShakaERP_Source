@@ -7,7 +7,7 @@ from odoo.tools import mute_logger
 class TestPackagingTours(HttpCase):
 
     def _get_product_url(self, product_id):
-        return '/odoo/action-stock.product_template_action_product/%s' % (product_id)
+        return '/shaka/action-stock.product_template_action_product/%s' % (product_id)
 
     def test_barcode_duplication_error(self):
         """ Test the barcode duplication error when creating a new product with an existing barcode """

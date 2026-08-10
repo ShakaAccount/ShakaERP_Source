@@ -121,7 +121,7 @@ test("Chatter jumps when navigating to a specific message link", async () => {
     router.pushState(
         router.urlToState(
             new URL(
-                `${window.location.origin}/odoo/res.partner/${partnerId}?highlight_message_id=${messageIds[0]}`
+                `${window.location.origin}/shaka/res.partner/${partnerId}?highlight_message_id=${messageIds[0]}`
             )
         ),
         { sync: true }

@@ -18,8 +18,8 @@ class TestWebRedirect(HttpCase):
         self.assertEqual(response_url_query, 'redirect=%2Fweb%3F')
 
     def test_web_route_redirect_param(self):
-        # This test if for the new routes with /odoo, pathname and query params
-        web_response = self.url_open('/odoo/action-887?cids=1')
+        # This test if for the new routes with /shaka, pathname and query params
+        web_response = self.url_open('/shaka/action-887?cids=1')
         web_response.raise_for_status()
         response_url_query = url_parse(web_response.url).query
 

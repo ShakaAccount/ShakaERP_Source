@@ -60,5 +60,5 @@ class TestTOTPInvite(TestTOTPMixin, HttpCase):
         if group_order_template:
             self.env.ref('base.group_user').write({"implied_ids": [(4, group_order_template.id)]})
         self.install_totphook()
-        self.start_tour('/odoo', 'totp_admin_invite', login='admin')
-        self.start_tour('/odoo', 'totp_admin_self_invite', login='admin')
+        self.start_tour('/shaka', 'totp_admin_invite', login='admin')
+        self.start_tour('/shaka', 'totp_admin_self_invite', login='admin')

@@ -9,5 +9,5 @@ class SurveyAnalyzeResultsRoute(Controller):
         action = survey.action_survey_open_linked_spreadsheet()
         spreadsheet_id = action.get('params', {}).get('spreadsheet_id')
         return request.redirect(
-            f"/odoo/surveys/{survey.id}/spreadsheet/{spreadsheet_id}"
+            f"/shaka/surveys/{survey.id}/spreadsheet/{spreadsheet_id}"
         )

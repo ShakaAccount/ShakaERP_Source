@@ -64,14 +64,14 @@ class TestKnowledgeEditorCommands(HttpCaseWithUserDemo):
     def test_knowledge_article_commands_tour(self):
         """ Test the various commands in the editor as admin user.
         Then access created embed views in readonly mode for extra checks. """
-        self.start_tour('/odoo', 'knowledge_article_commands_tour', login='admin')
+        self.start_tour('/shaka', 'knowledge_article_commands_tour', login='admin')
 
         # Check that the icon selected from the kanban card has been saved
         quik_create_article = self.env['knowledge.article'].search([("name", "=", "New Quick Create Item")])
         self.assertEqual(quik_create_article.icon, "🤩")
 
-        self.start_tour('/odoo', 'knowledge_article_commands_readonly_tour', login='demo')
+        self.start_tour('/shaka', 'knowledge_article_commands_readonly_tour', login='demo')
 
     def test_knowledge_calendar_command_tour(self):
         """Test the /calendar command in the editor"""
-        self.start_tour('/odoo', 'knowledge_calendar_command_tour', login='admin')
+        self.start_tour('/shaka', 'knowledge_calendar_command_tour', login='admin')

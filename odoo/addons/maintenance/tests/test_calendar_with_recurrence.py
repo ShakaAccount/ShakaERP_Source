@@ -32,7 +32,7 @@ class TestCalendarWithRecurrence(HttpCase):
         }])
         request = requests[2]
 
-        url = '/odoo/action-maintenance.hr_equipment_request_action_cal'
+        url = '/shaka/action-maintenance.hr_equipment_request_action_cal'
         self.start_tour(url, 'test_dblclick_event_from_calendar', login='admin')
 
         self.assertEqual(request.name, 'make your bed', "The event modification should update the request")
@@ -63,7 +63,7 @@ class TestCalendarWithRecurrence(HttpCase):
         }])
         request = requests[2]
 
-        url = '/odoo/action-maintenance.hr_equipment_request_action_cal'
+        url = '/shaka/action-maintenance.hr_equipment_request_action_cal'
         self.start_tour(url, 'test_drag_and_drop_event_in_calendar', login='admin')
 
         target_datetime = datetime.combine(datetime.now().replace(day=15), time.min.replace(hour=10))  # 15h of the month at 10 AM

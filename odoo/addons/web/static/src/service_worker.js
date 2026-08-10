@@ -19,7 +19,7 @@ self.addEventListener("install", (event) => {
 });
 
 const extractSessionInfo = (htmlContent) => {
-    const match = htmlContent.match(/odoo\.__session_info__\s*=\s*({.*?});/s);
+    const match = htmlContent.match(/shaka\.__session_info__\s*=\s*({.*?});/s);
     return match && match[1] ? match[1] : null;
 };
 

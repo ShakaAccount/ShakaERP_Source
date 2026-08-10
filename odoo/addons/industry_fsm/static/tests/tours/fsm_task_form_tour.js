@@ -4,7 +4,7 @@ import { stepUtils } from "@web_tour/tour_utils";
 registry.category("web_tour.tours").add(
     "fsm_task_form_tour",
     {
-        url: '/odoo',
+        url: '/shaka',
         steps: () => [
             ...stepUtils.goToAppSteps("industry_fsm.fsm_menu_root", "Open app Field Service"),
             {

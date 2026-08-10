@@ -87,7 +87,7 @@ function createReplies(textareaSelector) {
 registry.category("web_tour.tours").add(
     'social_twitter/static/tests/tours/tour_social_twitter_spam.js',
     {
-        url: '/odoo',
+        url: '/shaka',
         steps: () => [
         {
             trigger: '.o_app[data-menu-xmlid="social.menu_social_global"]',

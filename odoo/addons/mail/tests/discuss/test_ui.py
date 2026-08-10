@@ -9,7 +9,7 @@ from odoo.addons.base.tests.common import HttpCaseWithUserDemo, new_test_user
 class TestUi(HttpCaseWithUserDemo):
 
     def test_01_mail_tour(self):
-        self.start_tour("/odoo", 'discuss_channel_tour', login="admin")
+        self.start_tour("/shaka", 'discuss_channel_tour', login="admin")
 
     def test_02_mail_create_channel_no_mail_tour(self):
         self.env['res.users'].create({
@@ -19,11 +19,11 @@ class TestUi(HttpCaseWithUserDemo):
             'login': 'testuser',
             'password': 'testuser',
         })
-        self.start_tour("/odoo", 'discuss_channel_tour', login='testuser')
+        self.start_tour("/shaka", 'discuss_channel_tour', login='testuser')
 
     # basic rendering test of the configuration menu in Discuss
     def test_03_mail_discuss_configuration_tour(self):
-        self.start_tour("/odoo", "discuss_configuration_tour", login="admin")
+        self.start_tour("/shaka", "discuss_configuration_tour", login="admin")
 
     def test_04_meeting_view_tour(self):
         bob = new_test_user(self.env, "bob", groups="base.group_user", email="bob@test.com")
@@ -38,7 +38,7 @@ class TestUi(HttpCaseWithUserDemo):
         self.authenticate("bob", "bob")
         self.make_jsonrpc_request("/mail/rtc/channel/join_call", {"channel_id": group_chat.id})
         self.start_tour(
-            f"/odoo/discuss?active_id=discuss.channel_{group_chat.id}&fullscreen=1",
+            f"/shaka/discuss?active_id=discuss.channel_{group_chat.id}&fullscreen=1",
             "discuss.meeting_view_tour",
             login="john",
         )

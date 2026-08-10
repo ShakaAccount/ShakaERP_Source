@@ -2040,7 +2040,7 @@ export class Matcher {
      * @example
      *  expect("p").toHaveText("lorem ipsum dolor sit amet");
      * @example
-     *  expect("header h1").toHaveText(/odoo/i);
+     *  expect("header h1").toHaveText(/shaka/i);
      */
     toHaveText(text, options) {
         this._ensureArguments(arguments, ["string", "regex", null]);

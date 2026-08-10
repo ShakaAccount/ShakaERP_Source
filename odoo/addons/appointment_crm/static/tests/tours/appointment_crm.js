@@ -5,7 +5,7 @@ import { browser } from "@web/core/browser/browser";
 const oldWriteText = browser.navigator.clipboard.writeText;
 
 registry.category("web_tour.tours").add('appointment_crm_meeting_tour', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [stepUtils.showAppsMenuItem(), {
         trigger: '.o_app[data-menu-xmlid="crm.crm_menu_root"]',
         run: 'click',

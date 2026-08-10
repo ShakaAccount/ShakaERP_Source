@@ -15,7 +15,7 @@
             <t t-elif="resId">
                 <a
                     t-attf-class="o_form_uri"
-                    t-att-href="`/odoo/${urlRelation}/${resId}`"
+                    t-att-href="`/shaka/${urlRelation}/${resId}`"
                     t-on-click.prevent="onClick"
                 >
                     <span t-esc="displayName" t-att-class="{'me-2': props.row.isAdditionalRow}"/>

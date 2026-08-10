@@ -465,7 +465,7 @@ class TestDocumentsControllers(HttpCaseWithUserDemo, MockEmail):
     @mute_logger('odoo.http')
     def test_doc_ctrl_cross_redirection(self):
         docs_url = f'/documents/{self.public_file.access_token}?a=1'
-        odoo_url = f'/odoo{docs_url}'
+        odoo_url = f'/shaka{docs_url}'
         portal = self.user_portal.login
         demo = self.user_demo.login
         for login, url, code, location in [

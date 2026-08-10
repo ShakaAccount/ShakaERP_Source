@@ -69,7 +69,7 @@ their Pokémon can meet any challenge.
 
         # The tour will also save the offer after the change
         self.start_tour(
-            f"/odoo/employees/{self.employee.id}",
+            f"/shaka/employees/{self.employee.id}",
             "change_contract_template_on_offer_tour",
             login="admin",
         )

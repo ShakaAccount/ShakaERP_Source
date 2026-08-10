@@ -200,7 +200,7 @@ class DocumentsDocument(models.Model):
     @api.depends('access_token')
     def _compute_access_url(self):
         for document in self:
-            document.access_url = f'{document.sudo().get_base_url()}/odoo/documents/{quote(document.access_token, safe="")}'
+            document.access_url = f'{document.sudo().get_base_url()}/shaka/documents/{quote(document.access_token, safe="")}'
 
     @api.depends('create_activity_type_id', 'create_activity_user_id')
     def _compute_create_activity_option(self):
@@ -2734,7 +2734,7 @@ class DocumentsDocument(models.Model):
 
             return {
                 "type": "ir.actions.act_url",
-                "url": f"/odoo/action-documents.document_action?{url_params}"
+                "url": f"/shaka/action-documents.document_action?{url_params}"
             }
         return super()._get_access_action(access_uid=access_uid, force_website=force_website)
 

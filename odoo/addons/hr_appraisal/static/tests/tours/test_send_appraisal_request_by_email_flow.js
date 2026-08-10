@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("test_send_appraisal_request_by_email_flow", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         {
             trigger: ".o_app[data-menu-xmlid='hr_appraisal.menu_hr_appraisal_root']",

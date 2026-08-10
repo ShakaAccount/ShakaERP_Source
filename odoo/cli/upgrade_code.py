@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Rewrite the entire source code using the scripts found at
-/odoo/upgrade_code
+/shaka/upgrade_code
 
 Each script is named {version}-{name}.py and exposes an upgrade function
 that takes a single argument, the file_manager, and returns nothing.
@@ -63,7 +63,7 @@ except ImportError:
         def parser(self):
             return argparse.ArgumentParser(
                 prog=Path(sys.argv[0]).name,
-                description=__doc__.replace('/odoo/upgrade_code', str(UPGRADE)),
+                description=__doc__.replace('/shaka/upgrade_code', str(UPGRADE)),
                 formatter_class=argparse.RawDescriptionHelpFormatter,
             )
     config = None
@@ -173,7 +173,7 @@ def migrate(
 
 
 class UpgradeCode(Command):
-    """ Rewrite the entire source code using the scripts found at /odoo/upgrade_code """
+    """ Rewrite the entire source code using the scripts found at /shaka/upgrade_code """
     name = 'upgrade_code'
 
     def __init__(self):

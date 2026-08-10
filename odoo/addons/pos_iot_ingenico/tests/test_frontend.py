@@ -58,7 +58,7 @@ class TestUi(TestPointOfSaleHttpCommon):
             ],
         })
 
-        self.start_tour("/odoo", 'payment_terminals_tour', login="pos_user")
+        self.start_tour("/shaka", 'payment_terminals_tour', login="pos_user")
 
         orders = env['pos.order'].search([])
         self.assertEqual(len(orders.ids), 1, "There should be 1 orders.")

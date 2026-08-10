@@ -749,7 +749,7 @@ class TestUi(HttpCase):
         # run successfully if a partner is created during the flow
         # create it in advance here instead
         self.env['res.partner'].name_create('Agrolait')
-        self.start_tour("/odoo", 'rental_tour', login="admin")
+        self.start_tour("/shaka", 'rental_tour', login="admin")
 
     def test_product_displayed_on_rental_only(self):
         """
@@ -768,5 +768,5 @@ class TestUi(HttpCase):
             'sale_ok': sale_ok,
         } for sale_ok, rent_ok in product([True, False], [False, True])])
 
-        self.start_tour("/odoo", 'sale_renting_product_display', login="admin")
-        self.start_tour("/odoo", 'sale_product_display', login="admin")
+        self.start_tour("/shaka", 'sale_renting_product_display', login="admin")
+        self.start_tour("/shaka", 'sale_product_display', login="admin")

@@ -14,7 +14,7 @@ const embeddedViewPatchUtil = embeddedViewPatchFunctions();
 //------------------------------------------------------------------------------
 
 registry.category("web_tour.tours").add("knowledge_article_commands_readonly_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         stepUtils.showAppsMenuItem(),
         {

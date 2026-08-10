@@ -76,4 +76,4 @@ class TestUi(AccountTestMockOnlineSyncCommon):
                 'record': demo_partner,
                 'noupdate': False,
             }])
-        self.start_tour("/odoo", 'account_accountant_tour', login="admin")
+        self.start_tour("/shaka", 'account_accountant_tour', login="admin")

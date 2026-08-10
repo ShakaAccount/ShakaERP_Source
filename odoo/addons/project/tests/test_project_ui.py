@@ -12,7 +12,7 @@ class TestUi(odoo.tests.HttpCase):
         cls.env.ref('base.group_user').sudo().implied_ids |= cls.env.ref('project.group_project_milestone')
 
     def test_01_project_tour(self):
-        self.start_tour("/odoo", 'project_tour', login="admin")
+        self.start_tour("/shaka", 'project_tour', login="admin")
 
     def test_project_task_history(self):
         """This tour will check that the history works properly."""
@@ -31,7 +31,7 @@ class TestUi(odoo.tests.HttpCase):
             'project_id': project2.id,
         })
 
-        self.start_tour('/odoo?debug=1', 'project_task_history_tour', login='admin')
+        self.start_tour('/shaka?debug=1', 'project_task_history_tour', login='admin')
 
     def test_project_task_last_history_steps(self):
         """This tour will check that the history works properly."""
@@ -47,4 +47,4 @@ class TestUi(odoo.tests.HttpCase):
             'project_id': project.id,
         })
 
-        self.start_tour('/odoo', 'project_task_last_history_steps_tour', login='admin')
+        self.start_tour('/shaka', 'project_task_last_history_steps_tour', login='admin')

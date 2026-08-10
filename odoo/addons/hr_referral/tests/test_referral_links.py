@@ -81,7 +81,7 @@ class TestReferralLinks(TestHrReferralBase, HttpCase):
             'company_ids': [(4, self.company_1.id)],
             'company_id': self.company_1.id,
         })
-        self.start_tour("/odoo", 'hr_referral_utm_campaign_tour', login="stv")
+        self.start_tour("/shaka", 'hr_referral_utm_campaign_tour', login="stv")
 
         self.assertTrue(job.utm_campaign_id.id)
         nb_trackers = self.env['link.tracker'].search_count([('campaign_id', '=', job.utm_campaign_id.id)])

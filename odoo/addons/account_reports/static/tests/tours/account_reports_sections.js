@@ -4,7 +4,7 @@ import { Asserts } from "./asserts";
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add('account_reports_sections', {
-    url: "/odoo/action-account_reports.action_account_report_gt",
+    url: "/shaka/action-account_reports.action_account_report_gt",
     steps: () => [
         {
             content: "Open variant selector",

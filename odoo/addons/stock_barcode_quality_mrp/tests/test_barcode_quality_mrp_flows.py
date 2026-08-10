@@ -28,7 +28,7 @@ class TestBarcodeQualityControlMRPClientAction(TestBarcodeClientAction):
                 'picking_type_ids': [Command.link(self.warehouse.manu_type_id.id)],
             },
         ])
-        self.start_tour('/odoo/barcode', 'test_final_product_quality_check_mrp_barcode', login='admin')
+        self.start_tour('/shaka/barcode', 'test_final_product_quality_check_mrp_barcode', login='admin')
 
         quality_checks = self.env['quality.check'].search([('point_id', 'in', quality_points.ids)])
         self.assertRecordValues(quality_checks.sorted('title'), [

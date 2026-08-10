@@ -414,7 +414,7 @@ test("test next action on display_notification client action", async () => {
 });
 
 test("test reload client action", async () => {
-    redirect("/odoo?test=42");
+    redirect("/shaka?test=42");
     browser.location.search = "?test=42";
 
     patchWithCleanup(browser.history, {
@@ -465,19 +465,19 @@ test("test reload client action", async () => {
     });
     await runAllTimers();
     expect.verifySteps([
-        "replaceState /odoo?test=42",
+        "replaceState /shaka?test=42",
         "window_reload",
-        "pushState /odoo/action-2",
+        "pushState /shaka/action-2",
         "window_reload",
-        "pushState /odoo?menu_id=1",
+        "pushState /shaka?menu_id=1",
         "window_reload",
-        "pushState /odoo/action-1?menu_id=2",
+        "pushState /shaka/action-1?menu_id=2",
         "window_reload",
     ]);
 });
 
 test("test home client action", async () => {
-    redirect("/odoo");
+    redirect("/shaka");
     browser.location.search = "";
 
     patchWithCleanup(browser.location, {

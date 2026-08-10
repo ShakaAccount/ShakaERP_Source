@@ -238,9 +238,9 @@ class IapAccount(models.Model):
         if not self.env.user.has_group('base.group_no_one'):
             return False
         if account:
-            url = f"/odoo/action-iap.iap_account_action/{account.id}?menu_id={menu.id}"
+            url = f"/shaka/action-iap.iap_account_action/{account.id}?menu_id={menu.id}"
         else:
-            url = f"/odoo/action-iap.iap_account_action?menu_id={menu.id}"
+            url = f"/shaka/action-iap.iap_account_action?menu_id={menu.id}"
         return url
 
     @api.model

@@ -286,7 +286,7 @@ registry.category("web_tour.tours").add("test_shop_floor", {
         },
         ...stepUtils.closeShopFloor(),
         // After using to Shopfloor smart button on MO, should ave active WC as overview
-        { trigger: ".o_menuitem[href='/odoo/shop-floor']", run: "click" },
+        { trigger: ".o_menuitem[href='/shaka/shop-floor']", run: "click" },
         {
             trigger: ".o_work_centers",
             run: () => {
@@ -326,7 +326,7 @@ registry.category("web_tour.tours").add("test_shop_floor_auto_select_workcenter"
         },
         // Exit the Shop Floor and re-open it: WC buttons should be the same.
         ...stepUtils.closeShopFloor(),
-        { trigger: ".o_menuitem[href='/odoo/shop-floor']", run: "click" },
+        { trigger: ".o_menuitem[href='/shaka/shop-floor']", run: "click" },
         {
             trigger: ".o_work_centers",
             run: () => {
@@ -360,7 +360,7 @@ registry.category("web_tour.tours").add("test_shop_floor_auto_select_workcenter"
         },
         // Exit the Shop Floor and open it from a WO form view.
         ...stepUtils.closeShopFloor(),
-        { trigger: ".o_menuitem[href='/odoo/work-centers']", run: "click" },
+        { trigger: ".o_menuitem[href='/shaka/work-centers']", run: "click" },
         { trigger: "button[data-menu-xmlid='mrp.menu_mrp_manufacturing']", run: "click" },
         { trigger: "a[data-menu-xmlid='mrp.menu_mrp_workorder_todo']", run: "click" },
         { trigger: "[name='workcenter_id'][data-tooltip='Furnace']", run: "click" },

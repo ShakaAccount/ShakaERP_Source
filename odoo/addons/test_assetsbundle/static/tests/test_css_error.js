@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("css_error_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         {
             content: "Error message",

@@ -148,7 +148,7 @@ class TestPurchaseProductCatalog(AccountTestInvoicingCommon, HttpCase):
         } for vendor in (vendor_by_liter, vendor_by_unit)])
         purchase_orders[0].name = "PO/TEST/00001"
         purchase_orders[1].name = "PO/TEST/00002"
-        self.start_tour('/odoo/purchase', 'test_catalog_vendor_uom', login='accountman')
+        self.start_tour('/shaka/purchase', 'test_catalog_vendor_uom', login='accountman')
 
     def test_seller_price_discounted_with_template(self):
         ProductAttribute = self.env['product.attribute']

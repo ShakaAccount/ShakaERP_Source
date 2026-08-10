@@ -20,4 +20,4 @@ class TestPayslipLineEdit(TestPayslipBase, HttpCase):
             'employee_id': self.richard_emp.id
         })
         richard_payslip.compute_sheet()
-        self.start_tour("/odoo", 'hr_payroll_edit_payslip_lines_tour', login='admin')
+        self.start_tour("/shaka", 'hr_payroll_edit_payslip_lines_tour', login='admin')

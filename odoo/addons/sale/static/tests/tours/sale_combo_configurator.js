@@ -7,7 +7,7 @@ import tourUtils from '@sale/js/tours/tour_utils';
 registry
     .category('web_tour.tours')
     .add('sale_combo_configurator', {
-        url: '/odoo',
+        url: '/shaka',
         steps: () => [
             ...stepUtils.goToAppSteps('sale.sale_menu_root', "Open the sales app"),
             ...tourUtils.createNewSalesOrder(),
@@ -109,7 +109,7 @@ registry
     registry
     .category('web_tour.tours')
     .add('sale_combo_configurator_with_optional_products', {
-        url: '/odoo',
+        url: '/shaka',
         steps: () => [
             ...stepUtils.goToAppSteps('sale.sale_menu_root', "Open the sales app"),
             ...tourUtils.createNewSalesOrder(),

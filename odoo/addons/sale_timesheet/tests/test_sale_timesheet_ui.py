@@ -34,4 +34,4 @@ class TestSaleTimesheetUi(HttpCase):
 
     def test_ui(self):
         self.env['product.pricelist'].with_context(active_test=False).search([]).unlink()
-        self.start_tour('/odoo', 'sale_timesheet_tour', login='admin', timeout=100)
+        self.start_tour('/shaka', 'sale_timesheet_tour', login='admin', timeout=100)

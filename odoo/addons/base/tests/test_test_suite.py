@@ -134,7 +134,7 @@ class TestRunnerLoggingCommon(TransactionCase):
         self.test_result.addError(self, (AssertionError, AssertionError(message), None))
 
     def _clean_message(self, message):
-        root_path = PurePath(__file__).parents[4]  # removes /odoo/addons/base/tests/test_test_suite.py
+        root_path = PurePath(__file__).parents[4]  # removes /shaka/addons/base/tests/test_test_suite.py
         python_path = PurePath(contextlib.__file__).parent  # /usr/lib/pythonx.x, C:\\python\\Lib, ...
         message = re.sub(r'line \d+', 'line $line', message)
         message = re.sub(r'py:\d+', 'py:$line', message)

@@ -9,7 +9,7 @@
             <p class="o_view_nocontent_smiling_face">
                 No Social Account yet!
             </p><p>
-                <a href="/odoo/action-social.action_social_media">Link an Account</a> to start posting from Odoo.
+                <a href="/shaka/action-social.action_social_media">Link an Account</a> to start posting from Odoo.
             </p>
         </field>
     </record>

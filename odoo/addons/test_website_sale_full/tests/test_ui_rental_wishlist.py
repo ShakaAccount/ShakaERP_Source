@@ -19,4 +19,4 @@ class TestUi(HttpCase, TestWebsiteSaleRentingCommon):
             'state_id': self.env.ref('base.state_us_39').id,
             'email': 'mitchell.admin@example.com',
         })
-        self.start_tour("/odoo", 'shop_buy_rental_product_wishlist', login='admin')
+        self.start_tour("/shaka", 'shop_buy_rental_product_wishlist', login='admin')

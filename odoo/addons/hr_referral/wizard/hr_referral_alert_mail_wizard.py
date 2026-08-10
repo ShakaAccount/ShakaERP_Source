@@ -19,7 +19,7 @@ class HrReferralAlertMailWizard(models.TransientModel):
         return [(6, 0, user_ids.ids)]
 
     def _default_body(self):
-        url = '/odoo/action-hr_referral.action_hr_referral_welcome_screen'
+        url = '/shaka/action-hr_referral.action_hr_referral_welcome_screen'
         return _('A new alert has been added to the Referrals app! Check your <a href=%(url)s>dashboard</a> now!', url=url)
 
     user_ids = fields.Many2many('res.users', 'Users', domain=_get_user_domain, default=_default_user_ids, store=False)

@@ -76,5 +76,5 @@ test("FloatTimeGridCell in grid view", async () => {
     expect(".o_grid_cell_readonly").toHaveText("9:30", {
         message: "The edition should be taken into account.",
     });
-    expect(".o_grid_component[name='foo_id'] .o_form_uri").toHaveAttribute("href", "/odoo/m-foo/1");
+    expect(".o_grid_component[name='foo_id'] .o_form_uri").toHaveAttribute("href", "/shaka/m-foo/1");
 });

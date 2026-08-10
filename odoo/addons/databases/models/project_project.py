@@ -251,7 +251,7 @@ class ProjectProject(models.Model):
 
         if not url and self._database_version_gte('saas~17.2'):
             # Supported since odoo/odoo@c63d14a0485a553b74a8457aee158384e9ae6d3f
-            url = f'{self.database_url}/odoo'
+            url = f'{self.database_url}/shaka'
 
         if not url:
             url = f'{self.database_url}/web'

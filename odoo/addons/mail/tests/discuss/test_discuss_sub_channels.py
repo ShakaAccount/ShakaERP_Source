@@ -90,7 +90,7 @@ class TestDiscussSubChannels(HttpCase):
         for i in range(100):
             channel._create_sub_channel(name=f"Sub Channel {i}")
         self.start_tour(
-            f"/odoo/discuss?active_id=discuss.channel_{channel.id}",
+            f"/shaka/discuss?active_id=discuss.channel_{channel.id}",
             "test_discuss_sub_channel_search",
             login="bob_user",
         )

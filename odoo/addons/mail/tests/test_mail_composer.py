@@ -295,7 +295,7 @@ class TestMailComposerUI(MailCommon, HttpCase):
         partner.message_subscribe(partner_ids=[self.user_admin.partner_id.id])
         with self.mock_mail_app():
             self.start_tour(
-                f"/odoo/res.partner/{partner.id}",
+                f"/shaka/res.partner/{partner.id}",
                 "mail/static/tests/tours/mail_composer_test_tour.js",
                 login=self.user_employee.login
             )
@@ -356,20 +356,20 @@ class TestMailComposerUI(MailCommon, HttpCase):
         partner.message_subscribe(partner_ids=[self.user_admin.partner_id.id])
         with self.mock_mail_app():
             self.start_tour(
-                f"/odoo/res.partner/{partner.id}",
+                f"/shaka/res.partner/{partner.id}",
                 "mail/static/tests/tours/mail_html_composer_test_tour.js",
                 login=self.user_employee.login,
             )
 
     def test_send_attachment_without_body(self):
-        self.start_tour("/odoo/discuss", "create_thread_for_attachment_without_body",login="admin")
+        self.start_tour("/shaka/discuss", "create_thread_for_attachment_without_body",login="admin")
 
     def test_mail_composer_autosave_tour(self):
         partner = self.env["res.partner"].create(
             {"name": "Jane", "email": "jane@example.com"})
         with self.mock_mail_app():
             self.start_tour(
-                f"/odoo/res.partner/{partner.id}",
+                f"/shaka/res.partner/{partner.id}",
                 "mail/static/tests/tours/mail_composer_autosave_tour.js",
                 login=self.user_employee.login
             )

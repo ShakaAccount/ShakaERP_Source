@@ -12,5 +12,5 @@ class TestIndustryFsmUi(HttpCase):
         self.env.ref('base.user_admin').write({
             'email': 'mitchell.admin@example.com',
         })
-        self.start_tour("/odoo", 'industry_fsm_tour', login="admin")
-        self.start_tour('/odoo', 'fsm_task_form_tour', login="admin")
+        self.start_tour("/shaka", 'industry_fsm_tour', login="admin")
+        self.start_tour('/shaka', 'fsm_task_form_tour', login="admin")

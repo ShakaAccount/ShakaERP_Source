@@ -1371,7 +1371,7 @@ class TestAccountReportsFilters(TestAccountReportsCommon, odoo.tests.HttpCase):
             })],
         } for i in range(1, 4)]).action_post()
 
-        self.start_tour("/odoo", 'account_reports_hide_0_lines', login=self.env.user.login)
+        self.start_tour("/shaka", 'account_reports_hide_0_lines', login=self.env.user.login)
 
     @freeze_time('2020-01-16')
     def test_hide_line_at_0_tour_with_string_columns(self):
@@ -1390,7 +1390,7 @@ class TestAccountReportsFilters(TestAccountReportsCommon, odoo.tests.HttpCase):
             })],
         }).action_post()
 
-        self.start_tour("/odoo", 'account_reports_hide_0_lines_with_string_columns', login=self.env.user.login)
+        self.start_tour("/shaka", 'account_reports_hide_0_lines_with_string_columns', login=self.env.user.login)
 
     def test_rounding_unit_tour(self):
         self.env['account.move'].create({
@@ -1405,7 +1405,7 @@ class TestAccountReportsFilters(TestAccountReportsCommon, odoo.tests.HttpCase):
             })],
         }).action_post()
 
-        self.start_tour("/odoo", 'account_reports_rounding_unit', login=self.env.user.login)
+        self.start_tour("/shaka", 'account_reports_rounding_unit', login=self.env.user.login)
 
     def test_filter_multi_company(self):
         def _check_company_filter(allowed_companies, expected_companies, message=None, match_active=True):

@@ -2,7 +2,7 @@ import { inputFiles } from "@web/../tests/utils";
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("import_fec_file_tour", {
-    url: "/odoo/action-account_base_import.action_open_import_guide",
+    url: "/shaka/action-account_base_import.action_open_import_guide",
     steps: () => [
         {
             content: "Import FEC wizard",

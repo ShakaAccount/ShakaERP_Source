@@ -35,7 +35,7 @@
     <template id="website_helpdesk_forum.question_dropdown" inherit_id="website_forum.post_dropdown">
         <xpath expr="//div[hasclass('dropdown-menu')]" position="inside">
             <t t-if="question">
-                <a groups="helpdesk.group_helpdesk_user" t-if="question and question.show_ticket" class="dropdown-item ps-3" t-attf-href="/odoo/helpdesk.ticket/#{question.ticket_id.id}?menu_id=#{question.env.ref('helpdesk.menu_helpdesk_root').id}">
+                <a groups="helpdesk.group_helpdesk_user" t-if="question and question.show_ticket" class="dropdown-item ps-3" t-attf-href="/shaka/helpdesk.ticket/#{question.ticket_id.id}?menu_id=#{question.env.ref('helpdesk.menu_helpdesk_root').id}">
                     <i class="fa fa-life-ring fa-fw" />
                     View Ticket
                 </a>

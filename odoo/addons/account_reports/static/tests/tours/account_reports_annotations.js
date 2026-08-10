@@ -2,7 +2,7 @@ import { Asserts } from "./asserts";
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("account_reports_annotations", {
-    url: "/odoo/action-account_reports.action_account_report_bs",
+    url: "/shaka/action-account_reports.action_account_report_bs",
     steps: () => [
         //--------------------------------------------------------------------------------------------------------------
         // Annotations

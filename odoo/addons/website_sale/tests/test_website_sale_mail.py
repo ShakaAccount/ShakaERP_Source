@@ -67,7 +67,7 @@ class TestWebsiteSaleMail(HttpCaseWithUserPortal):
             self.authenticate('admin', 'admin')
             res = self.url_open(url)
             self.assertEqual(res.status_code, 200)
-            self.assertTrue(res.request.path_url.startswith('/odoo/product.template'))
+            self.assertTrue(res.request.path_url.startswith('/shaka/product.template'))
 
         with self.subTest(user='portal'):
             self.authenticate('portal', 'portal')

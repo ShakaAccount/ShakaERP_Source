@@ -22,7 +22,7 @@ class BaseAutomationTestUi(HttpCase):
 
     def test_01_base_automation_tour(self):
         self._neutralize_preexisting_automations()
-        self.start_tour("/odoo/action-base_automation.base_automation_act?debug=tests", "test_base_automation", login="admin")
+        self.start_tour("/shaka/action-base_automation.base_automation_act?debug=tests", "test_base_automation", login="admin")
         base_automation = self.env["base.automation"].search([])
         self.assertEqual(base_automation.model_id.model, "res.partner")
         self.assertEqual(base_automation.trigger, "on_create_or_write")
@@ -34,7 +34,7 @@ class BaseAutomationTestUi(HttpCase):
     def test_base_automation_on_tag_added(self):
         self._neutralize_preexisting_automations()
         self.env["test_base_automation.tag"].create({"name": "test"})
-        self.start_tour("/odoo/action-base_automation.base_automation_act?debug=tests", "test_base_automation_on_tag_added", login="admin")
+        self.start_tour("/shaka/action-base_automation.base_automation_act?debug=tests", "test_base_automation_on_tag_added", login="admin")
 
     def test_open_automation_from_grouped_kanban(self):
         self._neutralize_preexisting_automations()
@@ -65,7 +65,7 @@ class BaseAutomationTestUi(HttpCase):
         tag = self.env["test_base_automation.tag"].create({"name": "test tag"})
         self.env["test_base_automation.project"].create({"name": "test", "tag_ids": [Command.link(tag.id)]})
 
-        self.start_tour(f"/odoo/action-{test_action.id}?debug=0", "test_open_automation_from_grouped_kanban", login="admin")
+        self.start_tour(f"/shaka/action-{test_action.id}?debug=0", "test_open_automation_from_grouped_kanban", login="admin")
         base_auto = self.env["base.automation"].search([])
         self.assertEqual(base_auto.name, "From Tour")
         self.assertEqual(base_auto.model_name, "test_base_automation.project")
@@ -103,7 +103,7 @@ class BaseAutomationTestUi(HttpCase):
         automation.write({"action_server_ids": [Command.create(action)]})
 
         self.start_tour(
-            "/odoo/action-base_automation.base_automation_act",
+            "/shaka/action-base_automation.base_automation_act",
             "test_kanban_automation_view_stage_trigger", login="admin"
         )
 
@@ -126,7 +126,7 @@ class BaseAutomationTestUi(HttpCase):
         })
 
         self.start_tour(
-            "/odoo/action-base_automation.base_automation_act",
+            "/shaka/action-base_automation.base_automation_act",
             "test_kanban_automation_view_time_trigger", login="admin"
         )
 
@@ -143,7 +143,7 @@ class BaseAutomationTestUi(HttpCase):
         })
 
         self.start_tour(
-            "/odoo/action-base_automation.base_automation_act",
+            "/shaka/action-base_automation.base_automation_act",
             "test_kanban_automation_view_time_updated_trigger", login="admin"
         )
 
@@ -168,7 +168,7 @@ class BaseAutomationTestUi(HttpCase):
         automation.write({"action_server_ids": [Command.create(action)]})
 
         self.start_tour(
-            "/odoo/action-base_automation.base_automation_act",
+            "/shaka/action-base_automation.base_automation_act",
             "test_kanban_automation_view_create_action", login="admin"
         )
 
@@ -195,7 +195,7 @@ class BaseAutomationTestUi(HttpCase):
         automation.write({"action_server_ids": [Command.create(action) for i in range(3)]})
 
         self.start_tour(
-            "/odoo/action-base_automation.base_automation_act",
+            "/shaka/action-base_automation.base_automation_act",
             "test_resize_kanban",
             login="admin",
         )
@@ -247,7 +247,7 @@ class BaseAutomationTestUi(HttpCase):
 
         self.start_tour(
             (
-                f"/odoo/action-base_automation.base_automation_act/{automation.id}?debug=0"
+                f"/shaka/action-base_automation.base_automation_act/{automation.id}?debug=0"
             ),
             "test_form_view_resequence_actions",
             login="admin",
@@ -261,7 +261,7 @@ class BaseAutomationTestUi(HttpCase):
     def test_form_view_model_id(self):
         self.start_tour(
             (
-                "/odoo/action-base_automation.base_automation_act/new?view_type='form'&amp;debug=0)"
+                "/shaka/action-base_automation.base_automation_act/new?view_type='form'&amp;debug=0)"
             ),
             "test_form_view_model_id",
             login="admin",
@@ -272,7 +272,7 @@ class BaseAutomationTestUi(HttpCase):
         self.env["test_base_automation.tag"].create({"name": "test tag"})
         self.start_tour(
             (
-                "/odoo/action-base_automation.base_automation_act/new?view_type='form'&amp;debug=0)"
+                "/shaka/action-base_automation.base_automation_act/new?view_type='form'&amp;debug=0)"
             ),
             "test_form_view_custom_reference_field",
             login="admin",
@@ -281,7 +281,7 @@ class BaseAutomationTestUi(HttpCase):
     def test_form_view_mail_triggers(self):
         self.start_tour(
             (
-                "/odoo/action-base_automation.base_automation_act/new?view_type='form'&debug=0)"
+                "/shaka/action-base_automation.base_automation_act/new?view_type='form'&debug=0)"
             ),
             "test_form_view_mail_triggers",
             login="admin",
@@ -289,7 +289,7 @@ class BaseAutomationTestUi(HttpCase):
 
     def test_on_change_rule_creation(self):
         """ test on_change rule creation from the UI """
-        self.start_tour("/odoo/action-base_automation.base_automation_act", 'base_automation.on_change_rule_creation', login="admin")
+        self.start_tour("/shaka/action-base_automation.base_automation_act", 'base_automation.on_change_rule_creation', login="admin")
 
         rule = self.env['base.automation'].search([], order="create_date desc", limit=1)[0]
         view_model = self.env['ir.model']._get("ir.ui.view")

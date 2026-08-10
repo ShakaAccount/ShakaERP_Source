@@ -14,8 +14,8 @@ class Home(web_home.Home):
         """ Force a read/write cursor for documents.access """
         path = request.httprequest.path
         if (
-            path.startswith('/odoo/documents')
-            and (request.httprequest.args.get('access_token') or path.removeprefix('/odoo/documents/'))
+            path.startswith('/shaka/documents')
+            and (request.httprequest.args.get('access_token') or path.removeprefix('/shaka/documents/'))
             and request.session.uid
         ):
             return False
@@ -23,7 +23,7 @@ class Home(web_home.Home):
 
     @route(readonly=_web_client_readonly)
     def web_client(self, s_action=None, **kw):
-        """ Handle direct access to a document with a backend URL (/odoo/documents/<access_token>).
+        """ Handle direct access to a document with a backend URL (/shaka/documents/<access_token>).
 
         It redirects to the document either in:
         - the backend if the user is logged and has access to the Documents module
@@ -58,13 +58,13 @@ class Home(web_home.Home):
             Redirect = request.env['documents.redirect'].sudo()
             if document_sudo := Redirect._get_redirection(access_token):
                 return request.redirect(
-                    f'/odoo/documents/{quote(document_sudo.access_token, safe="")}?{keep_query("*")}',
+                    f'/shaka/documents/{quote(document_sudo.access_token, safe="")}?{keep_query("*")}',
                     HTTPStatus.MOVED_PERMANENTLY,
                 )
 
         # We want (1) the webclient renders the webclient template and load
         # the document action. We also want (2) the router rewrites
-        # /odoo/documents/<id> to /odoo/documents/<access-token> in the
+        # /shaka/documents/<id> to /shaka/documents/<access-token> in the
         # URL.
         # We redirect on /web so this override does kicks in again,
         # super() is loaded and renders the normal home template. We add

@@ -10,7 +10,7 @@ from odoo.tests import Form
 class TestWorkorderClientActionCommon(TestMrpWorkorderCommon):
     @classmethod
     def _get_client_action_url(cls, workorder_id):
-        return f'/odoo/{workorder_id}/action-mrp_workorder.tablet_client_action'
+        return f'/shaka/{workorder_id}/action-mrp_workorder.tablet_client_action'
 
     @classmethod
     def setUpClass(cls):

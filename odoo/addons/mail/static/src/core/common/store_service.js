@@ -470,7 +470,7 @@ export class Store extends BaseStore {
             }
             if (
                 browser.location.host === url.host &&
-                browser.location.pathname.startsWith("/odoo")
+                browser.location.pathname.startsWith("/shaka")
             ) {
                 this.ChatWindow.get({ thread })?.fold();
             }

@@ -2316,11 +2316,11 @@ describe("grid_view_mobile", () => {
         // Scroll to the middle of the grid
         await scroll(content, { top: content.scrollHeight / 2 });
         await animationFrame();
-        expect(`a[href="/odoo/m-task/101"]`).toHaveCount(1);
+        expect(`a[href="/shaka/m-task/101"]`).toHaveCount(1);
 
         // Scroll to the end of the grid
         await scroll(content, { top: content.scrollHeight });
         await animationFrame();
-        expect(`a[href="/odoo/m-task/199"]`).toHaveCount(1);
+        expect(`a[href="/shaka/m-task/199"]`).toHaveCount(1);
     });
 });

@@ -439,8 +439,8 @@ class PasskeyTest(HttpCaseWithUserDemo):
                 'password': '',
             })
 
-            # Login successful, redirected to /odoo
-            self.assertTrue(response.url.endswith('/odoo'))
+            # Login successful, redirected to /shaka
+            self.assertTrue(response.url.endswith('/shaka'))
 
 
 @tagged('post_install', '-at_install')
@@ -456,7 +456,7 @@ class PasskeyTestTours(PasskeyTest):
         self.admin_user.tz = 'UTC'  # workaround to fix timezone not being set so you are unable to click any buttons on the profile page
         self.admin_user.auth_passkey_key_ids.unlink()
         with self.patch_start_registration(self.passkeys['test-yubikey']['registration']['challenge']):
-            self.start_tour("/odoo?debug=tests", 'passkeys_tour_registration', login="admin")
+            self.start_tour("/shaka?debug=tests", 'passkeys_tour_registration', login="admin")
         with self.patch_start_auth(self.passkeys['test-yubikey']['auth']['challenge']):
-            self.start_tour("/odoo?debug=tests", 'passkeys_tour_verify', login="admin")
-        self.start_tour("/odoo?debug=tests", 'passkeys_tour_delete', login="admin")
+            self.start_tour("/shaka?debug=tests", 'passkeys_tour_verify', login="admin")
+        self.start_tour("/shaka?debug=tests", 'passkeys_tour_delete', login="admin")

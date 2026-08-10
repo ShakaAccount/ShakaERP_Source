@@ -73,7 +73,7 @@ class ShopeeController(http.Controller):
             ).create_or_update_shop(company_id, account.id, identifier, shop_vals)
 
         # Craft the URL of the Shopee Shop form view
-        redirect_url = f'/odoo/action-sale_shopee.action_shopee_account_list/{account.id}'
+        redirect_url = f'/shaka/action-sale_shopee.action_shopee_account_list/{account.id}'
         if shop_id and shop:
             redirect_url = f'{redirect_url}/action-sale_shopee.action_shopee_shop_list/{shop.id}'
 

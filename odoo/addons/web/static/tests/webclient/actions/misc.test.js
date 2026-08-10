@@ -243,7 +243,7 @@ test("getCurrentAction (virtual controller)", async () => {
     }
     actionRegistry.add("HelloWorldTest", ClientAction);
 
-    redirect("/odoo/action-1/plop");
+    redirect("/shaka/action-1/plop");
     await mountWithCleanup(WebClient);
 
     await animationFrame();
@@ -727,7 +727,7 @@ test("retrieving a stored action should remove 'allowed_company_ids' from its co
 
     // Prepare the URL hash to make sure the stored action will get executed.
     // Object.assign(browser.location, { search: "?model=partner&view_type=kanban" });
-    redirect("/odoo/action-1?view_type=kanban");
+    redirect("/shaka/action-1?view_type=kanban");
 
     // Create the web client. It should execute the stored action.
     await mountWithCleanup(WebClient);

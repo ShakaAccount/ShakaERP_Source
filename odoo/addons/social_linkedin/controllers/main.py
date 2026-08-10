@@ -45,7 +45,7 @@ class SocialLinkedinController(SocialController):
             except SocialValidationException as e:
                 return request.render('social.social_http_error_view', {'error_message': e.get_message(), 'documentation_data': e.get_documentation_data()})
 
-        return request.redirect('/odoo/action-social.action_social_stream_post')
+        return request.redirect('/shaka/action-social.action_social_stream_post')
 
     # ========================================================
     # COMMENTS / LIKES

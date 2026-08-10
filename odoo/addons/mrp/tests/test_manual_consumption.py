@@ -46,7 +46,7 @@ class TestTourManualConsumption(HttpCase):
         self.assertEqual(move_nt.quantity, 0)
         self.assertFalse(move_nt.picked)
 
-        url = f"/odoo/action-mrp.mrp_production_action/{mo.id}"
+        url = f"/shaka/action-mrp.mrp_production_action/{mo.id}"
         self.start_tour(url, "test_mrp_manual_consumption_02", login="admin", timeout=100)
 
         self.assertEqual(move_nt.manual_consumption, True)

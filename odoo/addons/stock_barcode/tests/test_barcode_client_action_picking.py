@@ -118,7 +118,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         delivery_with_move.action_confirm()
         delivery_with_move.action_assign()
 
-        url = f'/odoo/{delivery_with_move.id}/action-stock_barcode.stock_barcode_picking_client_action'
+        url = f'/shaka/{delivery_with_move.id}/action-stock_barcode.stock_barcode_picking_client_action'
         self.start_tour(url, 'test_picking_scan_package_confirmation', login='admin', timeout=180)
 
     def test_internal_picking_from_scratch_with_package(self):
@@ -152,7 +152,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         self.env['stock.quant']._update_available_quantity(self.product2, self.stock_location, 1, package_id=package4)
         self.assertEqual(package2.location_id.id, self.stock_location.id)
 
-        self.start_tour("/odoo/barcode", 'test_internal_picking_from_scratch_with_package', login='admin')
+        self.start_tour("/shaka/barcode", 'test_internal_picking_from_scratch_with_package', login='admin')
 
         # Check first package's content.
         self.assertEqual(len(self.package.quant_ids), 2)
@@ -268,7 +268,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         internal_pickings[1].action_add_entire_packs(packages[4:].ids)
         internal_pickings.action_confirm()
 
-        self.start_tour('/odoo/barcode', 'test_internal_picking_reserved_move_packages_into_new_palet', login='admin')
+        self.start_tour('/shaka/barcode', 'test_internal_picking_reserved_move_packages_into_new_palet', login='admin')
 
     def test_receipt_from_scratch_with_lots_1(self):
         self.env.user.write({
@@ -473,7 +473,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         self._reset_package_sequence(1000)
 
         # Opens the barcode main menu to be able to open the pickings by scanning their name.
-        self.start_tour("/odoo/barcode", "test_receipt_reserved_2_partial_put_in_pack", login="admin", timeout=180)
+        self.start_tour("/shaka/barcode", "test_receipt_reserved_2_partial_put_in_pack", login="admin", timeout=180)
 
         package1 = self.env['stock.package'].search([('name', '=', 'PACK0001000')])
         package2 = self.env['stock.package'].search([('name', '=', 'PACK0001001')])
@@ -536,7 +536,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
             ]
         ])
         receipts.action_confirm()
-        self.start_tour('/odoo/barcode', 'test_receipt_reserved_put_in_pack_after_interruption', login='admin')
+        self.start_tour('/shaka/barcode', 'test_receipt_reserved_put_in_pack_after_interruption', login='admin')
 
     def test_receipt_product_not_consecutively(self):
         """ Check that there is no new line created when scanning the same product several times but not consecutively."""
@@ -602,7 +602,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         delivery_from_stock_2.action_confirm()
         delivery_from_stock_2.action_assign()
 
-        url = '/odoo/action-stock_barcode.stock_barcode_action_main_menu'
+        url = '/shaka/action-stock_barcode.stock_barcode_action_main_menu'
         self.start_tour(url, 'test_delivery_source_location', login='admin', timeout=180)
 
     def test_delivery_lot_with_multi_companies(self):
@@ -809,7 +809,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         self.env['stock.package'].create({
             'name': 'pack-test',
         })
-        self.start_tour('/odoo/barcode', 'test_delivery_pack_from_different_location', login='admin')
+        self.start_tour('/shaka/barcode', 'test_delivery_pack_from_different_location', login='admin')
 
     def test_delivery_reserved_1(self):
         self.env.user.write({'group_ids': [Command.link(self.env.ref('stock.group_stock_multi_locations').id)]})
@@ -1458,7 +1458,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         )], limit=1)
         sequence.write({'number_next_actual': 1000})
 
-        self.start_tour("/odoo/barcode", 'test_pack_multiple_scan', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_pack_multiple_scan', login='admin', timeout=180)
 
         # Check the new package is well delivered
         package = self.env['stock.package'].search([
@@ -1507,7 +1507,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
             package_id=pack2,
         )
 
-        self.start_tour("/odoo/barcode", 'test_pack_common_content_scan', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_pack_common_content_scan', login='admin', timeout=180)
 
     def test_pack_multiple_location(self):
         """ Create a package in Shelf 1 and makes an internal transfer to move it to Shelf 2.
@@ -1541,7 +1541,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
             package_id=pack1,
         )
 
-        self.start_tour("/odoo/barcode", 'test_pack_multiple_location', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_pack_multiple_location', login='admin', timeout=180)
 
         # Check the new package is well transfered
         self.assertEqual(pack1.location_id, self.shelf2)
@@ -1738,7 +1738,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
             ],
         })
         receipt.action_confirm()
-        self.start_tour('/odoo/barcode', 'test_put_in_pack_in_new_created_package', login='admin')
+        self.start_tour('/shaka/barcode', 'test_put_in_pack_in_new_created_package', login='admin')
         self.assertEqual(receipt.move_ids.move_line_ids.result_package_id.name, "PACK0000042")
         self.assertEqual(
             receipt.move_ids[0].move_line_ids.result_package_id.id,
@@ -1833,12 +1833,12 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         # Pack boxes into a palet.
         box1.parent_package_id = palet1
         box2.parent_package_id = palet1
-        self.start_tour('/odoo/barcode', 'test_unpack_palet_then_pack_another_palet', login='admin')
+        self.start_tour('/shaka/barcode', 'test_unpack_palet_then_pack_another_palet', login='admin')
 
     def test_reload_flow(self):
         self.env.user.write({'group_ids': [Command.link(self.env.ref('stock.group_stock_multi_locations').id)]})
 
-        self.start_tour("/odoo/barcode", 'test_reload_flow', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_reload_flow', login='admin', timeout=180)
 
         move_line1 = self.env['stock.move.line'].search_count([
             ('product_id', '=', self.product1.id),
@@ -1868,8 +1868,8 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
                 Command.link(self.env.ref('stock.group_stock_multi_locations').id),
             ],
         })
-        self.start_tour("/odoo/barcode", 'test_receipt_duplicate_serial_number', login='admin', timeout=180)
-        self.start_tour("/odoo/barcode", 'test_delivery_duplicate_serial_number', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_receipt_duplicate_serial_number', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_delivery_duplicate_serial_number', login='admin', timeout=180)
 
     def test_bypass_source_scan(self):
         """ Scan a lot, package, product without source location scan. """
@@ -2171,7 +2171,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         })
         out_picking.name = 'WH/OUT/TEST/001'
         out_picking.action_confirm()
-        self.start_tour('/odoo/barcode', 'test_put_packs_in_new_pack', login='admin')
+        self.start_tour('/shaka/barcode', 'test_put_packs_in_new_pack', login='admin')
 
     def test_highlight_packs(self):
         self.env.user.write({'group_ids': [Command.link(self.env.ref('stock.group_tracking_lot').id)]})
@@ -2214,7 +2214,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
 
         self.env['stock.quant']._update_available_quantity(self.product1, self.stock_location, 7, package_id=self.package, owner_id=self.owner)
 
-        self.start_tour("/odoo/barcode", 'test_picking_owner_scan_package', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_picking_owner_scan_package', login='admin', timeout=180)
 
         move_line = self.env['stock.move.line'].search([('product_id', '=', self.product1.id)], limit=1)
         self.assertTrue(move_line)
@@ -2568,7 +2568,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         individual barcode encodings are separated by the separator."""
         self.env.user.write({'group_ids': [Command.link(self.env.ref('stock.group_production_lot').id)]})
         self.env['ir.config_parameter'].set_param('stock_barcode.barcode_separator_regex', '[,|]')
-        url = "/odoo/action-stock_barcode.stock_barcode_action_main_menu"
+        url = "/shaka/action-stock_barcode.stock_barcode_action_main_menu"
         self.start_tour(url, "test_scan_aggregate_barcode", login="admin", timeout=180)
         # Check the receipt values.
         domain = [('picking_type_id', '=', self.picking_type_in.id), ('state', '=', 'done')]
@@ -2620,7 +2620,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         delivery_picking.action_assign()
         delivery_picking.name = "delivery_scrap_test"
         # Opens the barcode main menu to be able to open the pickings by scanning their name.
-        self.start_tour("/odoo/barcode", "test_scrap", login="admin", timeout=180)
+        self.start_tour("/shaka/barcode", "test_scrap", login="admin", timeout=180)
 
     def test_scrap_change_source_location(self):
         self.env.user.group_ids = [
@@ -2704,7 +2704,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         delivery_with_move.action_confirm()
         delivery_with_move.action_assign()
 
-        self.start_tour('/odoo/barcode', 'test_show_entire_package', login='admin', timeout=180)
+        self.start_tour('/shaka/barcode', 'test_show_entire_package', login='admin', timeout=180)
 
     def test_define_the_destination_package(self):
         """
@@ -2788,7 +2788,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         })
         delivery.action_confirm()
         delivery.action_assign()
-        self.start_tour("/odoo/barcode", 'test_setting_barcode_allow_extra_product', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_setting_barcode_allow_extra_product', login='admin', timeout=180)
 
     def test_setting_barcode_allow_extra_product_with_packages(self):
         """
@@ -2839,7 +2839,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         deliveries[1].action_add_entire_packs(pack02.id)
         deliveries.action_confirm()
 
-        self.start_tour('/odoo/barcode', 'test_setting_barcode_allow_extra_product_with_packages', login='admin')
+        self.start_tour('/shaka/barcode', 'test_setting_barcode_allow_extra_product_with_packages', login='admin')
 
     def test_split_line_reservation(self):
         """ Tests new lines created when a line is split to take
@@ -2961,7 +2961,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         })
         internal.action_confirm()
         # Process the receipt and the internal transfer in a tour, then checks its move lines values.
-        self.start_tour('/odoo/barcode', 'test_split_line_on_destination_scan', login='admin')
+        self.start_tour('/shaka/barcode', 'test_split_line_on_destination_scan', login='admin')
         self.assertRecordValues(receipt.move_line_ids, [
             {'quantity': 2, 'picked': True, 'location_dest_id': receipt.location_dest_id.id},
             {'quantity': 2, 'picked': True, 'location_dest_id': self.shelf1.id},
@@ -3006,7 +3006,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         } for product in [self.product1, self.product2, product3]])
         delivery.action_confirm()
 
-        self.start_tour("/odoo/barcode", 'test_split_line_on_exit_for_delivery', login='admin')
+        self.start_tour("/shaka/barcode", 'test_split_line_on_exit_for_delivery', login='admin')
         # Checks delivery moves values:
         # - product1 line should not be split (completed line)
         # - product2 line should be split in two (2 qty picked, 2 qty left)
@@ -3087,7 +3087,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         self.assertRecordValues(receipt.move_ids, [
             {'product_uom_qty': 3.0, 'quantity': 3.0, 'picked': False}
         ])
-        self.start_tour('/odoo/barcode', 'test_split_line_on_exit_for_receipt_with_grouped_lot', login='admin')
+        self.start_tour('/shaka/barcode', 'test_split_line_on_exit_for_receipt_with_grouped_lot', login='admin')
         # Checks receipt moves values.
         self.assertRecordValues(receipt.move_ids, [
             {'product_uom_qty': 3.0, 'quantity': 3.0, 'picked': True},
@@ -3265,7 +3265,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         })
         receipt_picking.action_confirm()
         action = self.env.ref('stock_barcode.stock_barcode_action_main_menu')
-        url = "/odoo/action-stock_barcode.stock_barcode_action_main_menu"
+        url = "/shaka/action-stock_barcode.stock_barcode_action_main_menu"
         self.start_tour(url, 'test_open_picking_dont_override_assigned_user', login='admin')
         self.assertEqual(receipt_picking.user_id.id, bob.id, "Picking responsible should be unchanged after click when previously set")
 
@@ -3290,7 +3290,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         })
 
         cids = '-'.join(str(cid) for cid in self.env.user.company_ids.ids)
-        url = '/odoo/action-stock_barcode.stock_barcode_action_main_menu'
+        url = '/shaka/action-stock_barcode.stock_barcode_action_main_menu'
         self.start_tour(url, 'test_multi_company_record_access_in_barcode', login='admin', timeout=180, cookies={"cids": cids})
 
         self.assertTrue(
@@ -3319,7 +3319,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         })
         picking.action_confirm()
 
-        url = "/odoo/action-stock_barcode.stock_barcode_action_main_menu"
+        url = "/shaka/action-stock_barcode.stock_barcode_action_main_menu"
         self.start_tour(url, 'test_no_zero_demand_new_line_from_split', login='admin', timeout=180)
 
         self.assertRecordValues(
@@ -3439,7 +3439,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         self.env.user.write({'group_ids': [Command.link(grp_multi_loc.id)]})
         self.picking_type_internal.active = True
         self.env['stock.quant']._update_available_quantity(self.product1, self.shelf3, 5)
-        self.start_tour('/odoo/barcode', 'test_scan_product_when_in_form_view', login='admin')
+        self.start_tour('/shaka/barcode', 'test_scan_product_when_in_form_view', login='admin')
 
     def test_split_uncomplete_moves_on_exit(self):
         """
@@ -3805,7 +3805,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
                 'product_uom_qty': 2,
             })]
         }).action_confirm()
-        self.start_tour('/odoo/barcode', 'test_validate_uncomplete_return', login='admin')
+        self.start_tour('/shaka/barcode', 'test_validate_uncomplete_return', login='admin')
 
     def test_scan_package_with_different_uom(self):
         """ Ensure that when the user scans a package, if the line uses another
@@ -4045,7 +4045,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
                 'location_id': self.stock_location.id,
             }).action_apply_inventory()
         # Run the tour.
-        self.start_tour('/odoo/barcode', 'test_gs1_delivery_ambiguous_lot_number', login='admin', timeout=180)
+        self.start_tour('/shaka/barcode', 'test_gs1_delivery_ambiguous_lot_number', login='admin', timeout=180)
 
     def test_gs1_delivery_ambiguous_serial_number(self):
         """
@@ -4236,7 +4236,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
             'uom_id': self.env.ref('uom.product_uom_unit').id,
         })
         self.env['stock.package'].create({'name': '21-Chouette-MegaPack'})
-        self.start_tour("/odoo/barcode", 'test_gs1_receipt_conflicting_barcodes_mistaken_as_gs1', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_gs1_receipt_conflicting_barcodes_mistaken_as_gs1', login='admin', timeout=180)
 
     def test_gs1_receipt_lot_serial(self):
         """ Creates a receipt for a product tracked by lot, then process it in the Barcode App.
@@ -4321,7 +4321,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         non-GS1 barcode when GS1 nomenclature is active."""
         self.env.user.write({'group_ids': [Command.link(self.env.ref('stock.group_production_lot').id)]})
         self.env.company.nomenclature_id = self.env.ref('barcodes_gs1_nomenclature.default_gs1_nomenclature')
-        self.start_tour('/odoo/barcode', 'test_gs1_receipt_scan_not_gs1_multi_barcode', login='admin')
+        self.start_tour('/shaka/barcode', 'test_gs1_receipt_scan_not_gs1_multi_barcode', login='admin')
 
     def test_gs1_package_receipt_and_delivery(self):
         """ Receives some products and scans a GS1 barcode for a package, then
@@ -4353,7 +4353,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
             'barcode': 'IRONC',
         }])
 
-        self.start_tour("/odoo/barcode", 'test_gs1_package_receipt', login='admin')
+        self.start_tour("/shaka/barcode", 'test_gs1_package_receipt', login='admin')
         # Checks the package is in the stock location with the products.
         package = self.env['stock.package'].search([('name', '=', '546879213579461324')])
         package2 = self.env['stock.package'].search([('name', '=', '130406658041178543')])
@@ -4369,7 +4369,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         self.assertEqual(package3.package_type_id.id, iron_chest_package_type.id)
         self.assertEqual(package3.quant_ids.product_id.id, product2.id)
 
-        self.start_tour("/odoo/barcode", 'test_gs1_package_delivery', login='admin')
+        self.start_tour("/shaka/barcode", 'test_gs1_package_delivery', login='admin')
         # Checks the package is in the customer's location.
         self.assertEqual(package.location_id.id, self.customer_location.id)
 
@@ -4422,7 +4422,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
             'uom_id': self.env.ref('uom.product_uom_dozen').id,
         })
 
-        self.start_tour("/odoo/barcode", 'test_gs1_tracked_packaging', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_gs1_tracked_packaging', login='admin', timeout=180)
         lot = self.env['stock.lot'].search([('name', '=', 'lot-001')])
         move_lines = self.env['stock.move.line'].search([('product_id', '=', self.productlot1.id)])
         self.assertRecordValues(move_lines, [
@@ -4452,7 +4452,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
             'barcode': 'PCK4',
         })
 
-        self.start_tour('/odoo/barcode', 'test_serial_product_packaging', login='admin', timeout=180)
+        self.start_tour('/shaka/barcode', 'test_serial_product_packaging', login='admin', timeout=180)
 
     def test_split_line_on_scan(self):
         """
@@ -4525,7 +4525,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
 
         self.assertFalse(delivery2.signature)
 
-        url = '/odoo/action-stock_barcode.stock_picking_type_action_kanban'
+        url = '/shaka/action-stock_barcode.stock_picking_type_action_kanban'
         self.start_tour(url, 'test_barcode_signature_flow', login="admin")
 
         self.assertTrue(delivery2.signature)
@@ -4624,7 +4624,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
             })],
         })
         receipt.action_confirm()
-        self.start_tour('/odoo/barcode', 'test_qty_after_uom_update_picking_tour', login='admin')
+        self.start_tour('/shaka/barcode', 'test_qty_after_uom_update_picking_tour', login='admin')
 
     def test_stock_quant_ids_computed_by_product_update(self):
         """
@@ -4730,7 +4730,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         self.env.user.write({'group_ids': [Command.link(grp_multi_loc.id)]})
         self.picking_type_internal.action_unarchive()
         self.env['stock.quant']._update_available_quantity(self.product2, self.stock_location, 1)
-        self.start_tour('/odoo/barcode', 'test_no_validate_multiple_times', login='admin')
+        self.start_tour('/shaka/barcode', 'test_no_validate_multiple_times', login='admin')
 
         quant = self.env['stock.quant'].search([('product_id', '=', self.product2.id), ('location_id', '=', self.shelf1.id)], limit=1)
         self.assertEqual(quant.quantity, 1)

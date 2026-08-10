@@ -279,4 +279,4 @@ class TestUi(TestUiCommon):
         self.assertEqual([slot1_athos.start_datetime, slot1_athos.end_datetime], [full_slot_athos.start_datetime, full_slot_athos.end_datetime])
 
     def test_onboarding_tour(self):
-        self.start_tour("/odoo", 'planning_tour', login='admin')
+        self.start_tour("/shaka", 'planning_tour', login='admin')

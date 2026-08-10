@@ -22,7 +22,7 @@
             <t t-call="portal.portal_docs_entry">
                 <t t-set="icon" t-value="'/documents/static/src/img/documents_pile.svg'"/>
                 <t t-set="title">Documents</t>
-                <t t-set="url" t-value="'/odoo/documents_portal'"/>
+                <t t-set="url" t-value="'/shaka/documents_portal'"/>
                 <t t-set="text">Access all your documents</t>
                 <t t-set="placeholder_count" t-value="'document_count'"/>
             </t>

@@ -31,7 +31,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
         - Add a product with the form view.
         - Validate
         """
-        self.start_tour("/odoo/barcode", 'test_inventory_adjustment', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_inventory_adjustment', login='admin', timeout=180)
 
         inventory_moves = self.env['stock.move'].search([('product_id', 'in', [self.product1.id, self.product2.id]),
                                                          ('is_inventory', '=', True)])
@@ -59,7 +59,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
         quants.inventory_quantity_set = True
         quants.inventory_date = fields.Date.today()
 
-        self.start_tour("/odoo/barcode", 'test_inventory_adjustment_dont_update_location', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_inventory_adjustment_dont_update_location', login='admin', timeout=180)
         quants = self.env['stock.quant'].search([
             ('product_id', '=', self.product1.id),
             ('location_id.usage', '=', 'internal'),
@@ -101,7 +101,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'show_expected_quantity': True,
         })
         wizard_request_count.action_request_count()
-        self.start_tour("/odoo", 'test_inventory_adjustment_multi_company', login='admin', timeout=180)
+        self.start_tour("/shaka", 'test_inventory_adjustment_multi_company', login='admin', timeout=180)
         # Checks an inventory adjustment was correctly validated for each company.
         inventory_moves = self.env['stock.move'].search([
             ('is_inventory', '=', True),
@@ -124,7 +124,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
         - Validate
         """
         self.env.user.write({'group_ids': [Command.link(self.env.ref('stock.group_stock_multi_locations').id)]})
-        self.start_tour("/odoo/barcode", 'test_inventory_adjustment_multi_location', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_inventory_adjustment_multi_location', login='admin', timeout=180)
 
         inventory_moves = self.env['stock.move'].search([('product_id', 'in', [self.product1.id, self.product2.id]),
                                                          ('is_inventory', '=', True)])
@@ -159,7 +159,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
         """
         self.env.user.write({'group_ids': [Command.link(self.env.ref('stock.group_production_lot').id)]})
         self.env['ir.config_parameter'].set_param('stock.show_expected_quantity_count', 'True')
-        self.start_tour("/odoo/barcode", 'test_inventory_adjustment_tracked_product', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_inventory_adjustment_tracked_product', login='admin', timeout=180)
 
         inventory_moves = self.env['stock.move'].search([('product_id', 'in', [self.productlot1.id, self.productserial1.id]),
                                                          ('is_inventory', '=', True)])
@@ -211,7 +211,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
                 serial_number = self.env['stock.lot'].create({'product_id': self.productserial1.id, 'name': f'sn{n}'})
                 self.env['stock.quant']._update_available_quantity(self.productserial1, location, 1, lot_id=serial_number)
         # Opens the inventory adjustement and process it.
-        self.start_tour("/odoo/barcode", "test_inventory_adjustment_tracked_product_multilocation", login="admin", timeout=180)
+        self.start_tour("/shaka/barcode", "test_inventory_adjustment_tracked_product_multilocation", login="admin", timeout=180)
 
     def test_inventory_adjustment_tracked_product_permissive_quants(self):
         """Make an inventory adjustment for a product tracked by lot having quants without lot.
@@ -229,7 +229,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'product_id': self.productlot1.id,
         })
         self.env['stock.quant']._update_available_quantity(self.productlot1, self.stock_location, 5)
-        self.start_tour("/odoo/barcode", 'test_inventory_adjustment_tracked_product_permissive_quants', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_inventory_adjustment_tracked_product_permissive_quants', login='admin', timeout=180)
 
         inventory_moves = self.env['stock.move'].search([('product_id', '=', self.productlot1.id),
                                                          ('is_inventory', '=', True)])
@@ -249,7 +249,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
         """
         Quant = self.env['stock.quant']
         self.env['ir.config_parameter'].set_param('stock.show_expected_quantity_count', 'True')
-        self.start_tour("/odoo/barcode", 'test_inventory_create_quant', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_inventory_create_quant', login='admin', timeout=180)
 
         Quant._unlink_zero_quants()
         product1_quant = Quant.search([('product_id', '=', self.product1.id)])
@@ -299,7 +299,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'show_expected_quantity': True,
         })
         wizard_request_count.action_request_count()
-        self.start_tour("/odoo/barcode", 'test_inventory_dialog_not_counted_serial_numbers', login='admin')
+        self.start_tour("/shaka/barcode", 'test_inventory_dialog_not_counted_serial_numbers', login='admin')
         self.assertRecordValues(quants, [
             {'product_id': self.productserial1.id, 'lot_id': serial1_sns[0].id, 'quantity': 1, 'location_id': self.shelf1.id},
             {'product_id': self.productserial1.id, 'lot_id': serial1_sns[1].id, 'quantity': 1, 'location_id': self.shelf1.id},
@@ -328,7 +328,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'show_expected_quantity': False,
         })
         wizard_request_count.action_request_count()
-        self.start_tour("/odoo/barcode/", 'test_inventory_image_visible_for_quant', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode/", 'test_inventory_image_visible_for_quant', login='admin', timeout=180)
 
     def test_inventory_nomenclature(self):
         """ Simulate scanning a product and its weight
@@ -341,7 +341,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'barcode': '2145631000000',
         })
 
-        self.start_tour("/odoo/barcode", 'test_inventory_nomenclature', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_inventory_nomenclature', login='admin', timeout=180)
         quantity = self.env['stock.move.line'].search([
             ('product_id', '=', product_weight.id),
             ('state', '=', 'done'),
@@ -361,7 +361,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
         self.env['stock.quant']._update_available_quantity(self.product1, self.stock_location, 7, package_id=pack)
         self.env['stock.quant']._update_available_quantity(self.product2, self.stock_location, 3, package_id=pack)
 
-        self.start_tour("/odoo/barcode", "test_inventory_package", login="admin", timeout=180)
+        self.start_tour("/shaka/barcode", "test_inventory_package", login="admin", timeout=180)
 
         # Check the package is updated after adjustment
         self.assertDictEqual(
@@ -387,7 +387,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'product_id': self.product1.id,
             'barcode': 'pack007',
         })
-        self.start_tour("/odoo/barcode", 'test_inventory_packaging', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_inventory_packaging', login='admin', timeout=180)
         self.assertEqual(self.product1.qty_available, 15.0)
 
     def test_inventory_serial_product_packaging(self):
@@ -412,7 +412,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'barcode': 'PCK3',
         })
 
-        self.start_tour('/odoo/barcode', 'test_inventory_serial_product_packaging', login='admin', timeout=180)
+        self.start_tour('/shaka/barcode', 'test_inventory_serial_product_packaging', login='admin', timeout=180)
 
     def test_inventory_packaging_button(self):
         """
@@ -426,7 +426,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'relative_uom_id': self.env.ref('uom.product_uom_unit').id,
         })
         self.env['ir.config_parameter'].set_param('stock.show_expected_quantity_count', 'True')
-        self.start_tour("/odoo/barcode", "test_inventory_packaging_button", login="admin", timeout=180)
+        self.start_tour("/shaka/barcode", "test_inventory_packaging_button", login="admin", timeout=180)
         quant = self.env['stock.quant'].search([("product_id", "=", self.product1.id)], limit=1)
         self.assertEqual(quant.inventory_quantity, 15.0)
 
@@ -446,11 +446,11 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
         self.env['stock.quant']._update_available_quantity(self.product1, self.shelf1, 40.0)
         self.env['stock.quant']._update_available_quantity(self.product1, self.shelf2, 80.0)
 
-        self.start_tour("/odoo/barcode", "test_inventory_packaging_location", login="admin")
+        self.start_tour("/shaka/barcode", "test_inventory_packaging_location", login="admin")
         # Relaunch the same tour with a mobile device config.
         self.browser_size = '375x667'
         self.touch_enabled = True
-        self.start_tour("/odoo/barcode", "test_inventory_packaging_location", login="admin")
+        self.start_tour("/shaka/barcode", "test_inventory_packaging_location", login="admin")
 
     def test_inventory_owner_scan_package(self):
         group_owner = self.env.ref('stock.group_tracking_owner')
@@ -460,7 +460,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
 
         self.env['stock.quant']._update_available_quantity(self.product1, self.stock_location, 7, package_id=self.package, owner_id=self.owner)
 
-        self.start_tour("/odoo/barcode", 'test_inventory_owner_scan_package', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_inventory_owner_scan_package', login='admin', timeout=180)
 
         inventory_moves = self.env['stock.move'].search([('product_id', '=', self.product1.id), ('is_inventory', '=', True)])
         self.assertEqual(len(inventory_moves), 1)
@@ -506,7 +506,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'show_expected_quantity': True,
         })
         wizard_request_count.action_request_count()
-        self.start_tour("/odoo/barcode", 'test_inventory_setting_count_entire_locations_on', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_inventory_setting_count_entire_locations_on', login='admin', timeout=180)
 
     def test_inventory_setting_count_entire_locations_off(self):
         """
@@ -530,7 +530,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'show_expected_quantity': True,
         })
         wizard_request_count.action_request_count()
-        self.start_tour('/odoo/barcode', 'test_inventory_setting_count_entire_locations_off', login='admin', timeout=180)
+        self.start_tour('/shaka/barcode', 'test_inventory_setting_count_entire_locations_off', login='admin', timeout=180)
 
     def test_inventory_setting_show_quantity_to_count(self):
         """
@@ -569,10 +569,10 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
         })
         wizard_request_count.action_request_count()
 
-        self.start_tour("/odoo/barcode", 'test_inventory_setting_show_quantity_to_count_on', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_inventory_setting_show_quantity_to_count_on', login='admin', timeout=180)
         # Disable the "Show Quantity to Count" setting and launch second tour.
         self.env['ir.config_parameter'].set_param('stock.show_expected_quantity_count', 'False')
-        self.start_tour("/odoo/barcode", 'test_inventory_setting_show_quantity_to_count_off', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_inventory_setting_show_quantity_to_count_off', login='admin', timeout=180)
 
     def test_inventory_using_buttons(self):
         """ Creates an inventory from scratch, then scans products and verifies
@@ -582,7 +582,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
         # Adds some quantities for product2.
         self.env['stock.quant']._update_available_quantity(self.product2, self.stock_location, 10)
 
-        self.start_tour("/odoo/barcode", 'test_inventory_using_buttons', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_inventory_using_buttons', login='admin', timeout=180)
         product1_quant = self.env['stock.quant'].search([
             ('product_id', '=', self.product1.id),
             ('quantity', '>', 0)
@@ -619,7 +619,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'quantity': 1,
         })
 
-        self.start_tour("/odoo/barcode", 'test_inventory_adjustment_with_no_internal_location_quant', login='admin')
+        self.start_tour("/shaka/barcode", 'test_inventory_adjustment_with_no_internal_location_quant', login='admin')
 
         inventory_moves = self.env['stock.move'].search([('product_id', '=', self.product1.id),
                                                          ('is_inventory', '=', True)])
@@ -709,7 +709,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'get_specific_barcode_data',
             mocked_data_batch_method
         ):
-            self.start_tour('/odoo/barcode', 'test_rfid_inventory_scan_sgtin', login='admin', timeout=180)
+            self.start_tour('/shaka/barcode', 'test_rfid_inventory_scan_sgtin', login='admin', timeout=180)
             self.assertEqual(self.call_count, 2)
 
     def test_inventory_count_with_line_deletion(self):
@@ -720,7 +720,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
         # Put 5 units of prodcut1 in stock and start an inventory count
         self.env['stock.quant']._update_available_quantity(self.product1, self.stock_location, 5)
         self.env['ir.config_parameter'].set_param('stock.show_expected_quantity_count', 'True')
-        self.start_tour("/odoo/barcode", 'test_inventory_count_with_line_deletion', login='admin')
+        self.start_tour("/shaka/barcode", 'test_inventory_count_with_line_deletion', login='admin')
 
     # === GS1 TESTS ===#
     def test_gs1_inventory_gtin_8(self):
@@ -734,7 +734,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'uom_id': self.env.ref('uom.product_uom_unit').id
         })
 
-        self.start_tour("/odoo/barcode", 'test_gs1_inventory_gtin_8', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_gs1_inventory_gtin_8', login='admin', timeout=180)
 
         # Checks the inventory adjustment correclty created a move line.
         move_line = self.env['stock.move.line'].search([
@@ -755,7 +755,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'uom_id': self.env.ref('uom.product_uom_unit').id
         })
 
-        self.start_tour("/odoo/barcode", 'test_gs1_inventory_product_units', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_gs1_inventory_product_units', login='admin', timeout=180)
 
         quantity = self.env['stock.move.line'].search([
             ('product_id', '=', product.id),
@@ -793,7 +793,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
         pack_2 = self.env['stock.package'].create({'name': '487325612456785124'})
         self.env['stock.quant']._update_available_quantity(self.product2, self.shelf2, 6, package_id=pack_2)
 
-        self.start_tour("/odoo/barcode", 'test_gs1_inventory_package', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_gs1_inventory_package', login='admin', timeout=180)
 
         pack_3 = self.env['stock.package'].search([('name', '=', '122333444455555670')])
         self.assertEqual(pack_3.location_id.id, self.shelf2.id)
@@ -823,7 +823,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             'tracking': 'serial',
         })
 
-        self.start_tour("/odoo/barcode", 'test_gs1_inventory_lot_serial', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_gs1_inventory_lot_serial', login='admin', timeout=180)
 
         smls_lot = self.env['stock.move.line'].search([
             ('product_id', '=', product_lot.id),
@@ -880,7 +880,7 @@ class TestInventoryAdjustmentBarcodeClientAction(TestBarcodeClientAction):
             }).id,
         })
         self.assertEqual(product.qty_available, 10)
-        self.start_tour("/odoo", 'stock_barcode_package_with_lot', login="admin")
+        self.start_tour("/shaka", 'stock_barcode_package_with_lot', login="admin")
 
     def test_inventory_count_lot_split_in_packages(self):
         grp_multi_loc = self.env.ref('stock.group_stock_multi_locations')

@@ -2,7 +2,7 @@ import { registry } from "@web/core/registry";
 import { stepUtils } from "@web_tour/tour_utils";
 
 registry.category("web_tour.tours").add('mailing_editor', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [stepUtils.showAppsMenuItem(), {
     trigger: '.o_app[data-menu-xmlid="mass_mailing.mass_mailing_menu_root"]',
     run: "click",

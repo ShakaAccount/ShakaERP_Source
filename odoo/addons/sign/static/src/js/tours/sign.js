@@ -22,7 +22,7 @@ function dragAndDropSignature(isActive) {
 }
 
 registry.category("web_tour.tours").add("sign_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         stepUtils.showAppsMenuItem(),
         {

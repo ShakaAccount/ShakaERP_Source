@@ -6,4 +6,4 @@ from odoo.addons.base.tests.common import HttpCase
 class TestDatabasesUi(HttpCase):
 
     def test_ui(self):
-        self.start_tour('/odoo', 'databases_tour', login='admin')
+        self.start_tour('/shaka', 'databases_tour', login='admin')

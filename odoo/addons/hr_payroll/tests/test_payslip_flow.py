@@ -606,4 +606,4 @@ class TestPayslipFlow(TestPayslipBase):
 class TestPayslipUi(HttpCase):
     def test_tour_date_input(self):
         """Test payslip form date input."""
-        self.start_tour("/odoo", 'hr_payroll_form_view_date_input_tour', login='admin')
+        self.start_tour("/shaka", 'hr_payroll_form_view_date_input_tour', login='admin')

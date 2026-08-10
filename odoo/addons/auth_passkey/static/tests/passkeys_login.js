@@ -9,7 +9,7 @@ registry.category("web_tour.tours").add('passkeys_tour_login', {
             content: "Inject authenticator data",
             trigger: 'body',
             run: () => {
-                // Due to switching from /web/login to /odoo, the asset bundles will be different. As a result this will automatically clean up the test.
+                // Due to switching from /web/login to /shaka, the asset bundles will be different. As a result this will automatically clean up the test.
                 patch(passkeyLib, {
                     async startAuthentication() {
                         return {

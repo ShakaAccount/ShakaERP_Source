@@ -26,9 +26,9 @@ class TestAccountBankStatementTour(TestBankRecWidgetCommon, HttpCase):
             'journal_id': self.company_data['default_journal_bank'].id,
             'date': '2019-01-01',
         })
-        self.start_tour('/odoo', 'account_accountant_bank_rec_widget', login=self.env.user.login)
+        self.start_tour('/shaka', 'account_accountant_bank_rec_widget', login=self.env.user.login)
 
     def test_tour_bank_reconciliation_widget_reload_activities_when_add_a_new_one(self):
         self._create_st_line(amount=100.0)
 
-        self.start_tour('/odoo', 'account_accountant_bank_reconciliation_widget_reload_activies_when_add_a_new_one', login=self.env.user.login)
+        self.start_tour('/shaka', 'account_accountant_bank_reconciliation_widget_reload_activies_when_add_a_new_one', login=self.env.user.login)

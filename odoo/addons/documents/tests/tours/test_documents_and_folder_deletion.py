@@ -33,13 +33,13 @@ class TestDocumentDeletion(HttpCase):
         folder_copy = self.folder
         document_copy = self.document
         self.start_tour(
-            f"/odoo/documents/{self.document.access_token}", 'document_delete_tour', login='admin')
+            f"/shaka/documents/{self.document.access_token}", 'document_delete_tour', login='admin')
         self.assertTrue(folder_copy.exists(), "The folder should still exist")
         self.assertFalse(document_copy.exists(), "The document should not exist anymore")
 
     def test_tour_default_action_view(self):
         # todo: move to a more appropriate place in master
         self.start_tour(
-            f"/odoo/documents.document/{self.document.id}", 'document_default_access_view',
+            f"/shaka/documents.document/{self.document.id}", 'document_default_access_view',
             login='admin'
         )

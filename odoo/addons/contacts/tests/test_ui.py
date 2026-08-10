@@ -31,7 +31,7 @@ class TestUi(odoo.tests.HttpCase):
         ]).unlink()
         self.assertEqual(self.env['res.partner'].with_context(**action_context).new().company_type, "company")
 
-        self.start_tour("/odoo", 'debug_menu_set_defaults', login="admin")
+        self.start_tour("/shaka", 'debug_menu_set_defaults', login="admin")
 
     def test_vat_label_string(self):
         """ Test changing the vat_label field of the user company_id.

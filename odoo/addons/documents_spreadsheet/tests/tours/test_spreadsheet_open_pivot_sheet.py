@@ -8,7 +8,7 @@ from odoo.tests import tagged
 class TestSpreadsheetOpenPivot(SpreadsheetTestTourCommon):
 
     def test_01_spreadsheet_open_pivot_as_admin(self):
-        self.start_tour("/odoo", "spreadsheet_open_pivot_sheet", login="admin")
+        self.start_tour("/shaka", "spreadsheet_open_pivot_sheet", login="admin")
 
     def test_01_spreadsheet_open_pivot_as_user(self):
-        self.start_tour("/odoo", "spreadsheet_open_pivot_sheet", login="spreadsheetDude")
+        self.start_tour("/shaka", "spreadsheet_open_pivot_sheet", login="spreadsheetDude")

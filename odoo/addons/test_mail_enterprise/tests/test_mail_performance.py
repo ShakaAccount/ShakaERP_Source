@@ -79,7 +79,7 @@ class TestMailPerformance(EnterpriseBaseMailPerformance):
             new_message = record_ticket.message_post(
                 attachment_ids=attachments.ids,
                 # atmention a user, as it generates a different chunk for ocn
-                body=Markup('<p>Test Content<a href="/odoo" data-oe-id="%(partner_id)s" data-oe-model="res.partner">@user</a>') % {"partner_id": self.user_admin.partner_id.id},
+                body=Markup('<p>Test Content<a href="/shaka" data-oe-id="%(partner_id)s" data-oe-model="res.partner">@user</a>') % {"partner_id": self.user_admin.partner_id.id},
                 email_add_signature=True,
                 mail_auto_delete=True,
                 message_type='comment',

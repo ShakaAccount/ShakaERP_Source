@@ -242,7 +242,7 @@ export const salaryConfigTourCheckPersonalInfo = () => [
 ];
 
 registry.category("web_tour.tours").add("hr_contract_salary_employee_flow_tour", {
-    url: "/odoo",
+    url: "/shaka",
     wait_for: Promise.resolve(odoo.__TipTemplateDef),
     steps: () => [
         ...salaryConfigTourStart(),
@@ -253,7 +253,7 @@ registry.category("web_tour.tours").add("hr_contract_salary_employee_flow_tour",
 });
 
 registry.category("web_tour.tours").add("hr_contract_salary_employee_flow_tour_counter_sign", {
-    url: "/odoo",
+    url: "/shaka",
     wait_for: Promise.resolve(odoo.__TipTemplateDef),
     steps: () => [
         {

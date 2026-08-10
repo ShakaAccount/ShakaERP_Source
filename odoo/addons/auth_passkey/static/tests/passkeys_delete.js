@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add('passkeys_tour_delete', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [
         {
             content: 'Open user account menu',

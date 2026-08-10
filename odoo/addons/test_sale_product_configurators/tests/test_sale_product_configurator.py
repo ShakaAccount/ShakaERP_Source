@@ -34,7 +34,7 @@ class TestProductConfiguratorUi(TestProductConfiguratorCommon):
         self.product_product_custo_desk.taxes_id = tax
         self.product_product_conf_chair_floor_protect.taxes_id = tax
         self.product_product_conf_chair.taxes_id = tax
-        self.start_tour("/odoo", 'sale_product_configurator_tour', login='salesman')
+        self.start_tour("/shaka", 'sale_product_configurator_tour', login='salesman')
 
     def test_02_product_configurator_advanced(self):
         # group_delivery_invoice_address: show the shipping address (needed for a trigger)
@@ -102,7 +102,7 @@ class TestProductConfiguratorUi(TestProductConfiguratorCommon):
             len(product_template.product_variant_ids.product_template_attribute_value_ids), 0,
         )
 
-        self.start_tour("/odoo", 'sale_product_configurator_advanced_tour', login='salesman')
+        self.start_tour("/shaka", 'sale_product_configurator_advanced_tour', login='salesman')
 
         # Ensures dynamic create variants have been created by the configurator
         self.assertEqual(len(product_template.product_variant_ids), 1)
@@ -125,7 +125,7 @@ class TestProductConfiguratorUi(TestProductConfiguratorCommon):
                 'compute_price': 'formula'
             })]
         })
-        self.start_tour("/odoo", 'sale_product_configurator_edition_tour', login='salesman')
+        self.start_tour("/shaka", 'sale_product_configurator_edition_tour', login='salesman')
 
     def test_04_product_configurator_single_custom_value(self):
         # Prepare relevant test data
@@ -151,7 +151,7 @@ class TestProductConfiguratorUi(TestProductConfiguratorCommon):
         }])
 
         self.start_tour(
-            "/odoo",
+            "/shaka",
             'sale_product_configurator_single_custom_attribute_tour',
             login='salesman'
         )
@@ -190,7 +190,7 @@ class TestProductConfiguratorUi(TestProductConfiguratorCommon):
         # Remove tax from Conference Chair and Chair floor protection
         self.product_product_conf_chair.taxes_id = None
         self.product_product_conf_chair_floor_protect.taxes_id = None
-        self.start_tour("/odoo", 'sale_product_configurator_pricelist_tour', login='salesman')
+        self.start_tour("/shaka", 'sale_product_configurator_pricelist_tour', login='salesman')
 
     def test_06_product_configurator_optional_products(self):
         """The goal of this test is to check that the product configurator window opens correctly
@@ -217,7 +217,7 @@ class TestProductConfiguratorUi(TestProductConfiguratorCommon):
             (4, self.product_product_conf_chair.id)
         ]
         self.start_tour(
-            "/odoo", 'sale_product_configurator_optional_products_tour', login='salesman'
+            "/shaka", 'sale_product_configurator_optional_products_tour', login='salesman'
         )
 
     def test_07_product_configurator_recursive_optional_products(self):
@@ -241,12 +241,12 @@ class TestProductConfiguratorUi(TestProductConfiguratorCommon):
             (4, self.product_product_custo_desk.id)
         ]
         self.start_tour(
-            "/odoo", 'sale_product_configurator_recursive_optional_products_tour', login='salesman'
+            "/shaka", 'sale_product_configurator_recursive_optional_products_tour', login='salesman'
         )
 
     def test_product_configurator_update_custom_values(self):
         self.start_tour(
-            "/odoo", 'sale_product_configurator_custom_value_update_tour', login='salesman',
+            "/shaka", 'sale_product_configurator_custom_value_update_tour', login='salesman',
         )
         order = self.env['sale.order'].search([], order='id desc', limit=1)
         self.assertEqual(
@@ -283,7 +283,7 @@ class TestProductConfiguratorUi(TestProductConfiguratorCommon):
             'email': "azure@example.com",
         })
 
-        self.start_tour("/odoo", 'product_attribute_multi_type', login="salesman")
+        self.start_tour("/shaka", 'product_attribute_multi_type', login="salesman")
 
         sol = self.env['sale.order.line'].search([
             ('product_id', '=', product_template.product_variant_id.id),
@@ -332,4 +332,4 @@ class TestProductConfiguratorUi(TestProductConfiguratorCommon):
         self.product_product_conf_chair.taxes_id = None
         self.product_product_conf_chair_floor_protect.taxes_id = None
         self.assertTrue(self.salesman._has_group('product.group_product_pricelist'))
-        self.start_tour("/odoo", 'sale_product_configurator_uom_tour', login='salesman')
+        self.start_tour("/shaka", 'sale_product_configurator_uom_tour', login='salesman')

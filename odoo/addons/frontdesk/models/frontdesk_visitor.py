@@ -121,7 +121,7 @@ class FrontdeskVisitor(models.Model):
                 name = f"{self.name} ({self.company})" if self.company else self.name
                 msg = _("%(name)s just checked-in. Requested Drink: %(drink)s.",
                     name=Markup('<a href="%s">%s</a>') % (
-                        url_join(self.env['frontdesk.visitor'].get_base_url(), f'/odoo/action-{action}/{visitor.id}'), name
+                        url_join(self.env['frontdesk.visitor'].get_base_url(), f'/shaka/action-{action}/{visitor.id}'), name
                     ),
                     drink=', '.join(drink.name for drink in visitor.drink_ids),
                 )

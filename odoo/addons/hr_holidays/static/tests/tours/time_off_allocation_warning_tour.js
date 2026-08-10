@@ -8,7 +8,7 @@ const futureDateTo = today.plus({ days: 2 }).toFormat("MM/dd/yyyy");
 const warningText = "The allocated days cannot be used, because the allocation is set to finish in the past.";
 
 registry.category("web_tour.tours").add("time_off_allocation_warning_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         stepUtils.showAppsMenuItem(),
         {

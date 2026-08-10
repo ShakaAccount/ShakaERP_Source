@@ -5,7 +5,7 @@ import { markup } from "@odoo/owl";
 import { delay } from "@web/core/utils/concurrency";
 
 registry.category("web_tour.tours").add("discuss_channel_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         {
             isActive: ["enterprise"],

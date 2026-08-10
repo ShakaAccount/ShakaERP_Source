@@ -1435,7 +1435,7 @@ registry.category("web_tour.tours").add("test_barcode_mo_creation_in_mo2", {
         { trigger: "button.o_validate_page:enabled", run: "click" },
         { trigger: ".o_notification_bar.bg-success" },
         { trigger: ".o_notification .o_notification_close", run: "click" },
-        { trigger: "a[href='/odoo/barcode']", run: "click" },
+        { trigger: "a[href='/shaka/barcode']", run: "click" },
         // Create a new MO by scanning the operation's barcode.
         { trigger: ".o_stock_barcode_main_menu", run: "scan MO2_BARCODE" },
         {

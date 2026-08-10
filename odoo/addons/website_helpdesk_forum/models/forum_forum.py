@@ -56,5 +56,5 @@ class ForumForum(models.Model):
 
         return {
             'ticket': ticket.ticket_ref,
-            'url': f"/odoo/{ticket._name}/{ticket.id}",
+            'url': f"/shaka/{ticket._name}/{ticket.id}",
         }

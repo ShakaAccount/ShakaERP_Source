@@ -14,7 +14,7 @@ class TestUi(HttpCase, TestCrmCommon):
             'phone': '(355)-687-3262',
             'is_company': True,
         })
-        self.start_tour("/odoo", 'crm_tour', login="admin")
+        self.start_tour("/shaka", 'crm_tour', login="admin")
 
     def test_02_crm_tour_rainbowman(self):
         # we create a new user to make sure they get the 'Congrats on your first deal!'
@@ -28,10 +28,10 @@ class TestUi(HttpCase, TestCrmCommon):
                     self.ref('sales_team.group_sale_salesman')
                 ])]
         })
-        self.start_tour("/odoo", 'crm_rainbowman', login="temp_crm_user")
+        self.start_tour("/shaka", 'crm_rainbowman', login="temp_crm_user")
 
     def test_03_crm_tour_forecast(self):
-        self.start_tour("/odoo", 'crm_forecast', login="admin")
+        self.start_tour("/shaka", 'crm_forecast', login="admin")
 
     def test_email_and_phone_propagation_edit_save(self):
         """Test the propagation of the email / phone on the partner.
@@ -63,7 +63,7 @@ class TestUi(HttpCase, TestCrmCommon):
         self.assertTrue(lead.partner_email_update)
         self.assertTrue(lead.partner_phone_update)
 
-        self.start_tour('/odoo', 'crm_email_and_phone_propagation_edit_save', login='admin')
+        self.start_tour('/shaka', 'crm_email_and_phone_propagation_edit_save', login='admin')
 
         self.assertEqual(lead.email_from, 'test@example.com', 'Should not have changed the lead email')
         self.assertEqual(lead.phone, '+32 494 44 44 44', 'Should not have changed the lead phone')

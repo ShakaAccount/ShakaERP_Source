@@ -25,7 +25,7 @@ patch(OrderPaymentValidation.prototype, {
                 "%s by going to Backend > Orders > Invoice",
                 this.order.pos_reference
             );
-            const href = `/odoo/customer-invoices/${this.order?.raw?.account_move}`;
+            const href = `/shaka/customer-invoices/${this.order?.raw?.account_move}`;
             const link = markup`<a target="_blank" href=${href} class="text-info fw-bolder">${_t(
                 "Invoice"
             )}</a>`;

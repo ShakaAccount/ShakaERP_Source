@@ -488,7 +488,7 @@ class WhatsAppWebhookCase(WhatsAppFullCase, MockIncomingWhatsApp):
         context_message = channel_messages[0]
         self.assertIn(f"Related {self.env['ir.model']._get(test_record._name).display_name}:", context_message.body)
         self.assertIn(test_record.name, context_message.body)
-        self.assertIn(f"/odoo/{test_record._name}/{test_record.id}", context_message.body,
+        self.assertIn(f"/shaka/{test_record._name}/{test_record.id}", context_message.body,
                       "Should contain a link to the context record")
 
         customer_message = channel_messages[1]

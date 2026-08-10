@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("skip_website_configurator", {
-    url: "/odoo/action-website.action_website_configuration",
+    url: "/shaka/action-website.action_website_configuration",
     steps: () => [
         {
             content: "create a new website",

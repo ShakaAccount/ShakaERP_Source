@@ -46,14 +46,14 @@ describe(parseUrl(import.meta.url), () => {
         mockFetch(expect.step);
 
         const external = await fetch("http://some.url").then((res) => res.text());
-        const internal = await fetch("/odoo").then((res) => res.text());
+        const internal = await fetch("/shaka").then((res) => res.text());
         const data = await fetch("data:text/html,<body></body>").then((res) => res.text());
 
         expect(external).toBe("null");
         expect(internal).toBe("null");
         expect(data).toBe("<body></body>");
 
-        expect.verifySteps(["http://some.url", "/odoo", "data:text/html,<body></body>"]);
+        expect.verifySteps(["http://some.url", "/shaka", "data:text/html,<body></body>"]);
     });
 
     test("fetch JSON with blob URLs", async () => {

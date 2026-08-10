@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("approvals_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         {
             trigger: '.o_app[data-menu-xmlid="approvals.approvals_menu_root"]',

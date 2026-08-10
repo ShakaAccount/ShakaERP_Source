@@ -237,7 +237,7 @@ test("installation of the PWA request can be dismissed", async () => {
     await click(".o-mail-NotificationItem .oi-close");
     await waitForSteps([
         "getItem pwaService.installationState",
-        'installationState value:  {"/odoo":"dismissed"}',
+        'installationState value:  {"/shaka":"dismissed"}',
     ]);
     await click(".o_menu_systray i[aria-label='Messages']");
     await contains(".o-mail-NotificationItem", { count: 0 });
@@ -252,7 +252,7 @@ test("rendering with PWA installation request (dismissed)", async () => {
             if (key === "pwaService.installationState") {
                 asyncStep("getItem " + key);
                 // in this test, installation has been previously dismissed by the user
-                return `{"/odoo":"dismissed"}`;
+                return `{"/shaka":"dismissed"}`;
             }
             return super.getItem(key);
         },

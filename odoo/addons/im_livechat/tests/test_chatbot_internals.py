@@ -532,7 +532,7 @@ class ChatbotCase(MailCommon, chatbot_common.ChatbotCase):
             },
         ])
         action = self.env.ref('im_livechat.chatbot_script_action')
-        self.start_tour(f"/odoo/action-{action.id}", 'change_chatbot_step_type', login='admin')
+        self.start_tour(f"/shaka/action-{action.id}", 'change_chatbot_step_type', login='admin')
         self.assertFalse(step.answer_ids, "Answers were not cleared after step_type was changed.")
         self.assertFalse(step_2.triggering_answer_ids, "Step 2 still has stale triggering answers.")
         self.assertFalse(step_3.triggering_answer_ids, "Step 3 still has stale triggering answers.")

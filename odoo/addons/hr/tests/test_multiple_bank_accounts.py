@@ -9,7 +9,7 @@ class TestEmployeeMultipleBanksUi(HttpCase):
         employee = self.env['hr.employee'].create({
             'name': 'Johnny H.',
         })
-        self.start_tour("/odoo", 'hr_employee_multiple_bank_accounts_tour', login="admin", timeout=200)
+        self.start_tour("/shaka", 'hr_employee_multiple_bank_accounts_tour', login="admin", timeout=200)
         total = 0
         for ba in employee.bank_account_ids:
             ba_percentage = employee.salary_distribution[str(ba.id)]['amount']

@@ -169,7 +169,7 @@ class TestBarcodeBatchClientAction(TestBarcodeClientAction):
         self.picking_delivery_package.name = 'picking_delivery_package'
 
     def _get_batch_client_action_url(self, batch_id):
-        return f'/odoo/{batch_id}/action-stock_barcode_picking_batch.stock_barcode_picking_batch_client_action'
+        return f'/shaka/{batch_id}/action-stock_barcode_picking_batch.stock_barcode_picking_batch_client_action'
 
     def test_barcode_batch_receipt_1(self):
         """ Create a batch picking with 3 receipts, then open the batch in
@@ -441,7 +441,7 @@ class TestBarcodeBatchClientAction(TestBarcodeClientAction):
         batch_delivery.name = "test_barcode_batch_scan_lots - delivery"
 
         # Process both of them (first the receipt then the delivery.)
-        self.start_tour('/odoo/action-stock_barcode.stock_barcode_action_main_menu', 'test_barcode_batch_scan_lots', login='admin', timeout=180)
+        self.start_tour('/shaka/action-stock_barcode.stock_barcode_action_main_menu', 'test_barcode_batch_scan_lots', login='admin', timeout=180)
 
         # Checks pickings move lines values.
         lot1, lot2, lot3 = (batch_receipt | batch_delivery).move_line_ids.lot_id.sorted('name')
@@ -499,7 +499,7 @@ class TestBarcodeBatchClientAction(TestBarcodeClientAction):
         })
         batch.name = "delivery batch"
         batch.action_confirm()
-        self.start_tour('/odoo/barcode', 'test_barcode_batch_scan_other_reserved_lost', login='admin', timeout=180)
+        self.start_tour('/shaka/barcode', 'test_barcode_batch_scan_other_reserved_lost', login='admin', timeout=180)
 
     def test_put_in_pack_from_multiple_pages(self):
         """ A batch picking of 2 internal pickings where prod1 and prod2 are reserved in shelf1 and shelf2,
@@ -724,7 +724,7 @@ class TestBarcodeBatchClientAction(TestBarcodeClientAction):
                 Command.link(self.env.ref('stock.group_tracking_lot').id),
             ],
         })
-        self.start_tour("/odoo/barcode", 'test_batch_create', login='admin', timeout=180)
+        self.start_tour("/shaka/barcode", 'test_batch_create', login='admin', timeout=180)
         self.assertEqual(self.picking_delivery_1.batch_id, self.picking_delivery_2.batch_id)
         batch_delivery = self.picking_delivery_1.batch_id
         self.assertEqual(len(batch_delivery.move_ids), 5)

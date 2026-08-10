@@ -663,7 +663,7 @@ test("load with active_id active_ids", async () => {
         });
     });
 
-    browser.location.href = "/odoo/action-1/studio";
+    browser.location.href = "/shaka/action-1/studio";
     browser.location.search = "?mode=editor&_view_type=form&_tab=views&active_id=1";
 
     await mountWithCleanup(WebClientEnterprise);
@@ -694,7 +694,7 @@ test("can edit ir.actions.act_window without id", async () => {
     await waitFor(".o_web_studio_editor_manager");
 
     expect(".o_field_widget[name='name']").toHaveText("Rainbow Dash");
-    expect(browser.location.pathname).toBe("/odoo/action-1/1/m-pony/1/studio");
+    expect(browser.location.pathname).toBe("/shaka/action-1/1/m-pony/1/studio");
     expect(browser.location.search).toBe("?mode=editor&_tab=views&_view_type=form");
 
     await click(".o_menu_sections button:contains(Views)");
@@ -712,7 +712,7 @@ test("can edit ir.actions.act_window without id", async () => {
 
     expect(".o_form_view .o_field_widget[name='name'] input").toHaveValue("Rainbow Dash");
     expect(".o_breadcrumb").toHaveText("partner Action\nYop\nRainbow Dash");
-    expect(browser.location.pathname).toBe("/odoo/action-1/1/m-pony/1");
+    expect(browser.location.pathname).toBe("/shaka/action-1/1/m-pony/1");
     expect(browser.location.search).toBe(""); // no view type in search means the default view type of the action is taken
 });
 

@@ -2,7 +2,7 @@ import { registry } from "@web/core/registry";
 import { stepUtils } from "@web_tour/tour_utils";
 
 registry.category("web_tour.tours").add('industry_fsm_report_worksheet_test_tour', {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
     stepUtils.showAppsMenuItem(),
     {

@@ -857,7 +857,7 @@ test("when middle clicked on cell open records in new window ", async () => {
         'get current_state-{"actionStack":[{"displayName":"Subscriptions","action":22,"view_type":"cohort"}],"action":22}',
         'set current_action-{"type":"ir.actions.act_window","name":"Subscriptions","res_model":"subscription","views":[["my_list_view","list"],["my_form_view","form"]],"view_mode":"list","target":"current","context":{"lang":"en","tz":"taht","uid":7,"allowed_company_ids":[1]},"domain":["&",["start",">=","2017-07-10"],["start","<","2017-07-17"]]}',
         'set current_state-{"actionStack":[{"displayName":"Subscriptions","action":22,"view_type":"cohort"},{"displayName":"Subscriptions","model":"subscription","view_type":"list"}],"model":"subscription"}',
-        "opened in new window: /odoo/action-22/m-subscription",
+        "opened in new window: /shaka/action-22/m-subscription",
         'set current_action-{"id":22,"name":"Subscriptions","res_model":"subscription","type":"ir.actions.act_window","views":[[false,"cohort"],["my_list_view","list"],["my_form_view","form"]]}',
         'set current_state-{"actionStack":[{"displayName":"Subscriptions","action":22,"view_type":"cohort"}],"action":22}',
     ]);

@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("account_reports_widgets", {
-    url: "/odoo/action-account_reports.action_account_report_pl",
+    url: "/shaka/action-account_reports.action_account_report_pl",
     steps: () => [
         {
             content: "change date filter",

@@ -1292,4 +1292,4 @@ class TestChannelRTC(MailCommon, HttpCase):
         channel = self.env["discuss.channel"].with_user(bob)._create_group(partners_to=(bob | john).partner_id.ids)
         channel.with_user(bob).self_member_id.sudo()._rtc_join_call()
         self._reset_bus()
-        self.start_tour("/odoo", "discuss_call_invitation.js", login="john")
+        self.start_tour("/shaka", "discuss_call_invitation.js", login="john")

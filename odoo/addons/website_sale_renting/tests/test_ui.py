@@ -22,7 +22,7 @@ class TestUi(HttpCase, TestWebsiteSaleRentingCommon):
             'country_id': self.env.ref('base.us').id,
             'state_id': self.env.ref('base.state_us_39').id,
         })
-        self.start_tour("/odoo", 'shop_buy_rental_product', login='admin')
+        self.start_tour("/shaka", 'shop_buy_rental_product', login='admin')
 
     def test_add_accessory_rental_product(self):
         parent_product, accessory_product = self.env['product.product'].create([
@@ -53,7 +53,7 @@ class TestUi(HttpCase, TestWebsiteSaleRentingCommon):
             },
         ])
         parent_product.accessory_product_ids = accessory_product
-        self.start_tour("/odoo", 'shop_buy_accessory_rental_product', login='admin')
+        self.start_tour("/shaka", 'shop_buy_accessory_rental_product', login='admin')
 
     def test_website_sale_renting_default_range(self):
         with freeze_time("2023-12-04 08:00"):

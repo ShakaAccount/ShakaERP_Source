@@ -4,7 +4,7 @@ import { stepUtils } from "@web_tour/tour_utils";
 
 
 registry.category("web_tour.tours").add("knowledge_load_template", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         stepUtils.showAppsMenuItem(), {
             // open the Knowledge App

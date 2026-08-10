@@ -43,7 +43,7 @@ function changeArticleContentAndSave(newContent) {
 
 
 registry.category("web_tour.tours").add('knowledge_history_tour', {
-    url: '/odoo?debug=1,tests',
+    url: '/shaka?debug=1,tests',
     steps: () => [stepUtils.showAppsMenuItem(), {
         // open Knowledge App
         trigger: '.o_app[data-menu-xmlid="knowledge.knowledge_menu_root"]',

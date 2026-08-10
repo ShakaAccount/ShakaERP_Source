@@ -63,7 +63,7 @@ class HrEmployee(models.Model):
         result = {}
         for employee in self:
             if employee.user_id and not employee.user_id._is_portal():
-                result[employee.id] = f"/odoo/action-planning.planning_action_open_shift?date_start={date_start}&date_end={date_end}"
+                result[employee.id] = f"/shaka/action-planning.planning_action_open_shift?date_start={date_start}&date_end={date_end}"
             else:
                 result[employee.id] = '/planning/%s/%s' % (planning_access_token, employee.employee_token)
         return result

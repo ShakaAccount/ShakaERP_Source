@@ -11,7 +11,7 @@ registry.category("web_tour.tours").add("hr_contract_salary_tour", {
             content: "Go on configurator",
             trigger: ".navbar",
             run: function () {
-                redirect("/odoo");
+                redirect("/shaka");
             },
             expectUnloadPage: true,
         },
@@ -826,7 +826,7 @@ registry.category("web_tour.tours").add("hr_contract_salary_tour", {
     ],
 });
 registry.category("web_tour.tours").add("hr_contract_salary_tour_hr_sign", {
-    url: "/odoo",
+    url: "/shaka",
     wait_for: Promise.resolve(odoo.__TipTemplateDef),
     steps: () => [
         {
@@ -896,7 +896,7 @@ registry.category("web_tour.tours").add("hr_contract_salary_tour_hr_sign", {
     ],
 });
 registry.category("web_tour.tours").add("hr_contract_salary_tour_2", {
-    url: "/odoo",
+    url: "/shaka",
     wait_for: Promise.resolve(odoo.__TipTemplateDef),
     steps: () => [
         {
@@ -1400,7 +1400,7 @@ registry.category("web_tour.tours").add("hr_contract_salary_tour_2", {
             content: "Go on configurator",
             trigger: "h1.hr_cs_brand_optional",
             run: function () {
-                redirect("/odoo");
+                redirect("/shaka");
             },
             expectUnloadPage: true,
         },
@@ -1412,7 +1412,7 @@ registry.category("web_tour.tours").add("hr_contract_salary_tour_2", {
 });
 
 registry.category("web_tour.tours").add("hr_contract_salary_tour_counter_sign", {
-    url: "/odoo",
+    url: "/shaka",
     wait_for: Promise.resolve(odoo.__TipTemplateDef),
     steps: () => [
         {

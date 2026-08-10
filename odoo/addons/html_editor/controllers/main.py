@@ -679,7 +679,7 @@ class HTML_Editor(http.Controller):
             if not (
                 last_segment.isnumeric()
                 and (
-                    parsed_preview_url.path.startswith("/odoo")
+                    parsed_preview_url.path.startswith("/shaka")
                     or parsed_preview_url.path.startswith("/web")
                     or parsed_preview_url.path.startswith("/@/")
                 )

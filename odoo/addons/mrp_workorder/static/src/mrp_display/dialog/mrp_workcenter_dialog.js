@@ -80,6 +80,6 @@ export class MrpWorkcenterDialog extends ConfirmationDialog {
 
     async createWorkcenter() {
         await this.ormService.call("mrp.workcenter", "action_enable_routings", [[]]);
-        location.assign("/odoo/workcenters");
+        location.assign("/shaka/workcenters");
     }
 }

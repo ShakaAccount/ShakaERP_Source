@@ -3,7 +3,7 @@ import { stepUtils } from "@web_tour/tour_utils";
 import { endKnowledgeTour, openCommandBar } from './knowledge_tour_utils';
 
 registry.category("web_tour.tours").add('knowledge_embedded_view_filters_tour', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [stepUtils.showAppsMenuItem(), {
         // open Knowledge App
         trigger: '.o_app[data-menu-xmlid="knowledge.knowledge_menu_root"]',

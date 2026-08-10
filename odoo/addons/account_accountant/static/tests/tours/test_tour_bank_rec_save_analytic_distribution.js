@@ -6,7 +6,7 @@ import { accountTourSteps } from "@account/js/tours/account";
 
 
 registry.category("web_tour.tours").add('account_accountant_bank_rec_widget_save_analytic_distribution', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [
         stepUtils.showAppsMenuItem(),
         ...accountTourSteps.goToAccountMenu("Open the accounting module"),

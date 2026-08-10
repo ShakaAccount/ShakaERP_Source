@@ -56,7 +56,7 @@ class TestUI(HttpCase):
                 "google_address_autocomplete.google_places_api_key", MOCK_API_KEY
             )
             self.start_tour(
-                "/odoo/companies", "autocomplete_address_tour", login="admin"
+                "/shaka/companies", "autocomplete_address_tour", login="admin"
             )
 
     def test_google_api_calls(self):

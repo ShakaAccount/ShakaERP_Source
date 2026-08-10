@@ -19,7 +19,7 @@ const SupportedPaymentMethodsEdit = I => class extends I {
 
     async onClickViewProviders() {
         // Open the view in a separate tab such that any edits are kept.
-        browser.open('/odoo/action-payment.action_payment_provider', '_blank');
+        browser.open('/shaka/action-payment.action_payment_provider', '_blank');
     }
 };
 

@@ -183,7 +183,7 @@ class CustomerPortal(payment_portal.PaymentPortal):
             active_products = all(prod.active for prod in order_sudo.order_line.product_template_id)
             display_payment_message = order_sudo.plan_id.active and active_products
 
-        backend_url = f'/odoo/action-{order_sudo._get_portal_return_action().id}/{order_sudo.id}'
+        backend_url = f'/shaka/action-{order_sudo._get_portal_return_action().id}/{order_sudo.id}'
 
         portal_page_values = {
             'page_name': 'subscription',

@@ -20,7 +20,7 @@ class TestSaleOrderUI(HttpCase, ProductVariantsCommon):
         })
 
         self.start_tour(
-            f'/odoo/sales/{so.id}',
+            f'/shaka/sales/{so.id}',
             'sale_order_keep_uom_on_variant_wizard_quantity_change',
             login="admin",
         )

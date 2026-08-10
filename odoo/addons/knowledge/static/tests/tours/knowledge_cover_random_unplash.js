@@ -18,7 +18,7 @@ function makeVisible(el) {
 }
 
 registry.category("web_tour.tours").add('knowledge_random_cover_tour', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [stepUtils.showAppsMenuItem(), {
     // Open Knowledge App
     trigger: '.o_app[data-menu-xmlid="knowledge.knowledge_menu_root"]',

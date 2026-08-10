@@ -14,7 +14,7 @@
                         <!-- Open the link in a new tab to keep any pending edits in the editor. -->
                         <a
                             class="o_wpay_view_providers_btn col-auto btn btn-primary"
-                            href="/odoo/action-payment.action_payment_provider"
+                            href="/shaka/action-payment.action_payment_provider"
                             target="_blank"
                         >
                             View providers

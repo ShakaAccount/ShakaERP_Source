@@ -74,7 +74,7 @@ const assertNoRPC = {
 };
 
 registry.category("web_tour.tours").add("auth_timeout_tour_lock_timeout_inactivity", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         {
             trigger: "body",
@@ -146,7 +146,7 @@ registry.category("web_tour.tours").add("auth_timeout_tour_lock_timeout_inactivi
 });
 
 registry.category("web_tour.tours").add("auth_timeout_tour_lock_timeout_inactivity_2fa", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         // Check identity using a passkey, which is 2FA by itself, and check an RPC call works
         assertCheckIdentityForm,

@@ -97,7 +97,7 @@ test("uses a mobile-friendly view by default (if possible)", async () => {
 test("lazy load mobile-friendly view", async () => {
     stepAllNetworkCalls();
 
-    redirect("/odoo/action-1/new");
+    redirect("/shaka/action-1/new");
     await mountWithCleanup(WebClientEnterprise);
     await animationFrame();
 

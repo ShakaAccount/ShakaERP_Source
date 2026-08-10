@@ -8,7 +8,7 @@ import {
 
 
 registry.category("web_tour.tours").add("hr_contract_salary_applicant_flow_tour_belgium", {
-    url: "/odoo",
+    url: "/shaka",
     wait_for: Promise.resolve(odoo.__TipTemplateDef),
     steps() {
         return [

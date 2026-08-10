@@ -5,7 +5,7 @@ const SHEET_NAME = "Res Partner Test Spreadsheet";
 const TEMPLATE_NAME = `${SHEET_NAME} - Template`;
 
 registry.category("web_tour.tours").add("documents_spreadsheet_create_template_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         ...stepUtils.goToAppSteps("documents.menu_root", "Open Document app"),
         {

@@ -355,7 +355,7 @@ test("Open avatar card when clicking on partner mention", async () => {
     const pyEnv = await startServer();
     const partnerId = pyEnv.user.partner_id;
     pyEnv["mail.scheduled.message"].create({
-        body: `<a href="${getOrigin()}/odoo#model=res.partner&id=${partnerId}" class="o_mail_redirect" data-oe-model="res.partner" data-oe-id="${partnerId}">@Mitchell Admin</a>`,
+        body: `<a href="${getOrigin()}/shaka#model=res.partner&id=${partnerId}" class="o_mail_redirect" data-oe-model="res.partner" data-oe-id="${partnerId}">@Mitchell Admin</a>`,
         model: "res.partner",
         res_id: partnerId,
         scheduled_date: "2024-10-20 11:00:00",
@@ -371,7 +371,7 @@ test("Open chat when clicking on channel mention", async () => {
     const partnerId = pyEnv.user.partner_id;
     const channelId = pyEnv["discuss.channel"].create({ name: "my-channel" });
     pyEnv["mail.scheduled.message"].create({
-        body: `<a href="${getOrigin()}/odoo#model=discuss?channel&id=${channelId}" class="o_channel_redirect" data-oe-model="discuss.channel" data-oe-id="${channelId}">#my-channel</a>`,
+        body: `<a href="${getOrigin()}/shaka#model=discuss?channel&id=${channelId}" class="o_channel_redirect" data-oe-model="discuss.channel" data-oe-id="${channelId}">#my-channel</a>`,
         model: "res.partner",
         res_id: partnerId,
         scheduled_date: "2024-10-20 11:00:00",

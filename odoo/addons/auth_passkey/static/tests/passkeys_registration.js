@@ -5,7 +5,7 @@ import * as passkeyLib from "../lib/simplewebauthn";
 let unpatchPasskeyRegistration;
 
 registry.category("web_tour.tours").add('passkeys_tour_registration', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [
         {
             content: 'Open user account menu',

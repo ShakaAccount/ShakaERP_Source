@@ -70,4 +70,4 @@ class TestProductAttributeValue(HttpCase, SaleCommon):
             self.a3,
         )
         self.assertFalse(self.order_line.product_no_variant_attribute_value_ids.ptav_active)
-        self.start_tour("/odoo", 'delete_product_attribute_value_tour', login="admin")
+        self.start_tour("/shaka", 'delete_product_attribute_value_tour', login="admin")

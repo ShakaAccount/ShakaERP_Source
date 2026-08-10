@@ -107,7 +107,7 @@ registry.category("web_tour.tours").add("test_serial_tracked_and_register", {
 });
 
 registry.category("web_tour.tours").add("test_access_shop_floor_with_multicompany", {
-    url: "/odoo/action-menu",
+    url: "/shaka/action-menu",
     steps: () => [
         {
             content: "Select Shop Floor app",

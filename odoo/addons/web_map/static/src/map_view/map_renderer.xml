@@ -36,7 +36,7 @@
 
         <div class="alert alert-info alert-dismissible col col-md-10 px-5 mb-0 text-center position-absolute o-map-renderer--alert" role="status">
             To get routing on your map, you first need to set up your MapBox token. It's free.
-            <a href="/odoo/action-base_setup.action_general_configuration" class="ml8">
+            <a href="/shaka/action-base_setup.action_general_configuration" class="ml8">
                 <i class="oi oi-arrow-right"/>
                 Set up token
             </a>

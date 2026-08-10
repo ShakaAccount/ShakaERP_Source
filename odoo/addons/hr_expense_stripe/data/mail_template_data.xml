@@ -225,7 +225,7 @@
                         <t t-out="ctx.get('shipping_estimated_delivery', '')">[2025-12-24]</t><br/><br/>
                     </t>
                     To activate once received:<br/><br/>
-                    1) Go to <a t-attf-href="{{ website_url }}/odoo/cards">see your cards</a><br/>
+                    1) Go to <a t-attf-href="{{ website_url }}/shaka/cards">see your cards</a><br/>
                     2) Click on the card and follow the instructions<br/><br/>
                     Best,<br/>
                     <t t-out="company.name or ''">[Company Name]</t>

@@ -950,7 +950,7 @@ test("settings views does not write the id on the url", async () => {
 
     await getService("action").doAction(1);
     await runAllTimers();
-    expect(browser.location.pathname).toBe("/odoo/settings");
+    expect(browser.location.pathname).toBe("/shaka/settings");
     expect(".o_field_boolean input").toHaveProperty("disabled", false);
     await click(".o_field_boolean input");
     await animationFrame();
@@ -959,7 +959,7 @@ test("settings views does not write the id on the url", async () => {
 
     await animationFrame();
     expect(router.current.resId).toBe(undefined);
-    expect(browser.location.pathname).toBe("/odoo/settings");
+    expect(browser.location.pathname).toBe("/shaka/settings");
 });
 
 test.tags("desktop");
@@ -2179,7 +2179,7 @@ test("Open settings from url, with app anchor", async () => {
         </form>
     `;
 
-    redirect("/odoo/settings#crm");
+    redirect("/shaka/settings#crm");
     await mountWithCleanup(WebClient);
     await animationFrame();
     expect(".selected").toHaveAttribute("data-key", "crm", { message: "crm setting selected" });
@@ -2215,7 +2215,7 @@ test("Open settings from url, with setting id anchor", async () => {
         </form>
     `;
 
-    redirect("/odoo/settings#setting_id");
+    redirect("/shaka/settings#setting_id");
     await mountWebClient();
     expect(".selected").toHaveAttribute("data-key", "crm", { message: "crm setting selected" });
     expect(queryAllTexts(".settings .o_settings_container .o_form_label")).toEqual(["Foo"]);

@@ -496,7 +496,7 @@ test("url state is well handled when going in and out of the HomeMenu", async ()
     patchWithCleanup(browser.location, {
         origin: "http://example.com",
     });
-    redirect("/odoo");
+    redirect("/shaka");
     await mountWebClient({ WebClient: WebClientEnterprise });
     expect(router.current).toEqual({
         action: "menu",
@@ -661,7 +661,7 @@ test("go back to home menu using browser back button", async () => {
 
 test("initial action crashes", async () => {
     expect.errors(1);
-    redirect("/odoo/action-__test__client__action__?menu_id=1");
+    redirect("/shaka/action-__test__client__action__?menu_id=1");
     const ClientAction = registry.category("actions").get("__test__client__action__");
     class Override extends ClientAction {
         setup() {
@@ -761,7 +761,7 @@ test("Navigate to an application from the HomeMenu should generate only one push
     await goToHomeMenu();
     await animationFrame();
     expect(".o_home_menu").toHaveCount(1);
-    expect.verifySteps(["/odoo", "/odoo/action-1002", "/odoo", "/odoo/action-1001", "/odoo"]);
+    expect.verifySteps(["/shaka", "/shaka/action-1002", "/shaka", "/shaka/action-1001", "/shaka"]);
 });
 
 test("display studio icon when studio module is not installed", async () => {

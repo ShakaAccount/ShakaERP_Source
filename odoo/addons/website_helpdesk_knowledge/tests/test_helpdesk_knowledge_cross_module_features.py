@@ -62,30 +62,30 @@ class TestHelpdeskKnowledgeCrossModuleFeatures(HttpCase):
 
     def test_helpdesk_insert_graph_view_in_knowledge(self):
         """This tour will check that the user can insert a graph view in an article."""
-        self.start_tour('/odoo/action-helpdesk.helpdesk_ticket_analysis_action',
+        self.start_tour('/shaka/action-helpdesk.helpdesk_ticket_analysis_action',
             'helpdesk_insert_graph_view_in_knowledge', login='admin')
 
     def test_helpdesk_insert_kanban_view_link_in_knowledge(self):
         """This tour will check that the user can insert a view link in an article."""
-        self.start_tour('/odoo/action-helpdesk.helpdesk_ticket_action_main_tree',
+        self.start_tour('/shaka/action-helpdesk.helpdesk_ticket_action_main_tree',
             'helpdesk_insert_kanban_view_link_in_knowledge', login='admin')
 
     # File block:
 
     def test_helpdesk_pick_file_as_attachment_from_knowledge(self):
-        self.start_tour('/odoo/action-helpdesk.helpdesk_ticket_action_main_tree',
+        self.start_tour('/shaka/action-helpdesk.helpdesk_ticket_action_main_tree',
             'helpdesk_pick_file_as_attachment_from_knowledge', login='admin')
 
     def test_helpdesk_pick_file_as_message_attachment_from_knowledge(self):
-        self.start_tour('/odoo/action-helpdesk.helpdesk_ticket_action_main_tree',
+        self.start_tour('/shaka/action-helpdesk.helpdesk_ticket_action_main_tree',
             'helpdesk_pick_file_as_message_attachment_from_knowledge', login='admin')
 
     # Template block:
 
     def test_helpdesk_pick_template_as_description_from_knowledge(self):
-        self.start_tour('/odoo/action-helpdesk.helpdesk_ticket_action_main_tree',
+        self.start_tour('/shaka/action-helpdesk.helpdesk_ticket_action_main_tree',
             'helpdesk_pick_template_as_description_from_knowledge', login='admin')
 
     def test_helpdesk_pick_template_as_message_from_knowledge(self):
-        self.start_tour('/odoo/action-helpdesk.helpdesk_ticket_action_main_tree',
+        self.start_tour('/shaka/action-helpdesk.helpdesk_ticket_action_main_tree',
             'helpdesk_pick_template_as_message_from_knowledge', login='admin')

@@ -75,7 +75,7 @@ defineMenus([
 test.tags("desktop");
 test(`use stored menus, and don't update on load_menus return (if identical)`, async () => {
     const def = new Deferred();
-    redirect("/odoo/action-666");
+    redirect("/shaka/action-666");
     onRpc("/web/webclient/load_menus", () => def);
 
     // Initial Stored values
@@ -102,7 +102,7 @@ test(`use stored menus, and don't update on load_menus return (if identical)`, a
 test.tags("desktop");
 test(`use stored menus, and update on load_menus return`, async () => {
     const def = new Deferred();
-    redirect("/odoo/action-666");
+    redirect("/shaka/action-666");
     onRpc("/web/webclient/load_menus", () => def);
 
     // Initial Stored values

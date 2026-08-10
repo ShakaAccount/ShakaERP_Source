@@ -661,8 +661,8 @@ class BaseCase(case.TestCase):
                     # add some info on caller to allow semi-automatic update of query count
                     _frame, filename, linenum, funcname, _lines, _index = inspect.stack()[2]
                     filename = filename.replace('\\', '/')
-                    if "/odoo/addons/" in filename:
-                        filename = filename.rsplit("/odoo/addons/", 1)[1]
+                    if "/shaka/addons/" in filename:
+                        filename = filename.rsplit("/shaka/addons/", 1)[1]
                     if count > expected:
                         msg = "Query count more than expected for user %s: %d > %d in %s at %s:%s"
                         # add a subtest in order to continue the test_method in case of failures

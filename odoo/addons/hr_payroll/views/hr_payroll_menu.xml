@@ -7,7 +7,7 @@
     <record id="action_open_employees" model="ir.actions.act_url">
         <field name="name">Employees</field>
         <field name="target">self</field>
-        <field name="url">/odoo/payroll/employees</field>
+        <field name="url">/shaka/payroll/employees</field>
     </record>
     <menuitem
         id="menu_hr_payroll_dashboard_root"

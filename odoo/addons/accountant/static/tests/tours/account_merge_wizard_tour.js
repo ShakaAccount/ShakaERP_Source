@@ -2,7 +2,7 @@ import { accountTourSteps } from "@account/js/tours/account";
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("account_merge_wizard_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         ...accountTourSteps.goToAccountMenu("Go to Accounting"),
         {

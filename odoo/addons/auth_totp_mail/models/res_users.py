@@ -87,7 +87,7 @@ class ResUsers(models.Model):
         return action
 
     def get_totp_invite_url(self):
-        return '/odoo/action-auth_totp_mail.action_activate_two_factor_authentication'
+        return '/shaka/action-auth_totp_mail.action_activate_two_factor_authentication'
 
     def action_totp_invite(self):
         invite_template = self.env.ref('auth_totp_mail.mail_template_totp_invite')

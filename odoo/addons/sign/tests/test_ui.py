@@ -25,7 +25,7 @@ class TestUi(odoo.tests.HttpCase, SignRequestCommon):
         # make sure that we only have the required template.
         self.env['sign.template'].search([('name', '!=', 'template_1_role')]).write({'active': False})
 
-        self.start_tour("/odoo", 'shared_sign_request_tour', login='admin')
+        self.start_tour("/shaka", 'shared_sign_request_tour', login='admin')
         shared_sign_request = self.env['sign.request'].search([('reference', '=', 'template_1_role'), ('state', '=', 'shared')])
         self.assertTrue(shared_sign_request.exists(), 'A shared sign request should be created')
         signed_sign_request = self.env['sign.request'].search([('reference', '=', 'template_1_role'), ('state', '=', 'signed')])
@@ -82,7 +82,7 @@ class TestUi(odoo.tests.HttpCase, SignRequestCommon):
         self.user_1.write({
             'sign_signature': img_content,
         })
-        self.start_tour("/odoo", 'test_sign_flow_tour', login=self.user_1.login)
+        self.start_tour("/shaka", 'test_sign_flow_tour', login=self.user_1.login)
 
     def test_template_edition(self):
         blank_template = self.env['sign.template'].create({
@@ -93,7 +93,7 @@ class TestUi(odoo.tests.HttpCase, SignRequestCommon):
             'attachment_id': self.attachment.id,
             'template_id': blank_template.id,
         })
-        self.start_tour("/odoo", "sign_template_creation_tour", login="admin")
+        self.start_tour("/shaka", "sign_template_creation_tour", login="admin")
         self.assertEqual(document.name, 'new-document-name', 'The tour should have changed the document name')
         self.assertEqual(len(blank_template.sign_item_ids), 7)
         self.assertEqual(blank_template.responsible_count, 2)
@@ -103,13 +103,13 @@ class TestUi(odoo.tests.HttpCase, SignRequestCommon):
         self.assertEqual(blank_template.sign_item_ids.responsible_id[1].name, "Signer 1-Test", "Role should be updated with the new name")
 
     def test_report_modal(self):
-        self.start_tour("/odoo", "sign_report_modal_tour", login="admin")
+        self.start_tour("/shaka", "sign_report_modal_tour", login="admin")
 
     def test_sign_tour(self):
         sign_requests = self.env['sign.request'].search([])
         # Step 2 of the `sign_tour` onboarding tour assumes that there's no sign.request record in the database.
         sign_requests.active = False
-        self.start_tour("/odoo", "sign_tour", login="admin")
+        self.start_tour("/shaka", "sign_tour", login="admin")
 
     def test_sign_tour_without_sign(self):
         # The tour has a step for the Signature dialoge, which is relevant only if the user has no saved signature.
@@ -117,4 +117,4 @@ class TestUi(odoo.tests.HttpCase, SignRequestCommon):
         sign_requests = self.env['sign.request'].search([])
         # Step 2 of the `sign_tour` onboarding tour assumes that there's no sign.request record in the database.
         sign_requests.active = False
-        self.start_tour("/odoo", "sign_tour", login="admin")
+        self.start_tour("/shaka", "sign_tour", login="admin")

@@ -6,7 +6,7 @@ import tourUtils from '@sale/js/tours/tour_utils';
 registry
     .category('web_tour.tours')
     .add('sale_subscription_combo_configurator', {
-        url: '/odoo',
+        url: '/shaka',
         steps: () => [
             ...stepUtils.goToAppSteps('sale_subscription.menu_sale_subscription_root', "Open the subscription app"),
             {

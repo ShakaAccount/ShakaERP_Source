@@ -38,4 +38,4 @@ class TestTourAccountReports(AccountTestInvoicingHttpCommon):
         cls.out_invoice_previous_year.action_post()
 
     def test_tour_account_reports(self):
-        self.start_tour("/odoo", 'account_reports_widgets', login=self.env.user.login)
+        self.start_tour("/shaka", 'account_reports_widgets', login=self.env.user.login)

@@ -55,12 +55,12 @@ class TestHrAppraisalGoal(HttpCase):
         creation with smart buttons
         """
         self.start_tour(
-            f"/odoo/appraisals/{self.appraisal.id}",
+            f"/shaka/appraisals/{self.appraisal.id}",
             "appraisals_create_appraisal_goal_from_smart_button",
             login="admin",
         )
         self.start_tour(
-            f"/odoo/employees/{self.employee.id}",
+            f"/shaka/employees/{self.employee.id}",
             "employees_create_appraisal_goal_from_smart_button",
             login="admin",
         )

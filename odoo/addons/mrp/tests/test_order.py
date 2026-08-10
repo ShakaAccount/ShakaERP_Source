@@ -5359,7 +5359,7 @@ class TestTourMrpOrder(HttpCase):
             'is_storable': True,
         })
         self.assertEqual(len(mo.move_raw_ids), 0)
-        url = f'/odoo/action-mrp.mrp_production_action/{mo.id}'
+        url = f'/shaka/action-mrp.mrp_production_action/{mo.id}'
 
         self.start_tour(url, 'test_mrp_production_product_catalog', login='admin')
         self.assertEqual(len(mo.move_raw_ids), 1)
@@ -5412,7 +5412,7 @@ class TestTourMrpOrder(HttpCase):
         mo = mo_form.save()
 
         action_id = self.env.ref('mrp.menu_mrp_production_action').action
-        url = f'/odoo/action-{action_id.id}/{mo.id}'
+        url = f'/shaka/action-{action_id.id}/{mo.id}'
         self.start_tour(url, "test_manufacturing_and_byproduct_sm_to_sml_synchronization", login="admin", timeout=100)
         self.assertEqual(mo.move_raw_ids.quantity, 7)
         self.assertEqual(mo.move_raw_ids.move_line_ids.quantity, 7)

@@ -1312,7 +1312,7 @@ class MailingMailing(models.Model):
                        mailing_name=self.subject
                        ),
             'top_button_label': _('More Info'),
-            'top_button_url': tools.urls.urljoin(web_base_url, f'/odoo/mailing.mailing/{self.id}'),
+            'top_button_url': tools.urls.urljoin(web_base_url, f'/shaka/mailing.mailing/{self.id}'),
             'kpi_data': [
                 kpi,
                 {

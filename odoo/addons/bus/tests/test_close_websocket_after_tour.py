@@ -30,7 +30,7 @@ class TestCloseWebsocketAfterTour(WebsocketCase):
         mocked_brower_class.return_value.navigate_to.side_effect = navigate_to_side_effect
 
         with patch.object(websocket_module, "_websocket_instances", WeakSet()):
-            self.browser_js("/odoo", "")
+            self.browser_js("/shaka", "")
             self.assertTrue(websocket_created)
             # serve_forever_patch prevent websocket instances from being collected. Stop it now.
             self._serve_forever_patch.stop()

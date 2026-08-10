@@ -56,7 +56,7 @@ class TestSocialTwitter(HttpCase):
         self.env['ir.config_parameter'].sudo().set_param('social_twitter.enable_reply_limit', True)
 
         with self.mock_twitter_call():
-            self.start_tour("/odoo", 'social_twitter/static/tests/tours/tour_social_twitter_spam.js', login='social_manager')
+            self.start_tour("/shaka", 'social_twitter/static/tests/tours/tour_social_twitter_spam.js', login='social_manager')
 
         for message in self.all_messages:
             self.assertNotIn('_last__', message, 'Should not have posted the last message on X')

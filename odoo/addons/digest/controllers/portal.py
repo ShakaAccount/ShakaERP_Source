@@ -69,5 +69,5 @@ class DigestController(Controller):
         digest = request.env['digest.digest'].browse(digest_id).exists()
         digest.action_set_periodicity(periodicity)
 
-        url = f"/odoo/{digest._name}/{digest.id}"
+        url = f"/shaka/{digest._name}/{digest.id}"
         return request.redirect(url)

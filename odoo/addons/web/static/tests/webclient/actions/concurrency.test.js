@@ -219,7 +219,7 @@ test("execute a new action while loading a lazy-loaded controller", async () => 
             ],
         },
     ]);
-    redirect("/odoo/action-77/2?cids=1");
+    redirect("/shaka/action-77/2?cids=1");
 
     let def;
     onRpc("partner", "search_read", () => def);

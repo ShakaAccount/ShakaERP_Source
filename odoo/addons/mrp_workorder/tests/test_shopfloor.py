@@ -234,7 +234,7 @@ class TestShopFloor(HttpCase):
         mo.action_confirm()
         mo.action_assign()
         mo.button_plan()
-        self.start_tour('/odoo/shop-floor', "test_shop_floor", login='test_without_hr_right')
+        self.start_tour('/shaka/shop-floor', "test_shop_floor", login='test_without_hr_right')
 
         self.assertEqual(mo.move_finished_ids.quantity, 2)
         self.assertRecordValues(mo.move_raw_ids, [
@@ -311,7 +311,7 @@ class TestShopFloor(HttpCase):
         all_mo[1].workorder_ids[0].button_start()
         all_mo[1].workorder_ids[0].action_mark_as_done()
         all_mo[0].workorder_ids[1].barcode = "bake it lovely"
-        self.start_tour("/odoo/shop-floor", "test_shop_floor_auto_select_workcenter", login='test_without_hr_right')
+        self.start_tour("/shaka/shop-floor", "test_shop_floor_auto_select_workcenter", login='test_without_hr_right')
 
     @users('test_without_hr_right')
     def test_shop_floor_catalog_add_component_in_two_steps(self):
@@ -446,7 +446,7 @@ class TestShopFloor(HttpCase):
         all_mo.action_confirm()
         all_mo.action_assign()
         all_mo.button_plan()
-        self.start_tour('/odoo/shop-floor', 'test_shop_floor_my_wo_filter_with_pin_user', login='test_without_hr_right')
+        self.start_tour('/shaka/shop-floor', 'test_shop_floor_my_wo_filter_with_pin_user', login='test_without_hr_right')
 
     def test_generate_serials_in_shopfloor(self):
         """ Ensure we can produce a MO with By-Product even if it's tracked by SN,
@@ -499,7 +499,7 @@ class TestShopFloor(HttpCase):
         mo.button_plan()
 
         action = self.env["ir.actions.actions"]._for_xml_id("mrp_workorder.action_mrp_display")
-        url = f"/odoo/action-{action['id']}"
+        url = f"/shaka/action-{action['id']}"
         self.start_tour(url, "test_generate_serials_in_shopfloor", login='admin')
         self.assertEqual(mo.move_byproduct_ids.lot_ids.name, "00001")
 
@@ -631,7 +631,7 @@ class TestShopFloor(HttpCase):
         wo = mo.workorder_ids.sorted()[0]
         wo.button_start()
         wo.button_finish()
-        self.start_tour("/odoo/shop-floor", "test_change_qty_produced", login='test_without_hr_right')
+        self.start_tour("/shaka/shop-floor", "test_change_qty_produced", login='test_without_hr_right')
         self.assertEqual(mo.qty_producing, 3)
         for move in mo.move_raw_ids:
             if move.product_id.id == comp1.id:
@@ -667,7 +667,7 @@ class TestShopFloor(HttpCase):
         mo.action_assign()
         mo.button_plan()
 
-        self.start_tour('/odoo/shop-floor', 'test_operator_assigned_to_all_work_orders', login='test_without_hr_right')
+        self.start_tour('/shaka/shop-floor', 'test_operator_assigned_to_all_work_orders', login='test_without_hr_right')
 
         logs = mo.workorder_ids.time_ids
         self.assertEqual(len(logs), 2, 'Both operations should be logged.')
@@ -735,7 +735,7 @@ class TestShopFloor(HttpCase):
         mo.action_confirm()
         mo.action_assign()
         mo.button_plan()
-        self.start_tour("/odoo/shop-floor", "test_automatic_backorder_no_redirect", login='test_without_hr_right')
+        self.start_tour("/shaka/shop-floor", "test_automatic_backorder_no_redirect", login='test_without_hr_right')
         self.assertRecordValues(mo.production_group_id.production_ids.sorted('name'), [
             {'name': 'MOBACK-001', 'state': 'done'},
             {'name': 'MOBACK-002', 'state': 'done'},
@@ -750,7 +750,7 @@ class TestShopFloor(HttpCase):
             'group_ids': [Command.set(self.env.ref('mrp.group_mrp_routings').ids)],
         })
         self.env['mrp.workcenter'].create({'name': 'Workcenter1'})
-        self.start_tour('/odoo', 'test_shop_floor_access', login='test_without_hr_right')
+        self.start_tour('/shaka', 'test_shop_floor_access', login='test_without_hr_right')
 
     def test_set_qty_producing(self):
         user_admin = self.env.ref('base.user_admin')
@@ -866,7 +866,7 @@ class TestShopFloor(HttpCase):
         # Remove one component from the BoM, so that the MO and BoM are unsynced
         bom.bom_line_ids[0].unlink()
 
-        self.start_tour("/odoo/shop-floor", "test_shop_floor_unsynced_bom", login='admin')
+        self.start_tour("/shaka/shop-floor", "test_shop_floor_unsynced_bom", login='admin')
 
         self.assertEqual(mo.qty_producing, 1)
         for move in mo.move_raw_ids:
@@ -934,7 +934,7 @@ class TestShopFloor(HttpCase):
             'bom_id': bom.id,
         })
         mo.action_confirm()
-        self.start_tour('/odoo/shop-floor', 'test_product_consumption', login='admin')
+        self.start_tour('/shaka/shop-floor', 'test_product_consumption', login='admin')
 
         self.assertRecordValues(mo.move_raw_ids, [
             {
@@ -974,7 +974,7 @@ class TestShopFloor(HttpCase):
         pick = mo.picking_ids
         self.assertEqual(pick.picking_type_id, self.warehouse.pbm_type_id)
         pick.button_validate()
-        self.start_tour("/odoo/shop-floor", "test_add_component_from_shop_floor", login='admin')
+        self.start_tour("/shaka/shop-floor", "test_add_component_from_shop_floor", login='admin')
         self.assertEqual(mo.workorder_ids[0], mo.move_raw_ids.filtered(lambda m: m.product_id == self.product_2).workorder_id)
         new_pick = mo.picking_ids - pick
         self.assertEqual(new_pick.picking_type_id, self.warehouse.pbm_type_id)

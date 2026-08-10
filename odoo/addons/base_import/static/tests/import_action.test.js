@@ -297,7 +297,7 @@ describe("Import view", () => {
         const templateURL = "/myTemplateURL.xlsx";
         const secondTemplateURL = "/mySecondTemplateURL.xlsx";
 
-        redirect("/odoo/action-2");
+        redirect("/shaka/action-2");
 
         onRpc("partner", "get_import_templates", ({ route }) => {
             expect.step(route);
@@ -337,7 +337,7 @@ describe("Import view", () => {
     test("open import directlty from URL", async () => {
         const templateURL = "/myTemplateURL.xlsx";
 
-        redirect("/odoo/action-2/import");
+        redirect("/shaka/action-2/import");
 
         onRpc("partner", "get_import_templates", ({ route }) => {
             expect.step(route);
@@ -367,7 +367,7 @@ describe("Import view", () => {
         onRpc("base_import.import", "parse_preview", ({ route }) => expect.step(route));
         onRpc("base_import.import", "create", ({ route }) => expect.step(route));
 
-        redirect("/odoo/action-2");
+        redirect("/shaka/action-2");
         await mountWebClient();
         await getService("action").doAction(1);
         expect.verifySteps([
@@ -449,7 +449,7 @@ describe("Import view", () => {
             });
         });
         onRpc("base_import.import", "create", ({ route }) => expect.step(route));
-        redirect("/odoo/action-2");
+        redirect("/shaka/action-2");
         await mountWebClient();
         await getService("action").doAction(1);
         expect.verifySteps([
@@ -657,7 +657,7 @@ describe("Import view", () => {
         onRpc("base_import.import", "execute_import", ({ route }) => {
             expect.step(route);
         });
-        redirect("/odoo/action-2");
+        redirect("/shaka/action-2");
         await mountWebClient();
         await getService("action").doAction(1);
         expect.verifySteps(["action"]);
@@ -738,7 +738,7 @@ describe("Import view", () => {
             },
         });
 
-        redirect("/odoo/action-2");
+        redirect("/shaka/action-2");
         await mountWebClient();
         onRpc("base_import.import", "parse_preview", ({ route }) => {
             expect.step(route);
@@ -1275,7 +1275,7 @@ describe("Import view", () => {
             },
         });
 
-        redirect("/odoo/action-2");
+        redirect("/shaka/action-2");
         await mountWebClient();
         onRpc("base_import.import", "execute_import", ({ args }) => executeImport(args, true));
         await getService("action").doAction(1);
@@ -1538,7 +1538,7 @@ describe("Import view", () => {
 
     test("date format should be converted to strftime", async () => {
         let parseCount = 0;
-        redirect("/odoo/action-2");
+        redirect("/shaka/action-2");
         await mountWebClient();
         onRpc("base_import.import", "parse_preview", async ({ args }) => {
             parseCount++;

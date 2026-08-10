@@ -544,7 +544,7 @@ class TestAuthTimeoutHttp(HttpCase):
                 "lock_timeout_inactivity": [(1, False)],  # 1 second inactivity without MFA
             },
         ):
-            self.start_tour("/odoo", "auth_timeout_tour_lock_timeout_inactivity", login=self.user.login)
+            self.start_tour("/shaka", "auth_timeout_tour_lock_timeout_inactivity", login=self.user.login)
 
         # Set a 1 second inactivity timeout with 2fa, with a mock patch because the field `lock_timeout` is in minutes.
         with patch.object(
@@ -555,4 +555,4 @@ class TestAuthTimeoutHttp(HttpCase):
                 "lock_timeout_inactivity": [(1, True)],  # 1 second inactivity with MFA
             },
         ):
-            self.start_tour("/odoo", "auth_timeout_tour_lock_timeout_inactivity_2fa", login=self.user.login)
+            self.start_tour("/shaka", "auth_timeout_tour_lock_timeout_inactivity_2fa", login=self.user.login)

@@ -296,7 +296,7 @@ class TestReportEditorUIUnit(HttpCase):
 
     @property
     def tour_url(self):
-        return f"/odoo/action-{self.testAction.id}/studio?mode=editor&_tab=reports&_report_id={self.report.id}&menu_id={self.testMenu.id}"
+        return f"/shaka/action-{self.testAction.id}/studio?mode=editor&_tab=reports&_report_id={self.report.id}&menu_id={self.testMenu.id}"
 
     def _clear_routing(self):
         self.env.registry.clear_cache('routing')

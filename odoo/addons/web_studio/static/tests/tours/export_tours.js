@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("can_export_new_module", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         {
             trigger: ".o_home_menu_background .o_home_menu",

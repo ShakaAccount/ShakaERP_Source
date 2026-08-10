@@ -13,7 +13,7 @@ import {
 } from "@website/js/tours/tour_utils";
 
 registry.category("web_tour.tours").add("parent_child_menu", {
-    url: "/odoo/action-website.action_website_menu",
+    url: "/shaka/action-website.action_website_menu",
     steps: () => [
         {
             content: "Open Menu Form View",

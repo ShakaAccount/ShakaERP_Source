@@ -5,7 +5,7 @@ import { accountTourSteps } from "@account/js/tours/account";
 registry
     .category("web_tour.tours")
     .add("account_accountant_bank_reconciliation_widget_reload_activies_when_add_a_new_one", {
-        url: "/odoo",
+        url: "/shaka",
         steps: () => [
             stepUtils.showAppsMenuItem(),
             ...accountTourSteps.goToAccountMenu("Open the accounting module"),

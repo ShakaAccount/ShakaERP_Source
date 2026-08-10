@@ -12,4 +12,4 @@ class TestPayslipUi(TestHrPayrollAccountCommon, HttpCase):
             'company_id': self.env.company.id,
             'email': 'mitchell.admin@example.com',
         })
-        self.start_tour("/odoo", 'hr_payroll_view_header_buttons_tour', login='admin')
+        self.start_tour("/shaka", 'hr_payroll_view_header_buttons_tour', login='admin')

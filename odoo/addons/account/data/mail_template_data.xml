@@ -343,12 +343,12 @@
                                         </t>
 
                                         <div style="text-align: center; padding-top: 24px;">
-                                            <a t-if="invoice_count != 1" t-attf-href="/odoo/accounting/action-account.action_account_moves_email_preview?active_ids={{ invoice_preview_ids }}"
+                                            <a t-if="invoice_count != 1" t-attf-href="/shaka/accounting/action-account.action_account_moves_email_preview?active_ids={{ invoice_preview_ids }}"
                                                target="_blank"
                                                t-attf-style="padding: 12px 24px; font-size: 14px; font-weight: bold; color: #FFFFFF; text-decoration: none !important; background-color: #008384; border-radius:3px; display: inline-block;">
                                                Consult Invoices
                                             </a>
-                                            <a t-else="" t-attf-href="/odoo/accounting/{{ object.id }}/account.move/{{ invoices.id }}"
+                                            <a t-else="" t-attf-href="/shaka/accounting/{{ object.id }}/account.move/{{ invoices.id }}"
                                                target="_blank"
                                                t-attf-style="padding: 12px 24px; font-size: 14px; font-weight: bold; color: #FFFFFF; text-decoration: none !important; background-color: #008384; border-radius:3px; display: inline-block;">
                                                Consult Invoice

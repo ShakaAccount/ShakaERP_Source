@@ -4,7 +4,7 @@ import { registry } from "@web/core/registry";
 registry.category("web_tour.tours").add(
     'industry_fsm_sale_products_compute_catalog_tour',
     {
-        url: "/odoo",
+        url: "/shaka",
         steps: () => [
         {
             trigger: '.o_app[data-menu-xmlid="sale.sale_menu_root"]',

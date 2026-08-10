@@ -15,7 +15,7 @@ patch(router, {
         const { pathname } = urlObj;
         urlObj.pathname = pathname.replace(
             /\/my\/projects\/([1234567890]+)\/project_sharing/,
-            "/odoo/project.project/$1/project_sharing"
+            "/shaka/project.project/$1/project_sharing"
         );
         const state = super.urlToState(urlObj);
         if (state.actionStack?.length) {

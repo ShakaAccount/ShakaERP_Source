@@ -66,7 +66,7 @@ class TestAccountReportsTours(AccountTestInvoicingHttpCommon):
         move.action_post()
 
     def test_account_reports_tours(self):
-        self.start_tour("/odoo", 'account_reports', login=self.env.user.login)
+        self.start_tour("/shaka", 'account_reports', login=self.env.user.login)
 
     def test_account_reports_annotations_tours(self):
         # Create annotations
@@ -98,7 +98,7 @@ class TestAccountReportsTours(AccountTestInvoicingHttpCommon):
             'message_id': message_101404.id,
         })
 
-        self.start_tour("/odoo", 'account_reports_annotations', login=self.env.user.login)
+        self.start_tour("/shaka", 'account_reports_annotations', login=self.env.user.login)
 
         annotations = self.env['account.report.annotation'].search([])
 
@@ -112,7 +112,7 @@ class TestAccountReportsTours(AccountTestInvoicingHttpCommon):
         self.assertEqual(new_message.res_id, self.account_121000.id, "The new message should be linked to account 121000")
 
     def test_account_reports_audit_tours(self):
-        self.start_tour("/odoo/action-account_reports.action_view_account_audit", 'account_reports_audit', login=self.env.user.login)
+        self.start_tour("/shaka/action-account_reports.action_view_account_audit", 'account_reports_audit', login=self.env.user.login)
 
         messages = self.env['mail.message'].search([
             ('model', '=', 'account.account')

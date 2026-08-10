@@ -7,7 +7,7 @@ import { stepUtils } from "@web_tour/tour_utils";
  * create items from the item list.
  */
 registry.category("web_tour.tours").add('knowledge_readonly_item_list_tour', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [stepUtils.showAppsMenuItem(), { // open the Knowledge App
     trigger: '.o_app[data-menu-xmlid="knowledge.knowledge_menu_root"]',
     run: "click",

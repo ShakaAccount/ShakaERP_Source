@@ -29,4 +29,4 @@ class TestPurchaseFlowTourPostInstall(AccountTestInvoicingCommon, HttpCase):
             })],
         })
         purchase_order.button_approve()
-        self.start_tour('/odoo', 'test_basic_purchase_flow_with_minimal_access_rights', login='SuperPurchaseWoman')
+        self.start_tour('/shaka', 'test_basic_purchase_flow_with_minimal_access_rights', login='SuperPurchaseWoman')

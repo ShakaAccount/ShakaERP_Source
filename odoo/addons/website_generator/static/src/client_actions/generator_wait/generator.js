@@ -36,7 +36,7 @@ class WebsiteGenerator extends Component {
 
         useBus(this.website.bus, "HIDE-WEBSITE-LOADER", () => {
             if (!this.state.error) {
-                redirect("/odoo?showWebsiteGeneratorNotification=1");
+                redirect("/shaka?showWebsiteGeneratorNotification=1");
             }
         });
     }
@@ -50,7 +50,7 @@ class WebsiteGenerator extends Component {
         );
         // Safety check, return to backend if no request
         if (!lastScrapRequest) {
-            redirect("/odoo");
+            redirect("/shaka");
             return;
         }
         // If no real error status but not yet ready, ask server to check for

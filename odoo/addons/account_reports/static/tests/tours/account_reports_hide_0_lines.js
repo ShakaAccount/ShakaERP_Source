@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add('account_reports_hide_0_lines', {
-    url: '/odoo/action-account_reports.action_account_report_bs',
+    url: '/shaka/action-account_reports.action_account_report_bs',
     steps: () => [
         {
             content: 'test if the Bank and Cash line is present (but the value is 0)',
@@ -62,7 +62,7 @@ registry.category("web_tour.tours").add('account_reports_hide_0_lines', {
 });
 
 registry.category("web_tour.tours").add('account_reports_hide_0_lines_with_string_columns', {
-    url: '/odoo/action-account_reports.action_account_report_general_ledger',
+    url: '/shaka/action-account_reports.action_account_report_general_ledger',
     steps: () => [
         {
             content: "Check if the 211000 Account Payable line is present (but the value is 0)",

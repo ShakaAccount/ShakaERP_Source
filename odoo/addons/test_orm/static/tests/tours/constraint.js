@@ -2,7 +2,7 @@
     import { stepUtils } from "@web_tour/tour_utils";
 
     registry.category("web_tour.tours").add('sql_constaint', {
-        url: '/odoo/action-test_orm.action_categories?debug=1',
+        url: '/shaka/action-test_orm.action_categories?debug=1',
         steps: () => [
     {
         content: "wait web client",

@@ -10,7 +10,7 @@ function openRoot() {
         trigger: 'body',
         run() {
             document.querySelector("body").classList.add("wait");
-            window.location = '/odoo';
+            window.location = '/shaka';
         },
         expectUnloadPage: true,
     }, {
@@ -72,7 +72,7 @@ function closePreferencesDialog({content, totp_state}) {
 }
 
 registry.category("web_tour.tours").add('totp_tour_setup', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [
 ...openUserPreferencesAtSecurityTab(),
 {
@@ -359,7 +359,7 @@ registry.category("web_tour.tours").add('totp_login_disabled', {
 ]});
 
 registry.category("web_tour.tours").add('totp_admin_disables', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [stepUtils.showAppsMenuItem(), {
     content: 'Go to settings',
     trigger: '[data-menu-xmlid="base.menu_administration"]',

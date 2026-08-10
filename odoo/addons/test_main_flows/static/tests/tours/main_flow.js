@@ -5,7 +5,7 @@ import { stepUtils } from "@web_tour/tour_utils";
 import { markup } from "@odoo/owl";
 
 registry.category("web_tour.tours").add('main_flow_tour', {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
 ...stepUtils.toggleHomeMenu().map(step => {
     step.isActive = ["community", "mobile"];

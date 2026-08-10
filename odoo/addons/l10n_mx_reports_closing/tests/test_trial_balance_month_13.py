@@ -268,4 +268,4 @@ class TestL10nMXTrialBalanceMonth13(TestAccountReportsCommon, odoo.tests.HttpCas
             is refactored, as this module uses a hack to add the Month 13 options with the behavior we want.
         """
         with freeze_time('2022-06-01'):
-            self.start_tour("/odoo", 'trial_balance_month_13_date_filter', login=self.env.user.login)
+            self.start_tour("/shaka", 'trial_balance_month_13_date_filter', login=self.env.user.login)

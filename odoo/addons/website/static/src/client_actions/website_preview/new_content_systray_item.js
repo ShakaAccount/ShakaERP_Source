@@ -223,7 +223,7 @@ export class NewContentSystrayItem extends Component {
             // the feature with patches from the installed module.
             this.website.prepareOutLoader();
             const encodedPath = encodeURIComponent(url.toString());
-            redirect(`/odoo/action-website.website_preview?website_id=${id}&path=${encodedPath}`);
+            redirect(`/shaka/action-website.website_preview?website_id=${id}&path=${encodedPath}`);
         }
     }
 

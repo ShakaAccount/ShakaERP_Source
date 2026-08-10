@@ -8,7 +8,7 @@ from .common import HelpdeskCommon
 @odoo.tests.tagged('post_install', '-at_install')
 class TestUi(odoo.tests.HttpCase, HelpdeskCommon):
     def test_ui(self):
-        self.start_tour("/odoo", 'helpdesk_tour', login="admin")
+        self.start_tour("/shaka", 'helpdesk_tour', login="admin")
 
     def test_helpdesk_ticket_on_portal_ui(self):
         self.test_team.privacy_visibility = 'portal'
@@ -17,4 +17,4 @@ class TestUi(odoo.tests.HttpCase, HelpdeskCommon):
             'name': 'lamp stand',
             'team_id': self.test_team.id,
         })
-        self.start_tour('/odoo', 'helpdesk_search_ticket_on_portal_tour', login=self.helpdesk_portal.login)
+        self.start_tour('/shaka', 'helpdesk_search_ticket_on_portal_tour', login=self.helpdesk_portal.login)

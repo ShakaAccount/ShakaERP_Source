@@ -2,7 +2,7 @@ import { registry } from "@web/core/registry";
 import { delay } from "@web/core/utils/concurrency";
 
 registry.category("web_tour.tours").add("timesheet_record_time", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         {
             trigger: ".o_app[data-menu-xmlid='hr_timesheet.timesheet_menu_root']",
@@ -38,7 +38,7 @@ registry.category("web_tour.tours").add("timesheet_record_time", {
 });
 
 registry.category("web_tour.tours").add("timesheet_overtime_hour_encoding", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         {
             trigger: ".o_app[data-menu-xmlid='hr_timesheet.timesheet_menu_root']",
@@ -81,7 +81,7 @@ registry.category("web_tour.tours").add("timesheet_overtime_hour_encoding", {
 });
 
 registry.category("web_tour.tours").add("timesheet_overtime_day_encoding", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         {
             trigger: ".o_app[data-menu-xmlid='hr_timesheet.timesheet_menu_root']",

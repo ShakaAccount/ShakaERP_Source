@@ -56,7 +56,7 @@ class LazadaController(http.Controller):
             shop.name = request.env._("Lazada Shop - %(name)s", name=seller_data['name'])
 
             # Craft the URL of the Lazada Shop form view
-            shop_url = f'/odoo/action-sale_lazada.action_lazada_shop_list/{shop.id}'
+            shop_url = f'/shaka/action-sale_lazada.action_lazada_shop_list/{shop.id}'
             return request.redirect(shop_url, local=False)
 
         except utils.LazadaApiError as error:
@@ -67,5 +67,5 @@ class LazadaController(http.Controller):
             _logger.exception("Failed to authorize Lazada shop %s: %s", shop.id, error_message)
 
             return request.redirect(
-                f'/odoo/action-sale_lazada.action_lazada_shop_authorization_error/{shop.id}'
+                f'/shaka/action-sale_lazada.action_lazada_shop_authorization_error/{shop.id}'
             )

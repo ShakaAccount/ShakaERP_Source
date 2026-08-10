@@ -7,7 +7,7 @@ import tourUtils from '@sale/js/tours/tour_utils';
 registry
     .category('web_tour.tours')
     .add('sale_combo_configurator_preconfigure_unconfigurable_ptals', {
-        url: '/odoo',
+        url: '/shaka',
         steps: () => [
             ...stepUtils.goToAppSteps('sale.sale_menu_root', "Open the sales app"),
             ...tourUtils.createNewSalesOrder(),

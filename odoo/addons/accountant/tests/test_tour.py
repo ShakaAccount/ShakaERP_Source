@@ -45,4 +45,4 @@ class TestAccountantTours(AccountTestInvoicingHttpCommon):
             'company_id': companies[0].id,
             'company_ids': [Command.set(companies.ids)],
         })
-        self.start_tour("/odoo", 'account_merge_wizard_tour', login="admin", cookies={"cids": f"{companies[0].id}-{companies[1].id}"})
+        self.start_tour("/shaka", 'account_merge_wizard_tour', login="admin", cookies={"cids": f"{companies[0].id}-{companies[1].id}"})

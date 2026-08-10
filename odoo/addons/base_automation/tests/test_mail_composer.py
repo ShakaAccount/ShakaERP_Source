@@ -41,7 +41,7 @@ class TestMailFullComposer(MailCommon, HttpCase):
         partner.message_subscribe(partner_ids=[self.user_admin.partner_id.id])
         with self.mock_mail_app():
             self.start_tour(
-                f"/odoo/res.partner/{partner.id}",
+                f"/shaka/res.partner/{partner.id}",
                 "mail/static/tests/tours/mail_composer_test_tour.js",
                 login=self.user_employee.login
             )
@@ -76,7 +76,7 @@ class TestMailFullComposer(MailCommon, HttpCase):
         partner.message_subscribe(partner_ids=[self.user_admin.partner_id.id])
         with self.mock_mail_app():
             self.start_tour(
-                f"/odoo/res.partner/{partner.id}",
+                f"/shaka/res.partner/{partner.id}",
                 "mail/static/tests/tours/mail_html_composer_test_tour.js",
                 login=self.user_employee.login,
             )

@@ -55,7 +55,7 @@
                                         Welcome to Peppol
                                     </span>
                                     <div style="margin-bottom: 5px; margin-top: 18px;">
-                                        <a t-attf-href="/odoo/accounting/" target="_blank"
+                                        <a t-attf-href="/shaka/accounting/" target="_blank"
                                            t-attf-style="padding: 8px 12px; font-size: 12px; color: {{ object.email_primary_color or '#FFFFFF' }}; text-decoration: none !important; font-weight: 400; background-color: {{ object.email_secondary_color or '#875A7B' }}; border-radius:3px">
                                             Send invoices
                                         </a>

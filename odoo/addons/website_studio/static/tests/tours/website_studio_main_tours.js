@@ -2,7 +2,7 @@ import { registry } from "@web/core/registry";
 import { changeOptionInPopover } from "@website/js/tours/tour_utils";
 
 registry.category("web_tour.tours").add("website_studio_listing_and_page", {
-    url: "/odoo/action-studio?debug=1&mode=home_menu",
+    url: "/shaka/action-studio?debug=1&mode=home_menu",
     steps: () => [
         {
             trigger: "a.o_menuitem:contains('StudioApp')",
@@ -49,7 +49,7 @@ registry.category("web_tour.tours").add("website_studio_listing_and_page", {
 });
 
 registry.category("web_tour.tours").add("website_studio_listing_without_page", {
-    url: "/odoo/action-studio?debug=1&mode=home_menu",
+    url: "/shaka/action-studio?debug=1&mode=home_menu",
     steps: () => [
         {
             trigger: "a.o_menuitem:contains('StudioApp')",

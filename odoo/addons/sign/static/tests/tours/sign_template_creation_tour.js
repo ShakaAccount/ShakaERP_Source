@@ -41,7 +41,7 @@ export function createSelectionRectangle(viewerContainer, page, startPos = 0.25,
 }
 
 registry.category("web_tour.tours").add("sign_template_creation_tour", {
-    url: "/odoo?debug=1",
+    url: "/shaka?debug=1",
     steps: () => [
         stepUtils.showAppsMenuItem(),
         {

@@ -15,7 +15,7 @@ class TestImportFecFileTour(AccountTestInvoicingHttpCommon):
         4. Moves
         5. Move lines
         """
-        self.start_tour('/odoo', 'import_fec_file_tour', login=self.env.user.login)
+        self.start_tour('/shaka', 'import_fec_file_tour', login=self.env.user.login)
 
         with self.subTest(test='Test imported accounts'):
             account_codes = ('401000', '445660', '622700')

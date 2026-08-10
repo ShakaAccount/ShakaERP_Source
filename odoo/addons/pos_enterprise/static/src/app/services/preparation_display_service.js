@@ -454,7 +454,7 @@ export class PrepDisplay extends WithLazyGetterTrap {
         this.computeOrderCounts();
     }
     exit() {
-        redirect("/odoo/action-pos_enterprise.action_preparation_display");
+        redirect("/shaka/action-pos_enterprise.action_preparation_display");
     }
     get displayPresetsFilter() {
         return this.data.models["pos.config"].some((config) => config.use_presets);

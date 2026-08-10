@@ -3,7 +3,7 @@ import { registry } from "@web/core/registry";
 import { markup } from "@odoo/owl";
 
 registry.category("web_tour.tours").add("web_studio_home_menu_background_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         {
             trigger: ".o_home_menu_background",

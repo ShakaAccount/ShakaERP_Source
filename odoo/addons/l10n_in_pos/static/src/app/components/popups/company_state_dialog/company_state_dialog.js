@@ -14,7 +14,7 @@ export class companyStateDialog extends Component {
     }
 
     redirect() {
-        window.location = "/odoo/companies/" + this.pos.company.id;
+        window.location = "/shaka/companies/" + this.pos.company.id;
     }
 
     onClose() {

@@ -30,7 +30,7 @@
                                  invisible="not has_active_accounts" />
                             <div colspan="2" class="alert alert-info o_social_post_no_accounts_available" role="alert"
                                 invisible="has_active_accounts">
-                                <p><a href="/odoo/action-social.action_social_media">Link social accounts</a> before posting.</p>
+                                <p><a href="/shaka/action-social.action_social_media">Link social accounts</a> before posting.</p>
                             </div>
                             <field name="message" widget="text_emojis" class="o_social_post_message_wrapper"
                                 onchange_on_keydown="True" force_save="1" default_focus="1"

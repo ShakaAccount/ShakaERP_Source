@@ -492,7 +492,7 @@ export function prepend_trigger(steps, prepend_text = "") {
 }
 
 export function getClientActionUrl(path, edition) {
-    let url = `/odoo/action-website.website_preview`;
+    let url = `/shaka/action-website.website_preview`;
     if (path) {
         url += `?path=${encodeURIComponent(path)}`;
     }
@@ -586,7 +586,7 @@ export function registerBackendAndFrontendTour(name, options, steps) {
     if (typeof steps !== "function") {
         throw new Error(`tour.steps has to be a function that returns TourStep[]`);
     }
-    if (window.location.pathname === "/odoo") {
+    if (window.location.pathname === "/shaka") {
         return registerWebsitePreviewTour(name, options, () => {
             const newSteps = [];
             for (const step of steps()) {

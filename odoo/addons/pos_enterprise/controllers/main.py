@@ -10,7 +10,7 @@ class PosPreparationDisplayController(http.Controller):
         )
 
         if not preparation_display:
-            return request.redirect('/odoo/action-pos_preparation_display.action_preparation_display')
+            return request.redirect('/shaka/action-pos_preparation_display.action_preparation_display')
 
         session_info = request.env['ir.http'].session_info()
         session_info['preparation_display'] = preparation_display.read(["id", "name", "access_token"])[0]

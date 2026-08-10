@@ -27,4 +27,4 @@ class TestSpreadsheetImportXLSXUi(HttpCase):
             'folder_id': folder.id
         })
 
-        self.start_tour("/odoo", "spreadsheet_clone_xlsx", login="admin")
+        self.start_tour("/shaka", "spreadsheet_clone_xlsx", login="admin")

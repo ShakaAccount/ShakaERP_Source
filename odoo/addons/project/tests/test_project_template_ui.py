@@ -20,4 +20,4 @@ class TestProjectTemplatesTour(HttpCase):
         user_admin.write({
             'email': 'mitchell.admin@example.com',
         })
-        self.start_tour("/odoo", "project_templates_tour", login="admin")
+        self.start_tour("/shaka", "project_templates_tour", login="admin")

@@ -24,7 +24,7 @@ class TestDiscussMentionSuggestions(HttpCase):
             ],
         })
         self.start_tour(
-            f"/odoo/discuss?active_id=discuss.channel_{rd_channel.id}",
+            f"/shaka/discuss?active_id=discuss.channel_{rd_channel.id}",
             "discuss_mention_suggestions_group_restricted_channel.js",
             login="admin",
         )

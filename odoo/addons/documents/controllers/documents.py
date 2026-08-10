@@ -328,9 +328,9 @@ class ShareRoute(http.Controller):
         elif request.env.user._is_portal():
             return self._documents_render_portal_view(document_sudo)
         else:  # assume internal user
-            # Internal users use the /odoo/documents/<access_token> route
+            # Internal users use the /shaka/documents/<access_token> route
             return request.redirect(
-                f'/odoo/documents/{quote(access_token, safe="")}?{keep_query("*")}',
+                f'/shaka/documents/{quote(access_token, safe="")}?{keep_query("*")}',
                 HTTPStatus.TEMPORARY_REDIRECT,
             )
 
@@ -342,7 +342,7 @@ class ShareRoute(http.Controller):
             and not target_sudo.is_access_via_link_hidden
         ):
             return request.redirect(
-                f'/odoo/documents/{quote(target_sudo.access_token, safe="")}?{keep_query("*")}')
+                f'/shaka/documents/{quote(target_sudo.access_token, safe="")}?{keep_query("*")}')
         if target_sudo or not document_sudo:
             return request.render(
                 'documents.not_available', {'document': document_sudo}, status=404)
@@ -437,7 +437,7 @@ class ShareRoute(http.Controller):
             Redirect = request.env['documents.redirect'].sudo()
             if document_sudo := Redirect._get_redirection(access_token):
                 return request.redirect(
-                    f'/odoo/documents/{quote(document_sudo.access_token, safe="")}',
+                    f'/shaka/documents/{quote(document_sudo.access_token, safe="")}',
                     HTTPStatus.MOVED_PERMANENTLY,
                 )
             raise request.not_found()
@@ -572,7 +572,7 @@ class ShareRoute(http.Controller):
         '/document/share/<int:share_id>/<token>',
         '/document/share/<token>'], type='http', auth='public')
     def share_portal(self, share_id=None, token=None):
-        logger.warning("Deprecated since Odoo 18. Please access /odoo/documents/<access_token> instead.")
+        logger.warning("Deprecated since Odoo 18. Please access /shaka/documents/<access_token> instead.")
         return request.redirect(f'/shaka/documents/{quote(token or "", safe="")}', code=HTTPStatus.MOVED_PERMANENTLY)
 
     @http.route(['/documents/upload/', '/documents/upload/<access_token>'],

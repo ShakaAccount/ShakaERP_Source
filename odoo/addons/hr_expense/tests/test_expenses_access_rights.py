@@ -66,7 +66,7 @@ class TestExpensesAccessRights(TestExpenseCommon, HttpCase):
             'product_id': self.product_a.id,
             'price_unit': 1000.0,
         })
-        self.start_tour("/odoo", 'hr_expense_access_rights_test_tour', login="test-expense")
+        self.start_tour("/shaka", 'hr_expense_access_rights_test_tour', login="test-expense")
         self.assertRecordValues(expense, [{'state': 'submitted'}])
 
     def test_expense_user_cant_approve_own_expense(self):

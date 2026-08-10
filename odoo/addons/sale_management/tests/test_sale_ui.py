@@ -20,7 +20,7 @@ class TestUi(AccountTestInvoicingCommon, HttpCase):
         self.env.ref('base.user_admin').write({
             'email': 'mitchell.admin@example.com',
         })
-        self.start_tour("/odoo", 'sale_tour', login="admin")
+        self.start_tour("/shaka", 'sale_tour', login="admin")
 
     def test_04_portal_sale_signature_without_name_tour(self):
         """The goal of this test is to make sure the portal user can sign SO even witout a name."""
@@ -65,4 +65,4 @@ class TestSaleFlowTourPostInstall(TestSaleCommon, HttpCase):
             })],
         })
         sale_order.action_confirm()
-        self.start_tour('/odoo', 'test_basic_sale_flow_with_minimal_access_rights', login='SuperSaleWoman')
+        self.start_tour('/shaka', 'test_basic_sale_flow_with_minimal_access_rights', login='SuperSaleWoman')

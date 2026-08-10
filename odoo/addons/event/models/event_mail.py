@@ -418,7 +418,7 @@ class EventMail(models.Model):
 
             # add some information on cause
             template_link = Markup('<a href="%s">%s (%s)</a>') % (
-                f"{self.get_base_url()}/odoo/{template._name}/{template.id}",
+                f"{self.get_base_url()}/shaka/{template._name}/{template.id}",
                 template.display_name,
                 template.id,
             )

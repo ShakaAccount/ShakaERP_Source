@@ -45,7 +45,7 @@ class TestBarcodeClientActionPicking(TestBarcodeClientAction):
             },
         ])
 
-        self.start_tour("/odoo/barcode", "test_operation_quality_check_barcode", login="admin")
+        self.start_tour("/shaka/barcode", "test_operation_quality_check_barcode", login="admin")
 
         quality_checks = self.env['quality.check'].search([('point_id', 'in', quality_points.ids)])
         self.assertRecordValues(quality_checks.sorted('title'), [
@@ -128,7 +128,7 @@ class TestBarcodeClientActionPicking(TestBarcodeClientAction):
             {'product_id': self.productserial1.id, 'measure_on': 'move_line'},
             {'product_id': self.productserial1.id, 'measure_on': 'move_line'},
         ])
-        self.start_tour("/odoo/barcode", "test_quality_check_partial_reception_barcode", login="admin")
+        self.start_tour("/shaka/barcode", "test_quality_check_partial_reception_barcode", login="admin")
         self.assertEqual(picking_in.state, 'done')
         self.assertRecordValues(picking_in.check_ids, [
             {'product_id': self.productserial1.id, 'measure_on': 'move_line', 'quality_state': 'pass', 'lot_name': 'SN001'},

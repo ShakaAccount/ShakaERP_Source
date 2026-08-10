@@ -22,7 +22,7 @@ class TestShareController(SpreadsheetTestCommon, HttpCase):
     @mute_logger('odoo.http')
     def test_documents_share_portal_wrong_token(self):
         self.create_spreadsheet()
-        response = self.url_open("/odoo/documents/a-random-token")
+        response = self.url_open("/shaka/documents/a-random-token")
         self.assertFalse(response.ok)
 
     def test_documents_share_portal_internal_redirect(self):
@@ -42,7 +42,7 @@ class TestShareController(SpreadsheetTestCommon, HttpCase):
     @mute_logger('odoo.http')
     def test_public_spreadsheet_wrong_token(self):
         self.create_spreadsheet()
-        response = self.url_open("/odoo/documents/a-random-token")
+        response = self.url_open("/shaka/documents/a-random-token")
         self.assertFalse(response.ok)
 
     def test_contains_live_data_with_odoo_chart(self):

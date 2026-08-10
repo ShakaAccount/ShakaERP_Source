@@ -3,7 +3,7 @@ import { patch } from "@web/core/utils/patch";
 import { browser } from "@web/core/browser/browser";
 
 /*
-This prevents the router from trying to extract an action from the url if it starts with /odoo/documents
+This prevents the router from trying to extract an action from the url if it starts with /shaka/documents
  */
 browser.addEventListener(
     "click",
@@ -22,8 +22,8 @@ browser.addEventListener(
             }
             if (
                 browser.location.host === url.host &&
-                browser.location.pathname.startsWith("/odoo") &&
-                url.pathname.startsWith("/odoo/documents/") &&
+                browser.location.pathname.startsWith("/shaka") &&
+                url.pathname.startsWith("/shaka/documents/") &&
                 ev.target.target !== "_blank"
             ) {
                 ev.stopPropagation();
@@ -39,9 +39,9 @@ browser.addEventListener(
 patch(router, {
     stateToUrl(state) {
         const url = super.stateToUrl(state);
-        if (url.startsWith("/odoo/documents") && state.access_token) {
+        if (url.startsWith("/shaka/documents") && state.access_token) {
             return (
-                `/odoo/documents/${encodeURIComponent(state.access_token)}` +
+                `/shaka/documents/${encodeURIComponent(state.access_token)}` +
                 (Object.hasOwn(state, "debug") ? `?debug=${state.debug}` : "")
             );
         }

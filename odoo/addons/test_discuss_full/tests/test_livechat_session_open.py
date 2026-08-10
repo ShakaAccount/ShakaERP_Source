@@ -16,6 +16,6 @@ class TestImLivechatSessions(TestImLivechatCommon):
         )
         action = self.env.ref("im_livechat.discuss_channel_action_from_livechat_channel")
         self.start_tour(
-            f"/odoo/livechat/{self.livechat_channel.id}/action-{action.id}", "im_livechat_session_open",
+            f"/shaka/livechat/{self.livechat_channel.id}/action-{action.id}", "im_livechat_session_open",
             login="operator"
         )

@@ -103,7 +103,7 @@ const fn = (hidden) => {
 
             },
             category: "knowledge_articles",
-            href: `/odoo/knowledge.article/${article.id}`,
+            href: `/shaka/knowledge.article/${article.id}`,
             name: article.name || _t("Untitled"),
             props: {
                 isFavorite: article.is_user_favorite,

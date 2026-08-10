@@ -13,7 +13,7 @@ class TestDeliveryEasypostTour(HttpCase, EasypostTestCommon):
 
     def _get_client_action_url(self, delivery_carrier_id):
         action = self.env['ir.actions.actions']._for_xml_id('delivery.action_delivery_carrier_form')
-        return f"/odoo/action-{action['id']}/{delivery_carrier_id}"
+        return f"/shaka/action-{action['id']}/{delivery_carrier_id}"
 
     def test_carrier_type_selection_field(self):
         product = self.env['product.product'].create({

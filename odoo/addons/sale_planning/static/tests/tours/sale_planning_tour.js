@@ -3,7 +3,7 @@ import { registry } from "@web/core/registry";
 const planningTestTour = registry.category("web_tour.tours").get("planning_test_tour");
 
 registry.category("web_tour.tours").add("sale_planning_test_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         ...planningTestTour.steps(),
         {

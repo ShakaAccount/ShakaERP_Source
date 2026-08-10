@@ -47,7 +47,7 @@ class TestTodoUi(HttpCaseWithUserDemo):
         # Ensure that all activities appear in the systray under the good category
         # name and that clicking on this category opens the correct view where only
         # records of this category are listed.
-        self.start_tour("/odoo", 'project_task_activities_split', login="admin")
+        self.start_tour("/shaka", 'project_task_activities_split', login="admin")
 
     def test_tour_todo_main_ui_functions(self):
         """ This test ensure that the main ui functionalities are working including:
@@ -61,7 +61,7 @@ class TestTodoUi(HttpCaseWithUserDemo):
         self.env.ref('base.user_admin').write({
             'email': 'mitchell.admin@example.com',
         })
-        self.start_tour("/odoo", 'project_todo_main_functions', login='admin')
+        self.start_tour("/shaka", 'project_todo_main_functions', login='admin')
 
     @users('admin')
     def test_project_todo_history(self):
@@ -72,4 +72,4 @@ class TestTodoUi(HttpCaseWithUserDemo):
             'project_id': False
         })
 
-        self.start_tour('/odoo?debug=1', 'project_todo_history_tour', login='admin')
+        self.start_tour('/shaka?debug=1', 'project_todo_history_tour', login='admin')

@@ -468,7 +468,7 @@ class TestMailSchedule(EventMailCommon):
                 'subtype': 'mail.mt_note',
                 'mail_mail_values': {
                     'body': f'<p>Communication for {self.test_event.name} scheduled on {before_scheduler.scheduled_date} failed. '
-                            f'This may be linked to template <a href="{before_scheduler.get_base_url()}/odoo/mail.template/{self.template_reminder.id}">'
+                            f'This may be linked to template <a href="{before_scheduler.get_base_url()}/shaka/mail.template/{self.template_reminder.id}">'
                             f'{self.template_reminder.name} ({self.template_reminder.id})</a>.<br><br>It failed with error Some error.</p>',
                 },
             }]
@@ -531,7 +531,7 @@ class TestMailSchedule(EventMailCommon):
                 'subtype': 'mail.mt_note',
                 'mail_mail_values': {
                     'body': f'<p>Communication for {self.test_event.name} scheduled on {before_scheduler.scheduled_date} failed. '
-                            f'This is due to an error in template <a href="{before_scheduler.get_base_url()}/odoo/mail.template/{self.template_reminder.id}">'
+                            f'This is due to an error in template <a href="{before_scheduler.get_base_url()}/shaka/mail.template/{self.template_reminder.id}">'
                             f'{self.template_reminder.name} ({self.template_reminder.id})</a>.'
                             f'<br><br>There is an issue with dynamic placeholder. Actual error received is: '
                             '<br>\'event.registration\' object has no attribute \'evnetypo_id\'.</p>',
@@ -594,7 +594,7 @@ class TestMailSchedule(EventMailCommon):
                 'subtype': 'mail.mt_note',
                 'mail_mail_values': {
                     'body': f'<p>Communication for {self.test_event.name} scheduled on {test_dt} failed. '
-                            f'This may be linked to template <a href="{onsub_scheduler.get_base_url()}/odoo/mail.template/{onsub_scheduler.template_ref.id}">'
+                            f'This may be linked to template <a href="{onsub_scheduler.get_base_url()}/shaka/mail.template/{onsub_scheduler.template_ref.id}">'
                             f'{onsub_scheduler.template_ref.name} ({onsub_scheduler.template_ref.id})</a>.<br><br>It failed with error Some error.</p>',
                 },
             }]

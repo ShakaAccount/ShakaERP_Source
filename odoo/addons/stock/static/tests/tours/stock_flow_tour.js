@@ -3,7 +3,7 @@ import { registry } from "@web/core/registry";
 registry.category("web_tour.tours").add("test_basic_stock_flow_with_minimal_access_rights", {
     steps: () => [
         {
-            trigger: ".o_menuitem[href='/odoo/inventory']",
+            trigger: ".o_menuitem[href='/shaka/inventory']",
             run: "click",
         },
         {

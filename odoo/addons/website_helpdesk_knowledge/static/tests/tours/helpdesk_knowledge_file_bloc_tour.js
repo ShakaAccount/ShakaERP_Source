@@ -20,7 +20,7 @@ const createEmbeddedFileSteps = [
 ];
 
 registry.category("web_tour.tours").add('helpdesk_pick_file_as_attachment_from_knowledge', {
-    url: '/odoo/action-helpdesk.helpdesk_ticket_action_main_tree',
+    url: '/shaka/action-helpdesk.helpdesk_ticket_action_main_tree',
     steps: () => [{ // click on the first record of the list
     trigger: 'tr.o_data_row:first-child .o_data_cell[name="name"]',
     run: 'click',
@@ -41,7 +41,7 @@ registry.category("web_tour.tours").add('helpdesk_pick_file_as_attachment_from_k
 }]});
 
 registry.category("web_tour.tours").add('helpdesk_pick_file_as_message_attachment_from_knowledge', {
-    url: '/odoo/action-helpdesk.helpdesk_ticket_action_main_tree',
+    url: '/shaka/action-helpdesk.helpdesk_ticket_action_main_tree',
     steps: () => [{ // click on the first record of the list
     trigger: 'tr.o_data_row:first-child .o_data_cell[name="name"]',
     run: 'click',

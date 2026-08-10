@@ -2681,7 +2681,7 @@ class TestStockFlowTourPostInstall(TestStockCommon, HttpCase):
             },
         ])
         (receipt | delivery).action_confirm()
-        self.start_tour('/odoo', 'test_basic_stock_flow_with_minimal_access_rights', login='pauline')
+        self.start_tour('/shaka', 'test_basic_stock_flow_with_minimal_access_rights', login='pauline')
 
 
 @tagged('-at_install', 'post_install')

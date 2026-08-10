@@ -17,7 +17,7 @@
         <div id="wrap" class="bg-o-color-4 h-100 pb-4 px-4">
             <t t-set="o_portal_fullwidth_alert" groups="appointment.group_appointment_manager">
                 <t t-call="portal.portal_back_in_edit_mode">
-                    <t t-set="backend_url" t-value="'/odoo/action-appointment.appointment_type_action/%s' % appointment_type.id"/>
+                    <t t-set="backend_url" t-value="'/shaka/action-appointment.appointment_type_action/%s' % appointment_type.id"/>
                     <t t-set="custom_html">This is a preview of the customer appointment payment form.</t>
                 </t>
             </t>

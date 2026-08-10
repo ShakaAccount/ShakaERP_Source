@@ -92,7 +92,7 @@ class TestPeppolKYC(PeppolConnectorCommon, HttpCase):
         self.assertTrue(response.history[0].is_redirect)
         self.assertEqual(response.status_code, 200)
         # callback-action closes the window opened for the authentication and displays a notification
-        self.assertIn('/odoo/peppol-auth-callback-action?success=True', response.url)
+        self.assertIn('/shaka/peppol-auth-callback-action?success=True', response.url)
         connect_mock.assert_called_once()
         self.assertEqual(company.account_peppol_proxy_state, 'smp_registration')
         self.assertRecordValues(company.account_peppol_edi_user, [{
@@ -165,7 +165,7 @@ class TestPeppolKYC(PeppolConnectorCommon, HttpCase):
             })
         self.assertTrue(response.history[0].is_redirect)
         self.assertEqual(response.status_code, 200)
-        self.assertIn('/odoo/peppol-auth-callback-action?success=False', response.url)
+        self.assertIn('/shaka/peppol-auth-callback-action?success=False', response.url)
         connect_mock.assert_not_called()
         self.assertEqual(company.account_peppol_proxy_state, 'not_registered')
         self.assertFalse(company.account_peppol_edi_user)

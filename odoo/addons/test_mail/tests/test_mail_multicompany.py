@@ -382,7 +382,7 @@ class TestMultiCompanyControllers(TestMailMCCommon, HttpCase):
                         # company -> _redirect_to_record should redirect to
                         # messaging as the user doesn't have any access
                         parsed_url = url_parse(response.url)
-                        self.assertEqual(parsed_url.path, '/odoo/action-mail.action_discuss')
+                        self.assertEqual(parsed_url.path, '/shaka/action-mail.action_discuss')
                     else:
                         # Logged into company main, try accessing record in same
                         # company -> _redirect_to_record should add company in

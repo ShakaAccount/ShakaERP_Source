@@ -2,7 +2,7 @@ import { registry } from '@web/core/registry';
 import { stepUtils } from '@web_tour/tour_utils';
 
 registry.category('web_tour.tours').add('sale_renting_product_display', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [
         ...stepUtils.goToAppSteps('sale_renting.rental_menu_root', "Open the rental app"),
         {
@@ -45,7 +45,7 @@ registry.category('web_tour.tours').add('sale_renting_product_display', {
 });
 
 registry.category('web_tour.tours').add('sale_product_display', {
-    url: '/odoo',
+    url: '/shaka',
     steps: () => [
         ...stepUtils.goToAppSteps('sale.sale_menu_root', "Open the sale app"),
         {

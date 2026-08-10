@@ -166,7 +166,7 @@ class TestController(HttpCase):
             '/html_editor/link_preview_internal',
             data=json_safe.dumps({
                 "params": {
-                    "preview_url": _get_full_url(f"/odoo/users/{self.portal_user.id}"),
+                    "preview_url": _get_full_url(f"/shaka/users/{self.portal_user.id}"),
                 }
             }),
             headers=self.headers
@@ -179,7 +179,7 @@ class TestController(HttpCase):
             '/html_editor/link_preview_internal',
             data=json_safe.dumps({
                 "params": {
-                    "preview_url": _get_full_url("/odoo/actionInvalid/1"),
+                    "preview_url": _get_full_url("/shaka/actionInvalid/1"),
                 }
             }),
             headers=self.headers
@@ -192,7 +192,7 @@ class TestController(HttpCase):
             '/html_editor/link_preview_internal',
             data=json_safe.dumps({
                 "params": {
-                    "preview_url": _get_full_url("/odoo/users/9999"),
+                    "preview_url": _get_full_url("/shaka/users/9999"),
                 }
             }),
             headers=self.headers
@@ -261,7 +261,7 @@ class TestController(HttpCase):
             '/html_editor/link_preview_internal',
             data=json_safe.dumps({
                 "params": {
-                    "preview_url": _get_full_url(f"/odoo/res.users/{self.portal_user.id}"),
+                    "preview_url": _get_full_url(f"/shaka/res.users/{self.portal_user.id}"),
                 }
             }),
             headers=self.headers
@@ -275,7 +275,7 @@ class TestController(HttpCase):
             '/html_editor/link_preview_internal',
             data=json_safe.dumps({
                 "params": {
-                    "preview_url": _get_full_url("/odoo/mail.thread/1"),
+                    "preview_url": _get_full_url("/shaka/mail.thread/1"),
                 }
             }),
             headers=self.headers

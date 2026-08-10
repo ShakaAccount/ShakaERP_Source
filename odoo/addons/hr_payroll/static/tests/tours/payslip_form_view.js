@@ -2,7 +2,7 @@ import { registry } from "@web/core/registry";
 import { stepUtils } from "@web_tour/tour_utils";
 
 registry.category("web_tour.tours").add("hr_payroll_form_view_date_input_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         stepUtils.showAppsMenuItem(),
         {

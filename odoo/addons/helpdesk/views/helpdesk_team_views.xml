@@ -149,7 +149,7 @@
                                     <i class="fa fa-lightbulb-o" role='img'/><span class="ms-2">To use an email alias, the first step is to configure an Alias Domain. You can achieve this by navigating to the General Settings and configuring the corresponding field.</span>
                                 </p>
                                 <p invisible="alias_domain_id">
-                                    <a href="/odoo/settings#email-alias-setting" class="btn-link mt-2" role="button"><i class="oi oi-arrow-right"/> Set an Alias Domain</a>
+                                    <a href="/shaka/settings#email-alias-setting" class="btn-link mt-2" role="button"><i class="oi oi-arrow-right"/> Set an Alias Domain</a>
                                 </p>
                             </div>
                         </setting>

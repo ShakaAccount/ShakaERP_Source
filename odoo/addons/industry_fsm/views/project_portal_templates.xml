@@ -33,7 +33,7 @@
     <template id="portal_my_task" inherit_id="project.portal_my_task">
         <xpath expr="//t[@t-set='backend_url']" position="after">
             <t t-set="source_action_id" t-value="task.env.ref('industry_fsm.project_task_fsm_server_action').id if source == 'fsm' else task.env.ref('project.action_view_all_task').id"/>
-            <t t-set="backend_url" t-value="'/odoo/action-%s/%s' % (source_action_id, task.id)"/>
+            <t t-set="backend_url" t-value="'/shaka/action-%s/%s' % (source_action_id, task.id)"/>
         </xpath>
         <xpath expr="//div[@id='nav-report']" position="attributes">
             <attribute name="t-if">timesheets and allow_timesheets and show_portal_timesheets</attribute>

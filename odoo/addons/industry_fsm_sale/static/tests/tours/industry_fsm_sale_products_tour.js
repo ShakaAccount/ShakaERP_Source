@@ -2,7 +2,7 @@ import { registry } from "@web/core/registry";
 
 
 registry.category("web_tour.tours").add('industry_fsm_sale_products_tour', {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [{
     trigger: '.o_app[data-menu-xmlid="industry_fsm.fsm_menu_root"]',
     content: 'Go to industry FSM',
@@ -47,7 +47,7 @@ registry.category("web_tour.tours").add('industry_fsm_sale_products_tour', {
 }]});
 
 registry.category("web_tour.tours").add("test_industry_fsm_sale_add_product_on_invoice_tour", {
-    url: "/odoo/field-service",
+    url: "/shaka/field-service",
     steps: () => [
         {
             trigger: "input.o_searchview_input",

@@ -8,7 +8,7 @@ from odoo.tools import file_open, file_open_temporary_directory, file_path
 from odoo.tools.config import configmanager
 
 EMPTY_CONFIG_PATH = file_path('base/tests/config/empty.conf')
-PROJECT_PATH = odoo.tools.config.root_path.removesuffix('/odoo')
+PROJECT_PATH = odoo.tools.config.root_path.removesuffix('/shaka')
 DEFAULT_DATADIR = odoo.tools.config._default_options['data_dir']
 
 MISSING_HTTP_INTERFACE = """\

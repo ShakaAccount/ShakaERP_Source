@@ -594,7 +594,7 @@ test("error notifications should not be shown in Inbox", async () => {
     await openDiscuss("mail.box_inbox");
     await contains(".o-mail-Message");
     await contains(".o-mail-Message-header small", { text: "on Demo User" });
-    await contains(`.o-mail-Message-header a[href*='/odoo/res.partner/${partnerId}']`, {
+    await contains(`.o-mail-Message-header a[href*='/shaka/res.partner/${partnerId}']`, {
         text: "Demo User",
     });
     await contains(".o-mail-Message-notification", { count: 0 });

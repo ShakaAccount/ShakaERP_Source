@@ -19,7 +19,7 @@ class TestRecordTime(TestCommonTimesheet, HttpCase):
         })
 
     def test_record_time(self):
-        self.start_tour('/odoo', 'timesheet_record_time', login='admin', timeout=100)
+        self.start_tour('/shaka', 'timesheet_record_time', login='admin', timeout=100)
 
     def test_timesheet_overtime(self):
         self.empl_employee.resource_calendar_id.flexible_hours = True
@@ -39,12 +39,12 @@ class TestRecordTime(TestCommonTimesheet, HttpCase):
             for i in range(8)
         ])
 
-        self.start_tour('/odoo', 'timesheet_overtime_hour_encoding', login=self.user_employee.login, timeout=100)
+        self.start_tour('/shaka', 'timesheet_overtime_hour_encoding', login=self.user_employee.login, timeout=100)
 
         timesheets[6].write({'unit_amount': 0.0})
 
         self.env['res.config.settings'].create({'timesheet_encode_method': 'days'}).execute()
-        self.start_tour('/odoo', 'timesheet_overtime_day_encoding', login=self.user_employee.login, timeout=100)
+        self.start_tour('/shaka', 'timesheet_overtime_day_encoding', login=self.user_employee.login, timeout=100)
 
     def test_timesheet_availabilty_days(self):
         # Create company

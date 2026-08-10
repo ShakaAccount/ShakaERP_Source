@@ -18,7 +18,7 @@ class TestDiscussChannelInvite(HttpCase, MailCommon):
         )
         with self.mock_mail_gateway():
             self.start_tour(
-                f"/odoo/discuss?active_id={group_chat.id}", "discuss.invite_by_email", login="bob"
+                f"/shaka/discuss?active_id={group_chat.id}", "discuss.invite_by_email", login="bob"
             )
         self.assertIn(john.partner_id, group_chat.channel_member_ids.partner_id)
         self.assertNoMail(self.env["res.partner"], "john@test.com")

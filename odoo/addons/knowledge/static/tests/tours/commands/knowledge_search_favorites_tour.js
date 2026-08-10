@@ -157,7 +157,7 @@ const embedKnowledgeKanbanViewSteps = function (article) {
 // }; // TODO uncomment when OWL is ready
 
 registry.category("web_tour.tours").add("knowledge_items_search_favorites_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         stepUtils.showAppsMenuItem(),
         {
@@ -228,7 +228,7 @@ registry.category("web_tour.tours").add("knowledge_items_search_favorites_tour",
 });
 
 registry.category("web_tour.tours").add("knowledge_search_favorites_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [stepUtils.showAppsMenuItem(),
         // insert a first kanban view
         ...embedKnowledgeKanbanViewSteps("Article 1"),

@@ -6,7 +6,7 @@
         <attribute name="t-ref">nav</attribute>
     </xpath>
     <xpath expr="//t[@t-call='web.NavBar.AppsMenu']" position="replace">
-        <a t-if="!isScopedApp" href="/odoo" class="o_menu_toggle border-0" t-att-class="{'hasImage': currentApp?.webIconData}" accesskey="h" t-ref="menuApps" t-on-click.prevent="() => { env.isSmall ? this._openAppMenuSidebar() : this.hm.toggle() }">
+        <a t-if="!isScopedApp" href="/shaka" class="o_menu_toggle border-0" t-att-class="{'hasImage': currentApp?.webIconData}" accesskey="h" t-ref="menuApps" t-on-click.prevent="() => { env.isSmall ? this._openAppMenuSidebar() : this.hm.toggle() }">
             <t t-if="env.isSmall and !hm.hasHomeMenu">
                 <t t-call="web.NavBar.AppsMenu.Sidebar"/>
             </t>

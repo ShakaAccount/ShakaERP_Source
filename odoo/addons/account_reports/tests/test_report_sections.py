@@ -149,7 +149,7 @@ class TestReportSections(AccountTestInvoicingHttpCommon):
         self.section_1.filter_journals = True
 
         with patch.object(type(self.env['account.report']), '_init_options_custom', patched_init_options_custom):
-            self.start_tour("/odoo", 'account_reports_sections', login=self.env.user.login)
+            self.start_tour("/shaka", 'account_reports_sections', login=self.env.user.login)
 
     def test_exported_xlsx_unique_names(self):
         composite_report = self.env['account.report'].create({

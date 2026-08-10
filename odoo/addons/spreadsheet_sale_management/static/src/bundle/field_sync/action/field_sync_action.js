@@ -120,7 +120,7 @@ export class SpreadsheetFieldSyncAction extends AbstractSpreadsheetAction {
                 type: "ir.actions.act_url",
                 target: "new",
                 tag: "action_sale_order_spreadsheet_history",
-                url: `/odoo/sale-order-spreadsheet-history?spreadsheet_id=${this.resId}&res_model=${this.resModel}`,
+                url: `/shaka/sale-order-spreadsheet-history?spreadsheet_id=${this.resId}&res_model=${this.resModel}`,
             },
             { newWindow: true }
         );

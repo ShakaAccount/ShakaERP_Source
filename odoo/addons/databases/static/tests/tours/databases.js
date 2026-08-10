@@ -1,7 +1,7 @@
 import { registry } from "@web/core/registry";
 
 registry.category("web_tour.tours").add("databases_tour", {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
         {
             content: 'open databases app',
@@ -79,7 +79,7 @@ registry.category("web_tour.tours").add("databases_tour", {
         },
         {
             content: 'auto-save the database by going back to the list',
-            trigger: 'ol.breadcrumb a[href="/odoo/databases"]',
+            trigger: 'ol.breadcrumb a[href="/shaka/databases"]',
             run: 'click',
         },
         {
@@ -93,7 +93,7 @@ registry.category("web_tour.tours").add("databases_tour", {
         },
         {
             content: 'go back to the list',
-            trigger: 'ol.breadcrumb a[href="/odoo/databases"]',
+            trigger: 'ol.breadcrumb a[href="/shaka/databases"]',
             run: 'click',
         },
         {
@@ -161,7 +161,7 @@ registry.category("web_tour.tours").add("databases_tour", {
         },
         {
             content: 'go back to the list',
-            trigger: 'ol.breadcrumb a[href="/odoo/databases"]',
+            trigger: 'ol.breadcrumb a[href="/shaka/databases"]',
             run: 'click',
         },
         {

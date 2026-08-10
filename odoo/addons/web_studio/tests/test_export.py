@@ -179,7 +179,7 @@ class TestExport(HttpCase):
 @tagged("post_install", "-at_install")
 class TestExportTours(HttpCase):
     def test_can_export_new_module(self):
-        self.start_tour("/odoo?debug=tests", 'can_export_new_module', login="admin")
+        self.start_tour("/shaka?debug=tests", 'can_export_new_module', login="admin")
         # check the export result made by the tour
         wizard = self.env['studio.export.wizard'].search([], limit=1, order='id desc')
         data, files, circular_dependencies = wizard.get_export_info()

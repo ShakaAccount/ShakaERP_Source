@@ -331,7 +331,7 @@ class DigestDigest(models.Model):
         """ Give an optional action to display in digest email linked to some KPIs.
 
         :returns: key: kpi name (field name), value: an action that will be
-          concatenated with /odoo/action-{action}
+          concatenated with /shaka/action-{action}
         :rtype: dict
         """
         return {}
@@ -358,7 +358,7 @@ class DigestDigest(models.Model):
         if user.has_group('base.group_erp_manager'):
             preferences.append(Markup('<p>%s<br /><a href="%s" target="_blank" style="color:#017e84; font-weight: bold;">%s</a></p>') % (
                 _('Want to customize this email?'),
-                f'/odoo/{self._name}/{self.id:d}',
+                f'/shaka/{self._name}/{self.id:d}',
                 _('Choose the metrics you care about')
             ))
 

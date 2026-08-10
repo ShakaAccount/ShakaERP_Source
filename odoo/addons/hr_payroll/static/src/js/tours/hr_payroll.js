@@ -4,7 +4,7 @@ import { registry } from "@web/core/registry";
 import { markup } from "@odoo/owl";
 
 registry.category("web_tour.tours").add('payroll_tours', {
-    url: "/odoo",
+    url: "/shaka",
     steps: () => [
     {
         trigger: `.o_app[data-menu-xmlid='hr_work_entry_enterprise.menu_hr_payroll_root']`,

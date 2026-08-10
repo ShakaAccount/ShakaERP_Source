@@ -114,7 +114,7 @@
 
             <t t-set="o_portal_fullwidth_alert" groups="helpdesk.group_helpdesk_user">
                 <t t-call="portal.portal_back_in_edit_mode">
-                    <t t-set="backend_url" t-value="'/odoo/action-helpdesk.helpdesk_ticket_action_main_tree/%s?menu_id=%s' % (ticket.id, ticket.env.ref('helpdesk.helpdesk_ticket_menu_all').id)"/>
+                    <t t-set="backend_url" t-value="'/shaka/action-helpdesk.helpdesk_ticket_action_main_tree/%s?menu_id=%s' % (ticket.id, ticket.env.ref('helpdesk.helpdesk_ticket_menu_all').id)"/>
                 </t>
             </t>
 

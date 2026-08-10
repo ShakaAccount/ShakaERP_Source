@@ -562,7 +562,7 @@ export class ApplyConfiguratorScreen extends Component {
             // the web client needs to be reloaded after the new modules have
             // been installed.
             redirect(
-                `/odoo/action-website.website_preview?website_id=${encodeURIComponent(
+                `/shaka/action-website.website_preview?website_id=${encodeURIComponent(
                     resp.website_id
                 )}`
             );

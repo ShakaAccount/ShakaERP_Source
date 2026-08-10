@@ -654,7 +654,7 @@ class TestStudioApprovalsUIUnit(HttpCase):
             "users_to_notify": [Command.link(self.admin_user.id)],
         })
 
-        url = f"/odoo/action-{self.testAction.id}/studio?mode=editor&_view_type=form&_tab=views&menu_id={self.testMenu.id}"
+        url = f"/shaka/action-{self.testAction.id}/studio?mode=editor&_view_type=form&_tab=views&menu_id={self.testMenu.id}"
         self.start_tour(url, "test_web_studio.test_disable_approvals", login="admin")
         self.assertEqual(rule.active, False)
 
@@ -667,6 +667,6 @@ class TestStudioApprovalsUIUnit(HttpCase):
             "users_to_notify": [Command.link(self.admin_user.id)],
         })
 
-        url = f"/odoo/action-{self.testAction.id}/studio?mode=editor&_view_type=form&_tab=views&menu_id={self.testMenu.id}"
+        url = f"/shaka/action-{self.testAction.id}/studio?mode=editor&_view_type=form&_tab=views&menu_id={self.testMenu.id}"
         self.start_tour(url, "test_web_studio.test_disable_approvals_via_kanban", login="admin")
         self.assertEqual(rule.active, False)

@@ -19,7 +19,7 @@ class TestEmployeeUi(TestHrCommon, HttpCase):
         self.employee_paul.parent_id = self.employee_georges
         self.employee_pierre.parent_id = self.employee_paul
 
-        self.start_tour(f"/odoo/employees/{self.employee_georges.id}", 'indirect_subordinates_tour', login="admin")
+        self.start_tour(f"/shaka/employees/{self.employee_georges.id}", 'indirect_subordinates_tour', login="admin")
         indirect_subordinates = len(self.employee_georges.subordinate_ids - self.employee_georges.child_ids)
         self.assertEqual(indirect_subordinates, 1,
             "Georges should have 1 indirect subordinates: Pierre."
@@ -54,4 +54,4 @@ class TestEmployeeUi(TestHrCommon, HttpCase):
             'password': 'restricted_user',
             'group_ids': [(6, 0, self.res_users_hr_manager.group_ids.ids)],
         })
-        self.start_tour("/odoo/employees", 'employee_view_access_multicompany', login="restricted_user")
+        self.start_tour("/shaka/employees", 'employee_view_access_multicompany', login="restricted_user")

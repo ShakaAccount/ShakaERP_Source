@@ -20,7 +20,7 @@ class TestStockPickingTour(HttpCase):
         return super().setUp()
 
     def _get_picking_url(self, picking_id):
-        return '/odoo/action-stock.action_picking_tree_incoming/%s' % (picking_id)
+        return '/shaka/action-stock.action_picking_tree_incoming/%s' % (picking_id)
 
     def test_generate_serial_1(self):
         """generate some serial numbers in the detailed operation modal"""
@@ -82,7 +82,7 @@ class TestStockPickingTour(HttpCase):
         ])
 
         menu = self.env.ref('stock.menu_action_inventory_tree')
-        url = '/odoo/stock.quant?menu_id=%s' % (menu['id'])
+        url = '/shaka/stock.quant?menu_id=%s' % (menu['id'])
 
         # We need a bigger window, so the "Apply All" button is immediately visible
         self.browser_size = '1920,1080'

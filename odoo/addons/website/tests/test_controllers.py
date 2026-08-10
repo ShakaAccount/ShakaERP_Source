@@ -69,7 +69,7 @@ class TestControllers(tests.HttpCase):
             resp = self.url_open(f'/@{url}')
             backend_params = url_encode(dict(path=url))
             self.assertURLEqual(
-                resp.url, f'/odoo/action-website.website_preview?{backend_params}',
+                resp.url, f'/shaka/action-website.website_preview?{backend_params}',
                 "Internal user should have landed in the backend")
 
     def test_03_website_image(self):

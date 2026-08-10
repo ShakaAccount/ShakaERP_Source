@@ -10,7 +10,7 @@ class TestUi(IotCommonTest):
     def test_iot_device_test_button(self):
         """Make sure we can use the websocket to test printers using the 'Test'
         button on the printer (iot.device) record."""
-        self.start_tour("/odoo/iot", "iot_device_test_printer", login="admin")
+        self.start_tour("/shaka/iot", "iot_device_test_printer", login="admin")
         self.assertEqual(
             len(self.iot_websocket_messages),
             3,
