@@ -8,7 +8,7 @@
     <template id="login_layout" name="Login Layout" inherit_id="web.login_layout">
         <xpath expr="//div[hasclass('text-center', 'pb-3', 'border-bottom', 'mb-4')]" position="replace">
             <div class="text-center pb-3 border-bottom mb-4">
-                <img src="/my_debrand/static/img/brand.svg" alt="Logo" style="max-height:120px; max-width: 100%; width:auto"/>
+                <img src="/my_debrand/static/img/SHAKA.png" alt="Logo" style="max-height:200px; max-width: 100%; width:auto"/>
             </div>
         </xpath>
         <xpath expr="//div[hasclass('text-center', 'small', 'mt-4', 'pt-3', 'border-top')]" position="replace">

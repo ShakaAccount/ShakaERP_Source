@@ -5149,7 +5149,7 @@ msgid ""
 "Odoo Push notifications have been blocked. Go to your browser settings to "
 "allow them."
 msgstr ""
-"اعلان‌های فشاری اودوو مسدود شده‌اند. به تنظیمات مرورگر خود بروید تا آن‌ها را "
+"اعلان‌های فشاری مسدود شده‌اند. به تنظیمات مرورگر خود بروید تا آن‌ها را "
 "فعال کنید."
 
 #. module: web
@@ -5163,7 +5163,7 @@ msgstr "سایت اودوو"
 #. odoo-javascript
 #: code:addons/web/static/src/core/errors/error_dialogs.js:0
 msgid "Odoo Server Error"
-msgstr "خطای سرور اودوو"
+msgstr "خطای سرور"
 
 #. module: web
 #. odoo-javascript
