@@ -34,7 +34,7 @@ class ResCompany(models.Model):
                     'name': _("Settings"),
                     'type': 'ir.actions.act_url',
                     'target': 'self',
-                    'url': '/odoo/settings#certificates_settings',
+                    'url': '/shaka/settings#certificates_settings',
                 },
             }
         return errors

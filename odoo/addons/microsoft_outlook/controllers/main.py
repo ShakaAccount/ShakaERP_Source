@@ -28,7 +28,7 @@ class MicrosoftOutlookController(http.Controller):
             _logger.warning("Microsoft Outlook: an error occurred %s", error_description)
             return request.render('microsoft_outlook.microsoft_outlook_oauth_error', {
                 'error': error_description,
-                'redirect_url': '/odoo',
+                'redirect_url': '/shaka',
             })
 
         try:

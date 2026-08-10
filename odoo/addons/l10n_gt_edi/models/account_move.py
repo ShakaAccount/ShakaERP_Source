@@ -368,7 +368,7 @@ class AccountMove(models.Model):
                 'name': _("Settings"),
                 'type': 'ir.actions.act_url',
                 'target': 'self',
-                'url': '/odoo/settings#l10n_gt_edi_settings',
+                'url': '/shaka/settings#l10n_gt_edi_settings',
             },
         }
 

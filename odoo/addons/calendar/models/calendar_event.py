@@ -980,7 +980,7 @@ class CalendarEvent(models.Model):
             return {
                 'type': 'ir.actions.act_url',
                 'target': 'self',
-                'url': '/odoo/calendar'
+                'url': '/shaka/calendar'
             }
 
         template = self.env.ref('calendar.calendar_template_delete_event', raise_if_not_found=False)

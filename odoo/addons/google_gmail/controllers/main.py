@@ -29,7 +29,7 @@ class GoogleGmailController(http.Controller):
             _logger.warning("Google Gmail: an error occurred %s", error)
             return request.render('google_gmail.google_gmail_oauth_error', {
                 'error': _('An error occurred during the authentication process.'),
-                'redirect_url': '/odoo',
+                'redirect_url': '/shaka',
             })
 
         try:

@@ -245,7 +245,7 @@ class AccountIntrastatGoodsReportHandler(models.AbstractModel):
                     'name': _("Settings"),
                     'type': 'ir.actions.act_url',
                     'target': 'self',
-                    'url': '/odoo/settings#intrastat_statistics',
+                    'url': '/shaka/settings#intrastat_statistics',
                 }
             }
 
@@ -350,7 +350,7 @@ class AccountIntrastatGoodsReportHandler(models.AbstractModel):
                     'name': _("Settings"),
                     'type': 'ir.actions.act_url',
                     'target': 'self',
-                    'url': '/odoo/settings#intrastat_statistics',
+                    'url': '/shaka/settings#intrastat_statistics',
                 }
             }
 

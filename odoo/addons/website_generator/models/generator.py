@@ -472,7 +472,7 @@ class Website_GeneratorRequest(models.Model):
             # TODO: return website configurator?
             return {
                 'type': 'ir.actions.act_url',
-                'url': '/odoo',
+                'url': '/shaka',
                 'target': 'self',
             }
 
@@ -485,6 +485,6 @@ class Website_GeneratorRequest(models.Model):
 
         return {
             'type': 'ir.actions.act_url',
-            'url': "/odoo/action-website_generator.website_generator_screen?reload=true",
+            'url': "/shaka/action-website_generator.website_generator_screen?reload=true",
             'target': 'self',
         }

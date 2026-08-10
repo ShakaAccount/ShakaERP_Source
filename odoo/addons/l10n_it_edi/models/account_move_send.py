@@ -42,7 +42,7 @@ class AccountMoveSend(models.AbstractModel):
                         'name': _("Settings"),
                         'type': 'ir.actions.act_url',
                         'target': 'self',
-                        'url': '/odoo/settings#l10n_it_edi_setting',
+                        'url': '/shaka/settings#l10n_it_edi_setting',
                     },
                 }
 

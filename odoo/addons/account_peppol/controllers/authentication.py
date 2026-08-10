@@ -17,7 +17,7 @@ class PeppolAuthentication(http.Controller):
                 # Notify the root/initial window of the authentication result. See JS service "peppol_auth_service".
                 partner._bus_send("peppol_auth_channel", {'auth_result': 'success' if success else 'failure', 'error_message': error_message})
                 # Action to close the window opened for authentication
-            return request.redirect_query('/odoo/peppol-auth-callback-action', query={'success': success})
+            return request.redirect_query('/shaka/peppol-auth-callback-action', query={'success': success})
 
         connect_data = request.env['peppol.registration']._decode_connect_token(connect_token)
         if not connect_data:

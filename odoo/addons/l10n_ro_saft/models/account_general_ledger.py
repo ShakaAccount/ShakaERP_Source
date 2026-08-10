@@ -146,7 +146,7 @@ class AccountGeneralLedgerReportHandler(models.AbstractModel):
                     'name': _("Settings"),
                     'type': 'ir.actions.act_url',
                     'target': 'self',
-                    'url': '/odoo/settings#l10n_ro_saft_tax_accounting_basis',
+                    'url': '/shaka/settings#l10n_ro_saft_tax_accounting_basis',
                 }
             }
 

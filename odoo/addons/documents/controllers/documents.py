@@ -465,7 +465,7 @@ class ShareRoute(http.Controller):
 
     @http.route('/documents/redirect/<access_token>', type='http', auth='public', readonly=True)
     def documents_redirect(self, access_token):
-        return request.redirect(f'/odoo/documents/{quote(access_token, safe="")}', HTTPStatus.MOVED_PERMANENTLY)
+        return request.redirect(f'/shaka/documents/{quote(access_token, safe="")}', HTTPStatus.MOVED_PERMANENTLY)
 
     @http.route('/documents/touch/<access_token>', type='jsonrpc', auth='user')
     def documents_touch(self, access_token):
@@ -573,7 +573,7 @@ class ShareRoute(http.Controller):
         '/document/share/<token>'], type='http', auth='public')
     def share_portal(self, share_id=None, token=None):
         logger.warning("Deprecated since Odoo 18. Please access /odoo/documents/<access_token> instead.")
-        return request.redirect(f'/odoo/documents/{quote(token or "", safe="")}', code=HTTPStatus.MOVED_PERMANENTLY)
+        return request.redirect(f'/shaka/documents/{quote(token or "", safe="")}', code=HTTPStatus.MOVED_PERMANENTLY)
 
     @http.route(['/documents/upload/', '/documents/upload/<access_token>'],
                 type='http', auth='public', methods=['POST'],

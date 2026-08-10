@@ -64,8 +64,8 @@ class KnowledgeController(http.Controller):
     def _redirect_to_backend_view(self, article, show_resolved_threads=False):
         if article.id and show_resolved_threads:
             action_id = request.env.ref('knowledge.knowledge_article_action_form_show_resolved').id
-            return request.redirect(f'/odoo/action-{action_id}/{article.id}')
-        return request.redirect(f'/odoo/knowledge/{article.id or "new"}')
+            return request.redirect(f'/shaka/action-{action_id}/{article.id}')
+        return request.redirect(f'/shaka/knowledge/{article.id or "new"}')
 
     def _redirect_to_portal_view(self, article):
         # We build the session information necessary for the web client to load

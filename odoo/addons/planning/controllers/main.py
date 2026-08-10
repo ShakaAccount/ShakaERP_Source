@@ -359,7 +359,7 @@ class ShiftController(http.Controller):
             slot_sudo.write({'resource_id': employee.resource_id.id})
             slot_sudo.slot_properties  # necessary addition to stop the re-computation of the slot_properties field during the redirect (leads to access rights error)
 
-        return request.redirect('/odoo/action-planning.planning_action_open_shift')
+        return request.redirect('/shaka/action-planning.planning_action_open_shift')
 
     @http.route('/planning/unassign/<string:token_employee>/<int:shift_id>', type="http", auth="user", website=True)
     def planning_self_unassign_with_user(self, token_employee, shift_id, **kwargs):
@@ -368,7 +368,7 @@ class ShiftController(http.Controller):
             return request.not_found()
 
         if slot_sudo.is_unassign_deadline_passed:
-            return request.redirect('/odoo/action-planning.planning_action_open_shift')
+            return request.redirect('/shaka/action-planning.planning_action_open_shift')
 
         employee = request.env['hr.employee'].sudo().search([('employee_token', '=', token_employee)], limit=1)
         if not employee:
@@ -380,7 +380,7 @@ class ShiftController(http.Controller):
         slot_sudo.slot_properties  # necessary addition to stop the re-computation of the slot_properties field during the redirect (leads to access rights error)
 
         if request.env.user:
-            return request.redirect('/odoo/action-planning.planning_action_open_shift')
+            return request.redirect('/shaka/action-planning.planning_action_open_shift')
         return request.env['ir.ui.view']._render_template('planning.slot_unassign')
 
     @http.route(['/slot/<string:access_token>.ics'], type='http', auth="public", website=True)

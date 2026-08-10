@@ -82,7 +82,7 @@ class CalendarPopoverDeleteWizard(models.TransientModel):
         return {
             'type': 'ir.actions.act_url',
             'target': 'self',
-            'url': '/odoo/calendar'
+            'url': '/shaka/calendar'
         }
 
     def action_send_mail_and_delete(self):

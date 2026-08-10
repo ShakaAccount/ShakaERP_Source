@@ -195,7 +195,7 @@ class Website(Home):
         """
         if not redirect and request.params.get('login_success'):
             if request.env['res.users'].browse(uid)._is_internal():
-                redirect = '/odoo?' + request.httprequest.query_string.decode()
+                redirect = '/shaka?' + request.httprequest.query_string.decode()
             else:
                 redirect = '/my'
         return super()._login_redirect(uid, redirect=redirect)
@@ -704,7 +704,7 @@ class Website(Home):
 
         if redirect:
             if ext_special_case:  # redirect non html pages to backend to edit
-                return request.redirect(f"/odoo/ir.ui.view/{page.get('view_id')}")
+                return request.redirect(f"/shaka/ir.ui.view/{page.get('view_id')}")
             return request.redirect(request.env['website'].get_client_action_url(url, True))
 
         if ext_special_case:

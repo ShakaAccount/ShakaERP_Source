@@ -59,7 +59,7 @@ const readDataOnCache = async (url) => {
     if (url === offLineURL) {
         return response;
     }
-    // if you come from /odoo to project the url is now /odoo/project, but it doesn't exist in cache so use /odoo instead
+    // if you come from /shaka to project the url is now /shaka/project, but it doesn't exist in cache so use /shaka instead
     if (!response) {
         return readDataOnCache(homepageURL);
     }
