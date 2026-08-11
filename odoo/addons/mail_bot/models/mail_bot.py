@@ -10,6 +10,9 @@ from odoo import models, _
 class MailBot(models.AbstractModel):
     _name = 'mail.bot'
     _description = 'Mail Bot'
+    def _get_answer(self, record, body, values, command=False):
+            # Prevent OdooBot from auto-replying in discuss/chat channels
+            return False
 
     def _apply_logic(self, channel, values, command=None):
         """ Apply bot logic to generate an answer (or not) for the user
@@ -51,10 +54,10 @@ class MailBot(models.AbstractModel):
             "paperclip_icon": Markup("<i class='fa fa-paperclip' aria-hidden='true'/>"),
         }
 
-    def _get_answer(self, channel, body, values, command=False):
-        odoobot = self.env.ref("base.partner_root")
-        # onboarding
-        odoobot_state = self.env.user.odoobot_state
+    # def _get_answer(self, channel, body, values, command=False):
+    #     odoobot = self.env.ref("base.partner_root")
+    #     # onboarding
+    #     odoobot_state = self.env.user.odoobot_state
 
         if channel.channel_type == "chat" and odoobot in channel.channel_member_ids.partner_id:
             # main flow

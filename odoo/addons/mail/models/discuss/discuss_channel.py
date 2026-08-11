@@ -1003,25 +1003,35 @@ class DiscussChannel(models.Model):
             )
         return partners.ids
 
+
     def message_post(self, *, message_type="notification", partner_ids=None, **kwargs):
-        if message_type not in ["notification", "user_notification"]:
-            # sudo: discuss.channel - write to discuss.channel is not accessible for most users
-            self.sudo().last_interest_dt = fields.Datetime.now()
-        if "everyone" in kwargs.pop("special_mentions", []):
-            partner_ids = list(OrderedSet((partner_ids or []) + self.channel_member_ids.partner_id.ids))
-        if partner_ids:
-            kwargs["partner_ids"] = self._get_allowed_message_partner_ids(partner_ids)
-        # mail_post_autofollow=False is necessary to prevent adding followers
-        # when using mentions in channels. Followers should not be added to
-        # channels, and especially not automatically (because channel membership
-        # should be managed with discuss.channel.member instead).
-        # The current client code might be setting the key to True on sending
-        # message but it is only useful when targeting customers in chatter.
-        # This value should simply be set to False in channels no matter what.
-        return super(
-            DiscussChannel,
-            self.with_context(mail_post_autofollow_author_skip=True, mail_post_autofollow=False),
-        ).message_post(message_type=message_type, **kwargs)
+            # 1. Check if author is OdooBot
+            author_id = kwargs.get('author_id')
+            odoobot = self.env.ref('base.user_odoobot', raise_if_not_found=False)
+
+            if odoobot and author_id == odoobot.partner_id.id:
+                # Check if current channel is #general
+                if self.xml_id == 'mail.channel_all_general' or self.name == 'general':
+                    # Return empty recordset to completely block the message creation
+                    return self.env['mail.message']
+
+            # 2. Your existing channel logic
+            if message_type not in ["notification", "user_notification"]:
+                # sudo: discuss.channel - write to discuss.channel is not accessible for most users
+                self.sudo().last_interest_dt = fields.Datetime.now()
+
+            if "everyone" in kwargs.pop("special_mentions", []):
+                partner_ids = list(OrderedSet((partner_ids or []) + self.channel_member_ids.partner_id.ids))
+
+            if partner_ids:
+                kwargs["partner_ids"] = self._get_allowed_message_partner_ids(partner_ids)
+
+            # 3. Call super with context overrides
+            return super(
+                DiscussChannel,
+                self.with_context(mail_post_autofollow_author_skip=True, mail_post_autofollow=False),
+            ).message_post(message_type=message_type, partner_ids=partner_ids, **kwargs)
+
 
     def _message_post_after_hook(self, message, msg_vals):
         # Automatically set the message posted by the current user as seen for themselves.

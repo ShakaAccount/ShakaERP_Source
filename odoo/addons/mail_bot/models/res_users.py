@@ -18,7 +18,7 @@ class ResUsers(models.Model):
             ('onboarding_canned', 'Onboarding canned'),
             ('idle', 'Idle'),
             ('disabled', 'Disabled'),
-        ], string="OdooBot Status", readonly=True, required=False)  # keep track of the state: correspond to the code of the last message sent
+        ], string="OdooBot Status",default='disabled', readonly=True, required=False)  # keep track of the state: correspond to the code of the last message sent
     odoobot_failed = fields.Boolean(readonly=True)
 
     @property
@@ -31,6 +31,11 @@ class ResUsers(models.Model):
             self._init_odoobot()
 
     def _init_odoobot(self):
+        """
+                Prevents OdooBot from initializing onboarding conversations
+                or sending direct message channel invites to users.
+                """
+        return False
         self.ensure_one()
         odoobot_id = self.env['ir.model.data']._xmlid_to_res_id("base.partner_root")
         channel = self.env['discuss.channel']._get_or_create_chat([odoobot_id, self.partner_id.id])
