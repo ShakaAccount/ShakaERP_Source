@@ -141,7 +141,7 @@ msgid ""
 "API Keys allow your users to access Odoo with external tools when multi-"
 "factor authentication is enabled."
 msgstr ""
-"کلیدهای API به کاربران شما این امکان را می‌دهند که با ابزارهای خارجی به Odoo "
+"کلیدهای API به کاربران شما این امکان را می‌دهند که با ابزارهای خارجی به Shaka "
 "دسترسی پیدا کنند، زمانی که احراز هویت چندمرحله‌ای فعال باشد."
 
 #. module: base_setup
@@ -486,7 +486,7 @@ msgstr "احراز هویت OAuth"
 #. module: base_setup
 #: model_terms:ir.ui.view,arch_db:base_setup.res_config_settings_view_form
 msgid "Odoo"
-msgstr "اودو"
+msgstr "شاکا"
 
 #. module: base_setup
 #: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_partner_autocomplete
@@ -584,7 +584,7 @@ msgid ""
 "This name will be used for the application when Odoo is installed through "
 "the browser."
 msgstr ""
-"این نام برای برنامه زمانی که Odoo از طریق مرورگر نصب می‌شود، استفاده خواهد شد."
+"این نام برای برنامه زمانی که Shaka از طریق مرورگر نصب می‌شود، استفاده خواهد شد."
 
 #. module: base_setup
 #: model:ir.model.fields,field_description:base_setup.field_res_config_settings__module_web_unsplash
@@ -634,7 +634,7 @@ msgid ""
 "companies. When selecting one item, the company data and logo are auto-"
 "filled."
 msgstr ""
-"هنگامی که دفترچه آدرس خود را پر می کنید، Odoo لیستی از شرکت های منطبق را "
+"هنگامی که دفترچه آدرس خود را پر می کنید، Shaka لیستی از شرکت های منطبق را "
 "ارائه می دهد. هنگام انتخاب یک مورد، داده های شرکت و لوگو به طور خودکار پر می "
 "شوند."
 
