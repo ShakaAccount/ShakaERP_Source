@@ -1294,7 +1294,7 @@ msgstr "بازگشت"
 #: code:addons/point_of_sale/static/src/app/components/navbar/navbar.xml:0
 #: code:addons/point_of_sale/static/src/app/screens/login_screen/login_screen.js:0
 msgid "Backend"
-msgstr "<p>پشتیبان</p>"
+msgstr "پشتیبان"
 
 #. module: point_of_sale
 #. odoo-javascript
