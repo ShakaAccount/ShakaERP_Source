@@ -282,10 +282,10 @@
                                 <group string="Emails &amp; SMS">
                                     <field name="reminder_ids" widget="many2many_tags"/>
                                     <field name="booked_mail_template_id"
-                                        placeholder="If empty, Odoo will not send emails"
+                                        placeholder="If empty, shaka will not send emails"
                                         context="{'default_model': 'calendar.attendee', 'default_subject': name}"/>
                                     <field name="canceled_mail_template_id"
-                                        placeholder="If empty, Odoo will not send emails"
+                                        placeholder="If empty, shaka will not send emails"
                                         context="{'default_model': 'calendar.event', 'default_subject': name}"/>
                                 </group>
                             </group>

@@ -95,7 +95,7 @@
                                 placeholder="e.g. : open.wood.decoration@example.com"/>
                             <field name="phone" widget="phone" string="Phone" options="{'enable_sms': True}"/>
                             <field name="url" widget="url" string="Website"
-                                placeholder="e.g. : https://www.odoo.com"/>
+                                placeholder="e.g. : https://www.shaka.com"/>
                         </group>
                         <group>
                             <field name="event_id" placeholder="All Events"/>

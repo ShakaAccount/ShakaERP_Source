@@ -60,7 +60,7 @@ class TestViewNormalization(TransactionCase):
                                 <field name="zip" placeholder="ZIP" class="o_address_zip" readonly="type == 'contact' and parent_id"/>
                                 <field name="country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" readonly="type == 'contact' and parent_id"/>
                             </div>
-                            <field name="website" widget="url" placeholder="e.g. www.odoo.com"/>
+                            <field name="website" widget="url" placeholder="e.g. www.shaka.com"/>
                         </group>
                         <group>
                             <field name="function" placeholder="e.g. Sales Director" invisible="is_company"/>

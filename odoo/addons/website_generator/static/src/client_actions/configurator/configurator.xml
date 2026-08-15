@@ -13,7 +13,7 @@
                         <label for="url" class="col-sm-3 col-6 form-check-label"> Website URL </label>
                         <div class="col-sm-9 col-6">
                             <input id="url" name="url" type="url" required="true"
-                                class="o_input form-control" placeholder="https://www.odoo.com/" t-on-input="onUrlInput"/>
+                                class="o_input form-control" placeholder="https://www.shaka.com/" t-on-input="onUrlInput"/>
                         </div>
                         <div class="d-flex align-items-center">
                             <span t-if="state.url and state.isValidatingUrl" class="o_we_url_loading mx-2 fa fa-lg fa-circle-o-notch fa-spin" title="Loading..."/>

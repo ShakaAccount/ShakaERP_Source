@@ -48,7 +48,7 @@
                     <div class="oe_title">
                         <label for="name" string="Title"/>
                         <h1>
-                            <field name="name" placeholder="e.g. Odoo Inc." required="True"/>
+                            <field name="name" placeholder="e.g. shaka Inc." required="True"/>
                         </h1>
                     </div>
                     <group>

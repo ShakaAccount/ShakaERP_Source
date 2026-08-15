@@ -38,7 +38,7 @@
                                  help="Display this website for this web address"
                                  title="Display this website when users visit this domain"
                                  documentation="/applications/websites/website/configuration/domain_names.html#domain-name-website-map">
-                            <field name="website_domain" placeholder="https://www.odoo.com"/>
+                            <field name="website_domain" placeholder="https://www.shaka.com"/>
                         </setting>
                         <setting string="Languages"
                                  title="Languages available on your website"

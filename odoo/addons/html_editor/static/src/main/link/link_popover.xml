@@ -59,7 +59,7 @@
                                 class="o_we_href_input_link border-dark-subtle form-control form-control-sm"
                                 t-model="state.url"
                                 title="URL"
-                                placeholder="e.g. https://www.odoo.com"
+                                placeholder="e.g. https://www.shaka.com"
                                 t-on-keydown="onKeydownEnter"
                                 t-on-input="this.onChange"/>
                             <span class="ms-1" t-if="props.canUpload and !state.url">

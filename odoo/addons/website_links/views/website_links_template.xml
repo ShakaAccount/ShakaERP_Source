@@ -13,7 +13,7 @@
                                 <div class="mb-3 row">
                                     <label class="col-md-3 col-form-label text-start">Target Link</label>
                                     <div class="col-md-9">
-                                        <input type="text" id="url" class="form-control required-form-control"  required="True" placeholder="e.g. https://www.odoo.com/contactus" t-att-value="u"/>
+                                        <input type="text" id="url" class="form-control required-form-control"  required="True" placeholder="e.g. https://www.shaka.com/contactus" t-att-value="u"/>
                                     </div>
                                 </div>
 

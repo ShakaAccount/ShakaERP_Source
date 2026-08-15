@@ -258,7 +258,7 @@
                                                 <i class="fa fa-linkedin fa-2x o_linkedin_icon"></i>
                                                 <input id="recruitment4" type="text"
                                                     class="form-control s_website_form_input pl64"
-                                                    placeholder="e.g. https://www.linkedin.com/in/fpodoo"
+                                                    placeholder="e.g. https://www.linkedin.com/in/fpshaka"
                                                     style="padding-inline-start: calc(40px + 0.375rem)"
                                                     name="linkedin_profile"
                                                     data-fill-with="linkedin_profile"/>

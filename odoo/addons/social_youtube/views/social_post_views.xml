@@ -68,12 +68,12 @@
                 <field name="youtube_title"
                     string="Video Title"
                     onchange_on_keydown="True"
-                    placeholder="e.g. Odoo Social Tutorial"
+                    placeholder="e.g. shaka Social Tutorial"
                     invisible="state in ['posting', 'posted'] or youtube_accounts_count != 1 or is_split_per_media"
                     readonly="state != 'draft'"
                     required="youtube_accounts_count != 0"/>
                 <field name="youtube_description" string="Video Description" onchange_on_keydown="True"
-                    widget="text_emojis" placeholder="e.g. Engage your entire community with a single app! https://www.odoo.com/trial"
+                    widget="text_emojis" placeholder="e.g. Engage your entire community with a single app! https://www.shaka.com/trial"
                     invisible="state in ['posting', 'posted'] or youtube_accounts_count != 1 or is_split_per_media"
                     readonly="state != 'draft'"
                     required="youtube_video_id"/>
@@ -100,12 +100,12 @@
                             <field name="youtube_title"
                                 string="Video Title"
                                 onchange_on_keydown="True"
-                                placeholder="e.g. Odoo Social Tutorial"
+                                placeholder="e.g. shaka Social Tutorial"
                                 invisible="youtube_accounts_count != 1"
                                 readonly="state != 'draft'"
                                 required="is_split_per_media and youtube_accounts_count != 0"/>
                             <field name="youtube_description" string="Video Description" onchange_on_keydown="True"
-                                widget="text_emojis" placeholder="e.g. Engage your entire community with a single app! https://www.odoo.com/trial"
+                                widget="text_emojis" placeholder="e.g. Engage your entire community with a single app! https://www.shaka.com/trial"
                                 invisible="youtube_accounts_count != 1"
                                 readonly="state != 'draft'"
                                 required="is_split_per_media and youtube_video_id"/>

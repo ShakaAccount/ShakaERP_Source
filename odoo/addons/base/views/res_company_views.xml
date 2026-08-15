@@ -46,7 +46,7 @@
                                 <group>
                                     <field name="phone" class="o_force_ltr"/>
                                     <field name="email"/>
-                                    <field name="website" string="Website" widget="url" placeholder="e.g. https://www.odoo.com"/>
+                                    <field name="website" string="Website" widget="url" placeholder="e.g. https://www.shaka.com"/>
                                     <field name="parent_id" groups="base.group_no_one"/>
                                     <field name="color" widget="color_picker"/>
                                 </group>

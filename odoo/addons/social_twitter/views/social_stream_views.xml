@@ -14,7 +14,7 @@
                 <field name="twitter_account_user_id" invisible="1"/>
                 <field name="twitter_followed_account_id" string="Twitter Account" invisible="stream_type_type != 'twitter_likes'"
                     domain="[('twitter_id', '=', twitter_account_user_id)]" options="{'no_create': True, 'no_open': True}"/>
-                <field name="twitter_searched_keyword" placeholder="e.g. #odoo"
+                <field name="twitter_searched_keyword" placeholder="e.g. #shaka"
                     invisible="stream_type_type != 'twitter_keyword' or not account_id"
                     readonly="id"
                     required="stream_type_type == 'twitter_keyword'" />
