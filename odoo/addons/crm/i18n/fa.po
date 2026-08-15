@@ -841,7 +841,7 @@ msgstr "مدیریت ارتباط مشتریان: تخصیص سرنخ"
 #. module: crm
 #: model:ir.model,name:crm.model_calendar_event
 msgid "Calendar Event"
-msgstr "رخداد گاهشمار"
+msgstr "رخداد تقویم"
 
 #. module: crm
 #: model:ir.model.fields,field_description:crm.field_crm_lead__campaign_id

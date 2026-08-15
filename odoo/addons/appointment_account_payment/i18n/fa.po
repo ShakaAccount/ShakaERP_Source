@@ -194,7 +194,7 @@ msgstr ""
 #. module: appointment_account_payment
 #: model:ir.model.fields,field_description:appointment_account_payment.field_appointment_answer_input__calendar_event_id
 msgid "Calendar Event"
-msgstr "رخداد گاهشمار"
+msgstr "رخداد تقویم"
 
 #. module: appointment_account_payment
 #: model:ir.model.fields,field_description:appointment_account_payment.field_calendar_booking_line__capacity_reserved

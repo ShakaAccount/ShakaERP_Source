@@ -755,7 +755,7 @@ msgstr ""
 #: code:addons/web_studio/static/src/client_action/editor/editor_menu/editor_menu.js:0
 #: code:addons/web_studio/static/src/studio_service.js:0
 msgid "Calendar"
-msgstr "گاهشمار"
+msgstr "تقویم"
 
 #. module: web_studio
 #. odoo-javascript

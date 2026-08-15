@@ -93,7 +93,7 @@ msgstr "رزروها"
 #. module: pos_appointment
 #: model:ir.model,name:pos_appointment.model_calendar_event
 msgid "Calendar Event"
-msgstr "رخداد گاهشمار"
+msgstr "رخداد تقویم"
 
 #. module: pos_appointment
 #: model_terms:ir.ui.view,arch_db:pos_appointment.calendar_event_view_form_gantt_booking

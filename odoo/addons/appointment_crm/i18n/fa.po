@@ -32,13 +32,13 @@ msgstr "نوع قرار ملاقات"
 #. module: appointment_crm
 #: model:ir.model,name:appointment_crm.model_calendar_event
 msgid "Calendar Event"
-msgstr "رخداد گاهشمار"
+msgstr "رخداد تقویم"
 
 #. module: appointment_crm
 #. odoo-javascript
 #: code:addons/appointment_crm/static/src/views/appointment_calendar/appointment_crm_calendar_controller.xml:0
 msgid "Click in your calendar to pick meeting time proposals for"
-msgstr "برای انتخاب زمان پیشنهادی جلسه بر روی گاهشمار خود کلیک کنید"
+msgstr "برای انتخاب زمان پیشنهادی جلسه بر روی تقویم خود کلیک کنید"
 
 #. module: appointment_crm
 #: model:ir.model.fields,field_description:appointment_crm.field_appointment_type__lead_create

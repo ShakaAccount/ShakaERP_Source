@@ -26,7 +26,7 @@ msgid ""
 "%(user_names)s did not synchronize their Google Calendar account yet, Google "
 "Meeting links won't be added to their meetings."
 msgstr ""
-"%(user_names)s هنوز حساب گاهشمار گوگل خود را همگام‌ساری نکرده‌اند، لینک‌های "
+"%(user_names)s هنوز حساب تقویم گوگل خود را همگام‌ساری نکرده‌اند، لینک‌های "
 "google meet به جلسات آنها اضافه نمی‌شوند."
 
 #. module: appointment_google_calendar
@@ -42,7 +42,7 @@ msgstr "نوع قرار ملاقات"
 #. module: appointment_google_calendar
 #: model:ir.model,name:appointment_google_calendar.model_calendar_event
 msgid "Calendar Event"
-msgstr "رخداد گاهشمار"
+msgstr "رخداد تقویم"
 
 #. module: appointment_google_calendar
 #: model:ir.model.fields,field_description:appointment_google_calendar.field_appointment_type__connector_google
@@ -87,7 +87,7 @@ msgstr "شناسه"
 #. module: appointment_google_calendar
 #: model:ir.model.fields,field_description:appointment_google_calendar.field_appointment_type__users_wo_google_calendar_msg
 msgid "Users Without Google Calendar Synchronization"
-msgstr "کاربرانی که گاهشمار گوگل خود را همگام‌سازی نکرده‌اند"
+msgstr "کاربرانی که تقویم گوگل خود را همگام‌سازی نکرده‌اند"
 
 #. module: appointment_google_calendar
 #: model:ir.model.fields,field_description:appointment_google_calendar.field_appointment_type__event_videocall_source

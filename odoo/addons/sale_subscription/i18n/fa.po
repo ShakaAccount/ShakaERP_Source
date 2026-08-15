@@ -4907,7 +4907,7 @@ msgstr ""
 #~ "رکورد استفاده کنید."
 
 #~ msgid "Use Calendar"
-#~ msgstr "استفاده از گاهشمار"
+#~ msgstr "استفاده از تقویم"
 
 #~ msgid "Use employee work schedule"
 #~ msgstr "از برنامه کاری کارمند استفاده کن"

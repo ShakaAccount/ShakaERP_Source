@@ -3045,7 +3045,7 @@ msgstr ""
 #~ msgstr "کارمند پایه"
 
 #~ msgid "Calendar Event"
-#~ msgstr "رخداد گاهشمار"
+#~ msgstr "رخداد تقویم"
 
 #~ msgid "Cancel Future Appraisals"
 #~ msgstr "لغو ارزیابی های آینده"

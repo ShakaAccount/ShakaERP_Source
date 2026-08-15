@@ -32,7 +32,7 @@ msgstr ""
 #. module: pos_restaurant_appointment
 #: model:ir.model,name:pos_restaurant_appointment.model_calendar_event
 msgid "Calendar Event"
-msgstr "رخداد گاهشمار"
+msgstr "رخداد تقویم"
 
 #. module: pos_restaurant_appointment
 #: model:ir.model.fields,field_description:pos_restaurant_appointment.field_appointment_resource__display_name

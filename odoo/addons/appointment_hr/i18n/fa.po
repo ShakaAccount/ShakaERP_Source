@@ -32,7 +32,7 @@ msgstr "نوع قرار ملاقات"
 #. module: appointment_hr
 #: model:ir.model,name:appointment_hr.model_calendar_event
 msgid "Calendar Event"
-msgstr "رخداد گاهشمار"
+msgstr "رخداد تقویم"
 
 #. module: appointment_hr
 #: model:ir.model.fields,field_description:appointment_hr.field_appointment_type__display_name

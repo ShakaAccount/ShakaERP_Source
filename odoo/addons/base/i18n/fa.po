@@ -16585,7 +16585,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:base.view_users_form
 #: model_terms:ir.ui.view,arch_db:base.view_users_form_simple_modif
 msgid "Calendar"
-msgstr "گاهشمار"
+msgstr "تقویم"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_calendar_sms

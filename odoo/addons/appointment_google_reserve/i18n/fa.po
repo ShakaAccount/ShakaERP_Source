@@ -117,7 +117,7 @@ msgstr ""
 #. module: appointment_google_reserve
 #: model:ir.model,name:appointment_google_reserve.model_calendar_event
 msgid "Calendar Event"
-msgstr "رخداد گاهشمار"
+msgstr "رخداد تقویم"
 
 #. module: appointment_google_reserve
 #: model:ir.model.fields,help:appointment_google_reserve.field_appointment_type__google_reserve_merchant_id

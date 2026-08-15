@@ -1154,7 +1154,7 @@ msgstr "بای بای، رکورد!"
 #: model:ir.ui.menu,name:calendar.menu_calendar_configuration
 #: model_terms:ir.ui.view,arch_db:calendar.res_config_settings_view_form
 msgid "Calendar"
-msgstr "گاهشمار"
+msgstr "تقویم"
 
 #. module: calendar
 #: model:ir.actions.act_window,name:calendar.action_calendar_alarm
@@ -1181,7 +1181,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:calendar.field_calendar_recurrence__calendar_event_ids
 #: model:ir.model.fields,field_description:calendar.field_discuss_channel__calendar_event_ids
 msgid "Calendar Event"
-msgstr "رخداد گاهشمار"
+msgstr "رخداد تقویم"
 
 #. module: calendar
 #: model:ir.model,name:calendar.model_calendar_filters
@@ -3230,7 +3230,7 @@ msgstr "{{object.name}}: به‌روزرسانی رویداد"
 #~ msgstr "تعداد پیام ها که نیاز به عمل"
 
 #~ msgid "Open Calendar"
-#~ msgstr "بارکردن گاهشمار"
+#~ msgstr "بارکردن تقویم"
 
 #~ msgid "Private Event Excluded"
 #~ msgstr "رویداد خصوصی مستثنی شده است"
