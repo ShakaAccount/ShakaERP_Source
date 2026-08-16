@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <!--
+        Adds a "Today" shortcut as a footer row inside the calendar
+        popup itself (confirmed via the real rendered DOM: the picker's
+        root is <div class="o_datetime_picker ...">). Deliberately uses
+        position="inside" (append a new last child) rather than
+        position="replace": appending can't corrupt or drop anything
+        that's already there, even if some assumption about the
+        surrounding markup turns out to be wrong - worst case the xpath
+        just fails to match and nothing is added, rather than breaking
+        the whole picker (or the whole page) the way a bad "replace"
+        xpath would.
+    -->
+    <t t-inherit="web.DateTimePicker" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_datetime_picker')]" position="inside">
+            <div t-if="isJalaliActive" class="o_jalali_today_footer d-flex justify-content-center border-top pt-1">
+                <button type="button" class="btn btn-sm btn-link py-0"
+                        t-on-click="selectJalaliToday">امروز</button>
+            </div>
+        </xpath>
+    </t>
+</templates>

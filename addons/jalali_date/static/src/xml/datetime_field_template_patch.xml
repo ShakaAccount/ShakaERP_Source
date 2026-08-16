@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <!--
+        WHY THIS TEMPLATE PATCH EXISTS:
+        The picker service (datetimepicker_service.js) unconditionally
+        re-reads the real <input>'s DOM value and Gregorian-parses it every
+        time the popover closes - even on a plain "click outside". If that
+        box holds Jalali text at that moment, the private parser misreads
+        it and corrupts the value.
+
+        THE FIX, split by state:
+        - NOT being typed into: mask the real (Gregorian) text
+          (color: transparent) and lay a Jalali-text overlay span on top,
+          pointer-events disabled so clicks pass through to the real input.
+          Nothing here can corrupt anything, because the real input's
+          value is never written by us while in this state.
+        - BEING typed into: drop the mask/overlay and let the user edit
+          real, visible Jalali text directly in the input. On blur/Enter/
+          Tab/click-outside (handled in date_datetime_field_patch.js),
+          that Jalali text is converted to Gregorian text in Odoo's own
+          locale format *before* the private parser ever reads it, or
+          discarded if invalid - so the private code only ever sees
+          well-formed Gregorian text, in either case.
+    -->
+    <t t-inherit="web.DateTimeField" t-inherit-mode="extension">
+        <xpath expr="//input[@t-ref='start-date']" position="replace">
+            <span class="position-relative d-inline-block w-100">
+                <input
+                    t-ref="start-date"
+                    type="text"
+                    t-att-id="showSeparator ? props.endDateField and props.id : props.id"
+                    t-att-class="'o_input cursor-pointer ' + (props.warnFuture and isDateInTheFuture(0) ? 'text-danger' : '') + (isJalaliActive and !isJalaliEditingRaw(0) ? ' o_jalali_masked_input' : '')"
+                    autocomplete="off"
+                    t-att-placeholder="props.placeholder"
+                    t-att-data-field="startDateField"
+                    t-on-input="onJalaliInputStart"
+                    t-on-focus="onJalaliFocusStart"
+                    t-on-blur="onJalaliBlurStart"
+                    t-on-keydown="onJalaliKeydownStart"
+                    t-att-title="props.warnFuture and isDateInTheFuture(0) ? futureWarningMsg : ''"
+                />
+                <span t-if="isJalaliActive and !isJalaliEditingRaw(0)" class="o_jalali_overlay" t-esc="getFormattedValue(0)"/>
+            </span>
+        </xpath>
+        <xpath expr="//input[@t-ref='end-date']" position="replace">
+            <span class="position-relative d-inline-block w-100">
+                <input
+                    t-ref="end-date"
+                    type="text"
+                    t-att-id="props.startDateField and props.id"
+                    t-att-class="'o_input cursor-pointer ' + (props.warnFuture and isDateInTheFuture(1) ? 'text-danger' : '') + (isJalaliActive and !isJalaliEditingRaw(1) ? ' o_jalali_masked_input' : '')"
+                    autocomplete="off"
+                    t-att-placeholder="props.placeholder"
+                    t-att-data-field="endDateField"
+                    t-on-input="onJalaliInputEnd"
+                    t-on-focus="onJalaliFocusEnd"
+                    t-on-blur="onJalaliBlurEnd"
+                    t-on-keydown="onJalaliKeydownEnd"
+                    t-att-title="props.warnFuture and isDateInTheFuture(1) ? futureWarningMsg : ''"
+                />
+                <span t-if="isJalaliActive and !isJalaliEditingRaw(1)" class="o_jalali_overlay" t-esc="getFormattedValue(1)"/>
+            </span>
+        </xpath>
+    </t>
+</templates>

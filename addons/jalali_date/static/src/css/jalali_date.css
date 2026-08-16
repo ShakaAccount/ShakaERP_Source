@@ -1,0 +1,41 @@
+.o_jalali_masked_input {
+    color: transparent !important;
+    caret-color: transparent;
+    /* Some browsers (notably Firefox) ignore `color` for *selected* text
+       and fall back to default selection colors, which would otherwise
+       reveal the real Gregorian value as a highlighted box whenever the
+       picker service selects the input's text (it does this on
+       focus/open as a normal "select all to retype" convenience). Mask
+       the selection state explicitly so nothing leaks through. */
+    -webkit-text-fill-color: transparent !important;
+}
+
+.o_jalali_masked_input::selection {
+    background: transparent !important;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+.o_jalali_masked_input::-moz-selection {
+    background: transparent !important;
+    color: transparent !important;
+}
+
+.o_jalali_overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    /* Approximates the real input's own padding. Adjust if the overlay
+       text looks slightly offset from where the real input's text would
+       have sat - exact values depend on Odoo's current input styling. */
+    padding-left: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.o_jalali_today_footer .btn {
+    font-size: 0.85rem;
+}
