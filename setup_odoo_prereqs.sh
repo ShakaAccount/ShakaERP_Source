@@ -257,6 +257,7 @@ log_level = info
 ; Performance (Dynamically adjusted for ${CPU_CORES} CPUs and ${TOTAL_RAM_MB}MB RAM)
 workers = ${WORKERS}
 max_cron_threads = ${MAX_CRON_THREADS}
+gevent_port = 8072
 EOF
     log_success "فایل odoo.conf با موفقیت ساخته شد."
 }
