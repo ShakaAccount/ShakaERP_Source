@@ -41,7 +41,7 @@ services:
       - odoo_web_data:/home/odoo/.local
     networks:
       - odoo_net
-    command: ./odoo-bin -c /etc/odoo/odoo.conf --db_host=db -r ${POSTGRES_USER} -w ${POSTGRES_PASSWORD} -u estate
+    command: ./odoo-bin -c /etc/odoo/odoo.conf --db_host=db -r ${POSTGRES_USER} -w ${POSTGRES_PASSWORD} -u all
 
   nginx:
     image: nginx:alpine
