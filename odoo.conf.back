@@ -1,0 +1,21 @@
+[options]
+; Hardcode internal container values here
+db_host = 127.0.0.1
+db_port = 5432
+db_user = russellzparadox
+db_password = shaka_password
+
+; Security
+admin_passwd = my_super_secret_master_password
+; Enable Proxy Mode for Nginx
+proxy_mode = True
+; Paths
+addons_path = /opt/shaka/addons,/opt/shaka/custom_addons
+data_dir = /var/lib/shaka
+
+; Logging
+log_level = info
+; Quick Tip: If you ever need to perform a massive module installation or database upgrade, temporarily set workers = 0 (or pass --workers=0 in CLI) to bypass worker timeout limits during the update, then switch back to workers = 17.
+; Performance
+workers = 2
+max_cron_threads = 1

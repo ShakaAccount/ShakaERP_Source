@@ -2,17 +2,34 @@ version: '3.8'
 
 services:
   db:
-    image: pgvector/pgvector:pg16
+    build:
+      context: .
+      dockerfile: db.Dockerfile
+    image: odoo_19_db:pg16
     container_name: odoo_19_db
     restart: unless-stopped
     env_file:
       - .env
     volumes:
       - pg_data:/var/lib/postgresql/data
+      # pgBackRest repo lives on the host (survives container purge/rebuild)
+      - ../backups/pgbackrest:/var/lib/pgbackrest
+      - ./pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro
     ports:
       - "5433:5432"
     networks:
       - odoo_net
+    # Continuous WAL archiving -> RPO of seconds (well under the 15 min target)
+    command:
+      - postgres
+      - -c
+      - archive_mode=on
+      - -c
+      - archive_command=pgbackrest --stanza=shaka_db archive-push %p
+      - -c
+      - archive_timeout=30
+      - -c
+      - unix_socket_directories=/var/run/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
