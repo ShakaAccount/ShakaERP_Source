@@ -29,9 +29,12 @@ cd ~/Shaka
 
 ---
 
-## 2. Provide Production Secrets (`.env`)
+## 2. Provide Production Secrets (`.env`) — Optional
 
-Create `~/Shaka/.env` **manually** – do **not** commit it.
+The initialization script **auto-generates** a secure `.env` on first run if it doesn't exist.  
+You can pre-create `~/Shaka/.env` manually if you want specific passwords; otherwise the script will generate strong random ones and save them to `.env` (mode 600).
+
+If you create it manually, use this format:
 
 ```ini
 # Database Credentials
@@ -79,15 +82,17 @@ sudo ./deploy_init.sh
 The script performs, in order:
 
 1. Verifies Docker & Compose.
-2. Fixes pgBackRest directory ownership (`uid 999`).
-3. Builds the `db` image (pgvector + pgBackRest) and the `odoo_filestore_sync` helper image.
-4. Starts the database container and waits for healthcheck.
-5. Creates the pgBackRest stanza `shaka_db` and runs `check`.
-6. Takes an **initial full backup** if the repo is empty.
-7. Starts `web` and `nginx`.
-8. Runs an initial filestore sync.
-9. Installs two cron jobs (see below).
-10. Final health verification.
+2. **Generates `.env` with random passwords if missing** (or uses existing).
+3. **Renders `odoo.conf` from template via `envsubst`** (substitutes `${POSTGRES_USER}`, `${POSTGRES_PASSWORD}`, etc.).
+4. Fixes pgBackRest directory ownership (`uid 999`).
+5. Builds the `db` image (pgvector + pgBackRest) and the `odoo_filestore_sync` helper image.
+6. Starts the database container and waits for healthcheck.
+7. Creates the pgBackRest stanza `shaka_db` and runs `check`.
+8. Takes an **initial full backup** if the repo is empty.
+9. Starts `web` and `nginx`.
+10. Runs an initial filestore sync.
+11. Installs two cron jobs (see below).
+12. Final health verification.
 
 ### What the Cron Jobs Do
 
@@ -159,10 +164,10 @@ See **`DISASTER_RECOVERY.md`** in this repository for step‑by‑step restore p
 
 ```bash
 # Manual full backup (before major upgrade)
-~/odoo-19/backup/pgbackrest_full.sh
+~/Shaka/backup/pgbackrest_full.sh
 
 # Manual filestore sync
-~/odoo-19/backup/filestore_sync.sh
+~/Shaka/backup/filestore_sync.sh
 
 # List backups
 docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db info
@@ -188,7 +193,7 @@ docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db check --check
 ## 10. File Inventory (for audit)
 
 ```
-~/odoo-19/
+~/Shaka/
 ├── docker-compose.yml
 ├── pgbackrest.conf
 ├── db.Dockerfile
@@ -201,7 +206,7 @@ docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db check --check
 │   ├── filestore_sync.sh
 │   ├── pgbackrest_full.sh
 │   └── restore.sh
-└── .env                    # ← you create this
+└── .env                    # ← auto-generated on first run (or create manually)
 ```
 
 ---
