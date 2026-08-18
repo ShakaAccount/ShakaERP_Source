@@ -8,14 +8,14 @@ This document describes the backup architecture and step-by-step disaster recove
 
 | Component | Technology | RPO | Retention | Location |
 |-----------|------------|-----|-----------|----------|
-| PostgreSQL Database | pgBackRest (continuous WAL archiving + daily full) | **~seconds** (well under 15 min target) | 2 full backups + 7 days WAL | `../backups/pgbackrest/` |
-| Odoo Filestore (attachments) | rsync incremental mirror | **15 minutes** (cron) | Rolling mirror (--delete) | `../backups/filestore/` |
+| PostgreSQL Database | pgBackRest (continuous WAL archiving + daily full) | **~seconds** (well under 15 min target) | 2 full backups + 7 days WAL | `$BACKUPS/pgbackrest/` |
+| Odoo Filestore (attachments) | rsync incremental mirror | **15 minutes** (cron) | Rolling mirror (--delete) | `$BACKUPS/filestore/` |
 
 ### Key Properties
 
 - **Database RPO**: Continuous WAL archiving (`archive_timeout=30s`) → near-zero data loss
 - **Filestore RPO**: Cron runs every 15 minutes (`*/15 * * * *`)
-- **Backup Storage**: Host directory `../backups/` survives container rebuilds
+- **Backup Storage**: Host directory `$BACKUPS/` survives container rebuilds
 - **Encryption**: Not enabled (add `--repo1-cipher-type=aes-256-cbc` if required)
 
 ---
@@ -24,8 +24,8 @@ This document describes the backup architecture and step-by-step disaster recove
 
 ```bash
 # Repository root
-REPO=/home/russellzparadox/work/src_19e/odoo-19.0+e.20260223
-BACKUPS=/home/russellzparadox/work/src_19e/backups
+REPO=~/odoo-19
+BACKUPS=~/backups
 
 # Verify backups are healthy
 docker compose -f $REPO/docker-compose.yml exec -T -u postgres db pgbackrest --stanza=shaka_db check
@@ -53,7 +53,7 @@ $REPO/backup/filestore_sync.sh
 #### Step-by-Step Recovery
 
 ```bash
-cd /home/russellzparadox/work/src_19e/odoo-19.0+e.20260223
+cd ~/odoo-19
 
 # 1. Stop application (web) to prevent new writes
 docker compose stop web
@@ -72,8 +72,8 @@ docker run --rm \
 docker run --rm \
     --user postgres \
     -v odoo_19_pg_data:/var/lib/postgresql/data \
-    -v /home/russellzparadox/work/src_19e/backups/pgbackrest:/var/lib/pgbackrest \
-    -v /home/russellzparadox/work/src_19e/odoo-19.0+e.20260223/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro \
+    -v ~/backups/pgbackrest:/var/lib/pgbackrest \
+    -v ~/odoo-19/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro \
     --entrypoint pgbackrest \
     odoo_19_db:pg16 \
     --stanza=shaka_db restore
@@ -111,7 +111,7 @@ docker compose exec -T -u postgres db psql -U shaka -d postgres -c "SELECT count
 #### Step-by-Step Recovery
 
 ```bash
-cd /home/russellzparadox/work/src_19e/odoo-19.0+e.20260223
+cd ~/odoo-19
 
 # 1. Stop application (prevents new file writes during restore)
 docker compose stop web
@@ -119,7 +119,7 @@ docker compose stop web
 # 2. Restore filestore from backup mirror (--delete removes extra files)
 docker run --rm \
     -v odoo_19_data:/dst \
-    -v /home/russellzparadox/work/src_19e/backups/filestore:/src:ro \
+    -v ~/backups/filestore:/src:ro \
     odoo_filestore_sync -a --delete /src/ /dst/filestore/
 
 # 3. Fix ownership (Odoo runs as uid 1000)
@@ -158,8 +158,8 @@ curl -fsSL https://get.docker.com | sh
 docker compose version
 
 # Clone repository (or copy project files)
-git clone <your-repo> /opt/odoo-19
-cd /opt/odoo-odoo-19.0+e.20260223
+git clone <your-repo> ~/odoo-19
+cd ~/odoo-19
 
 # Restore .env file (database credentials, master password)
 # IMPORTANT: Keep .env secure and out of version control
@@ -169,16 +169,16 @@ cp /path/to/backup/.env .
 #### Recovery Procedure
 
 ```bash
-cd /opt/odoo-19.0+e.20260223
+cd ~/odoo-19
 
 # 1. Restore backup storage from off-site / NAS / cloud
 #    Ensure directory structure matches:
-#    /opt/odoo-19.0+e.20260223/../backups/pgbackrest/
-#    /opt/odoo-19.0+e.20260223/../backups/filestore/
-rsync -avz backup-server:/backups/ /home/russellzparadox/work/src_19e/backups/
+#    ~/backups/pgbackrest/
+#    ~/backups/filestore/
+rsync -avz backup-server:/backups/ ~/backups/
 
 # 2. Fix pgbackrest ownership (postgres uid 999)
-docker run --rm -v /home/russellzparadox/work/src_19e/backups:/opt/backups busybox:1.36 \
+docker run --rm -v ~/backups:/opt/backups busybox:1.36 \
     sh -c 'chown -R 999:999 /opt/backups/pgbackrest && chmod -R 750 /opt/backups/pgbackrest'
 
 # 3. Build images
@@ -190,8 +190,8 @@ docker compose up -d db
 # wait for healthy...
 docker run --rm --user postgres \
     -v odoo_19_pg_data:/var/lib/postgresql/data \
-    -v /home/russellzparadox/work/src_19e/backups/pgbackrest:/var/lib/pgbackrest \
-    -v /home/russellzparadox/work/src_19e/odoo-19.0+e.20260223/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro \
+    -v ~/backups/pgbackrest:/var/lib/pgbackrest \
+    -v ~/odoo-19/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro \
     --entrypoint pgbackrest odoo_19_db:pg16 \
     --stanza=shaka_db restore
 docker compose restart db
@@ -199,7 +199,7 @@ docker compose restart db
 # 5. Restore filestore (Scenario 2, step 2)
 docker run --rm \
     -v odoo_19_data:/dst \
-    -v /home/russellzparadox/work/src_19e/backups/filestore:/src:ro \
+    -v ~/backups/filestore:/src:ro \
     odoo_filestore_sync -a --delete /src/ /dst/filestore/
 docker run --rm -v odoo_19_data:/var/lib/odoo --entrypoint sh busybox:1.36 \
     -c 'chown -R 1000:1000 /var/lib/odoo/filestore'
@@ -284,8 +284,8 @@ docker compose exec -T -u postgres db psql -U shaka -d postgres < /tmp/res_partn
 #!/usr/bin/env bash
 # /etc/cron.daily/odoo-backup-check
 
-REPO=/home/russellzparadox/work/src_19e/odoo-19.0+e.20260223
-LOG=/home/russellzparadox/work/src_19e/backups/logs/health_check.log
+REPO=~/odoo-19
+LOG=~/backups/logs/health_check.log
 
 {
   echo "=== $(date) ==="
@@ -296,10 +296,10 @@ LOG=/home/russellzparadox/work/src_19e/backups/logs/health_check.log
   docker compose -f $REPO/docker-compose.yml exec -T -u postgres db pgbackrest --stanza=shaka_db info | grep "backup.*complete"
   
   # 3. Filestore sync log (last run)
-  tail -5 $REPO/../backups/logs/filestore_sync.log
+  tail -5 ~/backups/logs/filestore_sync.log
   
   # 4. Disk space
-  df -h $REPO/../backups
+  df -h ~/backups
 } >> $LOG 2>&1
 ```
 
@@ -352,13 +352,13 @@ docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db check --check
    Store passphrase in password manager, not in repo.
 
 2. **Access Control**: 
-   - `../backups/pgbackrest/` owned by uid 999 (postgres), mode 750
-   - `../backups/filestore/` owned by host user
+   - `$BACKUPS/pgbackrest/` owned by uid 999 (postgres), mode 750
+   - `$BACKUPS/filestore/` owned by host user
    - Restrict SSH/NFS access to backup directory
 
 3. **Off-Site Replication**: 
    - Configure `repo2-type=s3` (or `gcs`, `azure`) in pgbackrest.conf
-   - Or rsync `../backups/` to remote server nightly
+   - Or rsync `$BACKUPS/` to remote server nightly
 
 4. **Test Restores**: Schedule quarterly full restore drills to staging environment.
 
@@ -392,7 +392,7 @@ systemctl status cron
 # Check crontab
 crontab -l
 # Check logs
-tail -f /home/russellzparadox/work/src_19e/backups/logs/filestore_sync.log
+tail -f ~/backups/logs/filestore_sync.log
 ```
 
 ---
@@ -409,22 +409,23 @@ tail -f /home/russellzparadox/work/src_19e/backups/logs/filestore_sync.log
 ## Appendix: File Inventory
 
 ```
-/home/russellzparadox/work/src_19e/odoo-19.0+e.20260223/
+~/odoo-19/
 ├── docker-compose.yml          # Stack definition
 ├── pgbackrest.conf             # pgBackRest configuration
 ├── db.Dockerfile               # PostgreSQL + pgBackRest image
 ├── filestore-sync.Dockerfile   # rsync helper image
+├── deploy_init.sh              # ← run once on new server
+├── DISASTER_RECOVERY.md        # This file
+├── DEPLOYMENT_GUIDE.md
 ├── backup/
-│   ├── setup.sh                # One-time initialization
 │   ├── install_cron.sh         # Installs 15-min filestore + daily full backup cron
 │   ├── filestore_sync.sh       # Incremental rsync mirror (RPO 15min)
 │   ├── pgbackrest_full.sh      # Daily full backup trigger
 │   └── restore.sh              # Full disaster restore (database only)
-├── DISASTER_RECOVERY.md        # This file
 └── .env                        # Credentials (NOT in git)
 ```
 
-**Backup Root**: `/home/russellzparadox/work/src_19e/backups/`
+**Backup Root**: `~/backups/`
 - `pgbackrest/` — pgBackRest repository (WAL + base backups)
 - `filestore/` — rsync mirror of `/var/lib/odoo/filestore`
 - `logs/` — Cron job output logs

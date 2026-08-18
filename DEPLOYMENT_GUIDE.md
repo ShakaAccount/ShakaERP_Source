@@ -20,18 +20,18 @@ This guide explains how to deploy the Odoo 19 stack on a fresh server with **con
 
 ```bash
 # Option A: clone from git (recommended)
-git clone <your-private-repo> /opt/odoo-19
-cd /opt/odoo-19
+git clone <your-private-repo> ~/odoo-19
+cd ~/odoo-19
 
 # Option B: copy the whole directory via scp/rsync from your workstation
-# scp -r odoo-19.0+e.20260223 user@server:/opt/odoo-19
+# scp -r odoo-19.0+e.20260223 user@server:~/odoo-19
 ```
 
 ---
 
 ## 2. Provide Production Secrets (`.env`)
 
-Create `/opt/odoo-19/.env` **manually** – do **not** commit it.
+Create `~/odoo-19/.env` **manually** – do **not** commit it.
 
 ```ini
 # Database Credentials
@@ -49,10 +49,10 @@ SHAKA_MASTER_PASSWORD=<another-strong-password>
 
 ## 3. Restore Backup Storage from Off‑Site
 
-The backup directory (`/opt/backups` by default) must contain two sub‑trees:
+The backup directory (`~/backups` by default) must contain two sub‑trees:
 
 ```
-/opt/backups/
+~/backups/
 ├── pgbackrest/      # pgBackRest repository (WAL + base backups)
 └── filestore/       # rsync mirror of /var/lib/odoo/filestore
 ```
@@ -60,8 +60,8 @@ The backup directory (`/opt/backups` by default) must contain two sub‑trees:
 Sync from your backup server (adjust source):
 
 ```bash
-mkdir -p /opt/backups
-rsync -avz --progress backup-user@backup-server:/backups/ /opt/backups/
+mkdir -p ~/backups
+rsync -avz --progress backup-user@backup-server:/backups/ ~/backups/
 ```
 
 If this is a **brand‑new** deployment with no prior backups, you can skip this step – the init script will create an empty repo and take an initial full backup.
@@ -71,7 +71,7 @@ If this is a **brand‑new** deployment with no prior backups, you can skip this
 ## 4. Run the Initialization Script
 
 ```bash
-cd /opt/odoo-19
+cd ~/odoo-19
 chmod +x deploy_init.sh
 sudo ./deploy_init.sh
 ```
@@ -93,10 +93,10 @@ The script performs, in order:
 
 | Schedule | Command | Purpose |
 |----------|---------|---------|
-| `*/15 * * * *` | `/opt/odoo-19/backup/filestore_sync.sh` | Incremental rsync mirror of the filestore (RPO ≤ 15 min). |
-| `15 2 * * *` | `/opt/odoo-19/backup/pgbackrest_full.sh` | Daily full base backup at 02:15 (retention: 2 full + 7 days WAL). |
+| `*/15 * * * *` | `~/odoo-19/backup/filestore_sync.sh` | Incremental rsync mirror of the filestore (RPO ≤ 15 min). |
+| `15 2 * * *` | `~/odoo-19/backup/pgbackrest_full.sh` | Daily full base backup at 02:15 (retention: 2 full + 7 days WAL). |
 
-Both write logs to `/opt/backups/logs/`.
+Both write logs to `~/backups/logs/`.
 
 ---
 
@@ -113,7 +113,7 @@ docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db check
 docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db info
 
 # Filestore sync log
-tail /opt/backups/logs/filestore_sync.log
+tail ~/backups/logs/filestore_sync.log
 
 # Odoo reachable
 curl -I http://<server-ip>
@@ -159,10 +159,10 @@ See **`DISASTER_RECOVERY.md`** in this repository for step‑by‑step restore p
 
 ```bash
 # Manual full backup (before major upgrade)
-/opt/odoo-19/backup/pgbackrest_full.sh
+~/odoo-19/backup/pgbackrest_full.sh
 
 # Manual filestore sync
-/opt/odoo-19/backup/filestore_sync.sh
+~/odoo-19/backup/filestore_sync.sh
 
 # List backups
 docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db info
@@ -179,7 +179,7 @@ docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db check --check
 ## 9. Security Notes
 
 - **`.env`** contains secrets – restrict permissions (`chmod 600 .env`).
-- Backup directory `/opt/backups/pgbackrest` owned by `uid 999` (postgres) mode `750`.
+- Backup directory `~/backups/pgbackrest` owned by `uid 999` (postgres) mode `750`.
 - Consider enabling pgBackRest encryption (`repo1-cipher-type=aes-256-cbc`) and storing the passphrase in a vault.
 - Off‑site replication is **essential** – a single server loss must not lose both primary and backup data.
 
@@ -188,15 +188,15 @@ docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db check --check
 ## 10. File Inventory (for audit)
 
 ```
-/opt/odoo-19/
+~/odoo-19/
 ├── docker-compose.yml
 ├── pgbackrest.conf
 ├── db.Dockerfile
 ├── filestore-sync.Dockerfile
 ├── deploy_init.sh          # ← run once on new server
 ├── DISASTER_RECOVERY.md
+├── DEPLOYMENT_GUIDE.md
 ├── backup/
-│   ├── setup.sh
 │   ├── install_cron.sh
 │   ├── filestore_sync.sh
 │   ├── pgbackrest_full.sh

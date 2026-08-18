@@ -5,8 +5,8 @@
 set -euo pipefail
 
 # === CONFIGURATION (edit before running) ===
-REPO_DIR="${REPO_DIR:-/opt/odoo-19}"
-BACKUP_ROOT="${BACKUP_ROOT:-/opt/backups}"
+REPO_DIR="${REPO_DIR:-$HOME/odoo-19}"
+BACKUP_ROOT="${BACKUP_ROOT:-$HOME/backups}"
 STANZA="shaka_db"
 DB_IMAGE="odoo_19_db:pg16"
 PG_DATA_VOL="odoo_19_pg_data"
@@ -19,7 +19,7 @@ log() { echo "[$(date '+%F %T')] $*"; }
 log "Checking prerequisites..."
 command -v docker >/dev/null || { echo "Docker not installed"; exit 1; }
 command -v docker compose >/dev/null || { echo "Docker Compose plugin not installed"; exit 1; }
-docker compose version | grep -q "v2" || { echo "Docker Compose v2 required"; exit 1; }
+docker compose version | grep -q "v5" || { echo "Docker Compose v2 required"; exit 1; }
 
 # 2. Clone / copy project (assumes you already have the repo at $REPO_DIR)
 log "Using project at $REPO_DIR"
