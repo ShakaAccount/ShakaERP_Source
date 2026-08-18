@@ -20,18 +20,18 @@ This guide explains how to deploy the Odoo 19 stack on a fresh server with **con
 
 ```bash
 # Option A: clone from git (recommended)
-git clone <your-private-repo> ~/odoo-19
-cd ~/odoo-19
+git clone <your-private-repo> ~/Shaka
+cd ~/Shaka
 
 # Option B: copy the whole directory via scp/rsync from your workstation
-# scp -r odoo-19.0+e.20260223 user@server:~/odoo-19
+# scp -r odoo-19.0+e.20260223 user@server:~/Shaka
 ```
 
 ---
 
 ## 2. Provide Production Secrets (`.env`)
 
-Create `~/odoo-19/.env` **manually** – do **not** commit it.
+Create `~/Shaka/.env` **manually** – do **not** commit it.
 
 ```ini
 # Database Credentials
@@ -71,7 +71,7 @@ If this is a **brand‑new** deployment with no prior backups, you can skip this
 ## 4. Run the Initialization Script
 
 ```bash
-cd ~/odoo-19
+cd ~/Shaka
 chmod +x deploy_init.sh
 sudo ./deploy_init.sh
 ```
@@ -93,8 +93,8 @@ The script performs, in order:
 
 | Schedule | Command | Purpose |
 |----------|---------|---------|
-| `*/15 * * * *` | `~/odoo-19/backup/filestore_sync.sh` | Incremental rsync mirror of the filestore (RPO ≤ 15 min). |
-| `15 2 * * *` | `~/odoo-19/backup/pgbackrest_full.sh` | Daily full base backup at 02:15 (retention: 2 full + 7 days WAL). |
+| `*/15 * * * *` | `~/Shaka/backup/filestore_sync.sh` | Incremental rsync mirror of the filestore (RPO ≤ 15 min). |
+| `15 2 * * *` | `~/Shaka/backup/pgbackrest_full.sh` | Daily full base backup at 02:15 (retention: 2 full + 7 days WAL). |
 
 Both write logs to `~/backups/logs/`.
 

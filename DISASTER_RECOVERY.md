@@ -24,7 +24,7 @@ This document describes the backup architecture and step-by-step disaster recove
 
 ```bash
 # Repository root
-REPO=~/odoo-19
+REPO=~/Shaka
 BACKUPS=~/backups
 
 # Verify backups are healthy
@@ -53,7 +53,7 @@ $REPO/backup/filestore_sync.sh
 #### Step-by-Step Recovery
 
 ```bash
-cd ~/odoo-19
+cd ~/Shaka
 
 # 1. Stop application (web) to prevent new writes
 docker compose stop web
@@ -73,7 +73,7 @@ docker run --rm \
     --user postgres \
     -v odoo_19_pg_data:/var/lib/postgresql/data \
     -v ~/backups/pgbackrest:/var/lib/pgbackrest \
-    -v ~/odoo-19/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro \
+    -v ~/Shaka/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro \
     --entrypoint pgbackrest \
     odoo_19_db:pg16 \
     --stanza=shaka_db restore
@@ -111,7 +111,7 @@ docker compose exec -T -u postgres db psql -U shaka -d postgres -c "SELECT count
 #### Step-by-Step Recovery
 
 ```bash
-cd ~/odoo-19
+cd ~/Shaka
 
 # 1. Stop application (prevents new file writes during restore)
 docker compose stop web
@@ -158,8 +158,8 @@ curl -fsSL https://get.docker.com | sh
 docker compose version
 
 # Clone repository (or copy project files)
-git clone <your-repo> ~/odoo-19
-cd ~/odoo-19
+git clone <your-repo> ~/Shaka
+cd ~/Shaka
 
 # Restore .env file (database credentials, master password)
 # IMPORTANT: Keep .env secure and out of version control
@@ -169,7 +169,7 @@ cp /path/to/backup/.env .
 #### Recovery Procedure
 
 ```bash
-cd ~/odoo-19
+cd ~/Shaka
 
 # 1. Restore backup storage from off-site / NAS / cloud
 #    Ensure directory structure matches:
@@ -191,7 +191,7 @@ docker compose up -d db
 docker run --rm --user postgres \
     -v odoo_19_pg_data:/var/lib/postgresql/data \
     -v ~/backups/pgbackrest:/var/lib/pgbackrest \
-    -v ~/odoo-19/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro \
+    -v ~/Shaka/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro \
     --entrypoint pgbackrest odoo_19_db:pg16 \
     --stanza=shaka_db restore
 docker compose restart db
@@ -254,8 +254,8 @@ docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db info
 # 1. Create temporary restore on same host (different stanza name)
 docker run --rm --user postgres \
     -v odoo_19_pg_data:/var/lib/postgresql/data \
-    -v /home/russellzparadox/work/src_19e/backups/pgbackrest:/var/lib/pgbackrest \
-    -v /home/russellzparadox/work/src_19e/odoo-19.0+e.20260223/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro \
+    -v ~/backups/pgbackrest:/var/lib/pgbackrest \
+    -v ~/Shaka/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro \
     --entrypoint pgbackrest odoo_19_db:pg16 \
     --stanza=shaka_db --type=full --delta restore --target-action=promote --pg1-path=/var/lib/postgresql/data_temp
 
@@ -284,7 +284,7 @@ docker compose exec -T -u postgres db psql -U shaka -d postgres < /tmp/res_partn
 #!/usr/bin/env bash
 # /etc/cron.daily/odoo-backup-check
 
-REPO=~/odoo-19
+REPO=~/Shaka
 LOG=~/backups/logs/health_check.log
 
 {
@@ -409,7 +409,7 @@ tail -f ~/backups/logs/filestore_sync.log
 ## Appendix: File Inventory
 
 ```
-~/odoo-19/
+~/Shaka/
 ├── docker-compose.yml          # Stack definition
 ├── pgbackrest.conf             # pgBackRest configuration
 ├── db.Dockerfile               # PostgreSQL + pgBackRest image

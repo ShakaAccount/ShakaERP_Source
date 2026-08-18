@@ -5,7 +5,7 @@
 set -euo pipefail
 
 # === CONFIGURATION (edit before running) ===
-REPO_DIR="${REPO_DIR:-$HOME/odoo-19}"
+REPO_DIR="${REPO_DIR:-$HOME/Shaka}"
 BACKUP_ROOT="${BACKUP_ROOT:-$HOME/backups}"
 STANZA="shaka_db"
 DB_IMAGE="odoo_19_db:pg16"
@@ -15,44 +15,71 @@ ODOO_DATA_VOL="odoo_19_data"
 
 log() { echo "[$(date '+%F %T')] $*"; }
 
+# Generate a random password
+gen_pass() { openssl rand -base64 32 | tr -d '/+=' | cut -c1-32; }
+
 # 1. Prerequisites
 log "Checking prerequisites..."
 command -v docker >/dev/null || { echo "Docker not installed"; exit 1; }
 command -v docker compose >/dev/null || { echo "Docker Compose plugin not installed"; exit 1; }
-docker compose version | grep -q "v5" || { echo "Docker Compose v2 required"; exit 1; }
+docker compose version | grep -q "v2" || { echo "Docker Compose v2 required"; exit 1; }
 
 # 2. Clone / copy project (assumes you already have the repo at $REPO_DIR)
 log "Using project at $REPO_DIR"
 cd "$REPO_DIR"
 
-# 3. Restore .env from secure location (you must provide this)
+# 3. Create .env if missing (generate secure passwords)
 if [[ ! -f .env ]]; then
-    log "ERROR: .env not found. Copy your production .env to $REPO_DIR/.env"
-    echo "Required variables: POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, SHAKA_MASTER_PASSWORD"
-    exit 1
+    log "Generating .env with random passwords..."
+    POSTGRES_USER="shaka"
+    POSTGRES_PASSWORD="$(gen_pass)"
+    POSTGRES_DB="postgres"
+    SHAKA_MASTER_PASSWORD="$(gen_pass)"
+    cat > .env <<EOF
+# Database Credentials
+POSTGRES_USER=${POSTGRES_USER}
+POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+POSTGRES_DB=${POSTGRES_DB}
+
+# Shaka Settings
+SHAKA_MASTER_PASSWORD=${SHAKA_MASTER_PASSWORD}
+EOF
+    chmod 600 .env
+    log "Created .env (keep it safe!)"
+else
+    log ".env already exists, using existing credentials."
 fi
 
-# 4. Restore backup storage from off-site (rsync from your backup server)
+# Source .env for later use
+set -a
+source .env
+set +a
+
+# 4. Generate odoo.conf from template (substitute env vars)
+log "Generating odoo.conf from environment..."
+envsubst < odoo.conf > /tmp/odoo.conf.generated && mv /tmp/odoo.conf.generated odoo.conf
+
+# 5. Restore backup storage from off-site (rsync from your backup server)
 #    Uncomment and adjust the source:
 # log "Syncing backup storage from remote..."
 # rsync -avz --progress backup-user@backup-server:/backups/ "$BACKUP_ROOT/"
 
-# 5. Ensure backup directories exist
+# 6. Ensure backup directories exist
 mkdir -p "$BACKUP_ROOT/pgbackrest" "$BACKUP_ROOT/filestore" "$BACKUP_ROOT/logs"
 
-# 6. Fix pgBackRest ownership (postgres uid 999 inside container)
+# 7. Fix pgBackRest ownership (postgres uid 999 inside container)
 log "Fixing pgBackRest directory ownership..."
 docker run --rm -v "$BACKUP_ROOT":/opt/backups busybox:1.36 \
     sh -c 'chown -R 999:999 /opt/backups/pgbackrest && chmod -R 750 /opt/backups/pgbackrest'
 
-# 7. Build images
+# 8. Build images
 log "Building database image (pgvector + pgBackRest)..."
 docker compose build db
 
 log "Building filestore sync helper image..."
 docker build -f filestore-sync.Dockerfile -t odoo_filestore_sync .
 
-# 8. Start database
+# 9. Start database
 log "Starting database container..."
 docker compose up -d db
 
@@ -63,14 +90,14 @@ until [[ "$(docker inspect -f '{{.State.Health.Status}}' odoo_19_db 2>/dev/null)
 done
 log "Database healthy."
 
-# 9. Initialize pgBackRest stanza
+# 10. Initialize pgBackRest stanza
 log "Creating pgBackRest stanza '$STANZA'..."
 docker compose exec -T -u postgres db pgbackrest --stanza="$STANZA" stanza-create
 
 log "Running pgBackRest check..."
 docker compose exec -T -u postgres db pgbackrest --stanza="$STANZA" check
 
-# 10. Run initial full backup (if repo is empty)
+# 11. Run initial full backup (if repo is empty)
 if ! docker compose exec -T -u postgres db pgbackrest --stanza="$STANZA" info 2>/dev/null | grep -q "full backup:"; then
     log "No existing backups found. Running initial full backup..."
     docker compose exec -T -u postgres db pgbackrest --stanza="$STANZA" --type=full backup
@@ -78,19 +105,19 @@ else
     log "Existing backups detected. Skipping initial full backup."
 fi
 
-# 11. Start Odoo web + nginx
+# 12. Start Odoo web + nginx
 log "Starting web and nginx..."
 docker compose up -d web nginx
 
-# 12. Initial filestore sync (creates mirror)
+# 13. Initial filestore sync (creates mirror)
 log "Running initial filestore sync..."
 ./backup/filestore_sync.sh
 
-# 13. Install cron jobs for automated backups
+# 14. Install cron jobs for automated backups
 log "Installing cron jobs (filestore every 15 min, full DB daily at 02:15)..."
 ./backup/install_cron.sh
 
-# 14. Final verification
+# 15. Final verification
 log "Verifying backup health..."
 docker compose exec -T -u postgres db pgbackrest --stanza="$STANZA" check
 
