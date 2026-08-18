@@ -1,0 +1,13 @@
+FROM pgvector/pgvector:pg16
+
+# Install pgBackRest, AWS CLI, and cron
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    pgbackrest \
+    awscli \
+    cron \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create pgBackRest configuration directory
+RUN mkdir -p /etc/pgbackrest /var/log/pgbackrest /var/lib/pgbackrest \
+    && chown -R postgres:postgres /etc/pgbackrest /var/log/pgbackrest /var/lib/pgbackrest
