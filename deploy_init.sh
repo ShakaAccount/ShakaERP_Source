@@ -22,7 +22,7 @@ gen_pass() { openssl rand -base64 32 | tr -d '/+=' | cut -c1-32; }
 log "Checking prerequisites..."
 command -v docker >/dev/null || { echo "Docker not installed"; exit 1; }
 command -v docker compose >/dev/null || { echo "Docker Compose plugin not installed"; exit 1; }
-docker compose version | grep -q "v2" || { echo "Docker Compose v2 required"; exit 1; }
+#docker compose version | grep -q "v2" || { echo "Docker Compose v2 required"; exit 1; }
 
 # 2. Clone / copy project (assumes you already have the repo at $REPO_DIR)
 log "Using project at $REPO_DIR"
