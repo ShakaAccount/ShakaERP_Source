@@ -7948,7 +7948,7 @@ msgstr "محصول(ها) را برای بازپرداخت انتخاب کنید 
 #. odoo-javascript
 #: code:addons/point_of_sale/static/src/app/screens/payment_screen/payment_screen.js:0
 msgid "Select the shipping date"
-msgstr "انتخاب تاریخ ارسال"
+msgstr "تاریخ تحویل را انتخاب کنید"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_order_line__attribute_value_ids
