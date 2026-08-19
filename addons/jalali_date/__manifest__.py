@@ -11,6 +11,10 @@
         "views/res_users_views.xml",
     ],
     "assets": {
+        "web._assets_core": [
+            "jalali_date/static/src/js/jalali_utils.js",
+            "jalali_date/static/src/js/datetime_picker_patch.js",
+        ],
         "web.assets_backend": [
             "jalali_date/static/src/css/jalali_date.css",
             "jalali_date/static/src/js/jalali_utils.js",
