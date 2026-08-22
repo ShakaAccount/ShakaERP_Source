@@ -1,6 +1,8 @@
 
 services:
   db:
+    environment:
+          - TZ=Asia/Tehran
     build:
       context: .
       dockerfile: db.Dockerfile
@@ -36,6 +38,8 @@ services:
       retries: 5
 
   web:
+    environment:
+          - TZ=Asia/Tehran
     build:
       context: .
       dockerfile: Dockerfile
@@ -60,6 +64,8 @@ services:
     command: ./odoo-bin -c /etc/odoo/odoo.conf --db_host=db -r ${POSTGRES_USER} -w ${POSTGRES_PASSWORD} -u all
 
   nginx:
+    environment:
+          - TZ=Asia/Tehran
     image: nginx:alpine
     container_name: odoo_19_nginx
     restart: unless-stopped
