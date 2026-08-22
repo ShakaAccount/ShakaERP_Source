@@ -59,7 +59,7 @@ fi
 
 cd "$REPO_DIR"
 
-RESTORE_ARGS=(--stanza="$STANZA")
+RESTORE_ARGS=(--stanza="$STANZA" restore)
 if [[ -n "$TARGET" ]]; then
     # target-action=promote: auto-promote at target instead of pausing in recovery
     RESTORE_ARGS+=(--type=time --target="$TARGET" --target-action=promote)

@@ -67,8 +67,36 @@ set -a
 source .env
 set +a
 
-# 4. Generate odoo.conf from template (substitute env vars)
-log "Generating odoo.conf from environment..."
+# 4. Generate odoo.conf from embedded template (substitute env vars)
+log "Generating odoo.conf from template..."
+cat > odoo.conf <<'EOFCONF'
+[options]
+; Database
+db_host = ${POSTGRES_HOST:-db}
+db_port = ${POSTGRES_PORT:-5432}
+db_user = ${POSTGRES_USER}
+db_password = ${POSTGRES_PASSWORD}
+
+; Security
+admin_passwd = ${SHAKA_MASTER_PASSWORD}
+
+; Proxy
+proxy_mode = True
+
+; Paths
+addons_path = /opt/odoo/addons,/opt/odoo/custom_addons
+data_dir = /var/lib/odoo
+
+; Logging
+log_level = info
+
+; Performance
+workers = ${WORKERS:-4}
+max_cron_threads = ${MAX_CRON_THREADS:-2}
+gevent_port = ${GEVENT_PORT:-8072}
+EOFCONF
+
+# Now substitute the environment variables
 envsubst < odoo.conf > /tmp/odoo.conf.generated && mv /tmp/odoo.conf.generated odoo.conf
 
 # 5. Restore backup storage from off-site (rsync from your backup server)

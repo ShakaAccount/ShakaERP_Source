@@ -34,6 +34,9 @@ docker compose -f $REPO/docker-compose.yml exec -T -u postgres db pgbackrest --s
 # List available backups
 docker compose -f $REPO/docker-compose.yml exec -T -u postgres db pgbackrest --stanza=shaka_db info
 
+# Full database restore (latest or point-in-time)
+$REPO/backup/restore.sh [--target 'YYYY-MM-DD HH:MM:SS'] [--yes]
+
 # Manual full backup (run before maintenance)
 $REPO/backup/pgbackrest_full.sh
 
@@ -56,52 +59,28 @@ $REPO/backup/filestore_sync.sh
 ```bash
 cd ~/Shaka
 
-# 1. Stop application (web) to prevent new writes
-docker compose stop web
+# Use the automated restore script (handles preflight, confirmation, readiness wait)
+# Latest backup:
+./backup/restore.sh --yes
 
-# 2. Stop database
-docker compose stop db
+# Point-in-time (replace timestamp):
+./backup/restore.sh --target '2026-08-18 14:30:00' --yes
 
-# 3. Empty the PostgreSQL data volume (fresh restore target)
-docker run --rm \
-    -v odoo_19_pg_data:/var/lib/postgresql/data \
-    --entrypoint sh \
-    odoo_19_db:pg16 \
-    -c 'rm -rf /var/lib/postgresql/data/* && chown -R postgres:postgres /var/lib/postgresql/data'
-
-# 4A. Full restore (latest backup)
-docker run --rm \
-    --user postgres \
-    -v odoo_19_pg_data:/var/lib/postgresql/data \
-    -v ~/backups/pgbackrest:/var/lib/pgbackrest \
-    -v ~/Shaka/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro \
-    --entrypoint pgbackrest \
-    odoo_19_db:pg16 \
-    --stanza=shaka_db restore
-
-# 4B. Point-in-time restore (replace timestamp as needed)
-# docker run --rm ... pgbackrest --stanza=shaka_db --type=time --target='2026-08-18 14:30:00' restore
-
-# 5. Start database
-docker compose up -d db
-
-# 6. Verify database health
-docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db check
-
-# 7. Start application
-docker compose up -d web
+# Or without --yes for interactive confirmation
 ```
 
-**Note**: This scenario assumes you're on the same host — `.env` and `odoo.conf` are already in place. If they were accidentally deleted, restore from `~/backups/config/` before step 7.
-
 **Verification**:
+
 ```bash
 # Check Odoo can connect
 docker compose logs web | tail -20
 
-# Verify data integrity
-docker compose exec -T -u postgres db psql -U shaka -d postgres -c "SELECT count(*) FROM ir_module_module WHERE state='installed';"
+# Verify data integrity (source .env first to get correct user)
+source .env
+docker compose exec -T -u postgres db psql -U "$POSTGRES_USER" -d postgres -c "SELECT count(*) FROM ir_module_module WHERE state='installed';"
 ```
+
+**Note**: This scenario assumes you're on the same host — `.env` and `odoo.conf` are already in place. If they were accidentally deleted, restore from `~/backups/config/` before running the restore script.
 
 ---
 
@@ -136,15 +115,17 @@ docker run --rm \
 docker compose up -d web
 ```
 
-**Note**: This scenario assumes you're on the same host — `.env` and `odoo.conf` are already in place. If they were accidentally deleted, restore from `~/backups/config/` before step 4.
-
 **Verification**:
+
 ```bash
 # Check attachment count
-docker compose exec -T -u postgres db psql -U shaka -d postgres -c "SELECT count(*) FROM ir_attachment WHERE store_fname IS NOT NULL;"
+source .env
+docker compose exec -T -u postgres db psql -U "$POSTGRES_USER" -d postgres -c "SELECT count(*) FROM ir_attachment WHERE store_fname IS NOT NULL;"
 
 # Spot-check a few attachments via Odoo UI
 ```
+
+**Note**: This scenario assumes you're on the same host — `.env` and `odoo.conf` are already in place. If they were accidentally deleted, restore from `~/backups/config/` before step 4.
 
 ---
 
@@ -192,36 +173,10 @@ docker run --rm -v ~/backups:/opt/backups busybox:1.36 \
 docker compose build db
 docker build -f filestore-sync.Dockerfile -t odoo_filestore_sync .
 
-# 5. Restore database
-#    Initialize a fresh cluster first (this creates the odoo_19_pg_data
-#    volume and finishes initdb), then STOP postgres before restoring.
-docker compose up -d db
-# wait until db shows "healthy" (initdb must complete):
-docker compose ps
-docker compose stop db
+# 5. Restore database (uses the automated script with all safety checks)
+./backup/restore.sh --yes
 
-#    Wipe the freshly-initialized data directory.
-#    pgBackRest refuses to restore into a non-empty PGDATA — skipping this
-#    step is the usual cause of "restore" errors on a new host.
-docker run --rm \
-    -v odoo_19_pg_data:/var/lib/postgresql/data \
-    --entrypoint sh \
-    odoo_19_db:pg16 \
-    -c 'rm -rf /var/lib/postgresql/data/* && chown -R postgres:postgres /var/lib/postgresql/data'
-
-#    Run the restore (database stopped)
-docker run --rm --user postgres \
-    -v odoo_19_pg_data:/var/lib/postgresql/data \
-    -v ~/backups/pgbackrest:/var/lib/pgbackrest \
-    -v ~/Shaka/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro \
-    --entrypoint pgbackrest odoo_19_db:pg16 \
-    --stanza=shaka_db restore
-
-#    Start database and verify it recovered from the restored data
-docker compose up -d db
-docker compose exec -T -u postgres db pg_isready
-
-# 6. Restore filestore (Scenario 2, step 2)
+# 6. Restore filestore
 docker run --rm \
     -v odoo_19_data:/dst \
     -v ~/backups/filestore:/src:ro \
@@ -237,6 +192,7 @@ docker compose up -d
 ```
 
 **Verification**:
+
 ```bash
 # All services healthy?
 docker compose ps
@@ -263,8 +219,8 @@ curl -I http://localhost
 # Find the timestamp before migration started
 docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db info
 
-# Restore to that timestamp (see Scenario 1, step 4B)
-# --target='2026-08-18 10:00:00'
+# Restore to that timestamp using the automated script
+./backup/restore.sh --target '2026-08-18 10:00:00' --yes
 ```
 
 ---
@@ -273,31 +229,18 @@ docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db info
 
 **When to use**: Accidental `DELETE FROM res_partner WHERE ...` without WHERE clause.
 
-**Approach**: Restore to temporary database, extract data, copy back.
+**Approach**: The current setup only does physical backups (pgBackRest), which don't support single-table recovery directly. You have two options:
+
+**Option A — Restore to a temporary database and extract the table** (requires a spare server or extra disk):
 
 ```bash
-# 1. Create temporary restore on same host (different stanza name)
-docker run --rm --user postgres \
-    -v odoo_19_pg_data:/var/lib/postgresql/data \
-    -v ~/backups/pgbackrest:/var/lib/pgbackrest \
-    -v ~/Shaka/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro \
-    --entrypoint pgbackrest odoo_19_db:pg16 \
-    --stanza=shaka_db --type=full --delta restore --target-action=promote --pg1-path=/var/lib/postgresql/data_temp
-
-# 2. Start temporary PostgreSQL on different port
-# (simpler: use pg_dump from restored data directory)
-
-# 3. Dump specific table
-docker run --rm \
-    -v odoo_19_pg_data:/var/lib/postgresql/data \
-    --entrypoint pg_dump odoo_19_db:pg16 \
-    -U shaka -d postgres -t res_partner > /tmp/res_partner.sql
-
-# 4. Restore into production
-docker compose exec -T -u postgres db psql -U shaka -d postgres < /tmp/res_partner.sql
+# This is complex with physical-only backups. Recommended: add a weekly logical backup cron.
+# See "Add a Logical Backup (pg_dump) for Table-Level Recovery" in Maintenance Operations.
 ```
 
-> **Note**: For single-table recovery, consider using `pg_dump`/`pg_restore` from a logical backup instead. The current setup only does physical backups. Add a nightly `pg_dump` cron if this scenario is likely.
+**Option B — If you have a weekly logical backup (pg_dump)**, restore that dump to a temporary DB, extract the table, and copy back.
+
+> **Action Required**: Add a nightly/weekly `pg_dump` cron if single-table recovery is a likely scenario. See Maintenance Operations below.
 
 ---
 
@@ -359,8 +302,13 @@ docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db check --check
 ### Add a Logical Backup (pg_dump) for Table-Level Recovery
 
 ```bash
-# Add to crontab (weekly):
-# 0 3 * * 0 docker compose exec -T -u postgres db pg_dump -U shaka -d postgres -Fc > /backups/logical/odoo_$(date +\%Y\%m\%d).dump
+# Add to crontab (weekly, e.g. Sunday 03:00):
+# 0 3 * * 0 cd ~/Shaka && docker compose exec -T -u postgres db pg_dump -U ${POSTGRES_USER} -d postgres -Fc > ~/backups/logical/odoo_$(date +\%Y\%m\%d).dump
+
+# After adding, single-table recovery becomes:
+# 1. Restore logical dump to temporary database
+# 2. pg_dump the specific table
+# 3. psql the table into production
 ```
 
 ---
@@ -379,6 +327,7 @@ docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db check --check
 2. **Access Control**: 
    - `$BACKUPS/pgbackrest/` owned by uid 999 (postgres), mode 750
    - `$BACKUPS/filestore/` owned by host user
+   - `$BACKUPS/config/` owned by host user, mode 600 for `.env`
    - Restrict SSH/NFS access to backup directory
 
 3. **Off-Site Replication**: 
@@ -392,18 +341,22 @@ docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db check --check
 ## Troubleshooting
 
 ### pgBackRest "role postgres does not exist"
+
 ```bash
-# Ensure pg1-user=shaka is set in pgbackrest.conf [shaka_db] section
+# Ensure pg1-user=odoo is set in pgbackrest.conf [shaka_db] section
+# (matches POSTGRES_USER=odoo in .env)
 # Restart db container after config change
 docker compose restart db
 ```
 
 ### "repo1-type=path not allowed"
+
 ```bash
 # Use repo1-type=posix (fixed in pgbackrest.conf)
 ```
 
 ### Filestore rsync "No such file or directory"
+
 ```bash
 # Filestore doesn't exist until Odoo creates it on first run
 docker compose up -d web
@@ -411,6 +364,7 @@ docker compose up -d web
 ```
 
 ### Cron Jobs Not Running
+
 ```bash
 # Check cron daemon
 systemctl status cron
@@ -426,8 +380,8 @@ tail -f ~/backups/logs/filestore_sync.log
 
 - **Primary**: Platform team
 - **Backup Storage**: NAS at `backup-server:/backups/`
-- **Runbook Version**: 1.0 (2026-08-18)
-- **Next Review**: 2026-11-18
+- **Runbook Version**: 2.0 (2026-08-22)
+- **Next Review**: 2026-11-22
 
 ---
 
@@ -436,7 +390,7 @@ tail -f ~/backups/logs/filestore_sync.log
 ```
 ~/Shaka/
 ├── docker-compose.yml          # Stack definition
-├── pgbackrest.conf             # pgBackRest configuration
+├── pgbackrest.conf             # pgBackRest configuration (pg1-user=odoo)
 ├── db.Dockerfile               # PostgreSQL + pgBackRest image
 ├── filestore-sync.Dockerfile   # rsync helper image
 ├── deploy_init.sh              # ← run once on new server
@@ -446,7 +400,7 @@ tail -f ~/backups/logs/filestore_sync.log
 │   ├── install_cron.sh         # Installs 15-min filestore + daily full backup cron
 │   ├── filestore_sync.sh       # Incremental rsync mirror (RPO 15min)
 │   ├── pgbackrest_full.sh      # Daily full backup trigger
-│   └── restore.sh              # Full disaster restore (database only)
+│   └── restore.sh              # Full disaster restore (database only, with preflight, PITR, wait)
 ├── .env                        # Credentials (NOT in git)
 └── odoo.conf                   # Odoo config (NOT in git, generated from template)
 ```
