@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Privilege for the new groups -->
+    <record model="res.groups.privilege" id="res_groups_privilege_pos_free_items">
+        <field name="name">POS Free Items</field>
+        <field name="sequence">22</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+    </record>
+
     <!-- Groups -->
     <record id="group_pos_free_item_manager" model="res.groups">
         <field name="name">POS Free Item Manager</field>
-        <field name="category_id" ref="base.module_category_point_of_sale"/>
+        <field name="sequence">20</field>
+        <field name="privilege_id" ref="res_groups_privilege_pos_free_items"/>
         <field name="implied_ids" eval="[(4, ref('point_of_sale.group_pos_manager'))]"/>
     </record>
 
     <record id="group_pos_free_item_user" model="res.groups">
         <field name="name">POS Free Item User</field>
-        <field name="category_id" ref="base.module_category_point_of_sale"/>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="res_groups_privilege_pos_free_items"/>
         <field name="implied_ids" eval="[(4, ref('point_of_sale.group_pos_user'))]"/>
     </record>
 

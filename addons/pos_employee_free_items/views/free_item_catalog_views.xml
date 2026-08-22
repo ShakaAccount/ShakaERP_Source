@@ -4,11 +4,11 @@
         <field name="name">pos.free.item.catalog.tree</field>
         <field name="model">pos.free.item.catalog</field>
         <field name="arch" type="xml">
-            <tree string="Free-Item Catalogue" editable="bottom">
+            <list string="Free-Item Catalogue" editable="bottom">
                 <field name="sequence" widget="handle"/>
                 <field name="product_id"/>
                 <field name="active"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -37,26 +37,24 @@
 
     <menuitem id="menu_pos_free_item_catalog"
               name="Free-Item Catalogue"
-              parent="point_of_sale.menu_point_of_sale_root"
+              parent="point_of_sale.menu_point_of_sale"
               action="action_pos_free_item_catalog"
               groups="pos_employee_free_items.group_pos_free_item_manager"
               sequence="30"/>
 
-    <!-- Templates for POS -->
-    <templates id="template" xml:space="preserve">
-        <t t-name="FreeItemButton" owl="1">
-            <button t-att-class="'btn btn-secondary btn-sm' + (props.product ? '' : ' d-none')"
-                    t-on-click="onClick">
-                <i class="fa fa-gift"/> <t t-esc="props.product.display_name"/>
-            </button>
-        </t>
+    <!-- POS QWeb Templates -->
+    <template id="FreeItemButton" name="Free Item Button">
+        <button t-att-class="'btn btn-secondary btn-sm' + (props.product ? '' : ' d-none')"
+                t-on-click="onClick">
+            <i class="fa fa-gift"/> <t t-esc="props.product.display_name"/>
+        </button>
+    </template>
 
-        <t t-name="FreeItemList" owl="1">
-            <div class="d-flex flex-wrap gap-2 mt-2">
-                <t t-foreach="state.catalog" t-as="item">
-                    <FreeItemButton t-key="item.id" t-props="item"/>
-                </t>
-            </div>
-        </t>
-    </templates>
+    <template id="FreeItemList" name="Free Item List">
+        <div class="d-flex flex-wrap gap-2 mt-2">
+            <t t-foreach="state.catalog" t-as="item">
+                <FreeItemButton t-key="item.id" t-props="item"/>
+            </t>
+        </div>
+    </template>
 </odoo>

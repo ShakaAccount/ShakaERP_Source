@@ -9,8 +9,8 @@
         "hr"
     ],
     "data": [
-        "security/ir.model.access.csv",
         "security/pos_free_item_security.xml",
+        "security/ir.model.access.csv",
         "views/free_item_catalog_views.xml",
         "views/employee_free_allowance_views.xml",
         "views/pos_config_views.xml",

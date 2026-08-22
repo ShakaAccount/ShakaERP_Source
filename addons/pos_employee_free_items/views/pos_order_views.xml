@@ -5,15 +5,15 @@
         <field name="model">pos.order</field>
         <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//notebook/page[@string='Order Lines']" position="after">
-                <page string="Free Items">
+            <xpath expr="//notebook/page[@name='products']" position="after">
+                <page string="Free Items" name="free_items">
                     <field name="free_item_line_ids" readonly="1">
-                        <tree>
+                        <list>
                             <field name="product_id"/>
                             <field name="qty"/>
                             <field name="price_unit"/>
                             <field name="is_free_item"/>
-                        </tree>
+                        </list>
                     </field>
                 </page>
             </xpath>

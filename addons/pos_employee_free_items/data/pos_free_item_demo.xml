@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
     <!-- Example free items – remove or adapt for production -->
-    <record id="free_item_coffee" model="pos.free.item.catalog">
-        <field name="product_id" ref="product.product_product_4"/>  <!-- assume coffee exists -->
-        <field name="sequence">1</field>
-    </record>
-    <record id="free_item_croissant" model="pos.free.item.catalog">
-        <field name="product_id" ref="product.product_product_5"/>
-        <field name="sequence">2</field>
-    </record>
+    <!-- Demo data commented out as it references specific product XMLIDs -->
 </odoo>
