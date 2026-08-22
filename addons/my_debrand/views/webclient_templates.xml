@@ -6,6 +6,14 @@
         and remove the "Powered by Odoo" / "Manage Databases" footer.
     -->
     <template id="login_layout" name="Login Layout" inherit_id="web.login_layout">
+        <!-- Page title: "Shaka" instead of "Odoo" -->
+        <xpath expr="//t[@t-name='web.login_layout']" position="before">
+            <template id="web_login_layout_title_fix" inherit_id="web.layout">
+                <xpath expr="//head/title" position="replace">
+                    <title t-esc="title or 'Shaka'"/>
+                </xpath>
+            </template>
+        </xpath>
         <xpath expr="//div[hasclass('text-center', 'pb-3', 'border-bottom', 'mb-4')]" position="replace">
             <div class="text-center pb-3 border-bottom mb-4">
                 <img src="/my_debrand/static/img/SHAKA.png" alt="Logo" style="max-height:200px; max-width: 100%; width:auto"/>
