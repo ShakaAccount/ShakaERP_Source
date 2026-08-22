@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_free_allowance_tree" model="ir.ui.view">
+        <field name="name">employee.free.allowance.tree</field>
+        <field name="model">employee.free.allowance</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Free Allowances" editable="bottom">
+                <field name="employee_id"/>
+                <field name="date"/>
+                <field name="used_qty"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_employee_free_allowance" model="ir.actions.act_window">
+        <field name="name">Employee Free Allowances</field>
+        <field name="res_model">employee.free.allowance</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_employee_free_allowance"
+              name="Employee Free Allowances"
+              parent="point_of_sale.menu_point_of_sale_root"
+              action="action_employee_free_allowance"
+              groups="pos_employee_free_items.group_pos_free_item_manager"
+              sequence="31"/>
+</odoo>

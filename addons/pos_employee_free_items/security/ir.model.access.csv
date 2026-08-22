@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pos_free_item_catalog_manager,pos.free.item.catalog.manager,model_pos_free_item_catalog,group_pos_free_item_manager,1,1,1,1
+access_pos_free_item_catalog_user,pos.free.item.catalog.user,model_pos_free_item_catalog,group_pos_free_item_user,1,0,0,0
+access_employee_free_allowance_manager,employee.free.allowance.manager,model_employee_free_allowance,group_pos_free_item_manager,1,1,1,1
+access_employee_free_allowance_user,employee.free.allowance.user,model_employee_free_allowance,group_pos_free_item_user,1,0,0,0
