@@ -254,8 +254,7 @@ msgstr "۴۵"
 #: model:ir.model.fields,help:point_of_sale.field_pos_order__ticket_code
 msgid ""
 "5 digits alphanumeric code to be used by portal user to request an invoice"
-msgstr ""
-"کد ۵ رقمی الفبایی-عددی که توسط کاربر پورتال برای درخواست فاکتور استفاده می‌شود"
+msgstr "کد ۵ رقمی الفبایی-عددی که توسط کاربر پورتال برای درخواست فاکتور استفاده می‌شود"
 
 #. module: point_of_sale
 #: model:product.template,description_sale:point_of_sale.product_template_blue_denim_jeans
@@ -518,8 +517,7 @@ msgstr "؟ کلیک بر روی \"تأیید\" باعث اعتبارسنجی پ�
 msgid ""
 "A globally unique identifier for this pos configuration, used to prevent "
 "conflicts in client-generated data."
-msgstr ""
-"یک شناسه منحصر به فرد جهانی برای این پیکربندی POS، که برای جلوگیری از تداخل در داده‌های تولید شده توسط کلاینت استفاده می‌شود."
+msgstr "یک شناسه منحصر به فرد جهانی برای این پیکربندی POS، که برای جلوگیری از تداخل در داده‌های تولید شده توسط کلاینت استفاده می‌شود."
 
 #. module: point_of_sale
 #: model:ir.model.constraint,message:point_of_sale.constraint_pos_note_name_unique
@@ -542,8 +540,7 @@ msgstr "یک درخواست هنوز در پس‌زمینه در حال پردا
 msgid ""
 "A session is a period of time, usually one day, during which you sell "
 "through the Point of Sale."
-msgstr ""
-"یک جلسه یک بازه زمانی است، معمولاً یک روز، که در طی آن از طریق پایانه فروش به فروش می‌پردازید."
+msgstr "یک جلسه یک بازه زمانی است، معمولاً یک روز، که در طی آن از طریق پایانه فروش به فروش می‌پردازید."
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.pos_config_view_form
@@ -551,8 +548,7 @@ msgstr ""
 msgid ""
 "A session is currently opened for this PoS. Some settings can only be "
 "changed after the session is closed."
-msgstr ""
-"در حال حاضر یک جلسه برای این POS باز است. برخی تنظیمات تنها پس از بسته شدن جلسه قابل تغییر هستند."
+msgstr "در حال حاضر یک جلسه برای این POS باز است. برخی تنظیمات تنها پس از بسته شدن جلسه قابل تغییر هستند."
 
 #. module: point_of_sale
 #: model:ir.model.fields,help:point_of_sale.field_pos_order__sequence_number
@@ -915,8 +911,7 @@ msgstr "همه یادداشت‌ها"
 msgid ""
 "All payment methods must be in the same currency as the Sales Journal or the "
 "company currency if that is not set."
-msgstr ""
-"همه روش‌های پرداخت باید به یک ارز با دفتر روزنامه فروش یا ارز شرکت باشند (در صورت عدم تنظیم)."
+msgstr "همه روش‌های پرداخت باید به یک ارز با دفتر روزنامه فروش یا ارز شرکت باشند (در صورت عدم تنظیم)."
 
 #. module: point_of_sale
 #: model:ir.model.fields,help:point_of_sale.field_pos_preset__is_return
@@ -1022,9 +1017,7 @@ msgstr "مبلغ:"
 msgid ""
 "An error has occurred when trying to close the session.\n"
 "You will be redirected to the back-end to manually close the session."
-msgstr ""
-"هنگام تلاش برای بستن جلسه خطایی رخ داد.\n"
-"برای بستن دستی جلسه به بخش مدیریت هدایت خواهید شد."
+msgstr "هنگام تلاش برای بستن جلسه خطایی رخ داد.\nبرای بستن دستی جلسه به بخش مدیریت هدایت خواهید شد."
 
 #. module: point_of_sale
 #. odoo-javascript

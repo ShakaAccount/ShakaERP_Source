@@ -10,7 +10,7 @@ patch(InvoiceButton.prototype, {
             !["sent", "demo"].includes(this.props.order.l10n_jo_edi_pos_state)
         ) {
             this.dialog.add(WarningDialog, {
-                title: _t("Odoo Warning"),
+                title: _t("Shaka Warning"),
                 message: _t(
                     "Please synchronize this order with JoFotara first by clicking on Details > JoFotara (Jordan)"
                 ),

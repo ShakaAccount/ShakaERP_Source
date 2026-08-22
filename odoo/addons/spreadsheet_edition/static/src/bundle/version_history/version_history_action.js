@@ -330,7 +330,7 @@ export class VersionHistoryAction extends Component {
         if (this.model.session.serverRevisionId !== this.state.currentRevisionId) {
             if (!this.fromSnapshot) {
                 this.dialog.add(ConfirmationDialog, {
-                    title: _t("Odoo Spreadsheet"),
+                    title: _t("Shaka Spreadsheet"),
                     body: _t(
                         "There are missing revisions that prevent to restore the whole edition history.\n\
 Would you like to load the more recent modifications?"
@@ -344,7 +344,7 @@ Would you like to load the more recent modifications?"
                 });
             } else {
                 this.dialog.add(ConfirmationDialog, {
-                    title: _t("Odoo Spreadsheet"),
+                    title: _t("Shaka Spreadsheet"),
                     body: _t(
                         "The history of your spreadsheet is corrupted and you are likely missing recent revisions. This feature cannot be used."
                     ),

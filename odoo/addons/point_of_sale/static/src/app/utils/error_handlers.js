@@ -16,7 +16,7 @@ export function handleRPCError(error, dialog) {
             });
         } else {
             dialog.add(AlertDialog, {
-                title: _t("Odoo Server Error"),
+                title: _t("Shaka Server Error"),
                 body: data.message,
             });
         }

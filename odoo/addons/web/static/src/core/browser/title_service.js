@@ -35,7 +35,7 @@ export const titleService = {
 
         function updateTitle() {
             const counter = Object.values(titleCounters).reduce((acc, count) => acc + count, 0);
-            const name = Object.values(titleParts).join(" - ") || "Odoo";
+            const name = Object.values(titleParts).join(" - ") || "Shaka";
             if (!counter) {
                 document.title = name;
             } else {

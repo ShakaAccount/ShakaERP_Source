@@ -44,7 +44,7 @@ test("ErrorDialog with traceback", async () => {
     await click("main button");
     await animationFrame();
     expect(queryAllTexts("main .clearfix p")).toEqual([
-        "Odoo Error",
+        "Shaka Error",
         "Something bad happened",
         "Occured on 2019-03-11 09:30:00 GMT",
     ]);
@@ -77,7 +77,7 @@ test("Client ErrorDialog with traceback", async () => {
     await click("main button");
     await animationFrame();
     expect(queryAllTexts("main .clearfix p")).toEqual([
-        "Odoo Client Error",
+        "Shaka Client Error",
         "Something bad happened",
         "Occured on 2019-03-11 09:30:00 GMT",
     ]);
@@ -183,7 +183,7 @@ test("RedirectWarningDialog", async () => {
         },
     });
     expect(".o_dialog").toHaveCount(1);
-    expect("header .modal-title").toHaveText("Odoo Warning");
+    expect("header .modal-title").toHaveText("Shaka Warning");
     expect("main").toHaveText("Some strange unreadable message");
     expect(queryAllTexts("footer button")).toEqual(["Buy book on cryptography", "Close"]);
 
@@ -219,7 +219,7 @@ test("SessionExpiredDialog", async () => {
     await mountWithCleanup(SessionExpiredDialog, { env, props: { close() {} } });
     expect(".o_dialog").toHaveCount(1);
     expect(".o_dialog").toHaveCount(1);
-    expect("header .modal-title").toHaveText("Odoo Session Expired");
+    expect("header .modal-title").toHaveText("Shaka Session Expired");
     expect("main p").toHaveText(
         "Your Odoo session expired. The current page is about to be refreshed."
     );

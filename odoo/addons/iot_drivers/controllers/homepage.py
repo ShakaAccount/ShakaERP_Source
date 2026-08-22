@@ -228,7 +228,7 @@ class IotBoxOwlHomePage(http.Controller):
         interfaces_list = helpers.get_handlers_files_to_load(
             file_path('iot_drivers/iot_handlers/interfaces'))
         return json.dumps({
-            'title': "Odoo's IoT Box - Handlers list",
+            'title': "Shaka's IoT Box - Handlers list",
             'breadcrumb': 'Handlers list',
             'drivers_list': drivers_list,
             'interfaces_list': interfaces_list,

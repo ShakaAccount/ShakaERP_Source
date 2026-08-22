@@ -12,10 +12,10 @@ import { _t } from "@web/core/l10n/translation";
  */
 
 const CHART_PLACEHOLDER_DISPLAY_NAME = {
-    odoo_bar: _t("Odoo Bar Chart"),
-    odoo_line: _t("Odoo Line Chart"),
-    odoo_pie: _t("Odoo Pie Chart"),
-    odoo_radar: _t("Odoo Radar Chart"),
+    odoo_bar: _t("Shaka Bar Chart"),
+    odoo_line: _t("Shaka Line Chart"),
+    odoo_pie: _t("Shaka Pie Chart"),
+    odoo_radar: _t("Shaka Radar Chart"),
 };
 
 export class OdooChartCorePlugin extends OdooCorePlugin {

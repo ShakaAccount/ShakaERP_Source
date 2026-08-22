@@ -102,7 +102,7 @@ export function useDocumentView(helpers) {
         ]);
         if (!checkBaseAutomation > 0) {
             return dialogService.add(PromoteStudioAutomationDialog, {
-                title: _t("Odoo Studio - Customize workflows in minutes"),
+                title: _t("Shaka Studio - Customize workflows in minutes"),
             });
         }
         const userHasAccessRight = await user.checkAccessRight("base.automation", "create");

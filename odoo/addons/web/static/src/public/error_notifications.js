@@ -13,7 +13,7 @@ odooExceptionTitleMap.forEach((title, exceptionName) => {
 });
 
 const sessionExpired = {
-    title: _t("Odoo Session Expired"),
+    title: _t("Shaka Session Expired"),
     message: _t("Your Odoo session expired. The current page is about to be refreshed."),
     buttons: [
         {

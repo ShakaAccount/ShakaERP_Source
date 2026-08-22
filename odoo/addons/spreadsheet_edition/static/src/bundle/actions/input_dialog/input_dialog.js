@@ -22,7 +22,7 @@ export class InputDialog extends Component {
     }
 
     get defaultTitle() {
-        return _t("Odoo Spreadsheet");
+        return _t("Shaka Spreadsheet");
     }
 
     confirm() {

@@ -47,7 +47,7 @@ export const odooExceptionTitleMap = new Map(
 export class ErrorDialog extends Component {
     static template = "web.ErrorDialog";
     static components = { Dialog };
-    static title = _t("Odoo Error");
+    static title = _t("Shaka Error");
     static showTracebackButtonText = _t("See technical details");
     static hideTracebackButtonText = _t("Hide technical details");
     static props = { ...standardErrorDialogProps };
@@ -87,13 +87,13 @@ export class ErrorDialog extends Component {
 // Client Error Dialog
 // -----------------------------------------------------------------------------
 export class ClientErrorDialog extends ErrorDialog {}
-ClientErrorDialog.title = _t("Odoo Client Error");
+ClientErrorDialog.title = _t("Shaka Client Error");
 
 // -----------------------------------------------------------------------------
 // Network Error Dialog
 // -----------------------------------------------------------------------------
 export class NetworkErrorDialog extends ErrorDialog {}
-NetworkErrorDialog.title = _t("Odoo Network Error");
+NetworkErrorDialog.title = _t("Shaka Network Error");
 
 // -----------------------------------------------------------------------------
 // RPC Error Dialog
@@ -119,13 +119,13 @@ export class RPCErrorDialog extends ErrorDialog {
         }
         switch (this.props.type) {
             case "server":
-                this.title = _t("Odoo Server Error");
+                this.title = _t("Shaka Server Error");
                 break;
             case "script":
-                this.title = _t("Odoo Client Error");
+                this.title = _t("Shaka Client Error");
                 break;
             case "network":
-                this.title = _t("Odoo Network Error");
+                this.title = _t("Shaka Network Error");
                 break;
         }
     }
@@ -162,7 +162,7 @@ export class WarningDialog extends Component {
         if (this.props.exceptionName && odooExceptionTitleMap.has(this.props.exceptionName)) {
             return odooExceptionTitleMap.get(this.props.exceptionName).toString();
         }
-        return this.props.title || _t("Odoo Warning");
+        return this.props.title || _t("Shaka Warning");
     }
 }
 
@@ -178,7 +178,7 @@ export class RedirectWarningDialog extends Component {
         this.actionService = useService("action");
         const { data, subType } = this.props;
         const [message, actionId, buttonText, additionalContext] = data.arguments;
-        this.title = capitalize(subType) || _t("Odoo Warning");
+        this.title = capitalize(subType) || _t("Shaka Warning");
         this.message = message;
         this.actionId = actionId;
         this.buttonText = buttonText;

@@ -48,7 +48,7 @@ export class CashMoveListPopup extends Component {
             this.props.cashMoves = this.props.cashMoves.filter((cashMove) => cashMove.id !== cm.id);
         } catch (error) {
             this.dialog.add(AlertDialog, {
-                title: _t("Odoo Server Error"),
+                title: _t("Shaka Server Error"),
                 body: error.data.message,
             });
             throw error;

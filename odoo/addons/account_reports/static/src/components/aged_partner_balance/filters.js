@@ -13,7 +13,7 @@ export class AgedPartnerBalanceFilters extends AccountReportFilters {
         const agingInterval = parseInt(ev.target.value);
         if (agingInterval < 1) {
             this.dialog.add(WarningDialog, {
-                title: _t("Odoo Warning"),
+                title: _t("Shaka Warning"),
                 message: _t("Intervals cannot be smaller than 1"),
             });
             return;

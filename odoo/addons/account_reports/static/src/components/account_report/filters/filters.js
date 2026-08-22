@@ -371,7 +371,7 @@ export class AccountReportFilters extends Component {
         }
         else {
             this.dialog.add(WarningDialog, {
-                title: _t("Odoo Warning"),
+                title: _t("Shaka Warning"),
                 message: _t("Date cannot be empty"),
             });
         }
@@ -679,7 +679,7 @@ export class AccountReportFilters extends Component {
             this.controller.cachedFilterOptions.comparison.number_period = parseInt(numberPeriods);
         else
             this.dialog.add(WarningDialog, {
-                title: _t("Odoo Warning"),
+                title: _t("Shaka Warning"),
                 message: _t("Number of periods cannot be smaller than 1"),
             });
     }

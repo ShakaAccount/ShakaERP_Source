@@ -29,7 +29,7 @@ patch(GroupConfigMenu.prototype, {
             return this._openAutomations();
         } else {
             this.env.services.dialog.add(PromoteStudioAutomationDialog, {
-                title: _t("Odoo Studio - Customize workflows in minutes"),
+                title: _t("Shaka Studio - Customize workflows in minutes"),
             });
         }
     },
