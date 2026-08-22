@@ -27,6 +27,6 @@
     },
     "license": "LGPL-3",
     "installable": true,
-    "application": false,
+    "application": true,
     "auto_install": false
 }
