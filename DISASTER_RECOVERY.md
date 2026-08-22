@@ -185,16 +185,34 @@ docker run --rm -v ~/backups:/opt/backups busybox:1.36 \
 docker compose build db
 docker build -f filestore-sync.Dockerfile -t odoo_filestore_sync .
 
-# 4. Restore database (Scenario 1, steps 3-6)
+# 4. Restore database
+#    Initialize a fresh cluster first (this creates the odoo_19_pg_data
+#    volume and finishes initdb), then STOP postgres before restoring.
 docker compose up -d db
-# wait for healthy...
+# wait until db shows "healthy" (initdb must complete):
+docker compose ps
+docker compose stop db
+
+#    Wipe the freshly-initialized data directory.
+#    pgBackRest refuses to restore into a non-empty PGDATA — skipping this
+#    step is the usual cause of "restore" errors on a new host.
+docker run --rm \
+    -v odoo_19_pg_data:/var/lib/postgresql/data \
+    --entrypoint sh \
+    odoo_19_db:pg16 \
+    -c 'rm -rf /var/lib/postgresql/data/* && chown -R postgres:postgres /var/lib/postgresql/data'
+
+#    Run the restore (database stopped)
 docker run --rm --user postgres \
     -v odoo_19_pg_data:/var/lib/postgresql/data \
     -v ~/backups/pgbackrest:/var/lib/pgbackrest \
     -v ~/Shaka/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro \
     --entrypoint pgbackrest odoo_19_db:pg16 \
     --stanza=shaka_db restore
-docker compose restart db
+
+#    Start database and verify it recovered from the restored data
+docker compose up -d db
+docker compose exec -T -u postgres db pg_isready
 
 # 5. Restore filestore (Scenario 2, step 2)
 docker run --rm \
