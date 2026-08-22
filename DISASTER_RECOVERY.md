@@ -10,6 +10,7 @@ This document describes the backup architecture and step-by-step disaster recove
 |-----------|------------|-----|-----------|----------|
 | PostgreSQL Database | pgBackRest (continuous WAL archiving + daily full) | **~seconds** (well under 15 min target) | 2 full backups + 7 days WAL | `$BACKUPS/pgbackrest/` |
 | Odoo Filestore (attachments) | rsync incremental mirror | **15 minutes** (cron) | Rolling mirror (--delete) | `$BACKUPS/filestore/` |
+| Config (.env, odoo.conf) | deploy_init.sh one-time copy | **N/A** (manual trigger) | Single copy | `$BACKUPS/config/` |
 
 ### Key Properties
 
@@ -91,6 +92,8 @@ docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db check
 docker compose up -d web
 ```
 
+**Note**: This scenario assumes you're on the same host — `.env` and `odoo.conf` are already in place. If they were accidentally deleted, restore from `~/backups/config/` before step 7.
+
 **Verification**:
 ```bash
 # Check Odoo can connect
@@ -133,6 +136,8 @@ docker run --rm \
 docker compose up -d web
 ```
 
+**Note**: This scenario assumes you're on the same host — `.env` and `odoo.conf` are already in place. If they were accidentally deleted, restore from `~/backups/config/` before step 4.
+
 **Verification**:
 ```bash
 # Check attachment count
@@ -160,10 +165,6 @@ docker compose version
 # Clone repository (or copy project files)
 git clone <your-repo> ~/Shaka
 cd ~/Shaka
-
-# Restore .env file (database credentials, master password)
-# IMPORTANT: Keep .env secure and out of version control
-cp /path/to/backup/.env .
 ```
 
 #### Recovery Procedure
@@ -175,17 +176,23 @@ cd ~/Shaka
 #    Ensure directory structure matches:
 #    ~/backups/pgbackrest/
 #    ~/backups/filestore/
+#    ~/backups/config/          # <-- contains .env and odoo.conf
 rsync -avz backup-server:/backups/ ~/backups/
 
-# 2. Fix pgbackrest ownership (postgres uid 999)
+# 2. Restore configuration files (credentials & Odoo settings)
+cp ~/backups/config/.env .
+cp ~/backups/config/odoo.conf .
+chmod 600 .env
+
+# 3. Fix pgbackrest ownership (postgres uid 999)
 docker run --rm -v ~/backups:/opt/backups busybox:1.36 \
     sh -c 'chown -R 999:999 /opt/backups/pgbackrest && chmod -R 750 /opt/backups/pgbackrest'
 
-# 3. Build images
+# 4. Build images
 docker compose build db
 docker build -f filestore-sync.Dockerfile -t odoo_filestore_sync .
 
-# 4. Restore database
+# 5. Restore database
 #    Initialize a fresh cluster first (this creates the odoo_19_pg_data
 #    volume and finishes initdb), then STOP postgres before restoring.
 docker compose up -d db
@@ -214,7 +221,7 @@ docker run --rm --user postgres \
 docker compose up -d db
 docker compose exec -T -u postgres db pg_isready
 
-# 5. Restore filestore (Scenario 2, step 2)
+# 6. Restore filestore (Scenario 2, step 2)
 docker run --rm \
     -v odoo_19_data:/dst \
     -v ~/backups/filestore:/src:ro \
@@ -222,10 +229,10 @@ docker run --rm \
 docker run --rm -v odoo_19_data:/var/lib/odoo --entrypoint sh busybox:1.36 \
     -c 'chown -R 1000:1000 /var/lib/odoo/filestore'
 
-# 6. Start full stack
+# 7. Start full stack
 docker compose up -d
 
-# 7. Re-install cron jobs
+# 8. Re-install cron jobs
 ./backup/install_cron.sh
 ```
 
@@ -440,10 +447,12 @@ tail -f ~/backups/logs/filestore_sync.log
 │   ├── filestore_sync.sh       # Incremental rsync mirror (RPO 15min)
 │   ├── pgbackrest_full.sh      # Daily full backup trigger
 │   └── restore.sh              # Full disaster restore (database only)
-└── .env                        # Credentials (NOT in git)
+├── .env                        # Credentials (NOT in git)
+└── odoo.conf                   # Odoo config (NOT in git, generated from template)
 ```
 
 **Backup Root**: `~/backups/`
 - `pgbackrest/` — pgBackRest repository (WAL + base backups)
 - `filestore/` — rsync mirror of `/var/lib/odoo/filestore`
+- `config/` — **`.env` and `odoo.conf` copied on first deploy_init.sh run**
 - `logs/` — Cron job output logs

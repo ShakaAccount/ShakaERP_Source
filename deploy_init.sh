@@ -34,15 +34,27 @@ if [[ ! -f .env ]]; then
     POSTGRES_USER="shaka"
     POSTGRES_PASSWORD="$(gen_pass)"
     POSTGRES_DB="postgres"
+    POSTGRES_HOST="db"
+    POSTGRES_PORT="5432"
     SHAKA_MASTER_PASSWORD="$(gen_pass)"
+    ADMIN_PASSWORD="${SHAKA_MASTER_PASSWORD}"
+    WORKERS="4"
+    MAX_CRON_THREADS="2"
+    GEVENT_PORT="8072"
     cat > .env <<EOF
 # Database Credentials
 POSTGRES_USER=${POSTGRES_USER}
 POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 POSTGRES_DB=${POSTGRES_DB}
+POSTGRES_HOST=${POSTGRES_HOST}
+POSTGRES_PORT=${POSTGRES_PORT}
 
 # Shaka Settings
 SHAKA_MASTER_PASSWORD=${SHAKA_MASTER_PASSWORD}
+ADMIN_PASSWORD=${ADMIN_PASSWORD}
+WORKERS=${WORKERS}
+MAX_CRON_THREADS=${MAX_CRON_THREADS}
+GEVENT_PORT=${GEVENT_PORT}
 EOF
     chmod 600 .env
     log "Created .env (keep it safe!)"
@@ -65,7 +77,15 @@ envsubst < odoo.conf > /tmp/odoo.conf.generated && mv /tmp/odoo.conf.generated o
 # rsync -avz --progress backup-user@backup-server:/backups/ "$BACKUP_ROOT/"
 
 # 6. Ensure backup directories exist
-mkdir -p "$BACKUP_ROOT/pgbackrest" "$BACKUP_ROOT/filestore" "$BACKUP_ROOT/logs"
+mkdir -p "$BACKUP_ROOT/pgbackrest" "$BACKUP_ROOT/filestore" "$BACKUP_ROOT/logs" "$BACKUP_ROOT/config"
+
+# 6b. Copy config files to backup for disaster recovery (first-time only)
+if [[ ! -f "$BACKUP_ROOT/config/.env" ]]; then
+    log "Backing up .env and odoo.conf to $BACKUP_ROOT/config/ ..."
+    cp .env "$BACKUP_ROOT/config/.env"
+    cp odoo.conf "$BACKUP_ROOT/config/odoo.conf"
+    chmod 600 "$BACKUP_ROOT/config/.env"
+fi
 
 # 7. Fix pgBackRest ownership (postgres uid 999 inside container)
 log "Fixing pgBackRest directory ownership..."
