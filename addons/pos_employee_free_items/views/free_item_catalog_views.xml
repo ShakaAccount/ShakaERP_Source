@@ -31,7 +31,7 @@
     <record id="action_pos_free_item_catalog" model="ir.actions.act_window">
         <field name="name">Free-Item Catalogue</field>
         <field name="res_model">pos.free.item.catalog</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="context">{'search_default_active': 1}</field>
     </record>
 

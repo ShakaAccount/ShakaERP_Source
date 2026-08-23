@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
 
-    <!-- Free Item Button Component Template -->
-    <t t-name="FreeItemButton" owl="1">
-        <button type="button" class="btn btn-secondary free-item-btn" t-on-click="onClick">
-            <i class="fa fa-gift"/> <span>Free Item</span>
-        </button>
-    </t>
-
     <!-- Free Item List Component Template -->
-    <t t-name="FreeItemList" owl="1">
+    <t t-name="pos_employee_free_items.FreeItemList">
         <div class="free-item-list">
-            <t t-foreach="catalog" t-as="item">
-                <div class="free-item-option p-2 border rounded mb-1">
+            <div t-if="state.loading" class="text-muted p-2">
+                Loading free items...
+            </div>
+            <t t-foreach="state.catalog" t-as="item" t-key="item.id">
+                <button type="button" class="free-item-option btn btn-outline-secondary w-100 text-start p-2 mb-1"
+                        t-on-click="() => this.onSelectFreeItem(item)">
                     <t t-esc="item.product_id[1]"/>
-                    <FreeItemButton product="item"/>
-                </div>
+                </button>
             </t>
         </div>
     </t>
