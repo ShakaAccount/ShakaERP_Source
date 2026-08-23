@@ -15,12 +15,14 @@
         "views/employee_free_allowance_views.xml",
         "views/pos_config_views.xml",
         "views/pos_order_views.xml",
-        "templates/pos_screen_templates.xml",
+        # REMOVED: "templates/pos_screen_templates.xml"
         "data/pos_free_item_demo.xml"
     ],
     "assets": {
-        "point_of_sale.assets": [
-            "pos_employee_free_items/static/src/js/pos_free_items.js"
+        # Note: In modern Odoo, _assets_pos is the standard bundle for POS UI
+        "point_of_sale._assets_pos": [
+            "pos_employee_free_items/static/src/js/pos_free_items.js",
+            "pos_employee_free_items/templates/pos_screen_templates.xml" # ADDED HERE
         ]
     },
     "license": "LGPL-3",
