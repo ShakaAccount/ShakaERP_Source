@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Add a link in the user preferences dropdown (backend) -->
+    <!-- The old custom enrolment action has been removed.  Odoo's auth_totp
+         module owns TOTP setup, so users configure it from their own profile. -->
     <record id="view_users_form_inherit_totp" model="ir.ui.view">
         <field name="name">res.users.form.inherit.totp</field>
         <field name="model">res.users</field>
@@ -8,18 +9,11 @@
         <field name="arch" type="xml">
             <xpath expr="//page[@name='preferences']" position="inside">
                 <div class="mt-2">
-                    <a role="button" class="btn btn-link" href="/web#action=pos_employee_free_items.action_totp_enroll"
-                       groups="pos_employee_free_items.group_pos_free_item_user">
-                        <i class="fa fa-shield"/> My 2FA
-                    </a>
+                    <span class="text-muted" groups="pos_employee_free_items.group_pos_free_item_user">
+                        <i class="fa fa-shield"/> Configure two-factor authentication from your user profile before claiming POS free items.
+                    </span>
                 </div>
             </xpath>
         </field>
-    </record>
-
-    <!-- A dummy client action that opens the enrolment wizard (JS) -->
-    <record id="action_totp_enroll" model="ir.actions.client">
-        <field name="name">Enroll 2FA</field>
-        <field name="tag">pos_free_item_totp_enroll</field>
     </record>
 </odoo>

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api, _
+from odoo import api, fields, models
 from odoo.models import Constraint
 
 class PosFreeItemCatalog(models.Model):
@@ -7,8 +7,9 @@ class PosFreeItemCatalog(models.Model):
     _name = 'pos.free.item.catalog'
     _description = 'POS Free-Item Catalogue (admin-defined)'
     _order = 'sequence, name'
+    _inherit = ['pos.load.mixin']
 
-    name = fields.Char(required=True, translate=True)
+    name = fields.Char(related='product_id.display_name', store=True, readonly=True)
     product_id = fields.Many2one(
         'product.product',
         string='Product',
@@ -28,3 +29,14 @@ class PosFreeItemCatalog(models.Model):
             'A product can appear only once in the free-item catalogue per company.'
         )
     ]
+
+    @api.model
+    def _load_pos_data_domain(self, data, config):
+        return [
+            ('active', '=', True),
+            ('company_id', '=', config.company_id.id),
+        ]
+
+    @api.model
+    def _load_pos_data_fields(self, config):
+        return ['id', 'product_id', 'sequence']

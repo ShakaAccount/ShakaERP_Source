@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api, _
+from odoo import api, fields, models
 
 class PosOrder(models.Model):
     _inherit = 'pos.order'
@@ -23,3 +23,9 @@ class PosOrderLine(models.Model):
         ondelete='set null',
         readonly=True,
     )
+
+    @api.model
+    def _load_pos_data_fields(self, config):
+        return super()._load_pos_data_fields(config) + [
+            'is_free_item',
+        ]

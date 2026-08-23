@@ -4,13 +4,18 @@
     <!-- Free Item List Component Template -->
     <t t-name="pos_employee_free_items.FreeItemList">
         <div class="free-item-list">
-            <div t-if="state.loading" class="text-muted p-2">
-                Loading free items...
+            <div t-if="!hasEmployeeMode" class="alert alert-warning m-2">
+                Enable <strong>Employees</strong> in the POS configuration to use free items.
             </div>
-            <t t-foreach="state.catalog" t-as="item" t-key="item.id">
+            <div t-elif="!catalogItems.length" class="text-muted p-2">
+                No free items are configured.
+            </div>
+            <t t-foreach="catalogItems" t-as="item" t-key="item.id">
                 <button type="button" class="free-item-option btn btn-outline-secondary w-100 text-start p-2 mb-1"
+                        t-att-disabled="state.isClaiming"
                         t-on-click="() => this.onSelectFreeItem(item)">
-                    <t t-esc="item.product_id[1]"/>
+                    <i class="fa fa-gift me-1"/>
+                    <t t-esc="item.product_id.display_name || item.product_id.name || item.product_id"/>
                 </button>
             </t>
         </div>

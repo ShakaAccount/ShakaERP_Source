@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api, _
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 from odoo.models import Constraint
 
@@ -41,6 +41,13 @@ class EmployeeFreeAllowance(models.Model):
                 'company_id': self.env.company.id,
             })
         return rec
+
+    @api.model
+    def claim_for_employee(self, employee):
+        """Consume one allowance slot for an employee, or raise a user-facing error."""
+        allowance = self._get_or_create_allowance(employee)
+        allowance.claim_free_item()
+        return allowance
 
     def claim_free_item(self):
         """Increment used_qty, raise if limit exceeded."""
