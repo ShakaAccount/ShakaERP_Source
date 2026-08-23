@@ -24,7 +24,6 @@ class PosFreeItemCatalog(models.Model):
 
     _constraints = [
         Constraint(
-            'uniq_product_company',
             'unique(product_id, company_id)',
             'A product can appear only once in the free-item catalogue per company.'
         )

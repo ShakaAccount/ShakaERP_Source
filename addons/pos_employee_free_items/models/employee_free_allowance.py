@@ -18,7 +18,6 @@ class EmployeeFreeAllowance(models.Model):
 
     _constraints = [
         Constraint(
-            'uniq_emp_day',
             'unique(employee_id, date, company_id)',
             'Only one allowance record per employee per day per company.'
         )
