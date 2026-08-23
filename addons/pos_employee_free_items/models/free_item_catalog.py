@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
+from odoo.models import Constraint
 
 class PosFreeItemCatalog(models.Model):
     """Products that the admin decides can be given for free."""
@@ -21,7 +22,10 @@ class PosFreeItemCatalog(models.Model):
         'res.company', default=lambda s: s.env.company, required=True
     )
 
-    _sql_constraints = [
-        ('uniq_product_company', 'unique(product_id, company_id)',
-         'A product can appear only once in the free-item catalogue per company.')
+    _constraints = [
+        Constraint(
+            'uniq_product_company',
+            'unique(product_id, company_id)',
+            'A product can appear only once in the free-item catalogue per company.'
+        )
     ]

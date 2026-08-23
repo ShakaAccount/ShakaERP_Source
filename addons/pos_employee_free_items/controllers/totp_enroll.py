@@ -6,7 +6,7 @@ from odoo.exceptions import AccessDenied, UserError
 
 class TotpEnrollController(http.Controller):
 
-    @http.route('/pos_free_item/totp/enroll', type='json', auth='user', methods=['POST'], csrf=False)
+    @http.route('/pos_free_item/totp/enroll', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
     def enroll(self):
         """Return a provisioning URI + secret for the current user."""
         user = request.env.user
@@ -21,7 +21,7 @@ class TotpEnrollController(http.Controller):
         )
         return {'secret': secret, 'uri': uri}
 
-    @http.route('/pos_free_item/totp/verify', type='json', auth='user', methods=['POST'], csrf=False)
+    @http.route('/pos_free_item/totp/verify', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
     def verify(self, code):
         """Validate a TOTP code entered on the POS."""
         user = request.env.user
@@ -32,7 +32,7 @@ class TotpEnrollController(http.Controller):
             raise AccessDenied('Invalid TOTP code.')
         return {'success': True}
 
-    @http.route('/pos_free_item/claim', type='json', auth='user', methods=['POST'], csrf=False)
+    @http.route('/pos_free_item/claim', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
     def claim(self, employee_id):
         emp = request.env['hr.employee'].browse(employee_id)
         if not emp.exists():

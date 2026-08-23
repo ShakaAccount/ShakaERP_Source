@@ -25,6 +25,7 @@
             "pos_employee_free_items/templates/pos_screen_templates.xml" # ADDED HERE
         ]
     },
+    "author": "ShakaERP",
     "license": "LGPL-3",
     "installable": True,
     "application": False,

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from odoo.models import Constraint
 
 class EmployeeFreeAllowance(models.Model):
     """Tracks how many free items an employee has already taken today."""
@@ -15,9 +16,12 @@ class EmployeeFreeAllowance(models.Model):
         'res.company', default=lambda s: s.env.company, required=True
     )
 
-    _sql_constraints = [
-        ('uniq_emp_day', 'unique(employee_id, date, company_id)',
-         'Only one allowance record per employee per day per company.')
+    _constraints = [
+        Constraint(
+            'uniq_emp_day',
+            'unique(employee_id, date, company_id)',
+            'Only one allowance record per employee per day per company.'
+        )
     ]
 
     MAX_PER_DAY = 2
