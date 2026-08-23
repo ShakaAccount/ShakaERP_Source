@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
 
+    <!-- Free Item Button Component Template -->
+    <t t-name="FreeItemButton" owl="1">
+        <button type="button" class="btn btn-secondary free-item-btn" t-on-click="onClick">
+            <i class="fa fa-gift"/> <span>Free Item</span>
+        </button>
+    </t>
+
+    <!-- Free Item List Component Template -->
+    <t t-name="FreeItemList" owl="1">
+        <div class="free-item-list">
+            <t t-foreach="catalog" t-as="item">
+                <div class="free-item-option p-2 border rounded mb-1">
+                    <t t-esc="item.product_id[1]"/>
+                    <FreeItemButton product="item"/>
+                </div>
+            </t>
+        </div>
+    </t>
+
     <!-- Extend the POS ProductScreen Owl template to inject the Free Item List -->
     <t t-name="pos_employee_free_items.ProductScreen" t-inherit="point_of_sale.ProductScreen" t-inherit-mode="extension">
         <xpath expr="//div[contains(@class, 'product-screen')]" position="inside">
