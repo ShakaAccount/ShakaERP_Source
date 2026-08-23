@@ -15,7 +15,7 @@
         "views/employee_free_allowance_views.xml",
         "views/pos_config_views.xml",
         "views/pos_order_views.xml",
-        "views/pos_screen_views.xml",
+        "templates/pos_screen_templates.xml",
         "data/pos_free_item_demo.xml"
     ],
     "assets": {
