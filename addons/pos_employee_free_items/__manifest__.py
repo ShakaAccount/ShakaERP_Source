@@ -21,8 +21,8 @@
     "assets": {
         # Note: In modern Odoo, _assets_pos is the standard bundle for POS UI
         "point_of_sale._assets_pos": [
-            "static/src/js/pos_free_items.js",
-            "templates/pos_screen_templates.xml"
+            "pos_employee_free_items/static/src/js/pos_free_items.js",
+            "pos_employee_free_items/static/src/xml/pos_screen_templates.xml",
         ]
     },
     "author": "ShakaERP",
