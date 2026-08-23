@@ -37,6 +37,9 @@ class TotpEnrollController(http.Controller):
         emp = request.env['hr.employee'].browse(employee_id)
         if not emp.exists():
             raise UserError('Employee not found')
-        allowance = request.env['employee.free.allowance']._get_or_create_allowance(emp)
-        allowance.claim_free_item()
-        return {'allowed': True}
+        try:
+            allowance = request.env['employee.free.allowance']._get_or_create_allowance(emp)
+            allowance.claim_free_item()
+            return {'allowed': True}
+        except UserError as e:
+            return {'allowed': False, 'error': str(e)}

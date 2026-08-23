@@ -15,18 +15,16 @@
         "views/employee_free_allowance_views.xml",
         "views/pos_config_views.xml",
         "views/pos_order_views.xml",
+        "views/pos_screen_views.xml",
         "data/pos_free_item_demo.xml"
     ],
     "assets": {
-        "web.assets_backend": [
-            "pos_employee_free_items/static/src/js/pos_free_items.js"
-        ],
         "point_of_sale.assets": [
             "pos_employee_free_items/static/src/js/pos_free_items.js"
         ]
     },
     "license": "LGPL-3",
     "installable": True,
-    "application": True,
+    "application": False,
     "auto_install": False
 }

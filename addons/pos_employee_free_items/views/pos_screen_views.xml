@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit the POS ProductScreen to add the Free Item List -->
+    <template id="ProductScreen_inherit_free_items" inherit_id="point_of_sale.ProductScreen" name="ProductScreen with Free Items">
+        <xpath expr="//div[contains(@class, 'product-screen')]" position="inside">
+            <div class="free-item-section mb-3">
+                <h5 class="text-muted mb-2">Free Items (Employee)</h5>
+                <FreeItemList/>
+            </div>
+        </xpath>
+    </template>
+</odoo>
