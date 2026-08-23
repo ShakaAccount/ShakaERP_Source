@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- The old custom enrolment action has been removed.  Odoo's auth_totp
-         module owns TOTP setup, so users configure it from their own profile. -->
-    <record id="view_users_form_inherit_totp" model="ir.ui.view">
-        <field name="name">res.users.form.inherit.totp</field>
-        <field name="model">res.users</field>
-        <field name="inherit_id" ref="base.view_users_form"/>
+    <record id="view_employee_form_inherit_free_limit" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.free.limit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//page[@name='preferences']" position="inside">
-                <div class="mt-2">
-                    <span class="text-muted" groups="pos_employee_free_items.group_pos_free_item_user">
-                        <i class="fa fa-shield"/> Configure two-factor authentication from your user profile before claiming POS free items.
-                    </span>
-                </div>
+            <xpath expr="//page[@name='personal_information']" position="inside">
+                <group string="POS Free Items">
+                    <field name="free_item_daily_limit"
+                           groups="pos_employee_free_items.group_pos_free_item_manager"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_pos_config_form_inherit_free_limit" model="ir.ui.view">
+        <field name="name">pos.config.form.inherit.free.limit</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_config_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='products']" position="after">
+                <page string="Employee Free Items" name="employee_free_items"
+                      groups="pos_employee_free_items.group_pos_free_item_manager">
+                    <group>
+                        <field name="free_item_daily_limit"/>
+                    </group>
+                </page>
             </xpath>
         </field>
     </record>

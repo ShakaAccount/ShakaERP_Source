@@ -6,7 +6,7 @@ from odoo.models import Constraint
 class EmployeeFreeAllowance(models.Model):
     """Tracks how many free items an employee has already taken today."""
     _name = 'employee.free.allowance'
-    _description = 'Employee Daily Free-Item Allowance (max 2)'
+    _description = 'Employee Daily Free-Item Allowance'
     _rec_name = 'employee_id'
 
     employee_id = fields.Many2one('hr.employee', required=True, ondelete='cascade')
@@ -23,7 +23,17 @@ class EmployeeFreeAllowance(models.Model):
         )
     ]
 
-    MAX_PER_DAY = 2
+    @api.model
+    def _get_daily_limit(self, employee, config=None):
+        """Return the daily free-item limit for an employee.
+        
+        Priority: employee.free_item_daily_limit > config.free_item_daily_limit > 2 (default)
+        """
+        if employee.free_item_daily_limit:
+            return employee.free_item_daily_limit
+        if config and config.free_item_daily_limit:
+            return config.free_item_daily_limit
+        return 2
 
     @api.model
     def _get_or_create_allowance(self, employee):
@@ -43,18 +53,19 @@ class EmployeeFreeAllowance(models.Model):
         return rec
 
     @api.model
-    def claim_for_employee(self, employee):
-        """Consume one allowance slot for an employee, or raise a user-facing error."""
+    def claim_for_employee(self, employee, qty=1, config=None):
+        """Consume allowance slots for an employee, or raise a user-facing error."""
         allowance = self._get_or_create_allowance(employee)
-        allowance.claim_free_item()
+        allowance.claim_free_items(qty, config)
         return allowance
 
-    def claim_free_item(self):
-        """Increment used_qty, raise if limit exceeded."""
+    def claim_free_items(self, qty=1, config=None):
+        """Increment used_qty by qty, raise if limit exceeded."""
         self.ensure_one()
-        if self.used_qty >= self.MAX_PER_DAY:
+        limit = self._get_daily_limit(self.employee_id, config)
+        if self.used_qty + qty > limit:
             raise UserError(_(
-                'You have already claimed your %s free items for today.'
-            ) % self.MAX_PER_DAY)
-        self.used_qty += 1
+                'You have already claimed your %s free items for today (limit: %s).'
+            ) % (self.used_qty, limit))
+        self.used_qty += qty
         return True

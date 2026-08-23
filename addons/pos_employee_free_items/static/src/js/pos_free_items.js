@@ -22,7 +22,10 @@ class FreeItemList extends Component {
     setup() {
         this.pos = usePos();
         this.dialog = useService("dialog");
-        this.state = useState({ isClaiming: false });
+        this.state = useState({ 
+            isClaiming: false,
+            itemQuantities: {}, // track quantity per catalog item
+        });
     }
 
     get catalogItems() {
@@ -48,6 +51,15 @@ class FreeItemList extends Component {
     getProductTemplate(product) {
         const templateId = product.product_tmpl_id?.id || product.product_tmpl_id;
         return this.pos.models["product.template"].get(templateId);
+    }
+
+    getQuantity(catalogItem) {
+        return this.state.itemQuantities[catalogItem.id] || 1;
+    }
+
+    setQuantity(catalogItem, qty) {
+        const q = parseInt(qty, 10) || 1;
+        this.state.itemQuantities[catalogItem.id] = Math.max(1, q);
     }
 
     async requestCode() {
@@ -86,6 +98,7 @@ class FreeItemList extends Component {
             return;
         }
 
+        const qty = this.getQuantity(catalogItem);
         const code = await this.requestCode();
         if (code === undefined) {
             return;
@@ -98,6 +111,7 @@ class FreeItemList extends Component {
                 product_id: product.id,
                 pos_config_id: this.pos.config.id,
                 code,
+                qty,
             });
 
             // Use the native POS API with the actual product.template record.
@@ -106,6 +120,7 @@ class FreeItemList extends Component {
                 product_id: product,
                 product_tmpl_id: productTemplate,
                 price_unit: 0,
+                qty: qty,
                 is_free_item: true,
             });
             if (!line) {

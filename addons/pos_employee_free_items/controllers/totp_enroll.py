@@ -40,8 +40,8 @@ class PosFreeItemController(http.Controller):
         user._totp_rate_limit_purge('code_check')
 
     @http.route('/pos_free_item/claim', type='jsonrpc', auth='user', methods=['POST'])
-    def claim(self, employee_id, product_id, pos_config_id, code):
-        """Validate a complete free-item request and consume one daily allowance."""
+    def claim(self, employee_id, product_id, pos_config_id, code, qty=1):
+        """Validate a complete free-item request and consume daily allowance slots."""
         config = request.env['pos.config'].browse(int(pos_config_id)).exists()
         if not config:
             raise UserError(_("The POS configuration could not be found."))
@@ -65,8 +65,12 @@ class PosFreeItemController(http.Controller):
             raise UserError(_("This product is not available as a free item."))
 
         self._validate_totp(employee, code)
-        allowance = request.env['employee.free.allowance'].claim_for_employee(employee)
+        qty = int(qty)
+        if qty <= 0:
+            raise UserError(_("Quantity must be greater than zero."))
+
+        allowance = request.env['employee.free.allowance'].claim_for_employee(employee, qty, config)
         return {
             'allowance_id': allowance.id,
-            'remaining': allowance.MAX_PER_DAY - allowance.used_qty,
+            'remaining': allowance._get_daily_limit(employee, config) - allowance.used_qty,
         }

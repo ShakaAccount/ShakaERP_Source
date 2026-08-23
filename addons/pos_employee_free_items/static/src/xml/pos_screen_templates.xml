@@ -11,12 +11,31 @@
                 No free items are configured.
             </div>
             <t t-foreach="catalogItems" t-as="item" t-key="item.id">
-                <button type="button" class="free-item-option btn btn-outline-secondary w-100 text-start p-2 mb-1"
-                        t-att-disabled="state.isClaiming"
-                        t-on-click="() => this.onSelectFreeItem(item)">
-                    <i class="fa fa-gift me-1"/>
-                    <t t-esc="item.product_id.display_name || item.product_id.name || item.product_id"/>
-                </button>
+                <div class="free-item-option d-flex align-items-center gap-2 w-100 p-2 mb-1 border rounded bg-light">
+                    <i class="fa fa-gift me-2 text-secondary"/>
+                    <span class="flex-grow-1" t-esc="item.product_id.display_name || item.product_id.name || item.product_id"/>
+                    <div class="input-group input-group-sm" style="width: 100px;">
+                        <button type="button" class="btn btn-outline-secondary" 
+                                t-att-disabled="state.isClaiming || getQuantity(item) <= 1"
+                                t-on-click="() => setQuantity(item, getQuantity(item) - 1)">
+                            <i class="fa fa-minus"/>
+                        </button>
+                        <input type="text" class="form-control text-center" 
+                               t-att-value="getQuantity(item)"
+                               t-att-disabled="state.isClaiming"
+                               t-on-change="() => setQuantity(item, $event.target.value)"/>
+                        <button type="button" class="btn btn-outline-secondary" 
+                                t-att-disabled="state.isClaiming"
+                                t-on-click="() => setQuantity(item, getQuantity(item) + 1)">
+                            <i class="fa fa-plus"/>
+                        </button>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-sm"
+                            t-att-disabled="state.isClaiming"
+                            t-on-click="() => this.onSelectFreeItem(item)">
+                        <t t-esc="_t('Claim')"/>
+                    </button>
+                </div>
             </t>
         </div>
     </t>
