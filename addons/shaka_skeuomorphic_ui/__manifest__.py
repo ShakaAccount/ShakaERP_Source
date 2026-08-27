@@ -14,6 +14,8 @@
         'web.assets_backend': [
             'shaka_skeuomorphic_ui/static/src/scss/design_tokens.scss',
             'shaka_skeuomorphic_ui/static/src/scss/backend.scss',
+            'shaka_skeuomorphic_ui/static/src/scss/chrome.scss',
+            'shaka_skeuomorphic_ui/static/src/scss/views.scss',
         ],
     },
     'installable': True,

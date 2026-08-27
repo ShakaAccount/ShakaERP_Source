@@ -1,0 +1,150 @@
+/// Utility Mixins
+/// ============================================================================
+
+@mixin texture-paper($opacity: 0.03) {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--shaka-texture-paper);
+    opacity: $opacity;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+}
+
+@mixin texture-leather($opacity: 0.05) {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--shaka-texture-leather);
+    opacity: $opacity;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+}
+
+@mixin texture-metal($opacity: 0.04) {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--shaka-texture-metal);
+    opacity: $opacity;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+}
+
+@mixin texture-wood($opacity: 0.04) {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--shaka-texture-wood);
+    opacity: $opacity;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+}
+
+@mixin shadow-paper($size: md) {
+  @if $size == sm { box-shadow: var(--shaka-shadow-paper-sm); }
+  @else if $size == md { box-shadow: var(--shaka-shadow-paper-md); }
+  @else if $size == lg { box-shadow: var(--shaka-shadow-paper-lg); }
+  @else if $size == xl { box-shadow: var(--shaka-shadow-paper-xl); }
+}
+
+@mixin shadow-leather($size: md) {
+  @if $size == sm { box-shadow: var(--shaka-shadow-leather-sm); }
+  @else if $size == md { box-shadow: var(--shaka-shadow-leather-md); }
+  @else if $size == lg { box-shadow: var(--shaka-shadow-leather-lg); }
+}
+
+@mixin shadow-metal($size: md) {
+  @if $size == sm { box-shadow: var(--shaka-shadow-metal-sm); }
+  @else if $size == md { box-shadow: var(--shaka-shadow-metal-md); }
+  @else if $size == lg { box-shadow: var(--shaka-shadow-metal-lg); }
+}
+
+@mixin shadow-inset($size: md) {
+  @if $size == sm { box-shadow: var(--shaka-shadow-inset-sm); }
+  @else if $size == md { box-shadow: var(--shaka-shadow-inset-md); }
+  @else if $size == lg { box-shadow: var(--shaka-shadow-inset-lg); }
+}
+
+@mixin gradient-leather { background: var(--shaka-gradient-leather); }
+@mixin gradient-wood { background: var(--shaka-gradient-wood); }
+@mixin gradient-metal { background: var(--shaka-gradient-metal); }
+@mixin gradient-gold { background: var(--shaka-gradient-gold); }
+@mixin gradient-paper { background: var(--shaka-gradient-paper); }
+@mixin gradient-btn-primary { background: var(--shaka-gradient-btn-primary); }
+@mixin gradient-btn-secondary { background: var(--shaka-gradient-btn-secondary); }
+@mixin gradient-btn-gold { background: var(--shaka-gradient-btn-gold); }
+
+@mixin tactile-button($variant: primary) {
+  position: relative;
+  border: none;
+  border-radius: var(--shaka-radius-md);
+  font-family: var(--shaka-font-ui);
+  font-weight: 500;
+  font-size: var(--shaka-font-size-sm);
+  padding: var(--shaka-space-sm) var(--shaka-space-lg);
+  transition: all var(--shaka-transition-fast);
+  cursor: pointer;
+  
+  @if $variant == primary {
+    @include gradient-btn-primary;
+    color: var(--shaka-text-on-dark);
+    border: 1px solid darken($o-brand-primary, 15%);
+    @include shadow-leather(sm);
+  } @else if $variant == secondary {
+    @include gradient-btn-secondary;
+    color: var(--shaka-text-on-dark);
+    border: 1px solid darken($o-leather-brown, 15%);
+    @include shadow-leather(sm);
+  } @else if $variant == gold {
+    @include gradient-btn-gold;
+    color: var(--shaka-ink-black);
+    border: 1px solid var(--shaka-metal-brass);
+    @include shadow-metal(sm);
+  } @else if $variant == ghost {
+    background: transparent;
+    color: var(--shaka-brand-primary);
+    border: 1px solid transparent;
+    &:hover {
+      background: rgba($o-brand-primary, 0.1);
+      border-color: var(--shaka-brand-primary);
+    }
+  }
+  
+  &:hover {
+    transform: translateY(-1px);
+    @if $variant != ghost {
+      @include shadow-leather(md);
+    }
+  }
+  
+  &:active {
+    transform: translateY(1px);
+    transition: all var(--shaka-transition-press);
+    @include shadow-inset(sm);
+  }
+  
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($o-brand-primary, 0.3), var(--shaka-shadow-leather-md);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}

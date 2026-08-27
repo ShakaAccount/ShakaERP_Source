@@ -99,27 +99,28 @@ $o-border-width-thick: 3px !default;
 
 // Multi-layer shadows for skeuomorphic depth
 // Each shadow represents a different light interaction
+// Skill spec: 3+ layers per shadow (contact, ambient, cast) with top-left light source
 
 // Paper/card shadows (subtle, diffused)
-$o-shadow-paper-sm: 0 2px 4px rgba($o-ink-black, 0.08), 0 1px 2px rgba($o-ink-black, 0.06) !default;
-$o-shadow-paper-md: 0 4px 8px rgba($o-ink-black, 0.1), 0 2px 4px rgba($o-ink-black, 0.08) !default;
-$o-shadow-paper-lg: 0 8px 16px rgba($o-ink-black, 0.12), 0 4px 8px rgba($o-ink-black, 0.1) !default;
-$o-shadow-paper-xl: 0 16px 32px rgba($o-ink-black, 0.15), 0 8px 16px rgba($o-ink-black, 0.12) !default;
+$o-shadow-paper-sm: 0 1px 1px rgba($o-ink-black, 0.06), 0 2px 4px rgba($o-ink-black, 0.08), 0 3px 6px rgba($o-ink-black, 0.05) !default;
+$o-shadow-paper-md: 0 1px 2px rgba($o-ink-black, 0.07), 0 4px 8px rgba($o-ink-black, 0.1), 0 8px 16px rgba($o-ink-black, 0.07) !default;
+$o-shadow-paper-lg: 0 2px 4px rgba($o-ink-black, 0.08), 0 8px 16px rgba($o-ink-black, 0.12), 0 16px 32px rgba($o-ink-black, 0.09) !default;
+$o-shadow-paper-xl: 0 4px 8px rgba($o-ink-black, 0.1), 0 16px 32px rgba($o-ink-black, 0.15), 0 24px 48px rgba($o-ink-black, 0.1) !default;
 
 // Leather shadows (warmer, softer)
-$o-shadow-leather-sm: 0 2px 4px rgba($o-leather-dark, 0.15), 0 1px 2px rgba($o-leather-dark, 0.1) !default;
-$o-shadow-leather-md: 0 4px 10px rgba($o-leather-dark, 0.2), 0 2px 5px rgba($o-leather-dark, 0.15) !default;
-$o-shadow-leather-lg: 0 10px 20px rgba($o-leather-dark, 0.25), 0 5px 10px rgba($o-leather-dark, 0.2) !default;
+$o-shadow-leather-sm: 0 1px 2px rgba($o-leather-dark, 0.12), 0 2px 4px rgba($o-leather-dark, 0.15), 0 3px 6px rgba($o-leather-dark, 0.08) !default;
+$o-shadow-leather-md: 0 1px 3px rgba($o-leather-dark, 0.14), 0 4px 10px rgba($o-leather-dark, 0.2), 0 8px 18px rgba($o-leather-dark, 0.12) !default;
+$o-shadow-leather-lg: 0 2px 5px rgba($o-leather-dark, 0.18), 0 10px 20px rgba($o-leather-dark, 0.25), 0 20px 40px rgba($o-leather-dark, 0.15) !default;
 
 // Metal shadows (sharper, cooler)
-$o-shadow-metal-sm: 0 1px 3px rgba($o-metal-iron, 0.2), 0 1px 2px rgba($o-metal-iron, 0.15) !default;
-$o-shadow-metal-md: 0 3px 8px rgba($o-metal-iron, 0.25), 0 2px 4px rgba($o-metal-iron, 0.2) !default;
-$o-shadow-metal-lg: 0 8px 20px rgba($o-metal-iron, 0.3), 0 4px 10px rgba($o-metal-iron, 0.25) !default;
+$o-shadow-metal-sm: 0 1px 1px rgba($o-metal-iron, 0.18), 0 1px 3px rgba($o-metal-iron, 0.2), 0 2px 4px rgba($o-metal-iron, 0.12) !default;
+$o-shadow-metal-md: 0 1px 2px rgba($o-metal-iron, 0.2), 0 3px 8px rgba($o-metal-iron, 0.25), 0 6px 14px rgba($o-metal-iron, 0.15) !default;
+$o-shadow-metal-lg: 0 2px 4px rgba($o-metal-iron, 0.22), 0 8px 20px rgba($o-metal-iron, 0.3), 0 14px 28px rgba($o-metal-iron, 0.18) !default;
 
 // Inset shadows (pressed/engraved feel)
-$o-shadow-inset-sm: inset 0 1px 2px rgba($o-ink-black, 0.1) !default;
-$o-shadow-inset-md: inset 0 2px 4px rgba($o-ink-black, 0.15) !default;
-$o-shadow-inset-lg: inset 0 4px 8px rgba($o-ink-black, 0.2) !default;
+$o-shadow-inset-sm: inset 0 1px 2px rgba($o-ink-black, 0.1), inset 0 -1px 1px rgba($o-paper-white, 0.35) !default;
+$o-shadow-inset-md: inset 0 2px 4px rgba($o-ink-black, 0.15), inset 0 -2px 3px rgba($o-paper-white, 0.3) !default;
+$o-shadow-inset-lg: inset 0 4px 8px rgba($o-ink-black, 0.2), inset 0 -3px 6px rgba($o-paper-white, 0.25), inset 0 6px 12px rgba($o-ink-black, 0.08) !default;
 
 // Glow effects (for active/focus states)
 $o-glow-gold: 0 0 8px rgba($o-metal-gold, 0.4), 0 0 16px rgba($o-metal-gold, 0.2) !default;
@@ -137,38 +138,49 @@ $o-texture-wood: "data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://
 /// Gradient System (8-12 stop gradients for realistic materials)
 /// ============================================================================
 
-// Leather gradient (rich, multi-stop)
+// Leather gradient (rich, multi-stop, 11 stops per skill spec)
 $o-gradient-leather: linear-gradient(
     135deg,
     $o-leather-tan 0%,
-    $o-leather-brown 25%,
+    #B58A55 10%,
+    $o-leather-brown 22%,
+    #7A5A20 36%,
     $o-leather-dark 50%,
-    #3D2F1F 65%,
-    $o-leather-dark 75%,
-    $o-leather-brown 85%,
+    #3D2F1F 64%,
+    $o-leather-dark 74%,
+    #75561E 84%,
+    $o-leather-brown 92%,
     $o-leather-tan 100%
 ) !default;
 
-// Wood gradient (organic grain)
+// Wood gradient (organic grain, 12 stops)
 $o-gradient-wood: linear-gradient(
     90deg,
     $o-wood-light 0%,
+    #DEC090 8%,
     #C8A070 15%,
+    #D0A878 22%,
     $o-wood-medium 30%,
+    #AC8A58 38%,
     #A08050 45%,
+    #90704A 52%,
     $o-wood-dark 60%,
-    #7D6B4A 75%,
+    #7D6B4A 72%,
     $o-wood-deep 85%,
     $o-wood-dark 100%
 ) !default;
 
-// Metal gradient (brushed/reflective)
+// Metal gradient (brushed/reflective, 11 stops)
 $o-gradient-metal: linear-gradient(
     180deg,
-    #E8E8E8 0%,
+    #F2F2F2 0%,
+    #E8E8E8 10%,
     $o-metal-silver 20%,
+    #C4C4C4 30%,
     #B0B0B0 40%,
+    #949494 48%,
     $o-metal-steel 55%,
+    #686868 63%,
     #606060 70%,
     $o-metal-iron 85%,
     #3A3A3A 100%
@@ -187,36 +199,52 @@ $o-gradient-gold: linear-gradient(
     #8B5A2B 100%
 ) !default;
 
-// Paper gradient (subtle aging)
+// Paper gradient (subtle aging, 8 stops)
 $o-gradient-paper: linear-gradient(
     180deg,
-    $o-paper-white 0%,
-    $o-paper-cream 40%,
+    #FFFEFB 0%,
+    $o-paper-white 15%,
+    #FAF6EC 30%,
+    $o-paper-cream 42%,
+    #F0EAE0 55%,
     $o-paper-warm 70%,
+    #E2DACB 85%,
     $o-paper-aged 100%
 ) !default;
 
-// Button gradients (tactile, pressable)
+// Button gradients (tactile, pressable, 8+ stops)
 $o-gradient-btn-primary: linear-gradient(
     180deg,
-    lighten($o-brand-primary, 8%) 0%,
+    lighten($o-brand-primary, 12%) 0%,
+    lighten($o-brand-primary, 8%) 14%,
+    lighten($o-brand-primary, 4%) 32%,
     $o-brand-primary 50%,
-    darken($o-brand-primary, 8%) 100%
+    darken($o-brand-primary, 3%) 68%,
+    darken($o-brand-primary, 8%) 86%,
+    darken($o-brand-primary, 12%) 100%
 ) !default;
 
 $o-gradient-btn-secondary: linear-gradient(
     180deg,
-    lighten($o-leather-brown, 8%) 0%,
+    lighten($o-leather-brown, 12%) 0%,
+    lighten($o-leather-brown, 8%) 14%,
+    lighten($o-leather-brown, 4%) 32%,
     $o-leather-brown 50%,
-    darken($o-leather-brown, 8%) 100%
+    darken($o-leather-brown, 3%) 68%,
+    darken($o-leather-brown, 7%) 86%,
+    darken($o-leather-brown, 11%) 100%
 ) !default;
 
 $o-gradient-btn-gold: linear-gradient(
     180deg,
-    #FFF8DC 0%,
-    $o-metal-gold 40%,
-    $o-metal-brass 60%,
-    #C8A040 100%
+    #FFFBEA 0%,
+    #FFF8DC 12%,
+    $o-metal-gold 28%,
+    #F0D470 44%,
+    #E6C86A 58%,
+    $o-metal-brass 72%,
+    #C8A040 88%,
+    #B08C34 100%
 ) !default;
 
 /// Border Radius (organic, not mechanical)
@@ -412,6 +440,19 @@ $o-breakpoint-2xl: 1400px !default;
   --shaka-font-heading: #{$o-font-heading};
   --shaka-font-ui: #{$o-font-ui};
   --shaka-font-mono: #{$o-font-mono};
+  --shaka-font-size-xs: #{$o-font-size-xs};
+  --shaka-font-size-sm: #{$o-font-size-sm};
+  --shaka-font-size-base: #{$o-font-size-base};
+  --shaka-font-size-lg: #{$o-font-size-lg};
+  --shaka-font-size-xl: #{$o-font-size-xl};
+  --shaka-line-height-tight: #{$o-line-height-tight};
+  --shaka-line-height-normal: #{$o-line-height-normal};
+  --shaka-line-height-relaxed: #{$o-line-height-relaxed};
+
+  // Border widths
+  --shaka-border-width-thin: #{$o-border-width-thin};
+  --shaka-border-width-normal: #{$o-border-width-normal};
+  --shaka-border-width-thick: #{$o-border-width-thick};
   
   // Transitions
   --shaka-transition-fast: #{$o-transition-fast};
@@ -427,4 +468,68 @@ $o-breakpoint-2xl: 1400px !default;
   --shaka-z-popover: #{$o-z-popover};
   --shaka-z-tooltip: #{$o-z-tooltip};
   --shaka-z-toast: #{$o-z-toast};
+}
+
+/// Focus Ring & Emboss Tokens (a11y-compliant tactile focus)
+/// ============================================================================
+
+// Engraved text effect (for section headings on paper)
+@mixin shaka-engraved-text {
+  color: var(--shaka-text-secondary);
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.65),
+    0 -1px 0 rgba(26, 26, 46, 0.2);
+}
+
+// Embossed text effect (raised, for titles on leather/wood)
+@mixin shaka-embossed-text {
+  color: var(--shaka-text-on-dark);
+  text-shadow:
+    0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 1px 1px rgba(255, 248, 220, 0.25);
+}
+
+/// Dark Theme Token Swap (proper full-surface override)
+/// ============================================================================
+/// All relevant --shaka-* variables are redefined together so no rule ever
+/// reads a stale light-mode value. Applied under both the OS preference and
+/// Odoo's data-color-scheme attribute.
+
+@mixin shaka-dark-tokens {
+  // Backgrounds & surfaces
+  --shaka-bg-main: #{$o-leather-dark};
+  --shaka-bg-main-dark: #{$o-leather-black};
+  --shaka-surface-paper: #{lighten($o-leather-dark, 6%)};
+  --shaka-surface-parchment: #{$o-leather-brown};
+  --shaka-surface-wood: #{$o-wood-deep};
+  --shaka-surface-leather: #{darken($o-leather-tan, 25%)};
+  --shaka-surface-metal: #{$o-metal-iron};
+
+  // Elevated surfaces
+  --shaka-elevated-1: #{lighten($o-leather-dark, 8%)};
+  --shaka-elevated-2: #{lighten($o-leather-dark, 4%)};
+  --shaka-elevated-3: #{$o-leather-dark};
+
+  // Text
+  --shaka-text-primary: #{$o-paper-white};
+  --shaka-text-secondary: #{$o-paper-cream};
+  --shaka-text-muted: #{$o-metal-silver};
+  --shaka-text-link: #{lighten($o-brand-accent, 20%)};
+
+  // Borders
+  --shaka-border-paper: #{$o-leather-brown};
+  --shaka-border-wood: #{darken($o-wood-medium, 15%)};
+  --shaka-border-leather: #{lighten($o-leather-brown, 10%)};
+  --shaka-border-metal: #{lighten($o-metal-steel, 12%)};
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    @include shaka-dark-tokens;
+  }
+}
+
+[data-color-scheme='dark'],
+.o_web_client[data-color-scheme='dark'] {
+  @include shaka-dark-tokens;
 }

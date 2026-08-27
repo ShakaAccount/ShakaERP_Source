@@ -1,3 +1,4 @@
+@import 'shaka_mixins';
 // ShakaERP Skeuomorphic Login Page Styles
 // ============================================================================
 // Beautiful, tactile login experience with realistic materials
@@ -9,18 +10,18 @@
 
 @mixin login-card-shadow {
   box-shadow: 
-    0 20px 40px rgba(var(--shaka-leather-black), 0.2),
-    0 10px 20px rgba(var(--shaka-leather-black), 0.15),
-    0 0 0 1px rgba(var(--shaka-metal-gold), 0.1),
-    inset 0 1px 0 rgba(var(--shaka-paper-white), 0.2);
+    0 20px 40px rgba($o-leather-black, 0.2),
+    0 10px 20px rgba($o-leather-black, 0.15),
+    0 0 0 1px rgba($o-metal-gold, 0.1),
+    inset 0 1px 0 rgba($o-paper-white, 0.2);
 }
 
 @mixin login-input-focus {
   border-color: var(--shaka-brand-primary) !important;
   box-shadow: 
-    0 0 0 3px rgba(var(--shaka-brand-primary), 0.15),
+    0 0 0 3px rgba($o-brand-primary, 0.15),
     var(--shaka-shadow-paper-sm),
-    inset 0 2px 4px rgba(var(--shaka-ink-black), 0.05) !important;
+    inset 0 2px 4px rgba($o-ink-black, 0.05) !important;
   background: var(--shaka-paper-white) !important;
 }
 
@@ -64,7 +65,7 @@ body.login {
     left: 0;
     right: 0;
     height: 200px;
-    background: linear-gradient(180deg, rgba(var(--shaka-metal-gold), 0.05), transparent);
+    background: linear-gradient(180deg, rgba($o-metal-gold, 0.05), transparent);
     pointer-events: none;
     z-index: 1;
   }
@@ -131,7 +132,7 @@ body.login {
   .logo {
     max-width: 180px;
     height: auto;
-    filter: drop-shadow(0 4px 8px rgba(var(--shaka-leather-black), 0.2));
+    filter: drop-shadow(0 4px 8px rgba($o-leather-black, 0.2));
     transition: transform var(--shaka-transition-slow);
     
     &:hover {
@@ -302,7 +303,7 @@ body.login {
 .oe_login_form button[type="submit"],
 .login button[type="submit"] {
   width: 100% !important;
-  @include tactile-button(primary) !important;
+  @include tactile-button(primary);
   padding: var(--shaka-space-md) var(--shaka-space-xl) !important;
   font-size: var(--shaka-font-size-base) !important;
   font-weight: 600 !important;
@@ -464,14 +465,14 @@ footer.oe_login_footer {
   font-size: var(--shaka-font-size-xs) !important;
   font-family: var(--shaka-font-ui) !important;
   opacity: 0.8;
-  text-shadow: 1px 1px 2px rgba(var(--shaka-leather-black), 0.5);
+  text-shadow: 1px 1px 2px rgba($o-leather-black, 0.5);
   position: relative;
   z-index: 10;
   
   a {
     color: var(--shaka-metal-gold) !important;
     text-decoration: none !important;
-    border-bottom: 1px dotted rgba(var(--shaka-metal-gold), 0.5);
+    border-bottom: 1px dotted rgba($o-metal-gold, 0.5);
     transition: all var(--shaka-transition-fast);
     
     &:hover {
@@ -490,8 +491,8 @@ footer.oe_login_footer {
   text-align: center;
   
   .form-select {
-    background: rgba(var(--shaka-paper-white), 0.15) !important;
-    border: 1px solid rgba(var(--shaka-metal-gold), 0.3) !important;
+    background: rgba($o-paper-white, 0.15) !important;
+    border: 1px solid rgba($o-metal-gold, 0.3) !important;
     border-radius: var(--shaka-radius-pill) !important;
     color: var(--shaka-paper-cream) !important;
     padding: var(--shaka-space-xs) var(--shaka-space-xl) var(--shaka-space-xs) var(--shaka-space-md) !important;
@@ -502,12 +503,12 @@ footer.oe_login_footer {
     background-position: right var(--shaka-space-md) center !important;
     
     &:hover {
-      background: rgba(var(--shaka-paper-white), 0.25) !important;
+      background: rgba($o-paper-white, 0.25) !important;
       border-color: var(--shaka-metal-gold) !important;
     }
     
     &:focus {
-      background: rgba(var(--shaka-paper-white), 0.3) !important;
+      background: rgba($o-paper-white, 0.3) !important;
       border-color: var(--shaka-metal-gold) !important;
       box-shadow: var(--shaka-glow-gold);
       outline: none;
