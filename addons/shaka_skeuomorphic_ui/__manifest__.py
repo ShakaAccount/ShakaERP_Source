@@ -1,0 +1,23 @@
+{
+    'name': 'Shaka Skeuomorphic UI',
+    'version': '1.0',
+    'category': 'Customizations',
+    'summary': 'Skeuomorphic UI theme for ShakaERP - realistic textures, depth, and tactile interfaces',
+    'depends': ['web'],
+    'data': [
+        'views/webclient_templates.xml',
+    ],
+    'assets': {
+        'web.assets_frontend': [
+            'shaka_skeuomorphic_ui/static/src/scss/login.scss',
+        ],
+        'web.assets_backend': [
+            'shaka_skeuomorphic_ui/static/src/scss/design_tokens.scss',
+            'shaka_skeuomorphic_ui/static/src/scss/backend.scss',
+        ],
+    },
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+    'license': 'LGPL-3',
+}

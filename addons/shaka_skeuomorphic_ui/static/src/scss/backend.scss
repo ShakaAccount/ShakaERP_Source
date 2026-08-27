@@ -1,0 +1,1216 @@
+// ShakaERP Skeuomorphic Backend Styles
+// ============================================================================
+// Main backend theme with realistic textures, depth, and tactile interfaces
+// Import design tokens first
+@import 'design_tokens';
+
+/// Utility Mixins
+/// ============================================================================
+
+@mixin texture-paper($opacity: 0.03) {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--shaka-texture-paper);
+    opacity: $opacity;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+}
+
+@mixin texture-leather($opacity: 0.05) {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--shaka-texture-leather);
+    opacity: $opacity;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+}
+
+@mixin texture-metal($opacity: 0.04) {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--shaka-texture-metal);
+    opacity: $opacity;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+}
+
+@mixin texture-wood($opacity: 0.04) {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--shaka-texture-wood);
+    opacity: $opacity;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+}
+
+@mixin shadow-paper($size: md) {
+  @if $size == sm { box-shadow: var(--shaka-shadow-paper-sm); }
+  @else if $size == md { box-shadow: var(--shaka-shadow-paper-md); }
+  @else if $size == lg { box-shadow: var(--shaka-shadow-paper-lg); }
+  @else if $size == xl { box-shadow: var(--shaka-shadow-paper-xl); }
+}
+
+@mixin shadow-leather($size: md) {
+  @if $size == sm { box-shadow: var(--shaka-shadow-leather-sm); }
+  @else if $size == md { box-shadow: var(--shaka-shadow-leather-md); }
+  @else if $size == lg { box-shadow: var(--shaka-shadow-leather-lg); }
+}
+
+@mixin shadow-metal($size: md) {
+  @if $size == sm { box-shadow: var(--shaka-shadow-metal-sm); }
+  @else if $size == md { box-shadow: var(--shaka-shadow-metal-md); }
+  @else if $size == lg { box-shadow: var(--shaka-shadow-metal-lg); }
+}
+
+@mixin shadow-inset($size: md) {
+  @if $size == sm { box-shadow: var(--shaka-shadow-inset-sm); }
+  @else if $size == md { box-shadow: var(--shaka-shadow-inset-md); }
+  @else if $size == lg { box-shadow: var(--shaka-shadow-inset-lg); }
+}
+
+@mixin gradient-leather { background: var(--shaka-gradient-leather); }
+@mixin gradient-wood { background: var(--shaka-gradient-wood); }
+@mixin gradient-metal { background: var(--shaka-gradient-metal); }
+@mixin gradient-gold { background: var(--shaka-gradient-gold); }
+@mixin gradient-paper { background: var(--shaka-gradient-paper); }
+@mixin gradient-btn-primary { background: var(--shaka-gradient-btn-primary); }
+@mixin gradient-btn-secondary { background: var(--shaka-gradient-btn-secondary); }
+@mixin gradient-btn-gold { background: var(--shaka-gradient-btn-gold); }
+
+@mixin tactile-button($variant: primary) {
+  position: relative;
+  border: none;
+  border-radius: var(--shaka-radius-md);
+  font-family: var(--shaka-font-ui);
+  font-weight: 500;
+  font-size: var(--shaka-font-size-sm);
+  padding: var(--shaka-space-sm) var(--shaka-space-lg);
+  transition: all var(--shaka-transition-fast);
+  cursor: pointer;
+  
+  @if $variant == primary {
+    @include gradient-btn-primary;
+    color: var(--shaka-text-on-dark);
+    border: 1px solid darken(var(--shaka-brand-primary), 15%);
+    @include shadow-leather(sm);
+  } @else if $variant == secondary {
+    @include gradient-btn-secondary;
+    color: var(--shaka-text-on-dark);
+    border: 1px solid darken(var(--shaka-leather-brown), 15%);
+    @include shadow-leather(sm);
+  } @else if $variant == gold {
+    @include gradient-btn-gold;
+    color: var(--shaka-ink-black);
+    border: 1px solid var(--shaka-metal-brass);
+    @include shadow-metal(sm);
+  } @else if $variant == ghost {
+    background: transparent;
+    color: var(--shaka-brand-primary);
+    border: 1px solid transparent;
+    &:hover {
+      background: rgba(var(--shaka-brand-primary), 0.1);
+      border-color: var(--shaka-brand-primary);
+    }
+  }
+  
+  &:hover {
+    transform: translateY(-1px);
+    @if $variant != ghost {
+      @include shadow-leather(md);
+    }
+  }
+  
+  &:active {
+    transform: translateY(1px);
+    transition: all var(--shaka-transition-press);
+    @include shadow-inset(sm);
+  }
+  
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--shaka-brand-primary), 0.3), var(--shaka-shadow-leather-md);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/// Global Body & Root
+/// ============================================================================
+
+.o_web_client {
+  background: var(--shaka-bg-main);
+  background-image: var(--shaka-gradient-paper);
+  background-attachment: fixed;
+  min-height: 100vh;
+  font-family: var(--shaka-font-ui);
+  color: var(--shaka-text-primary);
+  line-height: var(--shaka-line-height-normal);
+  
+  // Subtle paper texture overlay
+  @include texture-paper(0.02);
+}
+
+/// Navbar / Header
+/// ============================================================================
+
+.o_main_navbar {
+  background: var(--shaka-gradient-leather) !important;
+  border-bottom: 2px solid var(--shaka-border-gold);
+  box-shadow: var(--shaka-shadow-leather-lg);
+  position: relative;
+  z-index: var(--shaka-z-sticky);
+  
+  // Brass accent line at bottom
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--shaka-gradient-gold);
+  }
+  
+  .o_navbar_apps_menu,
+  .o_menu_brand,
+  .o_top_menu_brand {
+    color: var(--shaka-paper-cream) !important;
+    text-shadow: 1px 1px 2px rgba(var(--shaka-leather-black), 0.5);
+    font-family: var(--shaka-font-heading);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  
+  .o_menu_systray,
+  .o_dropdown_toggler_btn {
+    color: var(--shaka-paper-cream) !important;
+    
+    &:hover {
+      color: var(--shaka-metal-gold) !important;
+      background: rgba(var(--shaka-paper-white), 0.1) !important;
+      border-radius: var(--shaka-radius-sm);
+    }
+  }
+  
+  // Search bar in navbar
+  .o_searchview_input {
+    background: rgba(var(--shaka-paper-white), 0.15) !important;
+    border: 1px solid rgba(var(--shaka-metal-gold), 0.3) !important;
+    border-radius: var(--shaka-radius-pill) !important;
+    color: var(--shaka-paper-white) !important;
+    padding: var(--shaka-space-xs) var(--shaka-space-md) !important;
+    backdrop-filter: blur(10px);
+    
+    &::placeholder {
+      color: rgba(var(--shaka-paper-cream), 0.7) !important;
+    }
+    
+    &:focus {
+      background: rgba(var(--shaka-paper-white), 0.25) !important;
+      border-color: var(--shaka-metal-gold) !important;
+      box-shadow: var(--shaka-glow-gold);
+      outline: none;
+    }
+  }
+}
+
+/// Main Content Area
+/// ============================================================================
+
+.o_main_content {
+  background: transparent;
+  padding: var(--shaka-space-xl);
+}
+
+.o_content {
+  background: var(--shaka-surface-paper);
+  border-radius: var(--shaka-radius-lg);
+  border: 1px solid var(--shaka-border-paper);
+  @include shadow-paper(md);
+  @include texture-paper(0.04);
+  overflow: hidden;
+}
+
+/// Breadcrumbs
+/// ============================================================================
+
+.o_breadcrumb {
+  background: var(--shaka-gradient-paper);
+  border-bottom: 1px solid var(--shaka-border-paper);
+  padding: var(--shaka-space-md) var(--shaka-space-lg);
+  font-family: var(--shaka-font-ui);
+  font-size: var(--shaka-font-size-sm);
+  @include texture-paper(0.05);
+  
+  .breadcrumb-item {
+    color: var(--shaka-text-secondary);
+    
+    &.active {
+      color: var(--shaka-text-primary);
+      font-weight: 500;
+    }
+    
+    a {
+      color: var(--shaka-brand-primary);
+      text-decoration: none;
+      border-bottom: 1px dotted transparent;
+      transition: all var(--shaka-transition-fast);
+      
+      &:hover {
+        color: var(--shaka-brand-accent);
+        border-bottom-color: var(--shaka-brand-accent);
+      }
+    }
+  }
+  
+  .breadcrumb-item + .breadcrumb-item::before {
+    color: var(--shaka-text-muted);
+    content: '›';
+    font-weight: 600;
+  }
+}
+
+/// Buttons (Global Override)
+/// ============================================================================
+
+.btn {
+  @include tactile-button(primary);
+  font-family: var(--shaka-font-ui);
+  letter-spacing: 0.25px;
+  
+  &.btn-secondary {
+    @include tactile-button(secondary);
+  }
+  
+  &.btn-primary {
+    @include tactile-button(primary);
+  }
+  
+  &.btn-gold,
+  &.btn-warning {
+    @include tactile-button(gold);
+  }
+  
+  &.btn-outline-primary,
+  &.btn-outline-secondary,
+  &.btn-outline-dark {
+    @include tactile-button(ghost);
+  }
+  
+  &.btn-sm {
+    padding: var(--shaka-space-xs) var(--shaka-space-md);
+    font-size: var(--shaka-font-size-xs);
+    border-radius: var(--shaka-radius-sm);
+  }
+  
+  &.btn-lg {
+    padding: var(--shaka-space-md) var(--shaka-space-xl);
+    font-size: var(--shaka-font-size-base);
+    border-radius: var(--shaka-radius-lg);
+  }
+  
+  // Icon buttons
+  &.btn-icon {
+    padding: var(--shaka-space-sm);
+    border-radius: var(--shaka-radius-md);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/// Form Controls
+/// ============================================================================
+
+.form-control,
+.form-select,
+.o_input,
+.o_field_widget input,
+.o_field_widget select,
+.o_field_widget textarea {
+  background: var(--shaka-surface-paper) !important;
+  border: 2px solid var(--shaka-border-paper) !important;
+  border-radius: var(--shaka-radius-md) !important;
+  color: var(--shaka-text-primary) !important;
+  font-family: var(--shaka-font-ui) !important;
+  font-size: var(--shaka-font-size-sm) !default;
+  padding: var(--shaka-space-sm) var(--shaka-space-md) !default;
+  transition: all var(--shaka-transition-fast) !default;
+  @include texture-paper(0.03);
+  
+  &::placeholder {
+    color: var(--shaka-text-muted) !default;
+    opacity: 0.7;
+  }
+  
+  &:hover {
+    border-color: var(--shaka-border-wood) !default;
+  }
+  
+  &:focus {
+    border-color: var(--shaka-brand-primary) !default;
+    box-shadow: 0 0 0 3px rgba(var(--shaka-brand-primary), 0.15), var(--shaka-shadow-paper-sm) !default;
+    outline: none !default;
+    background: var(--shaka-paper-white) !default;
+  }
+  
+  &:disabled,
+  &.readonly {
+    background: var(--shaka-paper-aged) !default;
+    border-color: var(--shaka-border-paper) !default;
+    color: var(--shaka-text-muted) !default;
+    cursor: not-allowed;
+  }
+  
+  // Required field indicator
+  &[required],
+  &.o_required {
+    border-left: 3px solid var(--shaka-brand-primary) !default;
+  }
+  
+  // Error state
+  &.is-invalid,
+  .o_field_widget:has(.o_field_invalid) & {
+    border-color: var(--shaka-ink-red) !default;
+    box-shadow: 0 0 0 3px rgba(var(--shaka-ink-red), 0.15) !default;
+  }
+}
+
+/// Select/Dropdown Enhancement
+/// ============================================================================
+
+.form-select,
+.o_field_widget select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235D4E37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !default;
+  background-position: right var(--shaka-space-md) center !default;
+  background-size: 16px !default;
+  padding-right: var(--shaka-space-2xl) !default;
+  appearance: none !default;
+}
+
+/// Labels
+/// ============================================================================
+
+label,
+.o_form_label,
+.control-label {
+  font-family: var(--shaka-font-heading) !default;
+  font-weight: 600 !default;
+  color: var(--shaka-text-secondary) !default;
+  font-size: var(--shaka-font-size-sm) !default;
+  margin-bottom: var(--shaka-space-xs) !default;
+  letter-spacing: 0.25px;
+  
+  .o_required_modifier {
+    color: var(--shaka-ink-red) !default;
+    margin-left: 2px;
+  }
+}
+
+/// Cards / Panels
+/// ============================================================================
+
+.card,
+.o_kanban_card,
+.o_list_record,
+.o_form_sheet_bg,
+.portal_chatter,
+.o_kanban_view .o_kanban_record {
+  background: var(--shaka-surface-paper) !default;
+  border: 1px solid var(--shaka-border-paper) !default;
+  border-radius: var(--shaka-radius-lg) !default;
+  @include shadow-paper(sm) !default;
+  @include texture-paper(0.03);
+  transition: all var(--shaka-transition-normal) !default;
+  
+  &:hover {
+    @include shadow-paper(md) !default;
+    transform: translateY(-2px) !default;
+    border-color: var(--shaka-border-wood) !default;
+  }
+}
+
+.card-header,
+.o_kanban_card_header,
+.o_form_sheet_header {
+  background: var(--shaka-gradient-leather) !default;
+  color: var(--shaka-paper-cream) !default;
+  border-bottom: 1px solid var(--shaka-border-gold) !default;
+  border-radius: var(--shaka-radius-lg) var(--shaka-radius-lg) 0 0 !default;
+  padding: var(--shaka-space-md) var(--shaka-space-lg) !default;
+  font-family: var(--shaka-font-heading) !default;
+  font-weight: 600;
+  @include texture-leather(0.08);
+  
+  .btn-close {
+    filter: invert(1) opacity(0.8);
+    &:hover { filter: invert(1) opacity(1); }
+  }
+}
+
+.card-body,
+.o_kanban_card_body,
+.o_form_sheet_body {
+  padding: var(--shaka-space-lg) !default;
+}
+
+.card-footer {
+  background: var(--shaka-paper-cream) !default;
+  border-top: 1px solid var(--shaka-border-paper) !default;
+  border-radius: 0 0 var(--shaka-radius-lg) var(--shaka-radius-lg) !default;
+  padding: var(--shaka-space-md) var(--shaka-space-lg) !default;
+  @include texture-paper(0.05);
+}
+
+/// Tables / List View
+/// ============================================================================
+
+.table,
+.o_list_table {
+  font-family: var(--shaka-font-ui) !default;
+  font-size: var(--shaka-font-size-sm) !default;
+  color: var(--shaka-text-primary) !default;
+  
+  thead {
+    background: var(--shaka-gradient-paper) !default;
+    border-bottom: 2px solid var(--shaka-border-wood) !default;
+    @include texture-paper(0.06);
+    
+    th {
+      color: var(--shaka-text-secondary) !default;
+      font-weight: 600 !default;
+      font-family: var(--shaka-font-heading) !default;
+      font-size: var(--shaka-font-size-xs) !default;
+      text-transform: uppercase !default;
+      letter-spacing: 0.5px !default;
+      padding: var(--shaka-space-md) !default;
+      border: none !default;
+      border-right: 1px solid var(--shaka-border-paper) !default;
+      white-space: nowrap !default;
+      
+      &:last-child { border-right: none !default; }
+      
+      .o_column_sortable:hover {
+        color: var(--shaka-brand-primary) !default;
+      }
+    }
+  }
+  
+  tbody tr {
+    background: var(--shaka-surface-paper) !default;
+    border-bottom: 1px solid var(--shaka-border-paper) !default;
+    transition: all var(--shaka-transition-fast) !default;
+    @include texture-paper(0.02);
+    
+    &:hover {
+      background: var(--shaka-paper-warm) !default;
+      @include shadow-inset(sm);
+    }
+    
+    &.o_selected_row,
+    &.active {
+      background: linear-gradient(90deg, rgba(var(--shaka-brand-primary), 0.08), transparent) !default;
+      border-left: 3px solid var(--shaka-brand-primary) !default;
+    }
+  }
+  
+  td {
+    padding: var(--shaka-space-md) !default;
+    vertical-align: middle !default;
+    border: none !default;
+    border-right: 1px solid var(--shaka-border-paper) !default;
+    
+    &:last-child { border-right: none !default; }
+  }
+  
+  // Striped rows
+  tbody tr:nth-child(even) {
+    background: var(--shaka-paper-cream) !default;
+  }
+}
+
+/// Pagination
+/// ============================================================================
+
+.pagination,
+.o_pager {
+  .page-link,
+  .o_pager_btn {
+    background: var(--shaka-surface-paper) !default;
+    border: 1px solid var(--shaka-border-paper) !default;
+    color: var(--shaka-text-secondary) !default;
+    border-radius: var(--shaka-radius-md) !default;
+    margin: 0 var(--shaka-space-xs) !default;
+    padding: var(--shaka-space-xs) var(--shaka-space-md) !default;
+    font-family: var(--shaka-font-ui) !default;
+    font-weight: 500 !default;
+    transition: all var(--shaka-transition-fast) !default;
+    @include texture-paper(0.03);
+    
+    &:hover {
+      background: var(--shaka-paper-warm) !default;
+      border-color: var(--shaka-border-wood) !default;
+      color: var(--shaka-brand-primary) !default;
+      transform: translateY(-1px) !default;
+      @include shadow-paper(sm);
+    }
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(var(--shaka-brand-primary), 0.2) !default;
+      outline: none !default;
+    }
+  }
+  
+  .page-item.active .page-link,
+  .o_pager_btn.active {
+    @include gradient-btn-primary !default;
+    border-color: darken(var(--shaka-brand-primary), 15%) !default;
+    color: var(--shaka-text-on-dark) !default;
+    @include shadow-leather(sm);
+  }
+  
+  .page-item.disabled .page-link {
+    opacity: 0.4 !default;
+    cursor: not-allowed !default;
+  }
+}
+
+/// Dropdowns / Menus
+/// ============================================================================
+
+.dropdown-menu,
+.o_dropdown_menu {
+  background: var(--shaka-surface-paper) !default;
+  border: 1px solid var(--shaka-border-wood) !default;
+  border-radius: var(--shaka-radius-lg) !default;
+  box-shadow: var(--shaka-shadow-leather-lg) !default;
+  padding: var(--shaka-space-sm) !default;
+  @include texture-paper(0.05);
+  margin-top: var(--shaka-space-xs) !default;
+  
+  &::before {
+    // Dropdown arrow
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 20px;
+    width: 16px;
+    height: 16px;
+    background: var(--shaka-surface-paper);
+    border-left: 1px solid var(--shaka-border-wood);
+    border-top: 1px solid var(--shaka-border-wood);
+    transform: rotate(45deg);
+    @include texture-paper(0.05);
+  }
+  
+  .dropdown-item,
+  .o_dropdown_item {
+    color: var(--shaka-text-primary) !default;
+    padding: var(--shaka-space-sm) var(--shaka-space-md) !default;
+    border-radius: var(--shaka-radius-md) !default;
+    font-family: var(--shaka-font-ui) !default;
+    font-size: var(--shaka-font-size-sm) !default;
+    transition: all var(--shaka-transition-fast) !default;
+    
+    &:hover,
+    &:focus {
+      background: var(--shaka-gradient-paper) !default;
+      color: var(--shaka-brand-primary) !default;
+      @include shadow-inset(sm);
+    }
+    
+    &.active,
+    &.selected {
+      @include gradient-btn-primary !default;
+      color: var(--shaka-text-on-dark) !default;
+      @include shadow-leather(sm);
+    }
+  }
+  
+  .dropdown-divider {
+    border-color: var(--shaka-border-paper) !default;
+    margin: var(--shaka-space-xs) 0 !default;
+  }
+}
+
+/// Modals / Dialogs
+/// ============================================================================
+
+.modal-content,
+.o_dialog_content {
+  background: var(--shaka-surface-paper) !default;
+  border: 2px solid var(--shaka-border-wood) !default;
+  border-radius: var(--shaka-radius-xl) !default;
+  @include shadow-leather(xl) !default;
+  @include texture-paper(0.04);
+  overflow: hidden;
+  
+  .modal-header,
+  .o_dialog_header {
+    background: var(--shaka-gradient-leather) !default;
+    color: var(--shaka-paper-cream) !default;
+    border-bottom: 1px solid var(--shaka-border-gold) !default;
+    padding: var(--shaka-space-md) var(--shaka-space-lg) !default;
+    @include texture-leather(0.08);
+    
+    .modal-title,
+    .o_dialog_title {
+      font-family: var(--shaka-font-heading) !default;
+      font-weight: 600 !default;
+      letter-spacing: 0.25px;
+    }
+    
+    .btn-close {
+      filter: invert(1) opacity(0.7);
+      &:hover { filter: invert(1) opacity(1); }
+    }
+  }
+  
+  .modal-body,
+  .o_dialog_body {
+    padding: var(--shaka-space-lg) !default;
+  }
+  
+  .modal-footer,
+  .o_dialog_footer {
+    background: var(--shaka-paper-cream) !default;
+    border-top: 1px solid var(--shaka-border-paper) !default;
+    padding: var(--shaka-space-md) var(--shaka-space-lg) !default;
+    border-radius: 0 0 var(--shaka-radius-xl) var(--shaka-radius-xl) !default;
+    @include texture-paper(0.05);
+  }
+}
+
+.modal-backdrop {
+  background: rgba(var(--shaka-leather-black), 0.6) !default;
+  backdrop-filter: blur(2px);
+}
+
+/// Tooltips & Popovers
+/// ============================================================================
+
+.tooltip,
+.o_tooltip {
+  .tooltip-inner {
+    background: var(--shaka-leather-dark) !default;
+    color: var(--shaka-paper-cream) !default;
+    border: 1px solid var(--shaka-border-gold) !default;
+    border-radius: var(--shaka-radius-md) !default;
+    padding: var(--shaka-space-xs) var(--shaka-space-sm) !default;
+    font-family: var(--shaka-font-ui) !default;
+    font-size: var(--shaka-font-size-xs) !default;
+    @include shadow-leather(md);
+    @include texture-leather(0.1);
+  }
+  
+  .tooltip-arrow::before {
+    border-top-color: var(--shaka-leather-dark) !default;
+  }
+}
+
+.popover,
+.o_popover {
+  background: var(--shaka-surface-paper) !default;
+  border: 1px solid var(--shaka-border-wood) !default;
+  border-radius: var(--shaka-radius-lg) !default;
+  @include shadow-leather(lg) !default;
+  @include texture-paper(0.05);
+  
+  .popover-header {
+    background: var(--shaka-gradient-paper) !default;
+    border-bottom: 1px solid var(--shaka-border-paper) !default;
+    border-radius: var(--shaka-radius-lg) var(--shaka-radius-lg) 0 0 !default;
+    font-family: var(--shaka-font-heading) !default;
+    font-weight: 600;
+    color: var(--shaka-text-secondary) !default;
+    @include texture-paper(0.06);
+  }
+  
+  .popover-body {
+    color: var(--shaka-text-primary) !default;
+  }
+}
+
+/// Tabs
+/// ============================================================================
+
+.nav-tabs,
+.o_tabs {
+  border-bottom: 2px solid var(--shaka-border-paper) !default;
+  margin-bottom: var(--shaka-space-lg) !default;
+  
+  .nav-link,
+  .o_tab_link {
+    color: var(--shaka-text-muted) !default;
+    border: none !default;
+    border-bottom: 3px solid transparent !default;
+    border-radius: 0 !default;
+    padding: var(--shaka-space-sm) var(--shaka-space-lg) !default;
+    font-family: var(--shaka-font-heading) !default;
+    font-weight: 500 !default;
+    font-size: var(--shaka-font-size-sm) !default;
+    text-transform: uppercase !default;
+    letter-spacing: 0.5px !default;
+    margin-bottom: -2px !default;
+    transition: all var(--shaka-transition-fast) !default;
+    background: transparent !default;
+    
+    &:hover {
+      color: var(--shaka-brand-primary) !default;
+      border-bottom-color: var(--shaka-brand-primary) !default;
+      background: transparent !default;
+    }
+    
+    &.active {
+      color: var(--shaka-brand-primary) !default;
+      border-bottom-color: var(--shaka-brand-primary) !default;
+      background: transparent !default;
+      font-weight: 600 !default;
+    }
+  }
+}
+
+/// Badges / Labels
+/// ============================================================================
+
+.badge,
+.o_badge,
+.label {
+  font-family: var(--shaka-font-ui) !default;
+  font-weight: 500 !default;
+  font-size: var(--shaka-font-size-xs) !default;
+  padding: var(--shaka-space-xs) var(--shaka-space-sm) !default;
+  border-radius: var(--shaka-radius-pill) !default;
+  letter-spacing: 0.25px;
+  
+  &.bg-primary,
+  &.badge-primary {
+    @include gradient-btn-primary !default;
+    color: var(--shaka-text-on-dark) !default;
+    @include shadow-leather(xs);
+  }
+  
+  &.bg-secondary,
+  &.badge-secondary {
+    @include gradient-btn-secondary !default;
+    color: var(--shaka-text-on-dark) !default;
+    @include shadow-leather(xs);
+  }
+  
+  &.bg-success,
+  &.badge-success {
+    background: linear-gradient(180deg, #4CAF50, #2E7D32) !default;
+    color: white !default;
+  }
+  
+  &.bg-warning,
+  &.badge-warning {
+    @include gradient-btn-gold !default;
+    color: var(--shaka-ink-black) !default;
+    @include shadow-metal(xs);
+  }
+  
+  &.bg-danger,
+  &.badge-danger {
+    background: linear-gradient(180deg, #E53935, #B71C1C) !default;
+    color: white !default;
+  }
+  
+  &.bg-info,
+  &.badge-info {
+    background: linear-gradient(180deg, #03A9F4, #01579B) !default;
+    color: white !default;
+  }
+}
+
+/// Alerts / Notifications
+/// ============================================================================
+
+.alert,
+.o_alert {
+  border: none !default;
+  border-radius: var(--shaka-radius-lg) !default;
+  padding: var(--shaka-space-md) var(--shaka-space-lg) !default;
+  font-family: var(--shaka-font-ui) !default;
+  font-size: var(--shaka-font-size-sm) !default;
+  @include texture-paper(0.04);
+  
+  &.alert-primary {
+    background: linear-gradient(135deg, rgba(var(--shaka-brand-primary), 0.1), rgba(var(--shaka-brand-primary), 0.05)) !default;
+    border-left: 4px solid var(--shaka-brand-primary) !default;
+    color: var(--shaka-brand-primary) !default;
+  }
+  
+  &.alert-success {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(76, 175, 80, 0.05)) !default;
+    border-left: 4px solid #4CAF50 !default;
+    color: #2E7D32 !default;
+  }
+  
+  &.alert-warning {
+    background: linear-gradient(135deg, rgba(var(--shaka-metal-gold), 0.15), rgba(var(--shaka-metal-brass), 0.08)) !default;
+    border-left: 4px solid var(--shaka-metal-gold) !default;
+    color: var(--shaka-ink-sepia) !default;
+    @include texture-paper(0.03);
+  }
+  
+  &.alert-danger,
+  &.alert-error {
+    background: linear-gradient(135deg, rgba(229, 57, 53, 0.1), rgba(229, 57, 53, 0.05)) !default;
+    border-left: 4px solid #E53935 !default;
+    color: #B71C1C !default;
+  }
+  
+  &.alert-info {
+    background: linear-gradient(135deg, rgba(3, 169, 244, 0.1), rgba(3, 169, 244, 0.05)) !default;
+    border-left: 4px solid #03A9F4 !default;
+    color: #01579B !default;
+  }
+  
+  .alert-link {
+    color: inherit !default;
+    text-decoration: underline !default;
+    font-weight: 500 !default;
+  }
+}
+
+/// Progress Bars
+/// ============================================================================
+
+.progress {
+  background: var(--shaka-paper-aged) !default;
+  border-radius: var(--shaka-radius-pill) !default;
+  height: 8px !default;
+  @include shadow-inset(sm);
+  overflow: hidden;
+  
+  .progress-bar {
+    @include gradient-btn-primary !default;
+    border-radius: var(--shaka-radius-pill) !default;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1) !default;
+    position: relative;
+    overflow: hidden;
+    
+    // Shine effect
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shaka-shine 2s infinite;
+    }
+  }
+}
+
+@keyframes shaka-shine {
+  100% { left: 100%; }
+}
+
+/// Scrollbars (Custom Styled)
+/// ============================================================================
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--shaka-paper-cream);
+  @include texture-paper(0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--shaka-gradient-leather);
+  border-radius: var(--shaka-radius-pill);
+  border: 2px solid var(--shaka-paper-cream);
+  @include texture-leather(0.1);
+  
+  &:hover {
+    background: var(--shaka-gradient-wood);
+  }
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--shaka-paper-cream);
+  @include texture-paper(0.05);
+}
+
+/// Kanban View Specific
+/// ============================================================================
+
+.o_kanban_view {
+  .o_kanban_record {
+    @include texture-paper(0.03);
+    border: 1px solid var(--shaka-border-paper) !default;
+    background: var(--shaka-surface-paper) !default;
+    border-radius: var(--shaka-radius-lg) !default;
+    @include shadow-paper(sm) !default;
+    transition: all var(--shaka-transition-normal) !default;
+    
+    &:hover {
+      @include shadow-paper(lg) !default;
+      transform: translateY(-4px) !default;
+      border-color: var(--shaka-border-wood) !default;
+    }
+    
+    &.o_kanban_record_dragged {
+      @include shadow-leather(xl) !default;
+      transform: rotate(2deg) !default;
+      z-index: var(--shaka-z-popover) !default;
+    }
+  }
+  
+  .o_kanban_column {
+    background: var(--shaka-paper-cream) !default;
+    border-radius: var(--shaka-radius-lg) !default;
+    @include texture-paper(0.04);
+    border: 1px solid var(--shaka-border-paper) !default;
+    
+    .o_kanban_header {
+      background: var(--shaka-gradient-leather) !default;
+      color: var(--shaka-paper-cream) !default;
+      border-radius: var(--shaka-radius-lg) var(--shaka-radius-lg) 0 0 !default;
+      padding: var(--shaka-space-md) !default;
+      border-bottom: 1px solid var(--shaka-border-gold) !default;
+      @include texture-leather(0.08);
+      
+      .o_kanban_header_title {
+        font-family: var(--shaka-font-heading) !default;
+        font-weight: 600 !default;
+      }
+    }
+  }
+}
+
+/// Activity / Chatter
+/// ============================================================================
+
+.o_chatter,
+.o_mail_thread {
+  background: var(--shaka-surface-paper) !default;
+  border: 1px solid var(--shaka-border-paper) !default;
+  border-radius: var(--shaka-radius-lg) !default;
+  @include shadow-paper(sm) !default;
+  @include texture-paper(0.03);
+  
+  .o_chatter_topbar {
+    background: var(--shaka-gradient-paper) !default;
+    border-bottom: 1px solid var(--shaka-border-paper) !default;
+    border-radius: var(--shaka-radius-lg) var(--shaka-radius-lg) 0 0 !default;
+    @include texture-paper(0.06);
+  }
+  
+  .o_message {
+    border-bottom: 1px solid var(--shaka-border-paper) !default;
+    padding: var(--shaka-space-md) !default;
+    transition: all var(--shaka-transition-fast) !default;
+    
+    &:hover {
+      background: var(--shaka-paper-cream) !default;
+    }
+    
+    .o_message_sender {
+      font-weight: 600 !default;
+      color: var(--shaka-text-secondary) !default;
+      font-family: var(--shaka-font-heading) !default;
+    }
+    
+    .o_message_date {
+      color: var(--shaka-text-muted) !default;
+      font-size: var(--shaka-font-size-xs) !default;
+    }
+  }
+}
+
+/// Sidebar / Menu
+/// ============================================================================
+
+.o_menu_sections {
+  background: var(--shaka-gradient-leather) !default;
+  border-right: 2px solid var(--shaka-border-gold) !default;
+  @include texture-leather(0.06);
+  
+  .o_menu_entry {
+    color: var(--shaka-paper-cream) !default;
+    border-left: 3px solid transparent !default;
+    padding: var(--shaka-space-md) var(--shaka-space-lg) !default;
+    font-family: var(--shaka-font-heading) !default;
+    font-weight: 500 !default;
+    transition: all var(--shaka-transition-fast) !default;
+    text-shadow: 1px 1px 2px rgba(var(--shaka-leather-black), 0.3);
+    
+    &:hover,
+    &.active {
+      background: rgba(var(--shaka-paper-white), 0.1) !default;
+      border-left-color: var(--shaka-metal-gold) !default;
+      color: var(--shaka-metal-gold) !default;
+      padding-left: calc(var(--shaka-space-lg) + 4px) !default;
+    }
+  }
+  
+  .o_menu_section {
+    color: var(--shaka-metal-gold) !default;
+    font-size: var(--shaka-font-size-xs) !default;
+    text-transform: uppercase !default;
+    letter-spacing: 1px !default;
+    padding: var(--shaka-space-lg) var(--shaka-space-lg) var(--shaka-space-xs) !default;
+    font-weight: 600 !default;
+    text-shadow: 1px 1px 2px rgba(var(--shaka-leather-black), 0.5);
+  }
+}
+
+/// Debug / Development Indicators
+/// ============================================================================
+
+.shaka-debug-mode .o_web_client::before {
+  content: 'SHAKA ERP - SKEUOMORPHIC UI ACTIVE';
+  position: fixed;
+  bottom: var(--shaka-space-md);
+  right: var(--shaka-space-md);
+  background: var(--shaka-gradient-gold);
+  color: var(--shaka-ink-black);
+  padding: var(--shaka-space-xs) var(--shaka-space-sm);
+  border-radius: var(--shaka-radius-pill);
+  font-size: var(--shaka-font-size-xs);
+  font-weight: 600;
+  font-family: var(--shaka-font-ui);
+  z-index: var(--shaka-z-toast);
+  @include shadow-metal(md);
+  @include texture-metal(0.1);
+  animation: shaka-pulse 3s ease-in-out infinite;
+}
+
+@keyframes shaka-pulse {
+  0%, 100% { box-shadow: var(--shaka-shadow-metal-sm); }
+  50% { box-shadow: var(--shaka-glow-gold); }
+}
+
+/// Reduced Motion Support
+/// ============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/// Dark Mode Support (Future Enhancement)
+/// ============================================================================
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --shaka-bg-main: #{$o-leather-dark};
+    --shaka-bg-main-dark: #{$o-leather-black};
+    --shaka-surface-paper: #{$o-leather-dark};
+    --shaka-surface-parchment: #{$o-leather-brown};
+    --shaka-paper-white: #{$o-leather-tan};
+    --shaka-paper-cream: #{$o-leather-brown};
+    --shaka-paper-warm: #{$o-leather-dark};
+    --shaka-paper-aged: #{$o-wood-deep};
+    --shaka-parchment: #{$o-leather-brown};
+    --shaka-text-primary: #{$o-paper-white};
+    --shaka-text-secondary: #{$o-paper-cream};
+    --shaka-text-muted: #{$o-metal-silver};
+    --shaka-border-paper: #{$o-leather-brown};
+    --shaka-border-wood: #{$o-wood-medium};
+  }
+  
+  .o_web_client {
+    background: var(--shaka-bg-main);
+    background-image: var(--shaka-gradient-leather);
+  }
+  
+  .form-control,
+  .form-select,
+  .o_input {
+    background: var(--shaka-leather-brown) !default;
+    border-color: var(--shaka-border-wood) !default;
+    color: var(--shaka-paper-white) !default;
+  }
+  
+  .table tbody tr {
+    background: var(--shaka-leather-dark) !default;
+  }
+  
+  .table tbody tr:nth-child(even) {
+    background: var(--shaka-leather-brown) !default;
+  }
+  
+  .card,
+  .o_kanban_card,
+  .o_list_record {
+    background: var(--shaka-leather-dark) !default;
+    border-color: var(--shaka-border-wood) !default;
+  }
+  
+  .modal-content,
+  .o_dialog_content {
+    background: var(--shaka-leather-dark) !default;
+    border-color: var(--shaka-border-gold) !default;
+  }
+  
+  .dropdown-menu,
+  .o_dropdown_menu {
+    background: var(--shaka-leather-dark) !default;
+    border-color: var(--shaka-border-gold) !default;
+  }
+}
+
+/// Print Styles
+/// ============================================================================
+
+@media print {
+  .o_main_navbar,
+  .o_menu_sections,
+  .btn,
+  .pagination,
+  .modal-backdrop {
+    display: none !important;
+  }
+  
+  .o_web_client {
+    background: white !important;
+    background-image: none !important;
+  }
+  
+  .card,
+  .o_form_sheet_bg,
+  .table {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+  
+  a {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
+}
