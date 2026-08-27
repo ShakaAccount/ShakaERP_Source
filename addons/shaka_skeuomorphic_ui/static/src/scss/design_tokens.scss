@@ -10,53 +10,56 @@
 $o-webclient-color-scheme: bright !default;
 
 // Skeuomorphic Material Palette
-// These represent real-world materials used throughout the UI
+// These represent real-world materials used throughout the UI.
+// v2 redesign: cohesive warm-neutral neutrals, stronger text/surface contrast,
+// one deep-forest accent (accessible with white text), and restrained warm
+// secondary material tones so surfaces read crisp instead of muddy.
 
-// Wood tones (warm, organic)
-$o-wood-light: #D4A574 !default;
-$o-wood-medium: #B8860B !default;
-$o-wood-dark: #8B7355 !default;
-$o-wood-deep: #5D4E37 !default;
+// Wood tones (warm, organic — used sparingly for frames/app rails)
+$o-wood-light: #D8B491 !default;
+$o-wood-medium: #C0A04E !default;
+$o-wood-dark: #9A7143 !default;
+$o-wood-deep: #5F4A2E !default;
 
 // Leather tones (rich, tactile)
-$o-leather-tan: #C19A6B !default;
-$o-leather-brown: #8B6914 !default;
-$o-leather-dark: #4A3728 !default;
-$o-leather-black: #1A1A1A !default;
+$o-leather-tan: #B08C66 !default;
+$o-leather-brown: #8A5F3C !default;
+$o-leather-dark: #4A3B2D !default;
+$o-leather-black: #211B13 !default;
 
 // Metal tones (cool, precise)
-$o-metal-brass: #B5A642 !default;
-$o-metal-bronze: #CD7F32 !default;
-$o-metal-copper: #B87333 !default;
-$o-metal-silver: #C0C0C0 !default;
-$o-metal-steel: #71797E !default;
-$o-metal-gold: #FFD700 !default;
-$o-metal-iron: #4B4B4B !default;
+$o-metal-brass: #B9A63A !default;
+$o-metal-bronze: #B06A33 !default;
+$o-metal-copper: #A96A2F !default;
+$o-metal-silver: #C9CBD0 !default;
+$o-metal-steel: #626A72 !default;
+$o-metal-gold: #D6A92C !default;
+$o-metal-iron: #3E4248 !default;
 
-// Paper/parchment tones (document feel)
-$o-paper-white: #FDFBF7 !default;
-$o-paper-cream: #F5F0E1 !default;
-$o-paper-warm: #EDE8DC !default;
-$o-paper-aged: #D4C9BE !default;
-$o-parchment: #F1E9D2 !default;
+// Paper/parchment tones (document feel) — neutrals, not yellow
+$o-paper-white: #FFFFFF !default;
+$o-paper-cream: #F6F1E8 !default;
+$o-paper-warm: #EFE9DC !default;
+$o-paper-aged: #D8CDBD !default;
+$o-parchment: #F5EFE2 !default;
 
-// Ink/text colors (traditional writing)
-$o-ink-black: #1A1A2E !default;
-$o-ink-dark: #2D2D44 !default;
-$o-ink-medium: #4A4A6A !default;
-$o-ink-sepia: #5D4E37 !default;
-$o-ink-red: #8B0000 !default;
+// Ink/text colors (warm-black, high legibility)
+$o-ink-black: #211D18 !default;
+$o-ink-dark: #3E372E !default;
+$o-ink-medium: #6C6455 !default;
+$o-ink-sepia: #6B4A2A !default;
+$o-ink-red: #A03030 !default;
 
-// Brand colors (Shaka identity with material feel)
-$o-brand-primary: #2C5F2D !default;      // Deep forest green (like aged leather)
-$o-brand-secondary: #8B6914 !default;    // Leather brown
-$o-brand-accent: #CD7F32 !default;       // Bronze/copper accent
-$o-brand-gold: #DAA520 !default;         // Gold leaf accent
+// Brand colors (accessible Shaka identity)
+$o-brand-primary: #1F6B48 !default;   // Deep green — 4.5+:1 with white text
+$o-brand-secondary: #8A5F3C !default; // Leather brown
+$o-brand-accent: #B06A33 !default;    // Bronze/copper accent
+$o-brand-gold: #D6A92C !default;       // Gold accent (used with dark text)
 
 /// Background & Surface System
 /// ============================================================================
 
-// Main backgrounds with material feel
+// Main backgrounds
 $o-main-bg: $o-paper-cream !default;
 $o-main-bg-dark: $o-leather-dark !default;
 
@@ -64,12 +67,12 @@ $o-main-bg-dark: $o-leather-dark !default;
 $o-surface-paper: $o-paper-white !default;
 $o-surface-parchment: $o-parchment !default;
 $o-surface-wood: $o-wood-light !default;
-$o-surface-leather: $o-leather-tan !default;
+$o-surface-leather: $o-leather-brown !default; // pairs with --text-on-leather at >4.5:1
 $o-surface-metal: $o-metal-silver !default;
 
 // Elevated surfaces (cards, modals, dropdowns)
 $o-elevated-1: $o-paper-white !default;
-$o-elevated-2: $o-paper-cream !default;
+$o-elevated-2: #FDFBF5 !default;
 $o-elevated-3: $o-paper-warm !default;
 
 // Text colors
@@ -77,9 +80,9 @@ $o-text-primary: $o-ink-black !default;
 $o-text-secondary: $o-ink-dark !default;
 $o-text-muted: $o-ink-medium !default;
 $o-text-on-dark: $o-paper-white !default;
-$o-text-on-leather: $o-paper-cream !default;
+$o-text-on-leather: #F5E9D8 !default;
 $o-text-link: $o-brand-primary !default;
-$o-text-link-hover: darken($o-brand-primary, 10%) !default;
+$o-text-link-hover: darken($o-brand-primary, 8%) !default;
 
 /// Border System (material-aware)
 /// ============================================================================
@@ -371,6 +374,11 @@ $o-breakpoint-2xl: 1400px !default;
   --shaka-surface-wood: #{$o-surface-wood};
   --shaka-surface-leather: #{$o-surface-leather};
   --shaka-surface-metal: #{$o-surface-metal};
+
+  // Elevated surfaces (cards, modals, dropdowns) — REQUIRED in light mode
+  --shaka-elevated-1: #{$o-elevated-1};
+  --shaka-elevated-2: #{$o-elevated-2};
+  --shaka-elevated-3: #{$o-elevated-3};
   
   // Text
   --shaka-text-primary: #{$o-text-primary};
@@ -378,6 +386,7 @@ $o-breakpoint-2xl: 1400px !default;
   --shaka-text-muted: #{$o-text-muted};
   --shaka-text-on-dark: #{$o-text-on-dark};
   --shaka-text-link: #{$o-text-link};
+  --shaka-text-link-hover: #{$o-text-link-hover};
   
   // Borders
   --shaka-border-paper: #{$o-border-paper};

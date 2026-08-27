@@ -68,17 +68,32 @@
 }
 
 // View switcher buttons: brushed-metal toggles
+// View switcher buttons: brushed-light-metal toggles with engraved dark glyphs.
+// (A full dark metal gradient would make neither black nor white text legible
+// across its height, so we use a stable light silver + dark engraved text.)
 .o_cp_switch_buttons .btn {
-  background: var(--shaka-gradient-metal);
-  border-color: rgba(75, 75, 75, 0.45);
-  color: #F2F2F2;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+  background: linear-gradient(180deg, #E9EBEE 0%, #D4D6D9 45%, #C2C5C9 100%);
+  border: 1px solid #8E949B;
+  color: #23201B;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+  box-shadow:
+    inset 0 -1px 0 rgba(255, 255, 255, 0.55),
+    0 1px 2px rgba(0, 0, 0, 0.18);
+  transition: box-shadow var(--shaka-transition-fast), background var(--shaka-transition-fast);
 
-  &.active,
   &:hover {
-    background: var(--shaka-gradient-gold);
-    color: #2D2D44;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+    background: linear-gradient(180deg, #EFC97A 0%, #E1C97A 45%, #D0B45E 100%);
+    color: #33290F;
+  }
+
+  &.active {
+    background: linear-gradient(180deg, #F0DC94 0%, #DFBE5E 55%, #C9A227 100%);
+    color: #33290F;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+    border-color: #A8851E;
+    box-shadow:
+      inset 0 2px 3px rgba(0, 0, 0, 0.18),
+      var(--shaka-glow-gold);
   }
 }
 
@@ -208,5 +223,29 @@ img.o_avatar {
     inset 0 1px 2px rgba(255, 255, 255, 0.35),
     0 2px 5px rgba(26, 26, 46, 0.25);
   background: var(--shaka-gradient-metal);
+}
+
+/// Accessibility - consistent tactile focus ring
+/// ============================================================================
+
+:focus-visible {
+  outline: 2px solid var(--shaka-brand-gold);
+  outline-offset: 2px;
+}
+.o_web_client :focus-visible {
+  outline: 2px solid var(--shaka-brand-gold);
+  outline-offset: 2px;
+}
+
+// Ensure link/primary text keeps the accessible deep green in light mode.
+.o_web_client a:not(.btn) {
+  color: var(--shaka-text-link);
+  &:hover, &:focus-visible { color: var(--shaka-text-link-hover); }
+}
+
+// Contrast safety floor for muted labels & placeholder text on light surfaces.
+.o_web_client .text-muted,
+.o_form_view .o_form_label {
+  color: var(--shaka-text-muted) !important;
 }
 
