@@ -1,10 +1,11 @@
 // ShakaERP Skeuomorphic Backend Styles
 // ============================================================================
 // Main backend theme with realistic textures, depth, and tactile interfaces
-// Import design tokens first
-@import 'design_tokens';
-@import 'shaka_mixins';
-
+//
+// NOTE: No @import statements here. Odoo concatenates all SCSS assets of a
+// bundle in manifest order (see assetsbundle.preprocess_css), so design tokens
+// and mixins must be declared as separate assets BEFORE this file in
+// __manifest__.py. Local @import is forbidden by Odoo and breaks libsass.
 
 /// Global Body & Root
 /// ============================================================================

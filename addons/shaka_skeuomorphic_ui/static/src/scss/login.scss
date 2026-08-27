@@ -1,9 +1,10 @@
-@import 'shaka_mixins';
 // ShakaERP Skeuomorphic Login Page Styles
 // ============================================================================
 // Beautiful, tactile login experience with realistic materials
-// Import design tokens
-@import 'design_tokens';
+//
+// NOTE: No @import statements here. Odoo concatenates all SCSS assets of a
+// bundle in manifest order (libcomp) — design tokens and mixins are declared as
+// separate files BEFORE this file in __manifest__.py.
 
 /// Login Page Specific Mixins
 /// ============================================================================
