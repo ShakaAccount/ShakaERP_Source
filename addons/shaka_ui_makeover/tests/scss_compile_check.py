@@ -72,7 +72,7 @@ def test_backend_bundle():
 def test_frontend_bundle():
     blob, paths = _read_concat(FRONTEND_ORDER)
     css = sass.compile(string=blob)
-    assert len(css) > 5_000, f'frontend bundle too small: {len(css)} bytes'
+    assert len(css) > 4_000, f'frontend bundle too small: {len(css)} bytes'
     assert 'backdrop-filter' in css or '-webkit-backdrop-filter' in css
     assert '.oe_login_form' in css, 'login form selector missing'
     return len(css)

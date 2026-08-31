@@ -45,12 +45,12 @@ html[data-theme='glass'] .o_web_client {
   @include lg-font-stack;
 }
 
-// ---- Navbar - frosted glass bar ----
+// ---- Navbar — same base background as the page, separated by a hairline border
 .o_web_client[data-theme='glass'] .o_main_navbar,
 html[data-theme='glass'] .o_main_navbar {
-  @include lg-glass-panel(strong);
-  box-shadow: var(--lg-shadow-md);
-  border-bottom: none;
+  background: var(--lg-bg-base);
+  border-bottom: 1px solid var(--lg-border);
+  box-shadow: none;
 }
 
 html[data-theme='glass'] .o_menu_systray,
@@ -58,140 +58,202 @@ html[data-theme='glass'] .o_main_navbar a {
   color: var(--lg-text);
 }
 
-// ---- Control panel - frosted ribbon ----
+// ---- Control panel — same base, bottom border, no rounded "ribbon" ----
 html[data-theme='glass'] .o_control_panel {
-  @include lg-glass-panel(soft);
-  box-shadow: var(--lg-shadow-sm);
-  border-radius: 0 0 var(--lg-r-md) var(--lg-r-md);
-  margin: 0 var(--lg-r-md);
+  background: var(--lg-bg-base);
+  border-bottom: 1px solid var(--lg-border);
+  border-radius: 0;
+  margin: 0;
+  box-shadow: none;
+}
+
+// ---- Form sheet background — solid dark surface, no glass world ----
+html[data-theme='glass'] .o_form_sheet_bg {
+  background: var(--lg-bg-base);
 }
 
 // ---- Cards / sheets ----
-html[data-theme='glass'] .o_form_sheet_bg {
-  @include glass-backdrop;
-}
-
 html[data-theme='glass'] div.o_card,
 html[data-theme='glass'] .o_kanban_renderer .o_kanban_record,
 html[data-theme='glass'] .card {
-  @include lg-glass-panel();
+  background: var(--lg-bg-surface);
+  border: 1px solid var(--lg-border);
+  border-radius: var(--lg-r-md);
+  box-shadow: var(--lg-shadow-sm);
+  color: var(--lg-text);
 }
 
-// ---- Modals - frosted dialog ----
+// ---- Modals - solid dark dialog (no glass blur on solid dark) ----
 html[data-theme='glass'] .modal-backdrop.show {
-  opacity: 0.5;
-  background: #101828;
+  opacity: 0.65;
+  background: #000000;
 }
 
 html[data-theme='glass'] .modal-content,
 html[data-theme='glass'] .o_dialog {
-  @include glass-elevated();
+  background: var(--lg-bg-surface);
+  border: 1px solid var(--lg-border);
   border-radius: var(--lg-r-lg);
+  box-shadow: var(--lg-shadow-lg);
   color: var(--lg-text);
 }
 
-// ---- Dropdowns ----
+// ---- Dropdowns - solid elevated surface, accent on hover/active ----
 html[data-theme='glass'] .dropdown-menu,
 html[data-theme='glass'] .o_dropdown_menu {
-  @include glass-elevated();
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
+  border-radius: var(--lg-r-md);
+  box-shadow: var(--lg-shadow-md);
   color: var(--lg-text);
   .dropdown-item {
+    color: var(--lg-text);
     border-radius: var(--lg-r-sm);
-    &:hover, &:focus { background: rgba(255,255,255,0.28); }
+    &:hover, &:focus {
+      background: var(--lg-bg-elevated);
+      color: var(--lg-text);
+      outline: 1px solid var(--lg-accent);
+    }
+    &.active,
+    &.selected,
+    &[aria-selected="true"] {
+      background: var(--lg-accent);
+      color: var(--lg-text-on-accent);
+    }
   }
 }
 
 // ---- Notifications ----
 html[data-theme='glass'] .o_notification {
-  @include glass-elevated();
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
   border-radius: var(--lg-r-md);
   border-inline-start: 3px solid var(--lg-accent);
+  box-shadow: var(--lg-shadow-md);
   color: var(--lg-text);
 }
 
 // ---- Buttons ----
 html[data-theme='glass'] .btn {
-  border-radius: var(--lg-r-md);
+  border-radius: var(--lg-r-sm);
+  font-weight: 500;
+  transition: background var(--lg-t-fast), border-color var(--lg-t-fast), color var(--lg-t-fast);
 }
 
 // Primary buttons.  Odoo 19 uses CSS custom props (--btn-primary-bg) on the
-// platform .btn, so we must override both `background` AND the --btn-* vars
-// to win the cascade reliably.
+// platform .btn, so we override both `background` AND the --btn-* vars to
+// win the cascade reliably.
 html[data-theme='glass'] .btn-primary,
 html[data-theme='glass'] .o_control_panel_main_buttons .btn-primary,
 html[data-theme='glass'] .o_form_button_save.btn-primary,
 html[data-theme='glass'] .o_web_settings_invite.btn-primary {
-  --btn-primary-bg: var(--lg-btn-primary);
-  --btn-primary-border-color: transparent;
-  --btn-primary-color: var(--lg-btn-text);
-  background: var(--lg-btn-primary);
-  background-color: var(--lg-btn-primary);
-  border-color: transparent;
-  color: var(--lg-btn-text);
-  box-shadow: var(--lg-shadow-sm), inset 0 1px 0 rgba(255,255,255,0.4);
+  --btn-primary-bg: var(--lg-accent);
+  --btn-primary-border-color: var(--lg-accent);
+  --btn-primary-color: var(--lg-text-on-accent);
+  --btn-primary-hover-bg: var(--lg-accent-strong);
+  --btn-primary-hover-border-color: var(--lg-accent-strong);
+  --btn-primary-hover-color: var(--lg-text-on-accent);
+  --btn-primary-active-bg: var(--lg-accent-strong);
+  --btn-primary-active-border-color: var(--lg-accent-strong);
+  background: var(--lg-accent);
+  background-color: var(--lg-accent);
+  border: 1px solid var(--lg-accent);
+  color: var(--lg-text-on-accent);
+  box-shadow: var(--lg-shadow-sm);
   &:hover {
-    filter: brightness(1.06);
-    --btn-primary-bg: var(--lg-btn-primary);
-    background-color: var(--lg-btn-primary);
+    background: var(--lg-accent-strong);
+    background-color: var(--lg-accent-strong);
+    border-color: var(--lg-accent-strong);
+    color: var(--lg-text-on-accent);
   }
   &:active,
-  &.active {
-    --btn-primary-bg: var(--lg-btn-primary);
-    background-color: var(--lg-btn-primary);
+  &.active,
+  &[aria-pressed="true"] {
+    background: var(--lg-accent-strong);
+    background-color: var(--lg-accent-strong);
+    border-color: var(--lg-accent-strong);
+    color: var(--lg-text-on-accent);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--lg-accent-icicle);
+    outline-offset: 2px;
   }
 }
 
 html[data-theme='glass'] .btn-secondary {
-  @include glass-control();
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
+  color: var(--lg-text);
+  &:hover {
+    background: var(--lg-bg-elevated);
+    border-color: var(--lg-accent-icicle);
+    color: var(--lg-text);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--lg-accent-icicle);
+    outline-offset: 2px;
+  }
   &[aria-pressed='true'],
   &.active {
     background: var(--lg-accent);
-    color: var(--lg-text-on-glass);
-    border-color: transparent;
+    color: var(--lg-text-on-accent);
+    border-color: var(--lg-accent);
   }
 }
 
-// ---- Form controls - frosted inputs ----
+html[data-theme='glass'] .btn-link {
+  color: var(--lg-accent);
+  &:hover, &:focus { color: var(--lg-accent-icicle); }
+}
+
+// ---- Form controls - solid dark inputs ----
 html[data-theme='glass'] .form-control,
 html[data-theme='glass'] .form-select,
 html[data-theme='glass'] .o_input,
 html[data-theme='glass'] input.form-control {
-  background: var(--lg-glass-soft);
-  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
-  backdrop-filter: blur(var(--lg-blur-sm));
-  border: 1px solid var(--lg-line-lo);
-  border-bottom-color: var(--lg-line-hi);
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
   color: var(--lg-text);
   border-radius: var(--lg-r-sm);
+  &::placeholder { color: var(--lg-text-muted); }
+  &:hover { border-color: var(--lg-accent-icicle); }
   &:focus {
     border-color: var(--lg-accent);
     box-shadow: 0 0 0 3px var(--lg-focus);
+    background: var(--lg-bg-elevated);
+    color: var(--lg-text);
   }
 }
 
 // ---- Tables / list ----
-html[data-theme='glass'] .o_list_renderer table.o_list_table thead th {
-  background: var(--lg-glass-soft);
-  color: var(--lg-text-secondary);
-}
-
-html[data-theme='glass'] .o_web_client .o_list_view .o_list_table tbody tr.o_data_row {
-  background: transparent;
-  &:hover { background: rgba(255,255,255,0.16); }
-  &.o_selected_row {
-    background: rgba(78,141,255,0.16);
+html[data-theme='glass'] .o_list_renderer table.o_list_table {
+  background: var(--lg-bg-surface);
+  thead th {
+    background: var(--lg-bg-surface);
+    color: var(--lg-text-secondary);
+    border-bottom: 1px solid var(--lg-border);
+  }
+  tbody tr.o_data_row {
+    background: var(--lg-bg-surface);
+    color: var(--lg-text);
+    border-bottom: 1px solid var(--lg-border);
+    &:hover { background: var(--lg-bg-elevated); }
+    &.o_selected_row {
+      background: rgba(91, 141, 239, 0.18);
+      color: var(--lg-text);
+    }
   }
 }
 
 // ---- Custom scrollbars ----
 html[data-theme='glass'] ::-webkit-scrollbar { width: 12px; height: 12px; }
 html[data-theme='glass'] ::-webkit-scrollbar-thumb {
-  background: rgba(90,100,120,0.35);
+  background: var(--lg-bg-elevated);
   border-radius: 999px;
   border: 3px solid transparent;
   background-clip: content-box;
 }
-html[data-theme='glass'] ::-webkit-scrollbar-thumb:hover { background: rgba(78,141,255,0.5); background-clip: content-box; }
+html[data-theme='glass'] ::-webkit-scrollbar-thumb:hover { background: var(--lg-accent); background-clip: content-box; }
 
 // ---- Focus ring ----
 html[data-theme='glass'] :focus-visible {
@@ -201,52 +263,56 @@ html[data-theme='glass'] :focus-visible {
 
 // ---- Webclient shell: app switcher, home dashboard, action manager ----
 html[data-theme='glass'] .o_web_client {
-  background: transparent;
+  background: var(--lg-bg-base);
 }
 
 html[data-theme='glass'] .o_action_manager,
 html[data-theme='glass'] .o_content {
-  background: transparent;
+  background: var(--lg-bg-base);
 }
 
 // App switcher (the small "grid" icon in the navbar)
 html[data-theme='glass'] .o_navbar_apps_menu {
   .dropdown-menu {
-    @include glass-elevated(strong);
+    background: var(--lg-bg-elevated);
+    border: 1px solid var(--lg-border);
     padding: var(--lg-r-md);
     border-radius: var(--lg-r-lg);
   }
   .o_app {
     border-radius: var(--lg-r-md);
-    transition: background var(--lg-t-fast), transform var(--lg-t-fast);
+    color: var(--lg-text);
+    transition: background var(--lg-t-fast), color var(--lg-t-fast);
     &:hover {
-      background: rgba(255, 255, 255, 0.22);
-      transform: translateY(-1px);
+      background: var(--lg-bg-elevated);
+      color: var(--lg-text);
     }
     &.focus,
     &:focus,
     &.active {
-      background: rgba(78, 141, 255, 0.22);
-      box-shadow: inset 0 0 0 1px var(--lg-accent);
+      background: var(--lg-accent);
+      color: var(--lg-text-on-accent);
     }
   }
 }
 
 // Home menu (the dashboard of installed apps)
 html[data-theme='glass'] .o_home_menu {
-  background: transparent;
+  background: var(--lg-bg-base);
   .o_home_menu_scrollable {
     padding: var(--lg-r-lg);
   }
   .o_app {
-    @include lg-glass-panel();
+    background: var(--lg-bg-surface);
+    border: 1px solid var(--lg-border);
     border-radius: var(--lg-r-lg);
     padding: var(--lg-r-md);
     color: var(--lg-text);
-    transition: transform var(--lg-t-fast), box-shadow var(--lg-t-med);
+    transition: transform var(--lg-t-fast), border-color var(--lg-t-fast), background var(--lg-t-fast);
     &:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--lg-gloss), var(--lg-shadow-lg);
+      transform: translateY(-2px);
+      background: var(--lg-bg-elevated);
+      border-color: var(--lg-accent-icicle);
     }
   }
 }
@@ -261,47 +327,25 @@ html[data-theme='glass'] .o_menu_brand {
 // Top menu sections (Discussions / Employees / etc. pills)
 html[data-theme='glass'] .o_menu_sections {
   .o_nav_entry {
-    border-radius: var(--lg-r-pill);
-    padding: 4px 12px;
+    border-radius: var(--lg-r-sm);
+    padding: 6px 12px;
     transition: background var(--lg-t-fast), color var(--lg-t-fast);
     color: var(--lg-text-secondary);
-    &:hover { background: rgba(255, 255, 255, 0.18); color: var(--lg-text); }
+    &:hover { background: var(--lg-bg-elevated); color: var(--lg-text); }
     &.active,
     &[aria-current="page"] {
       background: var(--lg-accent);
-      color: var(--lg-text-on-glass);
-      box-shadow: 0 4px 14px rgba(78, 141, 255, 0.32);
+      color: var(--lg-text-on-accent);
     }
   }
 }
 
-// ---- Ambient glass-world drift: subtle moving blobs (motion-safe) ----
-// Implemented as a fixed pseudo-element overlay so the radial backdrop stays
-// GPU-cheap. Honors prefers-reduced-motion.
-@media (prefers-reduced-motion: no-preference) {
-  html[data-theme='glass'] body::before {
-    content: '';
-    position: fixed;
-    inset: -10vmax;
-    z-index: -1;
-    pointer-events: none;
-    background:
-      radial-gradient(40vmax 40vmax at 20% 30%, var(--lg-bg-blob-a), transparent 60%),
-      radial-gradient(36vmax 36vmax at 80% 70%, var(--lg-bg-blob-b), transparent 60%),
-      radial-gradient(30vmax 30vmax at 50% 110%, var(--lg-bg-blob-c), transparent 60%);
-    opacity: 0.5;
-    filter: blur(40px);
-    animation: lg-world-drift 48s ease-in-out infinite alternate;
-  }
-}
+// ---- (Removed) Ambient glass-world drift animation ----
+// The previous pseudo-element blob animation produced floating colored
+// gradients which conflict with the locked dark palette. The page is
+// the solid --lg-bg-base now, with no animation.
 
-@keyframes lg-world-drift {
-  0%   { transform: translate3d(0, 0, 0)            scale(1); }
-  50%  { transform: translate3d(2vmax, -1vmax, 0)   scale(1.05); }
-  100% { transform: translate3d(-1vmax, 1vmax, 0)   scale(0.97); }
-}
-
-// ---- Reduced motion: disable blur shake ----
+// ---- Reduced motion: disable animations & transitions ----
 @media (prefers-reduced-motion: reduce) {
   html[data-theme='glass'] *,
   html[data-theme='glass'] *::before,

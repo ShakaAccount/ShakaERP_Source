@@ -1,24 +1,25 @@
-// ShakaERP Liquid Glass - view-level surfaces
+// ShakaERP Shaka Theme - view-level surfaces
 // ============================================================================
 
-// ---- Notebook - glass tab rail ----
+// ---- Notebook - dark tab rail ----
 html[data-theme='glass'] .o_notebook {
   .nav-tabs {
-    border-bottom: 1px solid var(--lg-line-lo);
+    border-bottom: 1px solid var(--lg-border);
   }
   .nav-link {
-    color: var(--lg-text-muted);
+    color: var(--lg-text-secondary);
     border-radius: var(--lg-r-sm);
     margin-inline-end: 4px;
-    &:hover { background: rgba(255,255,255,0.18); color: var(--lg-text); }
+    border: 1px solid transparent;
+    transition: background var(--lg-t-fast), color var(--lg-t-fast);
+    &:hover { background: var(--lg-bg-elevated); color: var(--lg-text); }
     &.active {
-      color: var(--lg-accent-strong);
+      color: var(--lg-text);
       font-weight: 600;
-      background: var(--lg-glass-strong);
-      border: 1px solid var(--lg-line-hi);
-      border-bottom-color: transparent;
-      backdrop-filter: blur(var(--lg-blur-sm));
-      box-shadow: inset 0 2px 0 var(--lg-accent);
+      background: var(--lg-bg-surface);
+      border: 1px solid var(--lg-border);
+      border-bottom-color: var(--lg-bg-surface);  // flush with the content
+      box-shadow: inset 0 -2px 0 var(--lg-accent);
     }
   }
   .o_notebook_content, .tab-pane {
@@ -26,65 +27,87 @@ html[data-theme='glass'] .o_notebook {
   }
 }
 
-// ---- Kanban - frosted index cards ----
+// ---- Kanban - solid dark cards ----
 html[data-theme='glass'] .o_kanban_record {
-  @include lg-glass-panel();
+  background: var(--lg-bg-surface);
+  border: 1px solid var(--lg-border);
   border-radius: var(--lg-r-md);
-  transition: transform var(--lg-t-fast), box-shadow var(--lg-t-med);
+  box-shadow: var(--lg-shadow-sm);
+  color: var(--lg-text);
+  transition: transform var(--lg-t-fast), border-color var(--lg-t-fast), background var(--lg-t-fast);
   &:hover {
     transform: translateY(-2px);
-    box-shadow: var(--lg-gloss), var(--lg-shadow-lg);
+    background: var(--lg-bg-elevated);
+    border-color: var(--lg-accent-icicle);
   }
   &:focus-within {
-    box-shadow: var(--lg-gloss), 0 0 0 3px var(--lg-focus);
+    border-color: var(--lg-accent);
+    box-shadow: 0 0 0 3px var(--lg-focus);
   }
 }
 
 // ---- Kanban column header ----
 html[data-theme='glass'] .o_kanban_group .o_kanban_header {
-  background: var(--lg-glass-soft);
-  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
-  backdrop-filter: blur(var(--lg-blur-sm));
+  background: var(--lg-bg-surface);
+  border-bottom: 1px solid var(--lg-border);
   border-radius: var(--lg-r-md) var(--lg-r-md) 0 0;
   color: var(--lg-text);
+  font-weight: 600;
 }
 
-// ---- Group names (embossed) ----
+// ---- Group names (column titles in list view) ----
 html[data-theme='glass'] .o_group_name {
   color: var(--lg-text);
-  text-shadow: 0 1px 0 var(--lg-line-hi);
+  font-weight: 600;
 }
 
-// ---- Date/time picker - desk glass ----
+// ---- Date/time picker ----
 html[data-theme='glass'] .o_datetime_picker {
-  @include glass-elevated();
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
   border-radius: var(--lg-r-md);
+  box-shadow: var(--lg-shadow-md);
+  color: var(--lg-text);
   .o_datetime_picker_header,
   .o_datetime_picker_navbar {
-    background: var(--lg-glass-soft);
+    background: var(--lg-bg-surface);
     color: var(--lg-text);
+    border-bottom: 1px solid var(--lg-border);
   }
   td.o_datetime_picker_day_cell {
     color: var(--lg-text);
-    &:hover { background: rgba(255,255,255,0.2); }
+    border-radius: 50%;
+    &:hover { background: var(--lg-bg-surface); }
   }
   .o_datetime_picker_day_cell.selected {
-    background: var(--lg-accent-strong);
-    color: #fff;
-    border-radius: 999px;
+    background: var(--lg-accent);
+    color: var(--lg-text-on-accent);
   }
 }
 
 // ---- Form labels ----
-html[data-theme='glass'] .o_form_view .o_form_label {
-  color: var(--lg-text-secondary);
+html[data-theme='glass'] .o_form_view .o_form_label,
+html[data-theme='glass'] .o_form_view label.o_form_label {
+  color: var(--lg-text);
+  font-weight: 500;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+// Form view: sheet title (the bold heading at the top of a form)
+html[data-theme='glass'] .o_form_view .o_form_sheet .oe_title h1,
+html[data-theme='glass'] .o_form_view .o_form_sheet .oe_title h2,
+html[data-theme='glass'] .o_form_view .o_form_sheet .oe_title h3,
+html[data-theme='glass'] .o_form_renderer.o_form_nosheet h2 {
+  color: var(--lg-text);
   font-weight: 600;
 }
 
-// ---- Search panel - frosted drawer ----
+// ---- Search panel - solid drawer ----
 html[data-theme='glass'] .o_search_panel_sidebar {
-  @include lg-glass-panel(soft);
-  border-inline-end: 1px solid var(--lg-line-lo);
+  background: var(--lg-bg-surface);
+  border-inline-end: 1px solid var(--lg-border);
+  color: var(--lg-text);
 }
 
 // ---- Pager chip ----
@@ -93,24 +116,21 @@ html[data-theme='glass'] .o_cp_pager .o_pager_value {
   border-radius: var(--lg-r-sm);
 }
 
-// ---- Chatter: frosted conversation rail ----
+// ---- Chatter: solid dark conversation rail ----
 html[data-theme='glass'] .o_Chatter {
-  background: var(--lg-glass-soft);
-  -webkit-backdrop-filter: blur(var(--lg-blur-md)) saturate(1.4);
-  backdrop-filter: blur(var(--lg-blur-md)) saturate(1.4);
-  border: 1px solid var(--lg-line-hi);
-  border-radius: var(--lg-r-lg);
+  background: var(--lg-bg-surface);
+  border: 1px solid var(--lg-border);
+  border-radius: var(--lg-r-md);
   box-shadow: var(--lg-shadow-sm);
   color: var(--lg-text);
 }
 
 html[data-theme='glass'] .o_Chatter_topbar {
-  background: var(--lg-glass);
-  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
-  backdrop-filter: blur(var(--lg-blur-sm));
-  border-bottom: 1px solid var(--lg-line-lo);
-  border-radius: var(--lg-r-lg) var(--lg-r-lg) 0 0;
+  background: var(--lg-bg-elevated);
+  border-bottom: 1px solid var(--lg-border);
+  border-radius: var(--lg-r-md) var(--lg-r-md) 0 0;
   padding: 8px 12px;
+  color: var(--lg-text);
   .btn { border-radius: var(--lg-r-pill); }
 }
 
@@ -120,7 +140,8 @@ html[data-theme='glass'] .o_Chatter_scroll {
 
 // Individual message card
 html[data-theme='glass'] .o_Message {
-  @include lg-glass-panel();
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
   border-radius: var(--lg-r-md);
   margin: 8px 0;
   padding: 12px 14px;
@@ -130,31 +151,30 @@ html[data-theme='glass'] .o_Message {
     color: var(--lg-text);
   }
   .o_Message_header {
-    border-bottom: 1px solid var(--lg-line-lo);
+    border-bottom: 1px solid var(--lg-border);
     padding-bottom: 4px;
     margin-bottom: 8px;
   }
   .o_Message_date {
-    color: var(--lg-text-muted);
+    color: var(--lg-text-secondary);
   }
   .o_Message_body {
     color: var(--lg-text);
   }
   &.o_Message_notification {
-    background: var(--lg-glass-deep);
+    background: var(--lg-bg-base);
     border-inline-start: 3px solid var(--lg-accent);
   }
 }
 
 // Composer
 html[data-theme='glass'] .o_Chatter_composer {
-  background: var(--lg-glass-soft);
-  border-top: 1px solid var(--lg-line-lo);
-  border-radius: 0 0 var(--lg-r-lg) var(--lg-r-lg);
+  background: var(--lg-bg-surface);
+  border-top: 1px solid var(--lg-border);
+  border-radius: 0 0 var(--lg-r-md) var(--lg-r-md);
   .o_ComposerTextField {
-    background: var(--lg-glass);
-    border: 1px solid var(--lg-line-hi);
-    border-bottom-color: var(--lg-line-lo);
+    background: var(--lg-bg-elevated);
+    border: 1px solid var(--lg-border);
     border-radius: var(--lg-r-md);
     color: var(--lg-text);
     &:focus-within {
@@ -185,18 +205,19 @@ html[data-theme='glass'] .o_Activity {
 
 // Attachment box + cards
 html[data-theme='glass'] .o_AttachmentBox {
-  background: var(--lg-glass-soft);
-  border: 1px solid var(--lg-line-hi);
-  border-bottom-color: var(--lg-line-lo);
+  background: var(--lg-bg-surface);
+  border: 1px solid var(--lg-border);
   border-radius: var(--lg-r-md);
   color: var(--lg-text);
 }
 html[data-theme='glass'] .o_AttachmentCard {
-  @include lg-glass-panel(soft);
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
   border-radius: var(--lg-r-sm);
   padding: 8px;
   color: var(--lg-text);
-  &:hover { box-shadow: var(--lg-gloss), var(--lg-shadow-md); transform: translateY(-1px); }
+  transition: border-color var(--lg-t-fast), transform var(--lg-t-fast);
+  &:hover { border-color: var(--lg-accent-icicle); transform: translateY(-1px); }
 }
 
 // Followers / recipients pills
@@ -205,8 +226,8 @@ html[data-theme='glass'] .o_RecipientsList {
   background: transparent;
   .o_FollowersList_follower,
   .o_RecipientsList_partner {
-    background: var(--lg-glass-soft);
-    border: 1px solid var(--lg-line-hi);
+    background: var(--lg-bg-elevated);
+    border: 1px solid var(--lg-border);
     border-radius: var(--lg-r-pill);
     color: var(--lg-text);
     padding: 2px 10px;
@@ -240,19 +261,18 @@ html[data-theme='glass'] [dir='rtl'] {
 // language "Change my preferences" popup, and every settings/backend form).
 // =====================================================================
 
-// A generic frosted input that covers most field widgets
+// A generic solid dark input that covers most field widgets
 html[data-theme='glass'] .o_input {
-  background: var(--lg-glass-soft);
-  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
-  backdrop-filter: blur(var(--lg-blur-sm));
-  border: 1px solid var(--lg-line-lo);
-  border-bottom-color: var(--lg-line-hi);
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
   color: var(--lg-text);
   border-radius: var(--lg-r-sm);
+  &::placeholder { color: var(--lg-text-secondary); }
   &:hover { border-color: var(--lg-accent-icicle); }
   &:focus {
     border-color: var(--lg-accent);
     box-shadow: 0 0 0 3px var(--lg-focus);
+    background: var(--lg-bg-elevated);
   }
 }
 
@@ -269,9 +289,8 @@ html[data-theme='glass'] .o_field_many2one,
 html[data-theme='glass'] .o_field_selection,
 html[data-theme='glass'] .o_wrap_input {
   .o_input {
-    background: var(--lg-glass-soft);
-    border: 1px solid var(--lg-line-lo);
-    border-bottom-color: var(--lg-line-hi);
+    background: var(--lg-bg-elevated);
+    border: 1px solid var(--lg-border);
     color: var(--lg-text);
     border-radius: var(--lg-r-sm);
     &:focus {
@@ -294,14 +313,14 @@ html[data-theme='glass'] .o_select_menu {
   }
   // the caret
   .o_select_menu_caret {
-    color: var(--lg-text-muted);
+    color: var(--lg-text-secondary);
   }
   // the drop list
   .o-autocomplete,
   .dropdown-menu {
     @include glass-elevated();
     border-radius: var(--lg-r-md);
-    background: var(--lg-glass-strong);
+    background: var(--lg-bg-elevated);
   }
 }
 
@@ -318,13 +337,11 @@ html[data-theme='glass'] .o_field_many2one_selection {
 html[data-theme='glass'] .o_field_many2many_tags,
 html[data-theme='glass'] .o_field_tags,
 html[data-theme='glass'] .o_tags_input {
-  background: var(--lg-glass-soft);
-  -webkit-backdrop-filter: blur(var(--lg-blur-sm)) saturate(1.3);
-  backdrop-filter: blur(var(--lg-blur-sm)) saturate(1.3);
-  border: 1px solid var(--lg-line-lo);
-  border-bottom-color: var(--lg-line-hi);
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
   border-radius: var(--lg-r-sm);
   color: var(--lg-text);
+  padding: 4px 6px;
   &:focus-within {
     border-color: var(--lg-accent);
     box-shadow: 0 0 0 3px var(--lg-focus);
@@ -333,8 +350,8 @@ html[data-theme='glass'] .o_tags_input {
   .badge,
   .o_tag,
   .tag {
-    background: var(--lg-glass);
-    border: 1px solid var(--lg-line-hi);
+    background: var(--lg-bg-surface);
+    border: 1px solid var(--lg-border);
     border-radius: var(--lg-r-pill);
     color: var(--lg-text);
   }
@@ -357,19 +374,18 @@ html[data-theme='glass'] .o_field_many2many_selection {
       }
     }
     .o_dropdown_button {
-      color: var(--lg-text-muted);
+      color: var(--lg-text-secondary);
     }
   }
 }
 
-// Boolean / radio (Checkbox style) — glass toggle
+// Boolean / radio (Checkbox style) — accent
 html[data-theme='glass'] .o_field_boolean,
 html[data-theme='glass'] .o_field_radio {
   .o_checkbox,
   .o_radio_item {
     color: var(--lg-text);
   }
-  // keep native form-control visuals tinted on glass
   .form-check-input:checked {
     background-color: var(--lg-accent);
     border-color: var(--lg-accent);
@@ -379,7 +395,7 @@ html[data-theme='glass'] .o_field_radio {
 // Contact/avatar image drop zone
 html[data-theme='glass'] .o_field_contact_image {
   .o_image_uploader_container {
-    background: var(--lg-glass-soft);
+    background: var(--lg-bg-elevated);
     border-radius: var(--lg-r-sm);
   }
 }
@@ -393,7 +409,7 @@ html[data-theme='glass'] .o_field_html_mail {
 
 // Notebook headers/tabs inside the preferences form
 html[data-theme='glass'] .o_notebook_headers {
-  border-bottom: 1px solid var(--lg-line-lo);
+  border-bottom: 1px solid var(--lg-border);
 }
 
 // Horizontal/vertical form groupings

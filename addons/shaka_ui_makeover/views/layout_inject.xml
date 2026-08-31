@@ -2,37 +2,23 @@
 <odoo>
     <data>
         <!--
-            Inject the liquid glass theme into web.layout <head>:
-            1. A one-line inline script that sets `data-theme="glass"` before
-               paint, so the SCSS gates (html[data-theme='glass'] …) always fire.
-            2. A <style> block emitting the user's Company brand color
-               overrides as CSS custom properties, so the buttons pick up
-               the configured color on first paint (no flash, no reload).
+            Inject the Shaka theme into web.layout <head>:
+            A one-line inline script that sets `data-theme="glass"` before paint,
+            so the SCSS gates (html[data-theme='glass'] …) always fire.
+
+            The visual palette is hard-locked in design_tokens.scss.  Per-Company
+            color overrides are no longer emitted; the previous `<style>` block
+            reading res.company.shaka_*_color fields was removed when the theme
+            switched from the user-configurable glass palette to the locked
+            dark palette (#0F1420 / #171D2E / #5B8DEF).
         -->
-        <template id="shaka_layout_assets" name="Shaka Liquid Glass Layout" inherit_id="web.layout">
+        <template id="shaka_layout_assets" name="Shaka Theme Layout" inherit_id="web.layout">
             <xpath expr="//head" position="inside">
                 <script type="text/javascript">
-                    // Set the liquid glass theme attribute before paint so the
-                    // gated SCSS rules always win.  Single theme — no toggle.
+                    // Set the theme attribute before paint so the gated SCSS
+                    // rules always win.  Single theme — no toggle.
                     document.documentElement.setAttribute('data-theme', 'glass');
                 </script>
-                <t t-if="request">
-                    <t t-set="shaka_company" t-value="request.env['res.company'].sudo().search([], limit=1)"/>
-                    <t t-set="shaka_primary" t-value="shaka_company and shaka_company.shaka_primary_color or None"/>
-                    <t t-set="shaka_text" t-value="shaka_company and shaka_company.shaka_button_text_color or None"/>
-                    <t t-if="shaka_primary or shaka_text">
-                        <style type="text/css" id="shaka_theme_vars">
-                            :root {
-                                <t t-if="shaka_primary">
-                                    --lg-btn-primary: <t t-esc="shaka_primary"/>;
-                                </t>
-                                <t t-if="shaka_text">
-                                    --lg-btn-text: <t t-esc="shaka_text"/>;
-                                </t>
-                            }
-                        </style>
-                    </t>
-                </t>
             </xpath>
         </template>
     </data>

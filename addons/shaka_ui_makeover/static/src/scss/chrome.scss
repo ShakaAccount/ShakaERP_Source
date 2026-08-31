@@ -75,47 +75,46 @@ html[data-theme='glass'] .popover {
 
 // ---- Alerts ----
 html[data-theme='glass'] .alert {
-  background: var(--lg-glass-soft);
-  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
-  backdrop-filter: blur(var(--lg-blur-sm));
-  border: 1px solid var(--lg-line-hi);
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
   color: var(--lg-text);
+  border-radius: var(--lg-r-sm);
 }
 
 // ---- Progress bars ----
 html[data-theme='glass'] .progress {
-  background: rgba(255,255,255,0.4);
+  background: var(--lg-bg-elevated);
   border-radius: 999px;
+  height: 6px;
 }
 html[data-theme='glass'] .progress-bar {
-  background: linear-gradient(180deg, var(--lg-accent-icicle), var(--lg-accent-strong));
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+  background: var(--lg-accent);
+  border-radius: 999px;
 }
 
 // ---- Badges ----
 html[data-theme='glass'] .badge {
-  background: var(--lg-glass-soft);
-  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
-  backdrop-filter: blur(var(--lg-blur-sm));
-  border: 1px solid var(--lg-line-hi);
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
   color: var(--lg-text);
-  &.text-bg-primary { background: var(--lg-accent-strong); color: #fff; }
+  border-radius: var(--lg-r-pill);
+  font-weight: 500;
+  padding: 4px 10px;
+  &.text-bg-primary { background: var(--lg-accent); color: var(--lg-text-on-accent); border-color: var(--lg-accent); }
 }
 
 // ---- Statusbar stepper (form save/discard) ----
 html[data-theme='glass'] .o_form_status_indicator_buttons .btn-primary {
-  background: var(--lg-btn-primary);
-  border-color: transparent;
-  color: var(--lg-btn-text);
+  background: var(--lg-accent);
+  background-color: var(--lg-accent);
+  border: 1px solid var(--lg-accent);
+  color: var(--lg-text-on-accent);
 }
 
 // ---- Form statusbar ribbon (the "New / In Progress / Done" pill row) ----
 html[data-theme='glass'] .o_form_statusbar {
-  background: var(--lg-glass);
-  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
-  backdrop-filter: blur(var(--lg-blur-sm));
-  border: 1px solid var(--lg-line-hi);
-  border-bottom-color: var(--lg-line-lo);
+  background: var(--lg-bg-surface);
+  border: 1px solid var(--lg-border);
   border-radius: var(--lg-r-pill);
   padding: 2px;
   color: var(--lg-text);
@@ -124,17 +123,16 @@ html[data-theme='glass'] .o_form_statusbar {
     padding: 4px 14px;
     color: var(--lg-text-secondary);
     transition: background var(--lg-t-fast), color var(--lg-t-fast);
-    &:hover { background: rgba(255, 255, 255, 0.2); color: var(--lg-text); }
+    &:hover { background: var(--lg-bg-elevated); color: var(--lg-text); }
     &.o_arrow_button_current,
     &.o_statusbar_status_selected {
       background: var(--lg-accent);
-      color: var(--lg-text-on-glass);
-      box-shadow: 0 4px 12px rgba(78, 141, 255, 0.32);
+      color: var(--lg-text-on-accent);
     }
   }
   .o_statusbar_text_input {
-    background: var(--lg-glass-soft);
-    border: 1px solid var(--lg-line-hi);
+    background: var(--lg-bg-elevated);
+    border: 1px solid var(--lg-border);
     border-radius: var(--lg-r-sm);
     color: var(--lg-text);
     &:focus { border-color: var(--lg-accent); box-shadow: 0 0 0 3px var(--lg-focus); }
@@ -145,28 +143,29 @@ html[data-theme='glass'] .o_form_statusbar {
 html[data-theme='glass'] .o_cp_buttons {
   gap: 6px;
   .btn {
-    @include glass-control();
+    background: var(--lg-bg-elevated);
+    border: 1px solid var(--lg-border);
+    color: var(--lg-text);
+    border-radius: var(--lg-r-sm);
+    &:hover { border-color: var(--lg-accent-icicle); }
   }
   .btn-primary {
-    background: var(--lg-btn-primary);
-    border-color: transparent;
-    color: var(--lg-btn-text);
-    box-shadow: var(--lg-shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    &:hover { filter: brightness(1.06); transform: translateY(-1px); }
+    background: var(--lg-accent);
+    background-color: var(--lg-accent);
+    border: 1px solid var(--lg-accent);
+    color: var(--lg-text-on-accent);
+    &:hover { background: var(--lg-accent-strong); border-color: var(--lg-accent-strong); }
   }
   .o_dropdown_title {
-    border-radius: var(--lg-r-md);
+    border-radius: var(--lg-r-sm);
   }
 }
 
-// ---- Control-panel search view (frosted search bar) ----
+// ---- Control-panel search view (solid dark search bar) ----
 html[data-theme='glass'] .o_searchview {
-  background: var(--lg-glass-soft);
-  -webkit-backdrop-filter: blur(var(--lg-blur-sm)) saturate(1.3);
-  backdrop-filter: blur(var(--lg-blur-sm)) saturate(1.3);
-  border: 1px solid var(--lg-line-hi);
-  border-bottom-color: var(--lg-line-lo);
-  border-radius: var(--lg-r-md);
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
+  border-radius: var(--lg-r-sm);
   color: var(--lg-text);
   transition: border-color var(--lg-t-fast), box-shadow var(--lg-t-fast);
   &:focus-within {
@@ -179,17 +178,20 @@ html[data-theme='glass'] .o_searchview {
     color: var(--lg-text);
   }
   .o_searchview_facet {
-    background: var(--lg-glass);
-    border: 1px solid var(--lg-line-hi);
+    background: var(--lg-bg-surface);
+    border: 1px solid var(--lg-border);
     border-radius: var(--lg-r-pill);
     padding: 2px 10px;
+    color: var(--lg-text);
   }
   .o_searchview_icon {
     color: var(--lg-text-muted);
   }
   .o_searchview_dropdown {
-    @include glass-elevated();
+    background: var(--lg-bg-elevated);
+    border: 1px solid var(--lg-border);
     border-radius: var(--lg-r-md);
+    box-shadow: var(--lg-shadow-md);
   }
 }
 
@@ -199,10 +201,8 @@ html[data-theme='glass'] .o_cp_pager {
   .o_pager_value,
   .o_pager_next,
   .o_pager_previous {
-    background: var(--lg-glass-soft);
-    -webkit-backdrop-filter: blur(var(--lg-blur-sm));
-    backdrop-filter: blur(var(--lg-blur-sm));
-    border: 1px solid var(--lg-line-hi);
+    background: var(--lg-bg-elevated);
+    border: 1px solid var(--lg-border);
     color: var(--lg-text);
   }
   .o_pager_value {
@@ -216,20 +216,18 @@ html[data-theme='glass'] .o_cp_pager {
   .o_pager_previous {
     color: var(--lg-text-secondary);
     transition: background var(--lg-t-fast);
-    &:hover { background: var(--lg-glass); color: var(--lg-text); }
+    &:hover { background: var(--lg-bg-surface); color: var(--lg-text); }
   }
 }
 
 // =====================================================================
-// Modals / dialogs — the full Odoo 19 class map (from real rendered DOM)
-// Bootstrap .modal-* and Odoo .o_dialog / .o_technical_modal.
+// Modals / dialogs — solid dark, no glass blur (would look wrong on solid)
 // =====================================================================
 
-// Scrim behind the modal
+// Scrim behind the modal — solid dark overlay
 html[data-theme='glass'] .modal-backdrop {
-  background: rgba(10, 16, 32, 0.55);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  background: #000000;
+  opacity: 0.65;
 }
 
 // The dialog wrapper + Bootstrap modal diamond
@@ -237,11 +235,11 @@ html[data-theme='glass'] .modal-dialog {
   border-radius: var(--lg-r-lg);
 }
 
-// The glass card body of every modal
+// The dialog card body — solid surface, 1px border
 html[data-theme='glass'] .modal-content {
-  @include glass-elevated(strong);
+  background: var(--lg-bg-surface);
+  border: 1px solid var(--lg-border);
   border-radius: var(--lg-r-lg);
-  border: 1px solid var(--lg-line-hi);
   overflow: hidden;
   color: var(--lg-text);
 }
@@ -249,12 +247,9 @@ html[data-theme='glass'] .modal-content {
 // Technical dialogs (My Preferences, Add Languages, etc.)
 html[data-theme='glass'] .o_technical_modal {
   .modal-content {
-    background: var(--lg-glass-strong);
-    -webkit-backdrop-filter: blur(var(--lg-blur-lg)) saturate(1.4);
-    backdrop-filter: blur(var(--lg-blur-lg)) saturate(1.4);
-    border: 1px solid var(--lg-line-hi);
-    border-bottom-color: var(--lg-line-lo);
-    box-shadow: var(--lg-gloss), var(--lg-shadow-lg);
+    background: var(--lg-bg-surface);
+    border: 1px solid var(--lg-border);
+    box-shadow: var(--lg-shadow-lg);
     color: var(--lg-text);
   }
   .modal-dialog {
@@ -278,87 +273,81 @@ html[data-theme='glass'] .o_technical_modal {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-// Modal header
+// Modal header — solid surface, bottom border
 html[data-theme='glass'] .modal-header {
-  background: var(--lg-glass);
-  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
-  backdrop-filter: blur(var(--lg-blur-sm));
-  border-bottom: 1px solid var(--lg-line-lo);
+  background: var(--lg-bg-surface);
+  border-bottom: 1px solid var(--lg-border);
   color: var(--lg-text);
+  padding: 14px 18px;
   .modal-title {
     color: var(--lg-text);
     font-weight: 600;
+    font-size: 1.05rem;
   }
   .btn-close {
-    filter: none;
+    filter: invert(1) grayscale(100%) brightness(200%); // make X visible on dark
     opacity: 0.7;
     &:hover { opacity: 1; }
   }
 }
 
-// Modal body (where the preferences form lives)
+// Modal body
 html[data-theme='glass'] .modal-body {
-  background: var(--lg-glass-soft);
-  -webkit-backdrop-filter: blur(var(--lg-blur-md)) saturate(1.3);
-  backdrop-filter: blur(var(--lg-blur-md)) saturate(1.3);
+  background: var(--lg-bg-base);
   color: var(--lg-text);
-  // o_act_window wraps a full OWL action inside a modal
+  padding: 18px;
   &.o_act_window {
     padding: 0;
-    background: transparent;
     .o_content {
-      background: transparent;
+      background: var(--lg-bg-base);
     }
   }
 }
 
 // Modal footer
 html[data-theme='glass'] .modal-footer {
-  background: var(--lg-glass);
-  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
-  backdrop-filter: blur(var(--lg-blur-sm));
-  border-top: 1px solid var(--lg-line-lo);
+  background: var(--lg-bg-surface);
+  border-top: 1px solid var(--lg-border);
   color: var(--lg-text);
+  padding: 12px 18px;
   .btn-primary {
-    background: var(--lg-btn-primary);
-    border-color: transparent;
-    color: var(--lg-btn-text);
+    background: var(--lg-accent);
+    background-color: var(--lg-accent);
+    border: 1px solid var(--lg-accent);
+    color: var(--lg-text-on-accent);
   }
 }
 
 // =====================================================================
-// Form sheets + form shell — the core white-background culprit.
-// .o_form_sheet_bg is a solid white wrapper in stock Odoo.
+// Form sheets + form shell — solid dark
 // =====================================================================
 html[data-theme='glass'] .o_form_view_container {
-  background: transparent;
+  background: var(--lg-bg-base);
 }
 
 // Form renderer:
-//   - WITH a sheet: stay transparent so the glass sheet shows on top
+//   - WITH a sheet: stay transparent so the solid sheet shows on top
 //   - WITHOUT a sheet (.o_form_nosheet, e.g. Add Languages dialog): give
-//     the renderer its own glass surface so the form is not white-on-white.
+//     the renderer its own solid surface so the form is not white-on-white.
 html[data-theme='glass'] .o_form_renderer {
   background: transparent;
 }
 html[data-theme='glass'] .o_form_renderer.o_form_nosheet {
-  @include glass-elevated(soft);
-  background: var(--lg-glass);
+  background: var(--lg-bg-surface);
   color: var(--lg-text);
   padding: var(--lg-r-md);
   border-radius: var(--lg-r-md);
+  border: 1px solid var(--lg-border);
 }
 
 html[data-theme='glass'] .o_form_sheet_bg {
-  @include glass-backdrop;
-  background-attachment: fixed;
+  background: var(--lg-bg-base);
 }
 
 html[data-theme='glass'] .o_form_sheet {
-  @include glass-elevated();
-  background: var(--lg-glass-strong);
-  border: 1px solid var(--lg-line-hi);
-  border-radius: var(--lg-r-lg);
+  background: var(--lg-bg-surface);
+  border: 1px solid var(--lg-border);
+  border-radius: var(--lg-r-md);
   color: var(--lg-text);
 }
 
@@ -370,7 +359,7 @@ html[data-theme='glass'] .o_inner_group {
 }
 html[data-theme='glass'] .o_cell {
   color: var(--lg-text);
-  padding: 6px 8px;
+  padding: 8px 10px;
 }
 html[data-theme='glass'] .o_wrap_label {
   color: var(--lg-text-secondary);
@@ -386,8 +375,7 @@ html[data-theme='glass'] .o_required_modifier .o_form_label::after {
   font-weight: 700;
 }
 
-// View controllers + editable forms: keep them transparent so glass
-// surfaces above show through, but force text contrast.
+// View controllers + editable forms
 html[data-theme='glass'] .o_view_controller,
 html[data-theme='glass'] .o_form_editable {
   background: transparent;
@@ -399,27 +387,35 @@ html[data-theme='glass'] .o_form_editable {
 // =====================================================================
 html[data-theme='glass'] .o_form_label,
 html[data-theme='glass'] .o_light_label {
-  color: var(--lg-text-secondary);
-  font-weight: 600;
+  color: var(--lg-text);
+  font-weight: 500;
 }
 
 html[data-theme='glass'] .o_form_button_save.btn-primary,
 html[data-theme='glass'] .btn-primary.o_form_button_save {
-  background: var(--lg-btn-primary);
-  border-color: transparent;
-  color: var(--lg-btn-text);
-  box-shadow: var(--lg-shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  background: var(--lg-accent);
+  background-color: var(--lg-accent);
+  border: 1px solid var(--lg-accent);
+  color: var(--lg-text-on-accent);
+  &:hover {
+    background: var(--lg-accent-strong);
+    background-color: var(--lg-accent-strong);
+    border-color: var(--lg-accent-strong);
+  }
 }
 
 html[data-theme='glass'] .o_form_button_cancel.btn-secondary {
-  @include glass-control();
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
+  color: var(--lg-text);
+  &:hover { border-color: var(--lg-accent-icicle); }
 }
 
-// Document / external / icon buttons keep the glass-control look
+// Document / external / icon buttons use the accent for clarity
 html[data-theme='glass'] .o_external_button,
 html[data-theme='glass'] .o_doc_link,
 html[data-theme='glass'] .o_dropdown_button,
 html[data-theme='glass'] .o_button_icon {
-  color: var(--lg-link);
-  &:hover { color: var(--lg-accent-strong); }
+  color: var(--lg-accent);
+  &:hover { color: var(--lg-accent-icicle); }
 }
