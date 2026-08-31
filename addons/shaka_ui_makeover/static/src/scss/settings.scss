@@ -1,26 +1,118 @@
 // ShakaERP Liquid Glass - Settings & back-office pages
 // ============================================================================
-// Historically these pages fell back to stock Bootstrap (the "default look").
-// Adding explicit frosted coverage for the Settings page and generic wizard
-// content so the whole back office matches.
+// Full Odoo 19 settings class coverage (verified against rendered DOM):
+//   .o_setting_container -> .settings_tab (.tab / .app_name)
+//   .o_settings_container -> .o_setting_box (.o_setting_left_pane / right)
+//   .o_form_sheet_bg / .o_form_sheet (preferences form inside modals)
+// ============================================================================
 
 // Settings page shell
-.o_web_client[data-theme='glass'] .o_settings,
 html[data-theme='glass'] .o_settings {
   @include glass-backdrop;
   color: var(--lg-text);
 }
 
-html[data-theme='glass'] .o_settings .o_setting_box {
+// The tab rail on the left (list of app sections)
+html[data-theme='glass'] .o_setting_container {
+  background: transparent;
+}
+
+html[data-theme='glass'] .settings_tab {
+  background: var(--lg-glass-soft);
+  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
+  backdrop-filter: blur(var(--lg-blur-sm));
+  border-inline-end: 1px solid var(--lg-line-lo);
+  padding: var(--lg-r-md) 0;
+  a.tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    margin: 4px 8px;
+    border-radius: var(--lg-r-sm);
+    color: var(--lg-text-secondary);
+    transition: background var(--lg-t-fast), color var(--lg-t-fast);
+    &:hover {
+      background: var(--lg-glass);
+      color: var(--lg-text);
+    }
+    &.selected {
+      background: var(--lg-glass-strong);
+      color: var(--lg-text);
+      box-shadow: inset 3px 0 0 var(--lg-accent);
+    }
+    .app_name {
+      color: inherit;
+      font-weight: 600;
+    }
+  }
+}
+
+// Rows of setting boxes
+html[data-theme='glass'] .o_settings_container {
+  gap: var(--lg-r-md);
+}
+
+// Individual setting box (a row with left pane + right pane)
+html[data-theme='glass'] .o_setting_box {
   background: var(--lg-glass);
   -webkit-backdrop-filter: blur(var(--lg-blur-sm)) saturate(1.4);
   backdrop-filter: blur(var(--lg-blur-sm)) saturate(1.4);
   border: 1px solid var(--lg-line-hi);
   border-bottom-color: var(--lg-line-lo);
   border-radius: var(--lg-r-md);
-  box-shadow: var(--lg-shadow-sm), inset 0 1px 0 rgba(255,255,255,0.6);
+  box-shadow: var(--lg-shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: box-shadow var(--lg-t-fast), border-color var(--lg-t-fast);
+  color: var(--lg-text);
+  &:hover {
+    border-color: var(--lg-accent);
+    box-shadow: var(--lg-shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
 }
 
+// Setting box left pane (title + description)
+html[data-theme='glass'] .o_setting_left_pane {
+  color: var(--lg-text);
+  .o_setting_title {
+    color: var(--lg-text);
+    font-weight: 600;
+  }
+  .o_setting_description {
+    color: var(--lg-text-muted);
+    font-size: 0.875rem;
+  }
+}
+
+// Setting box right pane (the controls)
+html[data-theme='glass'] .o_setting_right_pane {
+  color: var(--lg-text);
+  .o_field_widget {
+    color: var(--lg-text);
+  }
+  // color picker swatch — subtle glass border
+  .o_field_color_picker button,
+  .o_color_picker button {
+    background: var(--lg-glass-soft);
+    border: 1px solid var(--lg-line-hi);
+    border-radius: var(--lg-r-sm);
+    padding: 4px;
+  }
+  input[type='text'],
+  .o_field_char .o_input,
+  .o_input {
+    background: var(--lg-glass-soft);
+    border: 1px solid var(--lg-line-lo);
+    border-bottom-color: var(--lg-line-hi);
+    color: var(--lg-text);
+    border-radius: var(--lg-r-sm);
+    &:focus {
+      border-color: var(--lg-accent);
+      box-shadow: 0 0 0 3px var(--lg-focus);
+    }
+  }
+}
+
+// Settings module sections / headings
 html[data-theme='glass'] .o_settings h2,
 html[data-theme='glass'] .o_settings h3,
 html[data-theme='glass'] .o_settings .o_setting_heading,
@@ -28,103 +120,18 @@ html[data-theme='glass'] .o_settings .o_form_label {
   color: var(--lg-text);
 }
 
-html[data-theme='glass'] .o_settings .o_setting_left_pane,
-html[data-theme='glass'] .o_settings .o_controls {
-  color: var(--lg-text-secondary);
+html[data-theme='glass'] .o_web_settings_compact_subtitle small {
+  color: var(--lg-text-muted);
 }
 
-// Generic wizard / dialog content (used on settings & app wizards)
-html[data-theme='glass'] .o_wizard,
-html[data-theme='glass'] .o_dialog .o_dialog_content,
-html[data-theme='glass'] .o_cp_save_current_view {
-  color: var(--lg-text);
+// The "invite users" / "access rights" settings action buttons
+html[data-theme='glass'] .o_web_settings_invite.btn-primary {
+  background: var(--lg-btn-primary);
+  border-color: transparent;
+  color: var(--lg-btn-text);
 }
-
-// Inline form sheets inside settings
-html[data-theme='glass'] .o_form_sheet {
-  background: var(--lg-glass-soft);
-  -webkit-backdrop-filter: blur(var(--lg-blur-md)) saturate(1.4);
-  backdrop-filter: blur(var(--lg-blur-md)) saturate(1.4);
-  border: 1px solid var(--lg-line-hi);
-  border-radius: var(--lg-r-lg);
-  box-shadow: var(--lg-shadow-sm);
-  color: var(--lg-text);
-}
-
-// ---- Settings layout shell ----
-html[data-theme='glass'] .o_settings_container,
-html[data-theme='glass'] .o_settings_layout {
-  background: transparent;
-  color: var(--lg-text);
-}
-
-html[data-theme='glass'] .o_settings {
-  .settings_tab {
-    background: var(--lg-glass-soft);
-    border: 1px solid var(--lg-line-hi);
-    border-radius: var(--lg-r-md);
-    color: var(--lg-text);
-    padding: 8px 14px;
-    margin: 4px 0;
-    transition: background var(--lg-t-fast), border-color var(--lg-t-fast);
-    &:hover { background: var(--lg-glass); border-color: var(--lg-accent); }
-    &.selected,
-    &.active {
-      background: var(--lg-glass-strong);
-      border-color: var(--lg-accent);
-      box-shadow: inset 3px 0 0 var(--lg-accent);
-      color: var(--lg-text);
-    }
-  }
-  .o_settings_search {
-    background: var(--lg-glass);
-    -webkit-backdrop-filter: blur(var(--lg-blur-sm));
-    backdrop-filter: blur(var(--lg-blur-sm));
-    border: 1px solid var(--lg-line-hi);
-    border-bottom-color: var(--lg-line-lo);
-    border-radius: var(--lg-r-md);
-    color: var(--lg-text);
-    padding: 6px 12px;
-    &:focus-within {
-      border-color: var(--lg-accent);
-      box-shadow: 0 0 0 3px var(--lg-focus);
-    }
-  }
-}
-
-// Setting box: each setting row
-html[data-theme='glass'] .o_setting_box {
-  .o_setting_left_pane {
-    color: var(--lg-text);
-    .o_setting_title {
-      color: var(--lg-text);
-      font-weight: 600;
-    }
-    .o_setting_description {
-      color: var(--lg-text-muted);
-    }
-  }
-  .o_setting_right_pane {
-    color: var(--lg-text);
-    // Color picker swatch — wrap the input with a glass border
-    .o_field_color_picker button,
-    .o_color_picker button {
-      background: var(--lg-glass-soft);
-      border: 1px solid var(--lg-line-hi);
-      border-radius: var(--lg-r-sm);
-      padding: 4px;
-    }
-    input[type='text'],
-    .o_field_char,
-    .o_input {
-      background: var(--lg-glass-soft);
-      border: 1px solid var(--lg-line-lo);
-      border-bottom-color: var(--lg-line-hi);
-      color: var(--lg-text);
-      border-radius: var(--lg-r-sm);
-      &:focus { border-color: var(--lg-accent); box-shadow: 0 0 0 3px var(--lg-focus); }
-    }
-  }
+html[data-theme='glass'] .o_web_settings_access_rights.btn-link {
+  color: var(--lg-link);
 }
 
 // Modules / apps install dialog
@@ -135,4 +142,16 @@ html[data-theme='glass'] .o_module_kanban {
     @include lg-glass-panel();
     border-radius: var(--lg-r-md);
   }
+}
+
+// =====================================================================
+// Form sheets inside Settings (also used by preferences modal)
+// =====================================================================
+html[data-theme='glass'] .o_form_sheet {
+  @include glass-elevated();
+  background: var(--lg-glass-strong);
+  border: 1px solid var(--lg-line-hi);
+  border-radius: var(--lg-r-lg);
+  box-shadow: var(--lg-shadow-sm);
+  color: var(--lg-text);
 }

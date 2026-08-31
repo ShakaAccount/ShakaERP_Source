@@ -219,3 +219,143 @@ html[data-theme='glass'] .o_cp_pager {
     &:hover { background: var(--lg-glass); color: var(--lg-text); }
   }
 }
+
+// =====================================================================
+// Modals / dialogs — the full Odoo 19 class map (from real rendered DOM)
+// Bootstrap .modal-* and Odoo .o_dialog / .o_technical_modal.
+// =====================================================================
+
+// Scrim behind the modal
+html[data-theme='glass'] .modal-backdrop {
+  background: rgba(10, 16, 32, 0.55);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+// The dialog wrapper + Bootstrap modal diamond
+html[data-theme='glass'] .modal-dialog {
+  border-radius: var(--lg-r-lg);
+}
+
+// The glass card body of every modal
+html[data-theme='glass'] .modal-content {
+  @include glass-elevated(strong);
+  border-radius: var(--lg-r-lg);
+  border: 1px solid var(--lg-line-hi);
+  overflow: hidden;
+  color: var(--lg-text);
+}
+
+// Technical dialogs (My Preferences, language picker, etc.)
+html[data-theme='glass'] .o_technical_modal {
+  .modal-content {
+    background: var(--lg-glass-strong);
+    -webkit-backdrop-filter: blur(var(--lg-blur-lg)) saturate(1.3);
+    backdrop-filter: blur(var(--lg-blur-lg)) saturate(1.3);
+    border: 1px solid var(--lg-line-hi);
+    color: var(--lg-text);
+  }
+}
+
+// Modal header
+html[data-theme='glass'] .modal-header {
+  background: var(--lg-glass);
+  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
+  backdrop-filter: blur(var(--lg-blur-sm));
+  border-bottom: 1px solid var(--lg-line-lo);
+  color: var(--lg-text);
+  .modal-title {
+    color: var(--lg-text);
+    font-weight: 600;
+  }
+  .btn-close {
+    filter: none;
+    opacity: 0.7;
+    &:hover { opacity: 1; }
+  }
+}
+
+// Modal body (where the preferences form lives)
+html[data-theme='glass'] .modal-body {
+  background: var(--lg-glass-soft);
+  -webkit-backdrop-filter: blur(var(--lg-blur-md)) saturate(1.3);
+  backdrop-filter: blur(var(--lg-blur-md)) saturate(1.3);
+  color: var(--lg-text);
+  // o_act_window wraps a full OWL action inside a modal
+  &.o_act_window {
+    padding: 0;
+    background: transparent;
+    .o_content {
+      background: transparent;
+    }
+  }
+}
+
+// Modal footer
+html[data-theme='glass'] .modal-footer {
+  background: var(--lg-glass);
+  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
+  backdrop-filter: blur(var(--lg-blur-sm));
+  border-top: 1px solid var(--lg-line-lo);
+  color: var(--lg-text);
+  .btn-primary {
+    background: var(--lg-btn-primary);
+    border-color: transparent;
+    color: var(--lg-btn-text);
+  }
+}
+
+// =====================================================================
+// Form sheets + form shell — the core white-background culprit.
+// .o_form_sheet_bg is a solid white wrapper in stock Odoo.
+// =====================================================================
+html[data-theme='glass'] .o_form_view_container {
+  background: transparent;
+}
+
+html[data-theme='glass'] .o_form_renderer {
+  background: transparent;
+}
+
+html[data-theme='glass'] .o_form_sheet_bg {
+  @include glass-backdrop;
+  background-attachment: fixed;
+}
+
+html[data-theme='glass'] .o_form_sheet {
+  @include glass-elevated();
+  background: var(--lg-glass-strong);
+  border: 1px solid var(--lg-line-hi);
+  border-radius: var(--lg-r-lg);
+  color: var(--lg-text);
+}
+
+// =====================================================================
+// Form labels, buttons, and the save/cancel statusbar
+// =====================================================================
+html[data-theme='glass'] .o_form_label,
+html[data-theme='glass'] .o_light_label {
+  color: var(--lg-text-secondary);
+  font-weight: 600;
+}
+
+html[data-theme='glass'] .o_form_button_save.btn-primary,
+html[data-theme='glass'] .btn-primary.o_form_button_save {
+  background: var(--lg-btn-primary);
+  border-color: transparent;
+  color: var(--lg-btn-text);
+  box-shadow: var(--lg-shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+html[data-theme='glass'] .o_form_button_cancel.btn-secondary {
+  @include glass-control();
+}
+
+// Document / external / icon buttons keep the glass-control look
+html[data-theme='glass'] .o_external_button,
+html[data-theme='glass'] .o_doc_link,
+html[data-theme='glass'] .o_dropdown_button,
+html[data-theme='glass'] .o_button_icon {
+  color: var(--lg-link);
+  &:hover { color: var(--lg-accent-strong); }
+}

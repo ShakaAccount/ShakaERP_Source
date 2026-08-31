@@ -11,8 +11,22 @@ html[data-theme='glass'] {
   --lg-bg-blob-c: #{$lg-bg-blob-c};
 }
 
-html[data-theme='glass'] body {
+// ---- The glass world behind everything -----------------------------
+// Apply the gradient world to BOTH <html> and <body> so not a single page
+// can ever fall back to a plain white background.  High specificity + a
+// non-`!important` guard on the html element ensures this beats Odoo's
+// white `#fff` body paints.
+html[data-theme='glass'],
+html[data-theme='glass'] body,
+html[data-theme='glass'] .o_web_client {
   @include glass-backdrop;
+  background-attachment: fixed;
+}
+
+// But keep the .o_web_client *content* transparent so the world shows
+// through the frosted surfaces rather than painting over it.
+html[data-theme='glass'] .o_web_client {
+  background: transparent;
 }
 
 // Dark: deeper world behind dark glass
@@ -100,13 +114,31 @@ html[data-theme='glass'] .btn {
   border-radius: var(--lg-r-md);
 }
 
+// Primary buttons.  Odoo 19 uses CSS custom props (--btn-primary-bg) on the
+// platform .btn, so we must override both `background` AND the --btn-* vars
+// to win the cascade reliably.
 html[data-theme='glass'] .btn-primary,
-html[data-theme='glass'] .o_control_panel_main_buttons .btn-primary {
+html[data-theme='glass'] .o_control_panel_main_buttons .btn-primary,
+html[data-theme='glass'] .o_form_button_save.btn-primary,
+html[data-theme='glass'] .o_web_settings_invite.btn-primary {
+  --btn-primary-bg: var(--lg-btn-primary);
+  --btn-primary-border-color: transparent;
+  --btn-primary-color: var(--lg-btn-text);
   background: var(--lg-btn-primary);
+  background-color: var(--lg-btn-primary);
   border-color: transparent;
   color: var(--lg-btn-text);
   box-shadow: var(--lg-shadow-sm), inset 0 1px 0 rgba(255,255,255,0.4);
-  &:hover { filter: brightness(1.06); }
+  &:hover {
+    filter: brightness(1.06);
+    --btn-primary-bg: var(--lg-btn-primary);
+    background-color: var(--lg-btn-primary);
+  }
+  &:active,
+  &.active {
+    --btn-primary-bg: var(--lg-btn-primary);
+    background-color: var(--lg-btn-primary);
+  }
 }
 
 html[data-theme='glass'] .btn-secondary {

@@ -234,3 +234,134 @@ html[data-theme='glass'] [dir='rtl'] {
     border-radius: 0 var(--lg-r-md) var(--lg-r-md) 0;
   }
 }
+
+// =====================================================================
+// Form field coverage — real Odoo 19 field classes (My Preferences form,
+// language "Change my preferences" popup, and every settings/backend form).
+// =====================================================================
+
+// A generic frosted input that covers most field widgets
+html[data-theme='glass'] .o_input {
+  background: var(--lg-glass-soft);
+  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
+  backdrop-filter: blur(var(--lg-blur-sm));
+  border: 1px solid var(--lg-line-lo);
+  border-bottom-color: var(--lg-line-hi);
+  color: var(--lg-text);
+  border-radius: var(--lg-r-sm);
+  &:hover { border-color: var(--lg-accent-icicle); }
+  &:focus {
+    border-color: var(--lg-accent);
+    box-shadow: 0 0 0 3px var(--lg-focus);
+  }
+}
+
+// Field widget containers
+html[data-theme='glass'] .o_field_widget {
+  color: var(--lg-text);
+}
+
+// Char / text / integer / many2one dropdown fields
+html[data-theme='glass'] .o_field_char,
+html[data-theme='glass'] .o_field_text,
+html[data-theme='glass'] .o_field_integer,
+html[data-theme='glass'] .o_field_many2one,
+html[data-theme='glass'] .o_field_selection,
+html[data-theme='glass'] .o_wrap_input {
+  .o_input {
+    background: var(--lg-glass-soft);
+    border: 1px solid var(--lg-line-lo);
+    border-bottom-color: var(--lg-line-hi);
+    color: var(--lg-text);
+    border-radius: var(--lg-r-sm);
+    &:focus {
+      border-color: var(--lg-accent);
+      box-shadow: 0 0 0 3px var(--lg-focus);
+    }
+  }
+}
+
+// The language selector — both the "Change preferences" button and the
+// inline dropdown that opens when adding a language
+html[data-theme='glass'] .o_input_dropdown,
+html[data-theme='glass'] .o_select_menu {
+  position: relative;
+  .o_select_menu_toggler,
+  .o_dropdown_button,
+  .o_select_menu_input {
+    @include glass-control();
+    border-radius: var(--lg-r-sm);
+  }
+  // the caret
+  .o_select_menu_caret {
+    color: var(--lg-text-muted);
+  }
+  // the drop list
+  .o-autocomplete,
+  .dropdown-menu {
+    @include glass-elevated();
+    border-radius: var(--lg-r-md);
+    background: var(--lg-glass-strong);
+  }
+}
+
+// Many2one selection + autocomplete list
+html[data-theme='glass'] .o_many2one,
+html[data-theme='glass'] .o_field_many2one_selection {
+  .o_dropdown_button {
+    @include glass-control();
+    border-radius: var(--lg-r-sm);
+  }
+}
+
+// Boolean / radio (Checkbox style) — glass toggle
+html[data-theme='glass'] .o_field_boolean,
+html[data-theme='glass'] .o_field_radio {
+  .o_checkbox,
+  .o_radio_item {
+    color: var(--lg-text);
+  }
+  // keep native form-control visuals tinted on glass
+  .form-check-input:checked {
+    background-color: var(--lg-accent);
+    border-color: var(--lg-accent);
+  }
+}
+
+// Contact/avatar image drop zone
+html[data-theme='glass'] .o_field_contact_image {
+  .o_image_uploader_container {
+    background: var(--lg-glass-soft);
+    border-radius: var(--lg-r-sm);
+  }
+}
+
+// Optional fields that follow the widget baseline
+html[data-theme='glass'] .o_field_html,
+html[data-theme='glass'] .o_field_html_mail {
+  color: var(--lg-text);
+  .o_input { color: var(--lg-text); }
+}
+
+// Notebook headers/tabs inside the preferences form
+html[data-theme='glass'] .o_notebook_headers {
+  border-bottom: 1px solid var(--lg-line-lo);
+}
+
+// Horizontal/vertical form groupings
+html[data-theme='glass'] .o_horizontal {
+  gap: 0.5rem;
+}
+
+// Upload progress toasts
+html[data-theme='glass'] .o_upload_progress_toast {
+  @include glass-elevated();
+  border-radius: var(--lg-r-md);
+  color: var(--lg-text);
+}
+
+// Generic widget text safety
+html[data-theme='glass'] .o_widget,
+html[data-theme='glass'] .o_widget_notification_alert {
+  color: var(--lg-text);
+}
