@@ -73,13 +73,13 @@ html[data-theme='glass'] .o_form_sheet_bg {
 }
 
 // ---- Cards / sheets ----
+// No visible border (per spec — separation is by tone). 16px radius.
 html[data-theme='glass'] div.o_card,
 html[data-theme='glass'] .o_kanban_renderer .o_kanban_record,
 html[data-theme='glass'] .card {
   background: var(--lg-bg-surface);
-  border: 1px solid var(--lg-border);
-  border-radius: var(--lg-r-md);
-  box-shadow: var(--lg-shadow-sm);
+  border: none;
+  border-radius: var(--lg-r-lg);
   color: var(--lg-text);
 }
 
@@ -92,7 +92,7 @@ html[data-theme='glass'] .modal-backdrop.show {
 html[data-theme='glass'] .modal-content,
 html[data-theme='glass'] .o_dialog {
   background: var(--lg-bg-surface);
-  border: 1px solid var(--lg-border);
+  border: none;
   border-radius: var(--lg-r-lg);
   box-shadow: var(--lg-shadow-lg);
   color: var(--lg-text);
@@ -102,7 +102,7 @@ html[data-theme='glass'] .o_dialog {
 html[data-theme='glass'] .dropdown-menu,
 html[data-theme='glass'] .o_dropdown_menu {
   background: var(--lg-bg-elevated);
-  border: 1px solid var(--lg-border);
+  border: none;
   border-radius: var(--lg-r-md);
   box-shadow: var(--lg-shadow-md);
   color: var(--lg-text);
@@ -126,7 +126,7 @@ html[data-theme='glass'] .o_dropdown_menu {
 // ---- Notifications ----
 html[data-theme='glass'] .o_notification {
   background: var(--lg-bg-elevated);
-  border: 1px solid var(--lg-border);
+  border: none;
   border-radius: var(--lg-r-md);
   border-inline-start: 3px solid var(--lg-accent);
   box-shadow: var(--lg-shadow-md);
@@ -135,93 +135,80 @@ html[data-theme='glass'] .o_notification {
 
 // ---- Buttons ----
 html[data-theme='glass'] .btn {
-  border-radius: var(--lg-r-sm);
+  border-radius: var(--lg-r-pill);
   font-weight: 500;
-  transition: background var(--lg-t-fast), border-color var(--lg-t-fast), color var(--lg-t-fast);
+  transition: filter var(--lg-t-fast);
 }
 
-// Primary buttons.  Odoo 19 uses CSS custom props (--btn-primary-bg) on the
-// platform .btn, so we override both `background` AND the --btn-* vars to
-// win the cascade reliably.
+// ---- Primary buttons: blue-to-purple gradient (per spec) ----
+// Odoo 19 uses CSS custom props (--btn-primary-bg) on the platform .btn.
+// We override both `background` (the gradient) and the --btn-* vars
+// (the fallback color) so the override wins the cascade reliably.
 html[data-theme='glass'] .btn-primary,
 html[data-theme='glass'] .o_control_panel_main_buttons .btn-primary,
 html[data-theme='glass'] .o_form_button_save.btn-primary,
 html[data-theme='glass'] .o_web_settings_invite.btn-primary {
-  --btn-primary-bg: var(--lg-accent);
-  --btn-primary-border-color: var(--lg-accent);
+  --btn-primary-bg: var(--lg-accent-start);
+  --btn-primary-border-color: transparent;
   --btn-primary-color: var(--lg-text-on-accent);
-  --btn-primary-hover-bg: var(--lg-accent-strong);
-  --btn-primary-hover-border-color: var(--lg-accent-strong);
+  --btn-primary-hover-bg: var(--lg-accent-start);
+  --btn-primary-hover-border-color: transparent;
   --btn-primary-hover-color: var(--lg-text-on-accent);
-  --btn-primary-active-bg: var(--lg-accent-strong);
-  --btn-primary-active-border-color: var(--lg-accent-strong);
-  background: var(--lg-accent);
-  background-color: var(--lg-accent);
-  border: 1px solid var(--lg-accent);
+  --btn-primary-active-bg: var(--lg-accent-end);
+  --btn-primary-active-border-color: transparent;
+  --btn-primary-active-color: var(--lg-text-on-accent);
+  background: var(--lg-accent-gradient);
+  background-color: var(--lg-accent-start);  // fallback color
+  border: none;
   color: var(--lg-text-on-accent);
   box-shadow: var(--lg-shadow-sm);
-  &:hover {
-    background: var(--lg-accent-strong);
-    background-color: var(--lg-accent-strong);
-    border-color: var(--lg-accent-strong);
-    color: var(--lg-text-on-accent);
-  }
+  &:hover { filter: brightness(1.08); }
   &:active,
   &.active,
   &[aria-pressed="true"] {
-    background: var(--lg-accent-strong);
-    background-color: var(--lg-accent-strong);
-    border-color: var(--lg-accent-strong);
-    color: var(--lg-text-on-accent);
+    filter: brightness(0.95);
   }
   &:focus-visible {
-    outline: 2px solid var(--lg-accent-icicle);
+    outline: 2px solid var(--lg-accent);
     outline-offset: 2px;
   }
 }
 
 html[data-theme='glass'] .btn-secondary {
   background: var(--lg-bg-elevated);
-  border: 1px solid var(--lg-border);
+  border: none;
   color: var(--lg-text);
-  &:hover {
-    background: var(--lg-bg-elevated);
-    border-color: var(--lg-accent-icicle);
-    color: var(--lg-text);
-  }
+  &:hover { background: var(--lg-bg-elevated); filter: brightness(1.15); }
   &:focus-visible {
-    outline: 2px solid var(--lg-accent-icicle);
+    outline: 2px solid var(--lg-accent);
     outline-offset: 2px;
   }
   &[aria-pressed='true'],
   &.active {
     background: var(--lg-accent);
     color: var(--lg-text-on-accent);
-    border-color: var(--lg-accent);
   }
 }
 
+// Secondary / inline links — soft blue (per spec), no underline
 html[data-theme='glass'] .btn-link {
-  color: var(--lg-accent);
-  &:hover, &:focus { color: var(--lg-accent-icicle); }
+  color: var(--lg-link);
+  text-decoration: none;
+  &:hover, &:focus { color: var(--lg-link); filter: brightness(1.15); }
 }
 
-// ---- Form controls - solid dark inputs ----
+// ---- Form controls - solid dark inputs (no border, per spec) ----
 html[data-theme='glass'] .form-control,
 html[data-theme='glass'] .form-select,
 html[data-theme='glass'] .o_input,
 html[data-theme='glass'] input.form-control {
   background: var(--lg-bg-elevated);
-  border: 1px solid var(--lg-border);
+  border: none;
   color: var(--lg-text);
   border-radius: var(--lg-r-sm);
-  &::placeholder { color: var(--lg-text-muted); }
-  &:hover { border-color: var(--lg-accent-icicle); }
+  &::placeholder { color: var(--lg-text-secondary); }
   &:focus {
-    border-color: var(--lg-accent);
-    box-shadow: 0 0 0 3px var(--lg-focus);
-    background: var(--lg-bg-elevated);
-    color: var(--lg-text);
+    box-shadow: 0 0 0 2px var(--lg-accent);
   }
 }
 
@@ -239,7 +226,8 @@ html[data-theme='glass'] .o_list_renderer table.o_list_table {
     border-bottom: 1px solid var(--lg-border);
     &:hover { background: var(--lg-bg-elevated); }
     &.o_selected_row {
-      background: rgba(91, 141, 239, 0.18);
+      background: var(--lg-bg-elevated);
+      box-shadow: inset 3px 0 0 var(--lg-accent);
       color: var(--lg-text);
     }
   }
@@ -304,15 +292,14 @@ html[data-theme='glass'] .o_home_menu {
   }
   .o_app {
     background: var(--lg-bg-surface);
-    border: 1px solid var(--lg-border);
+    border: none;
     border-radius: var(--lg-r-lg);
     padding: var(--lg-r-md);
     color: var(--lg-text);
-    transition: transform var(--lg-t-fast), border-color var(--lg-t-fast), background var(--lg-t-fast);
+    transition: transform var(--lg-t-fast), background var(--lg-t-fast);
     &:hover {
       transform: translateY(-2px);
       background: var(--lg-bg-elevated);
-      border-color: var(--lg-accent-icicle);
     }
   }
 }

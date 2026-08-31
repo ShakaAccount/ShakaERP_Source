@@ -5,13 +5,18 @@
 // `var(--lg-*)` and never hardcodes hex. To recolor, edit this file only.
 //
 // Palette (chosen by the user, hard-locked — not user-configurable):
-//   bg-base        #0F1420   page, body, navbar, control panel
-//   bg-surface     #171D2E   cards, panels, sidebar, modal body
-//   bg-elevated    #1F2740   hover/active, popovers, dropdowns
-//   border         #2A3350   1px hairlines on cards, dividers
-//   accent         #5B8DEF   primary buttons, active nav, links
-//   text           #E7EAF3   primary text
-//   text-secondary #8B93A7   muted / secondary text
+//   bg-base        #0B0F19   page, body, navbar, control panel
+//   bg-surface     #141A29   cards, panels, sidebar, modal body
+//   bg-elevated    #1B2333   hover / active states
+//   border         #1E2536   1px hairline, used sparingly for separation
+//   accent         #5B7CFA   flat accent (active tab, focus, links)
+//   accent-start   #5B7CFA   gradient endpoint A (buttons ONLY)
+//   accent-end     #8B5CF6   gradient endpoint B (buttons ONLY)
+//   link           #6B8AFA   inline secondary links (no underline)
+//   text           #F2F4F8   primary text
+//   text-secondary #7B8494   timestamps, labels, muted body
+//   pill-bg        #232B3D   tag / pill background
+//   pill-text      #B8C0D0   tag / pill text
 //   danger         #F87171   destructive actions only
 // ============================================================================
 
@@ -21,41 +26,46 @@ html[data-theme='shaka'] {
   // sentinel; nothing to do here yet
 }
 
-// ---- Solid surface tokens (repurposed from the old "glass" naming so the
-// 558+ existing var(--lg-*) references cascade through unchanged) ----
-$lg-bg-base:        #0F1420 !default;
-$lg-bg-surface:     #171D2E !default;
-$lg-bg-elevated:    #1F2740 !default;
-$lg-border:         #2A3350 !default;
+// ---- Surfaces ----
+$lg-bg-base:        #0B0F19 !default;
+$lg-bg-surface:     #141A29 !default;
+$lg-bg-elevated:    #1B2333 !default;
+$lg-border:         #1E2536 !default;
 
-// ---- Accent ----
-$lg-accent:         #5B8DEF !default;
-$lg-accent-strong:  #4A78D9 !default;   // hover state of accent
-$lg-accent-icicle:  #93B4F7 !default;   // soft accent (icon tints, faint hover)
+// ---- Accent (flat) — used for non-button elements (active tab, focus, links) ----
+$lg-accent:         #5B7CFA !default;
+$lg-accent-strong:  #4A6BE0 !default;  // hover state of the flat accent
+$lg-link:           #6B8AFA !default;  // soft blue inline link color (per spec)
+
+// ---- Accent gradient endpoints — used ONLY for primary buttons ----
+$lg-accent-start:   #5B7CFA !default;  // gradient(90deg, ..., ...) — left
+$lg-accent-end:     #8B5CF6 !default;  // gradient(90deg, ..., ...) — right
 
 // ---- Text ----
-$lg-text:           #E7EAF3 !default;
-$lg-text-secondary: #8B93A7 !default;
-$lg-text-muted:     #8B93A7 !default;   // alias for code that referenced text-muted
-$lg-text-on-accent: #FFFFFF !default;
-$lg-link:           $lg-accent !default;
+$lg-text:           #F2F4F8 !default;
+$lg-text-secondary: #7B8494 !default;
+$lg-text-muted:     #7B8494 !default;   // alias for code that referenced text-muted
+$lg-text-on-accent: #FFFFFF !default;  // text on the gradient button
 
-// ---- Lines (renamed semantically: "line-hi" = top border, "line-lo" = bottom border) ----
-$lg-line-hi:        rgba(255, 255, 255, 0.06);  // hairline at top of cards
-$lg-line-lo:        #2A3350;                     // 1px solid border (same as --lg-border)
+// ---- Pills / tags ----
+$lg-pill-bg:        #232B3D !default;
+$lg-pill-text:      #B8C0D0 !default;
+
+// ---- Lines (1px hairlines; used sparingly — most surfaces separate by tone alone) ----
+$lg-line-hi:        rgba(255, 255, 255, 0.04);
+$lg-line-lo:        #1E2536;            // alias of --lg-border
 
 // ---- Focus + state ----
-$lg-focus:          rgba(91, 141, 239, 0.32);   // accent at 32% for focus rings
+$lg-focus:          rgba(91, 124, 250, 0.32);   // accent at 32% for focus rings
 $lg-danger:         #F87171 !default;
 $lg-success:        #34D399 !default;
 $lg-warning:        #FBBF24 !default;
 
-// ---- Shadows (very subtle on solid dark; cards rely on borders, not shadows) ----
+// ---- Shadows (very subtle on solid dark; cards rely on bg-tone, not shadows) ----
 $lg-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
 $lg-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.30);
 $lg-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.40);
-// Inner gloss: a hairline highlight at the top of an elevated surface
-$lg-gloss: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+$lg-gloss: none;  // no inset highlight on solid dark surfaces
 
 // ---- Legacy "glass" surface tokens — repurposed as solid surface aliases so
 // the 558+ existing var(--lg-glass-*) references cascade through unchanged.
@@ -66,31 +76,29 @@ $lg-glass:         $lg-bg-surface  !default;   // cards
 $lg-glass-soft:    $lg-bg-base     !default;   // form sheet bg, subtle wells
 $lg-glass-deep:    $lg-bg-base     !default;   // page-level wells
 
-// Dark-glass tints (kept for the @media dark override; they now equal base)
 $lg-glass-dark-1:  $lg-bg-elevated !default;
 $lg-glass-dark-2:  $lg-bg-surface  !default;
 $lg-glass-dark-3:  $lg-bg-base     !default;
 $lg-bg-dark-deep:  $lg-bg-base     !default;
 $lg-text-dark-hi:  $lg-text        !default;
 
-// ---- Blur tokens (kept for API compat — values become 0 in this solid theme) ----
+// ---- Blur tokens (kept for API compat — values are 0 in this solid theme) ----
 $lg-blur-sm: 0 !default;
 $lg-blur-md: 0 !default;
 $lg-blur-lg: 0 !default;
 
 // ---- Radius ----
-$lg-r-sm:   6px !default;
-$lg-r-md:   10px !default;
-$lg-r-lg:   14px !default;
-$lg-r-pill: 999px !default;
+$lg-r-sm:   8px !default;
+$lg-r-md:   12px !default;
+$lg-r-lg:   16px !default;     // card radius (per spec)
+$lg-r-pill: 999px !default;   // buttons + pills (per spec)
 
 // ---- Spacing, transitions ----
 $lg-t-fast: 140ms ease !default;
 $lg-t-med:  220ms ease !default;
 
-// ---- The world backdrop — solid dark navy with a subtle radial glow, no
-// floating blobs (we're not in glass mode anymore). Kept as a variable so
-// .glass-backdrop mixin stays usable without renaming callers. ----
+// ---- World backdrop — solid dark navy. Kept as vars so .glass-backdrop
+// mixin stays usable without renaming callers. ----
 $lg-bg-deep:    $lg-bg-base  !default;
 $lg-bg-mid:     $lg-bg-base  !default;
 $lg-bg-blob-a:  transparent  !default;
@@ -107,11 +115,15 @@ $lg-bg-blob-c:  transparent  !default;
   --lg-bg-elevated:    #{$lg-bg-elevated};
   --lg-border:         #{$lg-border};
 
-  // Accent
+  // Accent (flat, for non-button elements)
   --lg-accent:         #{$lg-accent};
   --lg-accent-strong:  #{$lg-accent-strong};
-  --lg-accent-icicle:  #{$lg-accent-icicle};
   --lg-link:           #{$lg-link};
+
+  // Accent gradient (buttons only)
+  --lg-accent-start:   #{$lg-accent-start};
+  --lg-accent-end:     #{$lg-accent-end};
+  --lg-accent-gradient: linear-gradient(90deg, #{$lg-accent-start}, #{$lg-accent-end});
 
   // Text
   --lg-text:           #{$lg-text};
@@ -120,7 +132,11 @@ $lg-bg-blob-c:  transparent  !default;
   --lg-text-on-accent: #{$lg-text-on-accent};
   --lg-text-on-glass:  #{$lg-text-on-accent};
 
-  // Lines
+  // Pills / tags
+  --lg-pill-bg:        #{$lg-pill-bg};
+  --lg-pill-text:      #{$lg-pill-text};
+
+  // Lines (used sparingly)
   --lg-line-hi: #{$lg-line-hi};
   --lg-line-lo: #{$lg-line-lo};
 
@@ -154,18 +170,8 @@ $lg-bg-blob-c:  transparent  !default;
   --lg-r-pill: #{$lg-r-pill};
 
   // ---- Hard-locked button colors (not user-configurable) ----
-  // These are intentionally NOT exposed as Company-color overrides.
-  // layout_inject.xml no longer emits a per-Company <style> block.
-  --lg-btn-primary: #{$lg-accent};
+  // Primary buttons use the gradient. layout_inject.xml no longer emits
+  // a per-Company <style> block.
+  --lg-btn-primary: #{$lg-accent-start};  // fallback color (gradient wins)
   --lg-btn-text:    #{$lg-text-on-accent};
 }
-
-// ---- (Removed) Dark-mode media query block ----
-// In a single-theme dark UI there is no system-preference dark mode to
-// override; the dark palette is the only palette. If a light variant is
-// ever added, re-introduce it gated on html[data-theme='light'].
-
-// ---- (Removed) World backdrop blob colors ----
-// The radial-blob "glass world" is no longer rendered. The body shows the
-// solid --lg-bg-base directly. If a subtle ambient texture is desired
-// later, reintroduce here as a faint gradient (opacity 0.3 or less).

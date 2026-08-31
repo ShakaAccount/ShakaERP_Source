@@ -1,12 +1,19 @@
 // ShakaERP Shaka Theme — Settings & back-office pages
 // ============================================================================
-// Real Odoo 19 settings class coverage (verified against rendered DOM).
-// Elevation hierarchy: page base (--lg-bg-base) → card (--lg-bg-surface) →
-// hover/active (--lg-bg-elevated). One accent (--lg-accent) is applied to
-// active sidebar tabs, primary buttons (Save/Invite), and links.
+// Odoo 19 settings class coverage. The page itself is a single dark
+// background tone; separation comes from card surfaces and section
+// spacing — borders are used sparingly per the spec.
+// Hierarchy:
+//   bg-base     #0B0F19   page + navbar + control panel + sidebar rail
+//   bg-surface  #141A29   setting cards, modal body, form sheet
+//   bg-elevated #1B2333   hover / active states
+//   border      #1E2536   1px hairline, used only where needed
+//   accent      #5B7CFA   flat accent (active tab, focus, links)
+//   gradient    #5B7CFA→#8B5CF6 — primary buttons ONLY
+//   link        #6B8AFA   inline secondary links, no underline
 // ============================================================================
 
-// Settings page shell — base dark background, no glass world
+// Settings page shell — base background, no glass world, no light bar
 html[data-theme='glass'] .o_settings {
   background: var(--lg-bg-base);
   color: var(--lg-text);
@@ -49,15 +56,24 @@ html[data-theme='glass'] .settings_tab {
 }
 
 // ---- Section headers ("Users", "Languages", "Company") ----
-// Higher contrast vs. the card surface so they read as headings, not body.
+// Bold, white, larger than card body text. Clear vertical spacing above
+// and below — not a thin divider line.
 html[data-theme='glass'] .o_settings h2,
-html[data-theme='glass'] .o_settings h3,
 html[data-theme='glass'] .app_settings_block h2,
+html[data-theme='glass'] .o_settings h3,
 html[data-theme='glass'] .app_settings_block h3,
 html[data-theme='glass'] .o_setting_heading {
   color: var(--lg-text);
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1.15rem;
   letter-spacing: 0.01em;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+// First section header doesn't need top margin (collapses into the page)
+html[data-theme='glass'] .o_settings > h2:first-of-type,
+html[data-theme='glass'] .o_settings .app_settings_block:first-of-type h2 {
+  margin-top: 8px;
 }
 
 // The compact subtitle (used in Odoo's General Settings block header)
@@ -71,18 +87,17 @@ html[data-theme='glass'] .o_settings_container {
 }
 
 // ---- Individual setting box (left pane: title + description; right: control) ----
-// The card: solid surface, 1px border, consistent padding, single accent on
-// hover/active. No "active" state needed (settings are inert).
+// Per spec: no visible border; separation comes from the bg tone difference
+// alone. 16px radius, ~20px padding, full RTL intact.
 html[data-theme='glass'] .o_setting_box {
   background: var(--lg-bg-surface);
-  border: 1px solid var(--lg-border);
-  border-radius: var(--lg-r-md);
-  box-shadow: var(--lg-shadow-sm);
+  border: none;
+  border-radius: var(--lg-r-lg);  // 16px
+  padding: 20px 22px;
   color: var(--lg-text);
-  padding: 16px 18px;
-  transition: border-color var(--lg-t-fast);
+  transition: background var(--lg-t-fast);
   &:hover {
-    border-color: var(--lg-accent-icicle);
+    background: var(--lg-bg-elevated);
   }
 }
 
@@ -91,13 +106,13 @@ html[data-theme='glass'] .o_setting_left_pane {
   color: var(--lg-text);
   .o_setting_title {
     color: var(--lg-text);
-    font-weight: 600;       // titles: 600
+    font-weight: 600;
     font-size: 0.95rem;
   }
   .o_setting_description {
-    color: var(--lg-text-secondary);  // secondary text: muted
+    color: var(--lg-text-secondary);  // #7B8494 timestamps/labels
     font-size: 0.85rem;
-    margin-top: 2px;
+    margin-top: 4px;
   }
 }
 
@@ -107,11 +122,11 @@ html[data-theme='glass'] .o_setting_right_pane {
   .o_field_widget {
     color: var(--lg-text);
   }
-  // color picker swatch — solid surface with the border
+  // color picker swatch — solid surface, no border (per spec)
   .o_field_color_picker button,
   .o_color_picker button {
     background: var(--lg-bg-elevated);
-    border: 1px solid var(--lg-border);
+    border: none;
     border-radius: var(--lg-r-sm);
     padding: 4px;
   }
@@ -119,35 +134,41 @@ html[data-theme='glass'] .o_setting_right_pane {
   .o_field_char .o_input,
   .o_input {
     background: var(--lg-bg-elevated);
-    border: 1px solid var(--lg-border);
+    border: none;
     color: var(--lg-text);
     border-radius: var(--lg-r-sm);
     &:focus {
-      border-color: var(--lg-accent);
-      box-shadow: 0 0 0 3px var(--lg-focus);
+      box-shadow: 0 0 0 2px var(--lg-accent);
     }
   }
 }
 
 // "Invite users" / "Access rights" buttons in the settings app header
+// Per spec: primary buttons get the gradient, white text, fully rounded
 html[data-theme='glass'] .o_web_settings_invite.btn-primary {
-  background: var(--lg-accent);
-  background-color: var(--lg-accent);
-  border: 1px solid var(--lg-accent);
+  background: var(--lg-accent-gradient);
+  background-color: var(--lg-accent-start);  // fallback if gradient is ignored
+  border: none;
+  border-radius: var(--lg-r-pill);
   color: var(--lg-text-on-accent);
-  &:hover { background: var(--lg-accent-strong); border-color: var(--lg-accent-strong); }
+  padding: 8px 20px;
+  font-weight: 600;
+  box-shadow: var(--lg-shadow-sm);
+  &:hover { filter: brightness(1.05); }
 }
 html[data-theme='glass'] .o_web_settings_access_rights.btn-link,
 html[data-theme='glass'] .o_settings .btn-link {
-  color: var(--lg-accent);
-  &:hover { color: var(--lg-accent-icicle); }
+  color: var(--lg-link);
+  text-decoration: none;
+  &:hover { color: var(--lg-link); filter: brightness(1.15); }
 }
 
 // "Add Languages" / "Add Users" link-style buttons inside settings
 html[data-theme='glass'] .o_settings .btn.btn-link {
-  color: var(--lg-accent);
+  color: var(--lg-link);
   font-weight: 500;
-  &:hover { color: var(--lg-accent-icicle); }
+  text-decoration: none;
+  &:hover { color: var(--lg-link); filter: brightness(1.15); }
   .o_button_icon { color: inherit; }
 }
 
@@ -157,8 +178,9 @@ html[data-theme='glass'] .o_module_kanban {
   .o_module_card,
   .o_kanban_record {
     background: var(--lg-bg-surface);
-    border: 1px solid var(--lg-border);
-    border-radius: var(--lg-r-md);
+    border: none;
+    border-radius: var(--lg-r-lg);
+    padding: 20px;
     color: var(--lg-text);
   }
 }
@@ -166,16 +188,14 @@ html[data-theme='glass'] .o_module_kanban {
 // ---- Form sheets inside Settings (also used by preferences modal) ----
 html[data-theme='glass'] .o_form_sheet {
   background: var(--lg-bg-surface);
-  border: 1px solid var(--lg-border);
-  border-radius: var(--lg-r-md);
-  box-shadow: var(--lg-shadow-sm);
+  border: none;
+  border-radius: var(--lg-r-lg);
   color: var(--lg-text);
 }
 
 // Save bar (the floating "Save / Discard" bar at the bottom of a form)
 html[data-theme='glass'] .o_form_status_indicator {
   background: var(--lg-bg-surface);
-  border: 1px solid var(--lg-border);
   border-radius: var(--lg-r-md);
   color: var(--lg-text);
 }

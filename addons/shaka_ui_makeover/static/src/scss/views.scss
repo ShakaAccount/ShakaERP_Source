@@ -27,22 +27,19 @@ html[data-theme='glass'] .o_notebook {
   }
 }
 
-// ---- Kanban - solid dark cards ----
+// ---- Kanban - solid dark cards (no border, per spec) ----
 html[data-theme='glass'] .o_kanban_record {
   background: var(--lg-bg-surface);
-  border: 1px solid var(--lg-border);
+  border: none;
   border-radius: var(--lg-r-md);
-  box-shadow: var(--lg-shadow-sm);
   color: var(--lg-text);
-  transition: transform var(--lg-t-fast), border-color var(--lg-t-fast), background var(--lg-t-fast);
+  transition: transform var(--lg-t-fast), background var(--lg-t-fast);
   &:hover {
     transform: translateY(-2px);
     background: var(--lg-bg-elevated);
-    border-color: var(--lg-accent-icicle);
   }
   &:focus-within {
-    border-color: var(--lg-accent);
-    box-shadow: 0 0 0 3px var(--lg-focus);
+    box-shadow: 0 0 0 2px var(--lg-accent);
   }
 }
 
@@ -64,7 +61,7 @@ html[data-theme='glass'] .o_group_name {
 // ---- Date/time picker ----
 html[data-theme='glass'] .o_datetime_picker {
   background: var(--lg-bg-elevated);
-  border: 1px solid var(--lg-border);
+  border: none;
   border-radius: var(--lg-r-md);
   box-shadow: var(--lg-shadow-md);
   color: var(--lg-text);
@@ -103,7 +100,7 @@ html[data-theme='glass'] .o_form_renderer.o_form_nosheet h2 {
   font-weight: 600;
 }
 
-// ---- Search panel - solid drawer ----
+// ---- Search panel - solid drawer (no border) ----
 html[data-theme='glass'] .o_search_panel_sidebar {
   background: var(--lg-bg-surface);
   border-inline-end: 1px solid var(--lg-border);
@@ -116,12 +113,11 @@ html[data-theme='glass'] .o_cp_pager .o_pager_value {
   border-radius: var(--lg-r-sm);
 }
 
-// ---- Chatter: solid dark conversation rail ----
+// ---- Chatter: solid dark conversation rail (no border) ----
 html[data-theme='glass'] .o_Chatter {
   background: var(--lg-bg-surface);
-  border: 1px solid var(--lg-border);
+  border: none;
   border-radius: var(--lg-r-md);
-  box-shadow: var(--lg-shadow-sm);
   color: var(--lg-text);
 }
 
@@ -141,7 +137,7 @@ html[data-theme='glass'] .o_Chatter_scroll {
 // Individual message card
 html[data-theme='glass'] .o_Message {
   background: var(--lg-bg-elevated);
-  border: 1px solid var(--lg-border);
+  border: none;
   border-radius: var(--lg-r-md);
   margin: 8px 0;
   padding: 12px 14px;
@@ -174,12 +170,11 @@ html[data-theme='glass'] .o_Chatter_composer {
   border-radius: 0 0 var(--lg-r-md) var(--lg-r-md);
   .o_ComposerTextField {
     background: var(--lg-bg-elevated);
-    border: 1px solid var(--lg-border);
+    border: none;
     border-radius: var(--lg-r-md);
     color: var(--lg-text);
     &:focus-within {
-      border-color: var(--lg-accent);
-      box-shadow: 0 0 0 3px var(--lg-focus);
+      box-shadow: 0 0 0 2px var(--lg-accent);
     }
   }
   .o_Composer_actionButton {
@@ -203,21 +198,21 @@ html[data-theme='glass'] .o_Activity {
   }
 }
 
-// Attachment box + cards
+// Attachment box + cards (no border, per spec)
 html[data-theme='glass'] .o_AttachmentBox {
   background: var(--lg-bg-surface);
-  border: 1px solid var(--lg-border);
+  border: none;
   border-radius: var(--lg-r-md);
   color: var(--lg-text);
 }
 html[data-theme='glass'] .o_AttachmentCard {
   background: var(--lg-bg-elevated);
-  border: 1px solid var(--lg-border);
+  border: none;
   border-radius: var(--lg-r-sm);
   padding: 8px;
   color: var(--lg-text);
-  transition: border-color var(--lg-t-fast), transform var(--lg-t-fast);
-  &:hover { border-color: var(--lg-accent-icicle); transform: translateY(-1px); }
+  transition: transform var(--lg-t-fast);
+  &:hover { transform: translateY(-1px); }
 }
 
 // Followers / recipients pills
@@ -226,10 +221,10 @@ html[data-theme='glass'] .o_RecipientsList {
   background: transparent;
   .o_FollowersList_follower,
   .o_RecipientsList_partner {
-    background: var(--lg-bg-elevated);
-    border: 1px solid var(--lg-border);
+    background: var(--lg-pill-bg);
+    color: var(--lg-pill-text);
+    border: none;
     border-radius: var(--lg-r-pill);
-    color: var(--lg-text);
     padding: 2px 10px;
   }
 }
@@ -261,17 +256,15 @@ html[data-theme='glass'] [dir='rtl'] {
 // language "Change my preferences" popup, and every settings/backend form).
 // =====================================================================
 
-// A generic solid dark input that covers most field widgets
+// A generic solid dark input that covers most field widgets (no border)
 html[data-theme='glass'] .o_input {
   background: var(--lg-bg-elevated);
-  border: 1px solid var(--lg-border);
+  border: none;
   color: var(--lg-text);
   border-radius: var(--lg-r-sm);
   &::placeholder { color: var(--lg-text-secondary); }
-  &:hover { border-color: var(--lg-accent-icicle); }
   &:focus {
-    border-color: var(--lg-accent);
-    box-shadow: 0 0 0 3px var(--lg-focus);
+    box-shadow: 0 0 0 2px var(--lg-accent);
     background: var(--lg-bg-elevated);
   }
 }
@@ -290,12 +283,11 @@ html[data-theme='glass'] .o_field_selection,
 html[data-theme='glass'] .o_wrap_input {
   .o_input {
     background: var(--lg-bg-elevated);
-    border: 1px solid var(--lg-border);
+    border: none;
     color: var(--lg-text);
     border-radius: var(--lg-r-sm);
     &:focus {
-      border-color: var(--lg-accent);
-      box-shadow: 0 0 0 3px var(--lg-focus);
+      box-shadow: 0 0 0 2px var(--lg-accent);
     }
   }
 }
@@ -338,22 +330,21 @@ html[data-theme='glass'] .o_field_many2many_tags,
 html[data-theme='glass'] .o_field_tags,
 html[data-theme='glass'] .o_tags_input {
   background: var(--lg-bg-elevated);
-  border: 1px solid var(--lg-border);
+  border: none;
   border-radius: var(--lg-r-sm);
   color: var(--lg-text);
   padding: 4px 6px;
   &:focus-within {
-    border-color: var(--lg-accent);
-    box-shadow: 0 0 0 3px var(--lg-focus);
+    box-shadow: 0 0 0 2px var(--lg-accent);
   }
-  // the selected-language tag chips
+  // the selected-language tag chips — pill style per spec
   .badge,
   .o_tag,
   .tag {
-    background: var(--lg-bg-surface);
-    border: 1px solid var(--lg-border);
+    background: var(--lg-pill-bg);
+    color: var(--lg-pill-text);
+    border: none;
     border-radius: var(--lg-r-pill);
-    color: var(--lg-text);
   }
 }
 

@@ -46,7 +46,6 @@
   } @else {
     &:hover {
       background: var(--lg-bg-elevated);
-      border-color: var(--lg-accent-icicle);
     }
   }
 }
@@ -54,10 +53,13 @@
 // Page-level backdrop: solid dark navy base. The "glass world" is gone.
 @mixin glass-backdrop {
   background: var(--lg-bg-base);
-  // Subtle vignette so the page has some depth without being noisy
+  // Very subtle radial accent glow at the top and bottom so the page has
+  // some depth without being noisy. Uses the new accent color (#5B7CFA)
+  // at very low opacity so the page reads as monochrome navy with a
+  // single-color accent.
   background-image:
-    radial-gradient(1200px 800px at 50% -10%, rgba(91, 141, 239, 0.04), transparent 60%),
-    radial-gradient(900px 700px at 50% 110%, rgba(91, 141, 239, 0.03), transparent 60%);
+    radial-gradient(1200px 800px at 50% -10%, rgba(91, 124, 250, 0.04), transparent 60%),
+    radial-gradient(900px 700px at 50% 110%, rgba(91, 124, 250, 0.03), transparent 60%);
   background-attachment: fixed;
 }
 
