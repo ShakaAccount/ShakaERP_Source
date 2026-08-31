@@ -1,97 +1,324 @@
-// ShakaERP Liquid Glass - login
+// ShakaERP Shaka Theme — login page
+// ============================================================================
+// Single continuous card from logo header down to the bottom links. The
+// logo itself is rendered dynamically from res.company via /web/binary/
+// company_logo and is intentionally not styled here — only the surrounding
+// container is themed.
 // ============================================================================
 
-html[data-theme='glass'] body {
+// Page background — the same dark navy world as the rest of the app
+html[data-theme='glass'] body.o_home_menu_background {
   @include glass-backdrop;
 }
 
+// =====================================================================
+// The outer "card" — Odoo's .card.bg-white with .shadow-sm, plus the inner
+// .o_database_list, plus the .card-body.  All of them are now a single
+// #141A29 panel with 16px radius and no border / no shadow.
+// =====================================================================
+html[data-theme='glass'] .o_database_list,
 html[data-theme='glass'] .oe_login_form,
 html[data-theme='glass'] .oe_signup_form,
 html[data-theme='glass'] .oe_reset_password_form {
-  @include glass-elevated();
+  background: var(--lg-bg-surface);
+  border: none;
   border-radius: var(--lg-r-lg);
+  box-shadow: none;
   color: var(--lg-text);
-  backdrop-filter: blur(var(--lg-blur-lg)) saturate(1.5);
+  // The outer card is a Bootstrap .card, which has overflow:hidden +
+  // border-radius so its children round with it.  No need to set the
+  // top-left/top-right radius of the inner logo block separately.
 }
 
+// The Bootstrap .card-body wrapper that holds both the logo and the form
+html[data-theme='glass'] .oe_login_form + .oe_structure,
+html[data-theme='glass'] .o_database_list .card-body {
+  background: var(--lg-bg-surface);
+  color: var(--lg-text);
+}
+
+// Bootstrap's bg-white utility class applied to the outer card — override
+// to the surface color.
+html[data-theme='glass'] .o_database_list.bg-white,
+html[data-theme='glass'] .bg-white {
+  background-color: var(--lg-bg-surface) !important;
+}
+
+// The bg-100 utility (Bootstrap 100-level) — also a light token by default
+html[data-theme='glass'] .bg-100 {
+  background-color: var(--lg-bg-surface) !important;
+}
+
+// =====================================================================
+// Logo header block — sits inside the .card-body above the form.  Same
+// background as the rest of the card so the seam disappears.  No
+// border-bottom, no padding-top (so the top of the card reads as
+// flush with the form below it).
+// =====================================================================
+html[data-theme='glass'] .oe_login_form .card-body > .text-center,
+html[data-theme='glass'] .o_database_list .card-body > .text-center {
+  background: transparent;
+  color: var(--lg-text);
+  padding-top: 24px;       // breathing room above the logo
+  padding-bottom: 24px;    // breathing room below the logo
+  border-bottom: none !important;  // remove the seam entirely
+  margin-bottom: 8px;      // tighter than Odoo's default 4 (mb-4) so the
+                            // form feels attached to the logo block
+}
+
+// The logo image — do not change the image itself.  Apply a soft glow so
+// the logo reads well on dark without altering the asset.
 html[data-theme='glass'] .oe_login_form .o_login_logo {
-  filter: drop-shadow(0 4px 8px rgba(23,43,77,0.2));
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
+  max-height: 120px;
 }
 
-html[data-theme='glass'] .oe_login_form input.form-control {
-  background: var(--lg-glass);
-  border: 1px solid var(--lg-line-hi);
-  border-bottom-color: var(--lg-line-lo);
+// =====================================================================
+// Form labels (پست الکترونیک / گذرواژه) — muted gray, with breathing room
+// above the input (not tight against it).
+// =====================================================================
+html[data-theme='glass'] .oe_login_form .form-label,
+html[data-theme='glass'] .oe_login_form label {
+  color: var(--lg-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 6px;       // not cramped against the input
+  letter-spacing: 0.01em;
+}
+
+// =====================================================================
+// Inputs — 1px border, 8px radius, consistent padding.  Background is
+// the elevated surface so the input reads as "recessed" against the card.
+// =====================================================================
+html[data-theme='glass'] .oe_login_form input.form-control,
+html[data-theme='glass'] .oe_login_form .form-control,
+html[data-theme='glass'] .oe_login_form .input-group .form-control {
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
+  border-radius: var(--lg-r-sm);
   color: var(--lg-text);
-  &:focus { box-shadow: 0 0 0 3px var(--lg-focus); border-color: var(--lg-accent); }
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  // RTL: text-align follows document direction; we keep "start" so the
+  // user's typed value aligns to the side they read from.
+  text-align: start;
+  &::placeholder {
+    color: var(--lg-text-secondary);
+    opacity: 0.7;
+  }
+  &:hover {
+    border-color: var(--lg-text-secondary);
+  }
+  &:focus {
+    border-color: var(--lg-accent);
+    box-shadow: 0 0 0 3px var(--lg-focus);
+    background: var(--lg-bg-elevated);
+    color: var(--lg-text);
+    outline: none;
+  }
 }
 
-html[data-theme='glass'] .oe_login_form .btn-primary {
-  background: var(--lg-btn-primary);
-  border-color: transparent;
-  color: var(--lg-btn-text);
-  box-shadow: var(--lg-shadow-sm), inset 0 1px 0 rgba(255,255,255,0.4);
+// =====================================================================
+// Autofill override — browser default yellow/olive must not break the
+// dark theme.  Per spec: inset #171D2E (we use --lg-bg-elevated for
+// palette consistency), text + caret #F2F4F8 (--lg-text).
+// =====================================================================
+html[data-theme='glass'] input:-webkit-autofill,
+html[data-theme='glass'] input:-webkit-autofill:hover,
+html[data-theme='glass'] input:-webkit-autofill:focus,
+html[data-theme='glass'] input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--lg-bg-elevated) inset !important;
+  box-shadow: 0 0 0 1000px var(--lg-bg-elevated) inset !important;
+  -webkit-text-fill-color: var(--lg-text) !important;
+  caret-color: var(--lg-text) !important;
+  transition: background-color 5000s ease-in-out 0s;  // avoid flash
 }
 
+// =====================================================================
+// Password input + show-password eye button
+// =====================================================================
+html[data-theme='glass'] .oe_login_form .o_show_password {
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
+  border-inline-start: none;  // no double border with the input
+  color: var(--lg-text-secondary);
+  border-radius: 0 var(--lg-r-sm) var(--lg-r-sm) 0;
+  &:hover { color: var(--lg-text); }
+}
+
+// =====================================================================
+// "ورود" submit button — primary accent gradient, white text, pill
+// corners, no border (per the rest of the app's primary-button rule).
+// =====================================================================
+html[data-theme='glass'] .oe_login_form button[type='submit'].btn-primary,
+html[data-theme='glass'] .oe_login_form .oe_login_buttons .btn-primary {
+  background: var(--lg-accent-gradient);
+  background-color: var(--lg-accent-start);  // fallback
+  border: none;
+  border-radius: var(--lg-r-pill);
+  color: var(--lg-text-on-accent);
+  font-weight: 600;
+  padding: 10px 20px;
+  width: 100%;
+  box-shadow: var(--lg-shadow-sm);
+  &:hover { filter: brightness(1.08); }
+  &:active { filter: brightness(0.95); }
+  &:focus-visible {
+    outline: 2px solid var(--lg-accent);
+    outline-offset: 2px;
+  }
+}
+
+// =====================================================================
+// "Use a Passkey" link — currently looks disabled because Bootstrap's
+// .list-group-item uses a near-white background.  Style as a proper
+// secondary button: transparent background, subtle border, muted text.
+// =====================================================================
+html[data-theme='glass'] .oe_login_form .o_login_auth,
+html[data-theme='glass'] .oe_login_form .o_login_auth .list-group {
+  background: transparent;
+  border: none;
+}
+
+html[data-theme='glass'] .oe_login_form .passkey_login_link,
+html[data-theme='glass'] .oe_login_form .o_login_auth .list-group-item {
+  background: transparent;
+  border: 1px solid var(--lg-border);
+  border-radius: var(--lg-r-md);
+  color: var(--lg-text-secondary);
+  padding: 10px 14px;
+  font-weight: 500;
+  margin-top: 8px;
+  transition: background var(--lg-t-fast), color var(--lg-t-fast), border-color var(--lg-t-fast);
+  &:hover, &:focus {
+    background: var(--lg-bg-elevated);
+    color: var(--lg-text);
+    border-color: var(--lg-text-secondary);
+  }
+  // The fa-qrcode icon inside the link
+  i, .fa {
+    color: inherit;
+  }
+  .mx-auto {
+    margin: 0;
+  }
+}
+
+// The "— یا —" separator
+html[data-theme='glass'] .oe_login_form .o_login_auth em,
+html[data-theme='glass'] .oe_login_form .text-muted {
+  color: var(--lg-text-secondary);
+}
+
+// =====================================================================
+// Inline links below the form (forgot password, signup, DB manager)
+// =====================================================================
+html[data-theme='glass'] .oe_login_form .btn-link,
 html[data-theme='glass'] .oe_login_form .small a,
 html[data-theme='glass'] .oe_footer a {
   color: var(--lg-link);
+  text-decoration: none;
+  &:hover { color: var(--lg-link); filter: brightness(1.15); }
 }
 
-// RTL-friendly brand header
-html[data-theme='glass'] .oe_login_form .text-center h4 {
-  color: var(--lg-text);
+// =====================================================================
+// Footer / database-manager link row (the .border-top row at the very
+// bottom of the card) — remove the visible seam, keep on the same bg
+// =====================================================================
+html[data-theme='glass'] .oe_login_form .border-top,
+html[data-theme='glass'] .oe_login_form .text-center.small.mt-4,
+html[data-theme='glass'] .oe_login_form .text-center.small.mt-4.border-top,
+html[data-theme='glass'] .oe_login_form hr {
+  background: transparent;
+  border-color: var(--lg-border) !important;
+  border-top: none !important;  // no seam at the bottom of the card either
+  color: var(--lg-text-secondary);
+  margin-top: 24px;
+  padding-top: 16px;
+  a {
+    color: var(--lg-link);
+    text-decoration: none;
+  }
 }
 
-// ---- Database list (multi-DB install selector) ----
+// The bottom row's "border-end" separator between links (between
+// "مدیریت پایگاه های داده" and the next link) — subtle, in the border color
+html[data-theme='glass'] .oe_login_form .text-center.small a.border-end,
+html[data-theme='glass'] .oe_login_form .text-center.small [class*='border-end'] {
+  border-color: var(--lg-border) !important;
+}
+
+// =====================================================================
+// RTL — make sure text alignment follows the document direction in form
+// controls.  In the live render the page is `o_rtl` (right-to-left) and
+// Persian labels are right-aligned, but the "admin" value inside the
+// email input renders left-aligned.  Force form controls to follow
+// document direction.
+// =====================================================================
+html[data-theme='glass'][dir='rtl'] .oe_login_form,
+html[data-theme='glass'][dir='rtl'] .o_database_list {
+  direction: rtl;
+  text-align: right;
+}
+html[data-theme='glass'][dir='rtl'] .oe_login_form input.form-control,
+html[data-theme='glass'][dir='rtl'] .oe_login_form .form-control {
+  // Odoo 19 sets `direction: ltr` on inputs by default, which forces
+  // typed values to render LTR inside the RTL form.  Switch to `rtl` so
+  // Persian text inside an RTL input flows naturally.
+  direction: rtl;
+  text-align: right;
+  // The placeholder is also Persian; keep it right-aligned
+  &::placeholder { text-align: right; }
+}
+
+// =====================================================================
+// Database-list (the "Choose a database" page) — same treatment
+// =====================================================================
 html[data-theme='glass'] .o_database_list {
-  @include glass-elevated();
-  border-radius: var(--lg-r-lg);
-  color: var(--lg-text);
   padding: var(--lg-r-md);
   .o_database_list_header {
     color: var(--lg-text);
     font-weight: 600;
   }
   .o_database_list_item {
-    background: var(--lg-glass-soft);
-    border: 1px solid var(--lg-line-hi);
+    background: var(--lg-bg-elevated);
+    border: 1px solid var(--lg-border);
     border-radius: var(--lg-r-sm);
     color: var(--lg-text);
-    padding: 6px 12px;
-    margin: 4px 0;
-    transition: background var(--lg-t-fast);
-    &:hover { background: var(--lg-glass); }
+    padding: 8px 12px;
+    margin: 6px 0;
+    transition: background var(--lg-t-fast), border-color var(--lg-t-fast);
+    &:hover {
+      background: var(--lg-bg-elevated);
+      border-color: var(--lg-text-secondary);
+    }
   }
 }
 
-// ---- Language selector dropdown ----
-html[data-theme='glass'] .o_lang_dropdown {
-  .dropdown-toggle {
-    @include glass-control();
-  }
-  .dropdown-menu {
-    @include glass-elevated();
-    border-radius: var(--lg-r-md);
-  }
+// =====================================================================
+// Language selector dropdown on the login page
+// =====================================================================
+html[data-theme='glass'] .oe_login_form .o_lang_dropdown .dropdown-toggle {
+  background: var(--lg-bg-elevated);
+  border: 1px solid var(--lg-border);
+  color: var(--lg-text);
+  border-radius: var(--lg-r-pill);
+  padding: 6px 14px;
+}
+html[data-theme='glass'] .oe_login_form .o_lang_dropdown .dropdown-menu {
+  background: var(--lg-bg-elevated);
+  border: none;
+  border-radius: var(--lg-r-md);
+  box-shadow: var(--lg-shadow-md);
+  color: var(--lg-text);
 }
 
-// ---- Footer links + small text under the form ----
-html[data-theme='glass'] .oe_login_form .small,
-html[data-theme='glass'] .oe_login_form .text-muted {
-  color: var(--lg-text-secondary);
-  a { color: var(--lg-link); }
-}
-
-html[data-theme='glass'] .oe_login_form .border-top,
-html[data-theme='glass'] .oe_login_form hr {
-  border-color: var(--lg-line-lo) !important;
-  opacity: 1;
-}
-
-// ---- Background ambient pattern: subtle moving blobs (motion-safe) ----
-@media (prefers-reduced-motion: no-preference) {
-  html[data-theme='glass'] body {
-    background-attachment: fixed;
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme='glass'] *,
+  html[data-theme='glass'] *::before,
+  html[data-theme='glass'] *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

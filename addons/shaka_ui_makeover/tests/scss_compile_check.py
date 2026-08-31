@@ -73,8 +73,10 @@ def test_frontend_bundle():
     blob, paths = _read_concat(FRONTEND_ORDER)
     css = sass.compile(string=blob)
     assert len(css) > 4_000, f'frontend bundle too small: {len(css)} bytes'
-    assert 'backdrop-filter' in css or '-webkit-backdrop-filter' in css
+    # Locked dark theme — no backdrop-filter. Check for a key login selector
+    # and the locked surface color.
     assert '.oe_login_form' in css, 'login form selector missing'
+    assert '#0B0F19' in css or '0B0F19' in css, 'locked page-base color not in bundle'
     return len(css)
 
 
