@@ -30,12 +30,12 @@
                                     </div>
                                 </div>
                             </setting>
-                            <setting string="Apply Theme Colors Now" company_dependent="1"
-                                help="Click to force-refresh the CSS custom properties for button colors without reload.">
+                            <setting string="Live preview" company_dependent="1"
+                                help="The colors above are applied on the next page load. Click here to reload the form and see them.">
                                 <div class="content-group">
                                     <div class="row mt16">
                                         <div class="col-lg-3"/>
-                                        <button type="object" name="action_shaka_apply_theme_colors" string="Apply Colors" class="btn-primary ps-2" icon="fa-paint-brush"/>
+                                        <button type="object" name="action_shaka_apply_theme_colors" string="Reload to apply" class="btn-secondary ps-2" icon="fa-refresh"/>
                                     </div>
                                 </div>
                             </setting>

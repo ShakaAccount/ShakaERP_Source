@@ -2,26 +2,31 @@
     'name': 'Shaka UI Makeover + Liquid Glass',
     'version': '1.0.0',
     'category': 'Themes',
-    'summary': 'Full liquid-glass UI makeover for ShakaERP — glass chrome, views, POS, settings coverage, settable button colors, Persian font, theme toggle',
+    'summary': 'Full liquid-glass UI makeover for ShakaERP — glass chrome, views, POS, settings coverage, settable button colors, Persian font, single theme',
     'description': """
 Liquid Glass UI theme for ShakaERP.
 
-Provides a complete liquid-glass redesign that covers all backend surfaces,
-views, POS UI, settings pages and the login screen. Ships its own design tokens
-and mixins (self-contained, no dependency on the skeuomorphic addon):
-    * Glass default-on for everyone, with a user-menu theme toggle.
-    * Settable button color + button text color in Settings (Company).
-    * Self-hosted Persian font with LTR/RTL support.
-    * Fully validates through Odoo's libsass concatenation (no @import).
+A complete liquid-glass redesign that covers every backend surface:
+navbar, control panel, app switcher, home dashboard, kanban, list, form,
+chatter, settings, login, POS, and a subtle ambient world animation.
 
-The previous skeuomorphic addon is intentionally left untouched and can be
-uninstalled separately once this theme is approved.
+* Single theme ("glass") — no user toggle; the theme attribute is set
+  declaratively from a QWeb template injected into ``web.layout`` head.
+* Settable primary button color and button text color from
+  Settings > General Settings > Shaka ERP > UI Theme (per-company).
+  Applied declaratively via a server-rendered ``<style>`` block so the
+  first paint already shows the configured color.
+* Persian font stack with RTL polish for Jalali-aware workflows.
+* Compiles cleanly through Odoo's libsass concatenation (no local @import).
+* Does not modify any file in ``odoo/addons``.
+
+Replaces the older ``shaka_skeuomorphic_ui`` addon; uninstall that one
+after this theme has been validated.
 """,
     'depends': ['web', 'point_of_sale'],
     'data': [
-        'views/theme_toggle.xml',
+        'views/layout_inject.xml',
         'views/company_settings_views.xml',
-        'models/res_config_settings.py',
     ],
     'assets': {
         # NOTE: Odoo concatenates assets in list order (no local @import), so
@@ -36,8 +41,6 @@ uninstalled separately once this theme is approved.
             'shaka_ui_makeover/static/src/scss/views.scss',
             'shaka_ui_makeover/static/src/scss/settings.scss',
             'shaka_ui_makeover/static/src/scss/login.scss',
-            # theme toggle JS
-            'shaka_ui_makeover/static/src/theme_switch/theme_switch.js',
         ],
         'web.assets_frontend': [
             'shaka_ui_makeover/static/src/scss/design_tokens.scss',

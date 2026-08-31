@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--
+            Inject the liquid glass theme into web.layout <head>:
+            1. A one-line inline script that sets `data-theme="glass"` before
+               paint, so the SCSS gates (html[data-theme='glass'] …) always fire.
+            2. A <style> block emitting the user's Company brand color
+               overrides as CSS custom properties, so the buttons pick up
+               the configured color on first paint (no flash, no reload).
+        -->
+        <template id="shaka_layout_assets" name="Shaka Liquid Glass Layout" inherit_id="web.layout">
+            <xpath expr="//head" position="inside">
+                <script type="text/javascript">
+                    // Set the liquid glass theme attribute before paint so the
+                    // gated SCSS rules always win.  Single theme — no toggle.
+                    document.documentElement.setAttribute('data-theme', 'glass');
+                </script>
+                <t t-if="request">
+                    <t t-set="shaka_company" t-value="request.env['res.company'].sudo().search([], limit=1)"/>
+                    <t t-set="shaka_primary" t-value="shaka_company and shaka_company.shaka_primary_color or None"/>
+                    <t t-set="shaka_text" t-value="shaka_company and shaka_company.shaka_button_text_color or None"/>
+                    <t t-if="shaka_primary or shaka_text">
+                        <style type="text/css" id="shaka_theme_vars">
+                            :root {
+                                <t t-if="shaka_primary">
+                                    --lg-btn-primary: <t t-esc="shaka_primary"/>;
+                                </t>
+                                <t t-if="shaka_text">
+                                    --lg-btn-text: <t t-esc="shaka_text"/>;
+                                </t>
+                            }
+                        </style>
+                    </t>
+                </t>
+            </xpath>
+        </template>
+    </data>
+</odoo>

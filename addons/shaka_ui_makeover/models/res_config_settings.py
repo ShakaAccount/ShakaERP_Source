@@ -17,19 +17,13 @@ class ResConfigSettings(models.TransientModel):
     )
 
     def action_shaka_apply_theme_colors(self):
-        """Apply theme colors by updating CSS custom properties via JS message."""
-        # This action just triggers a client-side reload of the CSS variables.
-        # The actual application happens in the theme_switch.js via the cookie
-        # and the CSS variables are picked up from the company fields.
+        """Reload the page so the server-rendered layout_inject.xml picks up
+        the new Company colors and emits them as :root CSS custom properties.
+        The button on the settings page calls this; clicking it is equivalent
+        to saving the form and reloading."""
         return {
             'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': 'Theme Colors',
-                'message': 'Colors applied. They will be active on next page load.',
-                'type': 'success',
-                'sticky': False,
-            }
+            'tag': 'reload',
         }
 
 
