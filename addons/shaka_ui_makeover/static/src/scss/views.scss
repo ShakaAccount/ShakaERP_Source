@@ -314,6 +314,54 @@ html[data-theme='glass'] .o_field_many2one_selection {
   }
 }
 
+// ---- Many2many tags (the language chips in "Add Languages") ----
+html[data-theme='glass'] .o_field_many2many_tags,
+html[data-theme='glass'] .o_field_tags,
+html[data-theme='glass'] .o_tags_input {
+  background: var(--lg-glass-soft);
+  -webkit-backdrop-filter: blur(var(--lg-blur-sm)) saturate(1.3);
+  backdrop-filter: blur(var(--lg-blur-sm)) saturate(1.3);
+  border: 1px solid var(--lg-line-lo);
+  border-bottom-color: var(--lg-line-hi);
+  border-radius: var(--lg-r-sm);
+  color: var(--lg-text);
+  &:focus-within {
+    border-color: var(--lg-accent);
+    box-shadow: 0 0 0 3px var(--lg-focus);
+  }
+  // the selected-language tag chips
+  .badge,
+  .o_tag,
+  .tag {
+    background: var(--lg-glass);
+    border: 1px solid var(--lg-line-hi);
+    border-radius: var(--lg-r-pill);
+    color: var(--lg-text);
+  }
+}
+
+// The many2many selection trigger row (wraps the autocomplete input)
+html[data-theme='glass'] .o_field_many2many_selection {
+  .o_input_dropdown {
+    .o-autocomplete {
+      background: transparent;
+    }
+    // the actual combobox input
+    .o-autocomplete--input {
+      background: transparent;
+      border: none;
+      color: var(--lg-text);
+      &:focus {
+        box-shadow: none;
+        border: none;
+      }
+    }
+    .o_dropdown_button {
+      color: var(--lg-text-muted);
+    }
+  }
+}
+
 // Boolean / radio (Checkbox style) — glass toggle
 html[data-theme='glass'] .o_field_boolean,
 html[data-theme='glass'] .o_field_radio {
