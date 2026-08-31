@@ -1,0 +1,281 @@
+// ShakaERP Liquid Glass - Point of Sale UI
+// ============================================================================
+// Skins the POS front-end (mounted under .pos with html[data-theme='glass']).
+// Uses verified POS classes: .pos, .leftpane, .rightpane, .product-screen,
+// .product-list, .numpad, .paymentlane and generic .btn controls.
+
+html[data-theme='glass'] .pos {
+  @include glass-backdrop;
+  color: var(--lg-text);
+}
+
+// Panes
+html[data-theme='glass'] .pos .leftpane,
+html[data-theme='glass'] .pos .rightpane {
+  background: var(--lg-glass-deep);
+  -webkit-backdrop-filter: blur(var(--lg-blur-md)) saturate(1.4);
+  backdrop-filter: blur(var(--lg-blur-md)) saturate(1.4);
+  border-inline-end: 1px solid var(--lg-line-hi);
+}
+
+// Product tiles - frosted cards
+html[data-theme='glass'] .pos .product {
+  @include lg-glass-panel();
+  border-radius: var(--lg-r-md);
+  transition: transform var(--lg-t-fast), box-shadow var(--lg-t-med);
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--lg-gloss), var(--lg-shadow-md);
+  }
+  &:active {
+    transform: translateY(0);
+    box-shadow: var(--lg-shadow-sm);
+  }
+}
+
+// Numpad / payment keypad
+html[data-theme='glass'] .pos .numpad .input-group,
+html[data-theme='glass'] .pos .paymentlane .paymentlines {
+  border-radius: var(--lg-r-sm);
+}
+
+html[data-theme='glass'] .pos .keypad button,
+html[data-theme='glass'] .pos .numpad button,
+html[data-theme='glass'] .pos .paymentlane {
+  @include glass-control();
+}
+
+// Primary actions / colour buttons
+html[data-theme='glass'] .pos .btn-primary,
+html[data-theme='glass'] .pos button.btn-primary {
+  background: var(--lg-btn-primary);
+  border-color: transparent;
+  color: var(--lg-btn-text);
+  box-shadow: var(--lg-shadow-sm), inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+html[data-theme='glass'] .pos .btn-secondary {
+  @include glass-control();
+}
+
+// Order summary / cart
+html[data-theme='glass'] .pos .order-summary,
+html[data-theme='glass'] .pos .orderline {
+  border-radius: var(--lg-r-sm);
+  &:hover { background: rgba(255,255,255,0.16); }
+}
+
+// POS scrollbars
+html[data-theme='glass'] .pos.big-scrollbars ::-webkit-scrollbar,
+html[data-theme='glass'] .pos ::-webkit-scrollbar { width: 10px; height: 10px; }
+html[data-theme='glass'] .pos ::-webkit-scrollbar-thumb {
+  background: rgba(90,100,120,0.35);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+// Search bar frosted
+html[data-theme='glass'] .pos .pos-search-bar input {
+  background: var(--lg-glass-soft);
+  border: 1px solid var(--lg-line-hi);
+  border-bottom-color: var(--lg-line-lo);
+  color: var(--lg-text);
+}
+
+// ---- POS header (top status bar) ----
+html[data-theme='glass'] .pos .pos-topheader {
+  background: var(--lg-glass);
+  -webkit-backdrop-filter: blur(var(--lg-blur-sm)) saturate(1.3);
+  backdrop-filter: blur(var(--lg-blur-sm)) saturate(1.3);
+  border-bottom: 1px solid var(--lg-line-hi);
+  color: var(--lg-text);
+  .pos-logo { color: var(--lg-text); }
+  .pos-button {
+    @include glass-control();
+  }
+  .status-buttons .button {
+    @include glass-control();
+  }
+}
+
+// ---- Category / subcategory lists (left side) ----
+html[data-theme='glass'] .pos .category-list,
+html[data-theme='glass'] .pos .subcategory-list {
+  background: transparent;
+  .category {
+    @include glass-control();
+    width: 100%;
+    margin: 4px 0;
+    text-align: start;
+  }
+  .category-button {
+    @include glass-control();
+  }
+}
+
+// ---- Action pad (the cluster of Pay / Validate buttons) ----
+html[data-theme='glass'] .pos .actionpad {
+  background: var(--lg-glass-soft);
+  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
+  backdrop-filter: blur(var(--lg-blur-sm));
+  border: 1px solid var(--lg-line-hi);
+  border-radius: var(--lg-r-md);
+  padding: 8px;
+  .button {
+    @include glass-control();
+    &.pay,
+    &.validate {
+      background: var(--lg-btn-primary);
+      color: var(--lg-btn-text);
+      border-color: transparent;
+      box-shadow: var(--lg-shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+  }
+}
+
+// ---- Payment screen (full-screen) ----
+html[data-theme='glass'] .pos .payment-screen {
+  background: transparent;
+  .paymentline,
+  .payment-lines {
+    background: var(--lg-glass-soft);
+    border: 1px solid var(--lg-line-hi);
+    border-radius: var(--lg-r-sm);
+  }
+}
+
+// ---- Receipt screen ----
+html[data-theme='glass'] .pos .receipt-screen {
+  background: transparent;
+  .receipt-line {
+    @include lg-glass-panel(soft);
+    border-radius: var(--lg-r-sm);
+    padding: 10px 14px;
+    margin: 4px 0;
+    color: var(--lg-text);
+    &:hover { background: var(--lg-glass); }
+  }
+  .receipt-pos-receipt {
+    background: var(--lg-glass-strong);
+    border: 1px solid var(--lg-line-hi);
+    border-radius: var(--lg-r-md);
+    color: var(--lg-text);
+  }
+}
+
+// ---- Ticket screen ----
+html[data-theme='glass'] .pos .ticket-screen {
+  background: transparent;
+  .order-row {
+    @include lg-glass-panel();
+    border-radius: var(--lg-r-md);
+    margin: 6px 0;
+    padding: 10px 12px;
+    color: var(--lg-text);
+    transition: transform var(--lg-t-fast), box-shadow var(--lg-t-med);
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--lg-gloss), var(--lg-shadow-md);
+    }
+    &.selected {
+      background: var(--lg-glass-strong);
+      box-shadow: inset 3px 0 0 var(--lg-accent);
+    }
+  }
+}
+
+// ---- Client list (customer select) ----
+html[data-theme='glass'] .pos .clientlist-screen {
+  background: transparent;
+  .client-list {
+    background: transparent;
+  }
+  .client-line {
+    @include lg-glass-panel(soft);
+    border-radius: var(--lg-r-sm);
+    margin: 4px 0;
+    padding: 8px 10px;
+    color: var(--lg-text);
+    &:hover { background: var(--lg-glass); }
+    &.selected {
+      background: var(--lg-glass-strong);
+      box-shadow: inset 3px 0 0 var(--lg-accent);
+    }
+  }
+}
+
+// ---- Popups (number pad / text input / error dialog) ----
+html[data-theme='glass'] .pos .popup {
+  @include glass-elevated();
+  border-radius: var(--lg-r-lg);
+  color: var(--lg-text);
+  .title {
+    color: var(--lg-text);
+    border-bottom: 1px solid var(--lg-line-lo);
+  }
+  .body {
+    color: var(--lg-text-secondary);
+  }
+  .footer {
+    border-top: 1px solid var(--lg-line-lo);
+    .button {
+      @include glass-control();
+      &.confirm {
+        background: var(--lg-btn-primary);
+        color: var(--lg-btn-text);
+        border-color: transparent;
+      }
+    }
+  }
+  input.input,
+  input.form-control {
+    background: var(--lg-glass-soft);
+    border: 1px solid var(--lg-line-hi);
+    border-bottom-color: var(--lg-line-lo);
+    color: var(--lg-text);
+    border-radius: var(--lg-r-sm);
+    &:focus { border-color: var(--lg-accent); box-shadow: 0 0 0 3px var(--lg-focus); }
+  }
+}
+
+// ---- Numpad: key buttons ----
+html[data-theme='glass'] .pos .numpad {
+  .mode-button,
+  .number-char {
+    @include glass-control();
+  }
+  .input-box {
+    background: var(--lg-glass);
+    border: 1px solid var(--lg-line-hi);
+    border-bottom-color: var(--lg-line-lo);
+    border-radius: var(--lg-r-sm);
+    color: var(--lg-text);
+  }
+}
+
+// ---- Order summary / line items ----
+html[data-theme='glass'] .pos .order-summary {
+  background: var(--lg-glass-soft);
+  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
+  backdrop-filter: blur(var(--lg-blur-sm));
+  border: 1px solid var(--lg-line-hi);
+  border-radius: var(--lg-r-md);
+  color: var(--lg-text);
+}
+
+html[data-theme='glass'] .pos .orderline {
+  background: transparent;
+  border-radius: var(--lg-r-sm);
+  padding: 6px 8px;
+  color: var(--lg-text);
+  transition: background var(--lg-t-fast);
+  &:hover { background: rgba(255, 255, 255, 0.16); }
+  &.selected {
+    background: var(--lg-glass-strong);
+    box-shadow: inset 3px 0 0 var(--lg-accent);
+  }
+  .info-list {
+    color: var(--lg-text-muted);
+  }
+}

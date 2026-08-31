@@ -1,0 +1,140 @@
+// ShakaERP Liquid Glass Design Tokens
+// ============================================================================
+// Frosted-glass, translucent, light-refracting theme. Self-contained (uses its
+// own --lg-* namespace) so it can coexist with, and cleanly override, the
+// skeuomorphic addon until that one is uninstalled.
+//
+// All component rules are gated on html[data-theme="glass"] (default-on), which
+// gives higher specificity than the skeuomorphic .o_* selectors regardless of
+// asset-bundle ordering.
+
+/// Theme gate (attribute) - declared once
+/// ============================================================================
+html[data-theme='glass'],
+html[data-theme='shaka'] {
+  // sentinel; nothing to do here yet
+}
+
+/// Glass Color Primitives (light)
+/// ============================================================================
+$lg-accent:        #4E8DFF !default;   // luminous blue (brand)
+$lg-accent-strong: #2E6BDB !default;
+$lg-accent-icicle: #9DC1FF !default;
+$lg-ink-900:       #131722 !default;
+$lg-ink-700:       #2B3245 !default;
+$lg-ink-500:       #5A6478 !default;
+$lg-ink-on-glass:  #FFFFFF !default;
+$lg-line-hi:       rgba(255, 255, 255, 0.9); // highlight edge
+$lg-line-lo:       rgba(31, 48, 82, 0.16);   // lower shadow edge
+
+// Backdrop (behind the glass)
+$lg-bg-deep:       #DCE7FB !default;   // cool light sky
+$lg-bg-mid:        #C4D6F5 !default;
+$lg-bg-blob-a:     rgba(120, 160, 255, 0.5);
+$lg-bg-blob-b:     rgba(190, 140, 255, 0.42);
+$lg-bg-blob-c:     rgba(120, 230, 220, 0.4);
+
+// Glass panels (translucent, blurred)
+$lg-glass-strong:  rgba(255, 255, 255, 0.82) !default;
+$lg-glass:         rgba(255, 255, 255, 0.66) !default;
+$lg-glass-soft:    rgba(255, 255, 255, 0.46) !default;
+$lg-glass-deep:    rgba(255, 255, 255, 0.3)  !default;
+
+// Text on glass
+$lg-text-strong:   #131722 !default;
+$lg-text:          #2B3245 !default;
+$lg-text-muted:    #5A6478 !default;
+$lg-text-on-glass: #FFFFFF !default;
+$lg-link:          $lg-accent-strong !default;
+
+// Focus / interaction
+$lg-focus:         rgba(78, 141, 255, 0.55);
+$lg-danger:        #E4556B !default;
+$lg-success:       #2E9E74 !default;
+$lg-warning:       #E8A33D !default;
+
+// Dark glass
+$lg-glass-dark-1:  rgba(24, 32, 48, 0.72) !default;
+$lg-glass-dark-2:  rgba(24, 32, 48, 0.55) !default;
+$lg-glass-dark-3:  rgba(24, 32, 48, 0.36) !default;
+$lg-bg-dark-deep:  #0E1220 !default;
+$lg-text-dark-hi:   #EAF1FF !default;
+
+/// Shadows (soft, diffused glass)
+$lg-shadow-sm: 0 1px 2px rgba(23, 43, 77, 0.1), 0 2px 8px rgba(23, 43, 77, 0.08);
+$lg-shadow-md: 0 4px 12px rgba(23, 43, 77, 0.12), 0 8px 24px rgba(23, 43, 77, 0.10);
+$lg-shadow-lg: 0 10px 30px rgba(23, 43, 77, 0.16), 0 20px 50px rgba(23, 43, 77, 0.12);
+// Inner gloss
+$lg-gloss: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 0 12px rgba(255, 255, 255, 0.35);
+
+// Blur tokens
+$lg-blur-sm: 12px !default;
+$lg-blur-md: 20px !default;
+$lg-blur-lg: 32px !default;
+
+/// Radius
+$lg-r-sm: 10px !default;
+$lg-r-md: 14px !default;
+$lg-r-lg: 20px !default;
+$lg-r-pill: 999px !default;
+
+/// Spacing, transitions
+$lg-t-fast: 140ms ease !default;
+$lg-t-med: 220ms ease !default;
+
+// export vars
+:root {
+  --lg-accent: #{$lg-accent};
+  --lg-accent-strong: #{$lg-accent-strong};
+  --lg-accent-icicle: #{$lg-accent-icicle};
+  --lg-ink-900: #{$lg-ink-900};
+  --lg-ink-700: #{$lg-ink-700};
+  --lg-ink-500: #{$lg-ink-500};
+  --lg-link: #{$lg-link};
+  --lg-glass: #{$lg-glass};
+  --lg-glass-soft: #{$lg-glass-soft};
+  --lg-glass-deep: #{$lg-glass-deep};
+  --lg-glass-strong: #{$lg-glass-strong};
+  --lg-text: #{$lg-text-strong};
+  --lg-text-secondary: #{$lg-text};
+  --lg-text-muted: #{$lg-text-muted};
+  --lg-text-on-glass: #{$lg-text-on-glass};
+  --lg-danger: #{$lg-danger};
+  --lg-success: #{$lg-success};
+  --lg-warning: #{$lg-warning};
+  --lg-blur-sm: #{$lg-blur-sm};
+  --lg-blur-md: #{$lg-blur-md};
+  --lg-blur-lg: #{$lg-blur-lg};
+  --lg-line-hi: #{$lg-line-hi};
+  --lg-line-lo: #{$lg-line-lo};
+  --lg-shadow-sm: #{$lg-shadow-sm};
+  --lg-shadow-md: #{$lg-shadow-md};
+  --lg-shadow-lg: #{$lg-shadow-lg};
+  --lg-gloss: #{$lg-gloss};
+  --lg-r-sm: #{$lg-r-sm};
+  --lg-r-md: #{$lg-r-md};
+  --lg-r-lg: #{$lg-r-lg};
+  --lg-r-pill: #{$lg-r-pill};
+  // settable brand (from Settings; contrast auto-adjusts in JS)
+  --lg-btn-primary: #{$lg-accent-strong};
+  --lg-btn-text: #FFFFFF;
+}
+
+// Dark overrides via [data-theme="glass"] + OS/data-color-scheme
+@media (prefers-color-scheme: dark) {
+  html[data-theme='glass'] {
+    --lg-glass: #{$lg-glass-dark-2};
+    --lg-glass-soft: #{$lg-glass-dark-3};
+    --lg-glass-deep: rgba(14, 18, 32, 0.5);
+    --lg-glass-strong: #{$lg-glass-dark-1};
+    --lg-text: #{$lg-text-dark-hi};
+    --lg-text-secondary: #{darken($lg-text-dark-hi, 6%)};
+    --lg-text-muted: #{darken($lg-text-dark-hi, 28%)};
+    --lg-line-hi: rgba(255, 255, 255, 0.14);
+    --lg-line-lo: rgba(0, 0, 0, 0.45);
+    --lg-link: #{$lg-accent-icicle};
+    --lg-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+    --lg-shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45), 0 10px 30px rgba(0, 0, 0, 0.35);
+    --lg-shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.5), 0 24px 60px rgba(0, 0, 0, 0.4);
+  }
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Add Shaka UI Makeover settings section to General Settings -->
+        <record id="res_config_settings_view_form_shaka_ui" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.shaka_ui_makeover</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="5"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <field name="company_id" groups="base.group_multi_company" invisible="1"/>
+                    <app data-string="Shaka ERP" string="Shaka ERP" name="shaka_ui_makeover">
+                        <block title="UI Theme" name="shaka_ui_theme_settings">
+                            <setting string="Primary Button Color" company_dependent="1"
+                                help="Main button color used across the Shaka ERP Glass UI. Enter a hex color (e.g. #4E8DFF).">
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="shaka_primary_color" class="col-lg-3 o_light_label"/>
+                                        <field name="shaka_primary_color" widget="color_picker" placeholder="#4E8DFF"/>
+                                    </div>
+                                </div>
+                            </setting>
+                            <setting string="Button Text Color" company_dependent="1"
+                                help="Text color on primary buttons. Must contrast with the primary color (WCAG AA). Enter a hex color (e.g. #FFFFFF).">
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="shaka_button_text_color" class="col-lg-3 o_light_label"/>
+                                        <field name="shaka_button_text_color" widget="color_picker" placeholder="#FFFFFF"/>
+                                    </div>
+                                </div>
+                            </setting>
+                            <setting string="Apply Theme Colors Now" company_dependent="1"
+                                help="Click to force-refresh the CSS custom properties for button colors without reload.">
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <div class="col-lg-3"/>
+                                        <button type="object" name="action_shaka_apply_theme_colors" string="Apply Colors" class="btn-primary ps-2" icon="fa-paint-brush"/>
+                                    </div>
+                                </div>
+                            </setting>
+                        </block>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

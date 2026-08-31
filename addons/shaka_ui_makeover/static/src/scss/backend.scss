@@ -1,0 +1,280 @@
+// ShakaERP Liquid Glass - global backend skin
+// ============================================================================
+
+// ---- The glass world behind everything -----------------------------
+html[data-theme='glass'] {
+  // Persist a few backdrop vars for the fixed world view
+  --lg-bg-deep: #{$lg-bg-deep};
+  --lg-bg-mid: #{$lg-bg-mid};
+  --lg-bg-blob-a: #{$lg-bg-blob-a};
+  --lg-bg-blob-b: #{$lg-bg-blob-b};
+  --lg-bg-blob-c: #{$lg-bg-blob-c};
+}
+
+html[data-theme='glass'] body {
+  @include glass-backdrop;
+}
+
+// Dark: deeper world behind dark glass
+@media (prefers-color-scheme: dark) {
+  html[data-theme='glass'] {
+    --lg-bg-deep: #{$lg-bg-dark-deep};
+    --lg-bg-mid: #{lighten($lg-bg-dark-deep, 5%)};
+    --lg-bg-blob-a: rgba(64, 96, 170, 0.35);
+    --lg-bg-blob-b: rgba(120, 80, 170, 0.3);
+    --lg-bg-blob-c: rgba(40, 120, 120, 0.28);
+  }
+}
+
+html[data-theme='glass'] .o_web_client {
+  color: var(--lg-text);
+  font-family: "Shaka Persian", "Inter", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+// ---- Navbar - frosted glass bar ----
+.o_web_client[data-theme='glass'] .o_main_navbar,
+html[data-theme='glass'] .o_main_navbar {
+  @include lg-glass-panel(strong);
+  box-shadow: var(--lg-shadow-md);
+  border-bottom: none;
+}
+
+html[data-theme='glass'] .o_menu_systray,
+html[data-theme='glass'] .o_main_navbar a {
+  color: var(--lg-text);
+}
+
+// ---- Control panel - frosted ribbon ----
+html[data-theme='glass'] .o_control_panel {
+  @include lg-glass-panel(soft);
+  box-shadow: var(--lg-shadow-sm);
+  border-radius: 0 0 var(--lg-r-md) var(--lg-r-md);
+  margin: 0 var(--lg-r-md);
+}
+
+// ---- Cards / sheets ----
+html[data-theme='glass'] .o_form_sheet_bg {
+  @include glass-backdrop;
+}
+
+html[data-theme='glass'] div.o_card,
+html[data-theme='glass'] .o_kanban_renderer .o_kanban_record,
+html[data-theme='glass'] .card {
+  @include lg-glass-panel();
+}
+
+// ---- Modals - frosted dialog ----
+html[data-theme='glass'] .modal-backdrop.show {
+  opacity: 0.5;
+  background: #101828;
+}
+
+html[data-theme='glass'] .modal-content,
+html[data-theme='glass'] .o_dialog {
+  @include glass-elevated();
+  border-radius: var(--lg-r-lg);
+  color: var(--lg-text);
+}
+
+// ---- Dropdowns ----
+html[data-theme='glass'] .dropdown-menu,
+html[data-theme='glass'] .o_dropdown_menu {
+  @include glass-elevated();
+  color: var(--lg-text);
+  .dropdown-item {
+    border-radius: var(--lg-r-sm);
+    &:hover, &:focus { background: rgba(255,255,255,0.28); }
+  }
+}
+
+// ---- Notifications ----
+html[data-theme='glass'] .o_notification {
+  @include glass-elevated();
+  border-radius: var(--lg-r-md);
+  border-inline-start: 3px solid var(--lg-accent);
+  color: var(--lg-text);
+}
+
+// ---- Buttons ----
+html[data-theme='glass'] .btn {
+  border-radius: var(--lg-r-md);
+}
+
+html[data-theme='glass'] .btn-primary,
+html[data-theme='glass'] .o_control_panel_main_buttons .btn-primary {
+  background: var(--lg-btn-primary);
+  border-color: transparent;
+  color: var(--lg-btn-text);
+  box-shadow: var(--lg-shadow-sm), inset 0 1px 0 rgba(255,255,255,0.4);
+  &:hover { filter: brightness(1.06); }
+}
+
+html[data-theme='glass'] .btn-secondary {
+  @include glass-control();
+  &[aria-pressed='true'],
+  &.active {
+    background: var(--lg-accent);
+    color: var(--lg-text-on-glass);
+    border-color: transparent;
+  }
+}
+
+// ---- Form controls - frosted inputs ----
+html[data-theme='glass'] .form-control,
+html[data-theme='glass'] .form-select,
+html[data-theme='glass'] .o_input,
+html[data-theme='glass'] input.form-control {
+  background: var(--lg-glass-soft);
+  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
+  backdrop-filter: blur(var(--lg-blur-sm));
+  border: 1px solid var(--lg-line-lo);
+  border-bottom-color: var(--lg-line-hi);
+  color: var(--lg-text);
+  border-radius: var(--lg-r-sm);
+  &:focus {
+    border-color: var(--lg-accent);
+    box-shadow: 0 0 0 3px var(--lg-focus);
+  }
+}
+
+// ---- Tables / list ----
+html[data-theme='glass'] .o_list_renderer table.o_list_table thead th {
+  background: var(--lg-glass-soft);
+  color: var(--lg-text-secondary);
+}
+
+html[data-theme='glass'] .o_web_client .o_list_view .o_list_table tbody tr.o_data_row {
+  background: transparent;
+  &:hover { background: rgba(255,255,255,0.16); }
+  &.o_selected_row {
+    background: rgba(78,141,255,0.16);
+  }
+}
+
+// ---- Custom scrollbars ----
+html[data-theme='glass'] ::-webkit-scrollbar { width: 12px; height: 12px; }
+html[data-theme='glass'] ::-webkit-scrollbar-thumb {
+  background: rgba(90,100,120,0.35);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+html[data-theme='glass'] ::-webkit-scrollbar-thumb:hover { background: rgba(78,141,255,0.5); background-clip: content-box; }
+
+// ---- Focus ring ----
+html[data-theme='glass'] :focus-visible {
+  outline: 2px solid var(--lg-accent);
+  outline-offset: 2px;
+}
+
+// ---- Webclient shell: app switcher, home dashboard, action manager ----
+html[data-theme='glass'] .o_web_client {
+  background: transparent;
+}
+
+html[data-theme='glass'] .o_action_manager,
+html[data-theme='glass'] .o_content {
+  background: transparent;
+}
+
+// App switcher (the small "grid" icon in the navbar)
+html[data-theme='glass'] .o_navbar_apps_menu {
+  .dropdown-menu {
+    @include glass-elevated(strong);
+    padding: var(--lg-r-md);
+    border-radius: var(--lg-r-lg);
+  }
+  .o_app {
+    border-radius: var(--lg-r-md);
+    transition: background var(--lg-t-fast), transform var(--lg-t-fast);
+    &:hover {
+      background: rgba(255, 255, 255, 0.22);
+      transform: translateY(-1px);
+    }
+    &.focus,
+    &:focus,
+    &.active {
+      background: rgba(78, 141, 255, 0.22);
+      box-shadow: inset 0 0 0 1px var(--lg-accent);
+    }
+  }
+}
+
+// Home menu (the dashboard of installed apps)
+html[data-theme='glass'] .o_home_menu {
+  background: transparent;
+  .o_home_menu_scrollable {
+    padding: var(--lg-r-lg);
+  }
+  .o_app {
+    @include lg-glass-panel();
+    border-radius: var(--lg-r-lg);
+    padding: var(--lg-r-md);
+    color: var(--lg-text);
+    transition: transform var(--lg-t-fast), box-shadow var(--lg-t-med);
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--lg-gloss), var(--lg-shadow-lg);
+    }
+  }
+}
+
+// Menu brand chip
+html[data-theme='glass'] .o_menu_brand {
+  color: var(--lg-text);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+// Top menu sections (Discussions / Employees / etc. pills)
+html[data-theme='glass'] .o_menu_sections {
+  .o_nav_entry {
+    border-radius: var(--lg-r-pill);
+    padding: 4px 12px;
+    transition: background var(--lg-t-fast), color var(--lg-t-fast);
+    color: var(--lg-text-secondary);
+    &:hover { background: rgba(255, 255, 255, 0.18); color: var(--lg-text); }
+    &.active,
+    &[aria-current="page"] {
+      background: var(--lg-accent);
+      color: var(--lg-text-on-glass);
+      box-shadow: 0 4px 14px rgba(78, 141, 255, 0.32);
+    }
+  }
+}
+
+// ---- Ambient glass-world drift: subtle moving blobs (motion-safe) ----
+// Implemented as a fixed pseudo-element overlay so the radial backdrop stays
+// GPU-cheap. Honors prefers-reduced-motion.
+@media (prefers-reduced-motion: no-preference) {
+  html[data-theme='glass'] body::before {
+    content: '';
+    position: fixed;
+    inset: -10vmax;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(40vmax 40vmax at 20% 30%, var(--lg-bg-blob-a), transparent 60%),
+      radial-gradient(36vmax 36vmax at 80% 70%, var(--lg-bg-blob-b), transparent 60%),
+      radial-gradient(30vmax 30vmax at 50% 110%, var(--lg-bg-blob-c), transparent 60%);
+    opacity: 0.5;
+    filter: blur(40px);
+    animation: lg-world-drift 48s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes lg-world-drift {
+  0%   { transform: translate3d(0, 0, 0)            scale(1); }
+  50%  { transform: translate3d(2vmax, -1vmax, 0)   scale(1.05); }
+  100% { transform: translate3d(-1vmax, 1vmax, 0)   scale(0.97); }
+}
+
+// ---- Reduced motion: disable blur shake ----
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme='glass'] *,
+  html[data-theme='glass'] *::before,
+  html[data-theme='glass'] *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

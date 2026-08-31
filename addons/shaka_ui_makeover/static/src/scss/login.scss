@@ -1,0 +1,98 @@
+// ShakaERP Liquid Glass - login
+// ============================================================================
+
+html[data-theme='glass'] body {
+  @include glass-backdrop;
+}
+
+html[data-theme='glass'] .oe_login_form,
+html[data-theme='glass'] .oe_signup_form,
+html[data-theme='glass'] .oe_reset_password_form {
+  @include glass-elevated();
+  border-radius: var(--lg-r-lg);
+  color: var(--lg-text);
+  backdrop-filter: blur(var(--lg-blur-lg)) saturate(1.5);
+}
+
+html[data-theme='glass'] .oe_login_form .o_login_logo {
+  filter: drop-shadow(0 4px 8px rgba(23,43,77,0.2));
+}
+
+html[data-theme='glass'] .oe_login_form input.form-control {
+  background: var(--lg-glass);
+  border: 1px solid var(--lg-line-hi);
+  border-bottom-color: var(--lg-line-lo);
+  color: var(--lg-text);
+  &:focus { box-shadow: 0 0 0 3px var(--lg-focus); border-color: var(--lg-accent); }
+}
+
+html[data-theme='glass'] .oe_login_form .btn-primary {
+  background: var(--lg-btn-primary);
+  border-color: transparent;
+  color: var(--lg-btn-text);
+  box-shadow: var(--lg-shadow-sm), inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+html[data-theme='glass'] .oe_login_form .small a,
+html[data-theme='glass'] .oe_footer a {
+  color: var(--lg-link);
+}
+
+// RTL-friendly brand header
+html[data-theme='glass'] .oe_login_form .text-center h4 {
+  color: var(--lg-text);
+  font-family: "Shaka Persian", "Inter", sans-serif;
+}
+
+// ---- Database list (multi-DB install selector) ----
+html[data-theme='glass'] .o_database_list {
+  @include glass-elevated();
+  border-radius: var(--lg-r-lg);
+  color: var(--lg-text);
+  padding: var(--lg-r-md);
+  .o_database_list_header {
+    color: var(--lg-text);
+    font-weight: 600;
+  }
+  .o_database_list_item {
+    background: var(--lg-glass-soft);
+    border: 1px solid var(--lg-line-hi);
+    border-radius: var(--lg-r-sm);
+    color: var(--lg-text);
+    padding: 6px 12px;
+    margin: 4px 0;
+    transition: background var(--lg-t-fast);
+    &:hover { background: var(--lg-glass); }
+  }
+}
+
+// ---- Language selector dropdown ----
+html[data-theme='glass'] .o_lang_dropdown {
+  .dropdown-toggle {
+    @include glass-control();
+  }
+  .dropdown-menu {
+    @include glass-elevated();
+    border-radius: var(--lg-r-md);
+  }
+}
+
+// ---- Footer links + small text under the form ----
+html[data-theme='glass'] .oe_login_form .small,
+html[data-theme='glass'] .oe_login_form .text-muted {
+  color: var(--lg-text-secondary);
+  a { color: var(--lg-link); }
+}
+
+html[data-theme='glass'] .oe_login_form .border-top,
+html[data-theme='glass'] .oe_login_form hr {
+  border-color: var(--lg-line-lo) !important;
+  opacity: 1;
+}
+
+// ---- Background ambient pattern: subtle moving blobs (motion-safe) ----
+@media (prefers-reduced-motion: no-preference) {
+  html[data-theme='glass'] body {
+    background-attachment: fixed;
+  }
+}

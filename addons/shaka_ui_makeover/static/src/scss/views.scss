@@ -1,0 +1,237 @@
+// ShakaERP Liquid Glass - view-level surfaces
+// ============================================================================
+
+// ---- Notebook - glass tab rail ----
+html[data-theme='glass'] .o_notebook {
+  .nav-tabs {
+    border-bottom: 1px solid var(--lg-line-lo);
+  }
+  .nav-link {
+    color: var(--lg-text-muted);
+    border-radius: var(--lg-r-sm);
+    margin-inline-end: 4px;
+    &:hover { background: rgba(255,255,255,0.18); color: var(--lg-text); }
+    &.active {
+      color: var(--lg-accent-strong);
+      font-weight: 600;
+      background: var(--lg-glass-strong);
+      border: 1px solid var(--lg-line-hi);
+      border-bottom-color: transparent;
+      backdrop-filter: blur(var(--lg-blur-sm));
+      box-shadow: inset 0 2px 0 var(--lg-accent);
+    }
+  }
+  .o_notebook_content, .tab-pane {
+    background: transparent;
+  }
+}
+
+// ---- Kanban - frosted index cards ----
+html[data-theme='glass'] .o_kanban_record {
+  @include lg-glass-panel();
+  border-radius: var(--lg-r-md);
+  transition: transform var(--lg-t-fast), box-shadow var(--lg-t-med);
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--lg-gloss), var(--lg-shadow-lg);
+  }
+  &:focus-within {
+    box-shadow: var(--lg-gloss), 0 0 0 3px var(--lg-focus);
+  }
+}
+
+// ---- Kanban column header ----
+html[data-theme='glass'] .o_kanban_group .o_kanban_header {
+  background: var(--lg-glass-soft);
+  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
+  backdrop-filter: blur(var(--lg-blur-sm));
+  border-radius: var(--lg-r-md) var(--lg-r-md) 0 0;
+  color: var(--lg-text);
+}
+
+// ---- Group names (embossed) ----
+html[data-theme='glass'] .o_group_name {
+  color: var(--lg-text);
+  text-shadow: 0 1px 0 var(--lg-line-hi);
+}
+
+// ---- Date/time picker - desk glass ----
+html[data-theme='glass'] .o_datetime_picker {
+  @include glass-elevated();
+  border-radius: var(--lg-r-md);
+  .o_datetime_picker_header,
+  .o_datetime_picker_navbar {
+    background: var(--lg-glass-soft);
+    color: var(--lg-text);
+  }
+  td.o_datetime_picker_day_cell {
+    color: var(--lg-text);
+    &:hover { background: rgba(255,255,255,0.2); }
+  }
+  .o_datetime_picker_day_cell.selected {
+    background: var(--lg-accent-strong);
+    color: #fff;
+    border-radius: 999px;
+  }
+}
+
+// ---- Form labels ----
+html[data-theme='glass'] .o_form_view .o_form_label {
+  color: var(--lg-text-secondary);
+  font-weight: 600;
+}
+
+// ---- Search panel - frosted drawer ----
+html[data-theme='glass'] .o_search_panel_sidebar {
+  @include lg-glass-panel(soft);
+  border-inline-end: 1px solid var(--lg-line-lo);
+}
+
+// ---- Pager chip ----
+html[data-theme='glass'] .o_cp_pager .o_pager_value {
+  @include glass-control();
+  font-family: "Shaka Persian", "Inter", sans-serif;
+  border-radius: var(--lg-r-sm);
+}
+
+// ---- Chatter: frosted conversation rail ----
+html[data-theme='glass'] .o_Chatter {
+  background: var(--lg-glass-soft);
+  -webkit-backdrop-filter: blur(var(--lg-blur-md)) saturate(1.4);
+  backdrop-filter: blur(var(--lg-blur-md)) saturate(1.4);
+  border: 1px solid var(--lg-line-hi);
+  border-radius: var(--lg-r-lg);
+  box-shadow: var(--lg-shadow-sm);
+  color: var(--lg-text);
+}
+
+html[data-theme='glass'] .o_Chatter_topbar {
+  background: var(--lg-glass);
+  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
+  backdrop-filter: blur(var(--lg-blur-sm));
+  border-bottom: 1px solid var(--lg-line-lo);
+  border-radius: var(--lg-r-lg) var(--lg-r-lg) 0 0;
+  padding: 8px 12px;
+  .btn { border-radius: var(--lg-r-pill); }
+}
+
+html[data-theme='glass'] .o_Chatter_scroll {
+  background: transparent;
+}
+
+// Individual message card
+html[data-theme='glass'] .o_Message {
+  @include lg-glass-panel();
+  border-radius: var(--lg-r-md);
+  margin: 8px 0;
+  padding: 12px 14px;
+  color: var(--lg-text);
+  .o_Message_author,
+  .o_Message_avatar {
+    color: var(--lg-text);
+  }
+  .o_Message_header {
+    border-bottom: 1px solid var(--lg-line-lo);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+  }
+  .o_Message_date {
+    color: var(--lg-text-muted);
+  }
+  .o_Message_body {
+    color: var(--lg-text);
+  }
+  &.o_Message_notification {
+    background: var(--lg-glass-deep);
+    border-inline-start: 3px solid var(--lg-accent);
+  }
+}
+
+// Composer
+html[data-theme='glass'] .o_Chatter_composer {
+  background: var(--lg-glass-soft);
+  border-top: 1px solid var(--lg-line-lo);
+  border-radius: 0 0 var(--lg-r-lg) var(--lg-r-lg);
+  .o_ComposerTextField {
+    background: var(--lg-glass);
+    border: 1px solid var(--lg-line-hi);
+    border-bottom-color: var(--lg-line-lo);
+    border-radius: var(--lg-r-md);
+    color: var(--lg-text);
+    &:focus-within {
+      border-color: var(--lg-accent);
+      box-shadow: 0 0 0 3px var(--lg-focus);
+    }
+  }
+  .o_Composer_actionButton {
+    @include glass-control();
+  }
+}
+
+// Activity entries
+html[data-theme='glass'] .o_Activity {
+  @include lg-glass-panel(soft);
+  border-radius: var(--lg-r-md);
+  margin: 6px 0;
+  padding: 10px 12px;
+  color: var(--lg-text);
+  .o_Activity_author {
+    color: var(--lg-text);
+    font-weight: 600;
+  }
+  .o_Activity_details {
+    color: var(--lg-text-secondary);
+  }
+}
+
+// Attachment box + cards
+html[data-theme='glass'] .o_AttachmentBox {
+  background: var(--lg-glass-soft);
+  border: 1px solid var(--lg-line-hi);
+  border-bottom-color: var(--lg-line-lo);
+  border-radius: var(--lg-r-md);
+  color: var(--lg-text);
+}
+html[data-theme='glass'] .o_AttachmentCard {
+  @include lg-glass-panel(soft);
+  border-radius: var(--lg-r-sm);
+  padding: 8px;
+  color: var(--lg-text);
+  &:hover { box-shadow: var(--lg-gloss), var(--lg-shadow-md); transform: translateY(-1px); }
+}
+
+// Followers / recipients pills
+html[data-theme='glass'] .o_FollowersList,
+html[data-theme='glass'] .o_RecipientsList {
+  background: transparent;
+  .o_FollowersList_follower,
+  .o_RecipientsList_partner {
+    background: var(--lg-glass-soft);
+    border: 1px solid var(--lg-line-hi);
+    border-radius: var(--lg-r-pill);
+    color: var(--lg-text);
+    padding: 2px 10px;
+  }
+}
+
+// ---- RTL polish (Persian / Jalali-friendly) ----
+html[data-theme='glass'] [dir='rtl'] {
+  // Logical-property border sides are already used above; this block catches
+  // anything that still hard-codes left/right.
+  .o_form_sheet_bg,
+  .o_form_sheet {
+    background-position: right top;
+  }
+  .o_main_navbar {
+    border-bottom-width: 1px;
+  }
+  .breadcrumb-item + .breadcrumb-item::before {
+    content: '\\'; // backslash separator feels right-to-left
+    padding: 0 6px;
+    color: var(--lg-text-muted);
+  }
+  font-feature-settings: 'ss01' on, 'cv11' on;
+  .o_kanban_group .o_kanban_header {
+    border-radius: 0 var(--lg-r-md) var(--lg-r-md) 0;
+  }
+}
