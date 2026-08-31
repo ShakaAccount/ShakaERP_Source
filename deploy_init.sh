@@ -4,9 +4,13 @@
 
 set -euo pipefail
 
-# === CONFIGURATION (edit before running) ===
-REPO_DIR="${REPO_DIR:-$HOME/Shaka}"
-BACKUP_ROOT="${BACKUP_ROOT:-$HOME/backups}"
+# === CONFIGURATION (defaults are repo-location-aware — no hardcoded folder) ===
+# Script auto-locates itself, so it works wherever the repo is cloned.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="${REPO_DIR:-$SCRIPT_DIR}"
+# Backups live next to the repo (sibling dir) unless overridden — matches
+# the backup scripts' own convention so every script agrees on the path.
+BACKUP_ROOT="${BACKUP_ROOT:-$(cd "$REPO_DIR/.." && pwd)/backups}"
 STANZA="shaka_db"
 DB_IMAGE="odoo_19_db:pg16"
 PG_DATA_VOL="odoo_19_pg_data"
@@ -159,11 +163,11 @@ docker compose up -d web nginx
 
 # 13. Initial filestore sync (creates mirror)
 log "Running initial filestore sync..."
-./backup/filestore_sync.sh
+"$REPO_DIR/backup/filestore_sync.sh"
 
 # 14. Install cron jobs for automated backups
 log "Installing cron jobs (filestore every 15 min, full DB daily at 02:15)..."
-./backup/install_cron.sh
+"$REPO_DIR/backup/install_cron.sh"
 
 # 15. Final verification
 log "Verifying backup health..."

@@ -4,9 +4,12 @@
 
 set -euo pipefail
 
-# === CONFIGURATION (edit before running) ===
-REPO_DIR="${REPO_DIR:-$HOME/Shaka}"
-BACKUP_ROOT="${BACKUP_ROOT:-$HOME/backups}"
+# === CONFIGURATION (defaults are repo-location-aware — no hardcoded folder) ===
+# Script auto-locates itself, so it works wherever the repo is cloned.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="${REPO_DIR:-$SCRIPT_DIR}"
+# Backups live next to the repo (sibling dir) unless overridden.
+BACKUP_ROOT="${BACKUP_ROOT:-$(cd "$REPO_DIR/.." && pwd)/backups}"
 STANZA="shaka_db"
 DB_IMAGE="odoo_19_db:pg16"
 # ===========================================
