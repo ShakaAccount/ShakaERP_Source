@@ -90,7 +90,6 @@ html[data-theme='glass'] .o_search_panel_sidebar {
 // ---- Pager chip ----
 html[data-theme='glass'] .o_cp_pager .o_pager_value {
   @include glass-control();
-  font-family: "Shaka Persian", "Inter", sans-serif;
   border-radius: var(--lg-r-sm);
 }
 

@@ -28,7 +28,7 @@ html[data-theme='glass'] body {
 
 html[data-theme='glass'] .o_web_client {
   color: var(--lg-text);
-  font-family: "Shaka Persian", "Inter", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  @include lg-font-stack;
 }
 
 // ---- Navbar - frosted glass bar ----

@@ -8,7 +8,6 @@ html[data-theme='glass'] .breadcrumb-item + .breadcrumb-item::before {
 html[data-theme='glass'] .o_last_breadcrumb_item.active,
 html[data-theme='glass'] .breadcrumb-item.active {
   color: var(--lg-text);
-  font-family: "Shaka Persian", "Inter", sans-serif;
 }
 
 // ---- View switcher - glass segmented ----
