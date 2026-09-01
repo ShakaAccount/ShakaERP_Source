@@ -30,11 +30,20 @@ html[data-theme='glass'] .oe_reset_password_form {
   // top-left/top-right radius of the inner logo block separately.
 }
 
-// The Bootstrap .card-body wrapper that holds both the logo and the form
+// The Bootstrap .card-body wrapper that holds both the logo and the form.
+// Odoo 19 ships `:where(.card:not([data-vxml])) .card-body:not(...) {
+// --background-color: rgba(255,255,255,.9); background-color: ... }` which
+// ties our specificity and sets the custom property too — override BOTH the
+// --background-color/--color vars and the resolved background-color.
 html[data-theme='glass'] .oe_login_form + .oe_structure,
-html[data-theme='glass'] .o_database_list .card-body {
+html[data-theme='glass'] .o_database_list .card-body,
+html[data-theme='glass'] .oe_signup_form .card-body,
+html[data-theme='glass'] .oe_reset_password_form .card-body {
+  --background-color: var(--lg-bg-surface);
+  --color: var(--lg-text);
+  background-color: var(--lg-bg-surface) !important;
   background: var(--lg-bg-surface);
-  color: var(--lg-text);
+  color: var(--lg-text) !important;
 }
 
 // Bootstrap's bg-white utility class applied to the outer card — override
