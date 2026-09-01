@@ -27,6 +27,8 @@ after this theme has been validated.
     'data': [
         'views/layout_inject.xml',
         'views/company_settings_views.xml',
+        'views/login_templates.xml',
+
     ],
     'assets': {
         # NOTE: Odoo concatenates assets in list order (no local @import), so

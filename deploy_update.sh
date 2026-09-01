@@ -22,9 +22,9 @@ command -v docker >/dev/null || { echo "Docker not installed"; exit 1; }
 command -v docker compose >/dev/null || { echo "Docker Compose plugin not installed"; exit 1; }
 
 # 2. Go to repo and pull latest
-log "Updating repository at $REPO_DIR..."
-cd "$REPO_DIR"
-git pull --ff-only
+# log "Updating repository at $REPO_DIR..."
+# cd "$REPO_DIR"
+# git pull --ff-only
 
 # 3. Re-generate odoo.conf from template (in case template changed)
 if [[ -f .env ]]; then

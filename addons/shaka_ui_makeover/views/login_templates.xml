@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="shaka_login" inherit_id="web.login" name="Shaka Login Tweaks">
+        <!-- Replace whole button -->
+        <xpath expr="//button[contains(@class, 'o_show_password')]" position="replace">
+            <button type="button" class="btn btn-sm o_show_password" aria-label="Show password">
+                <i class="fa fa-eye"/>
+            </button>
+        </xpath>
+    </template>
+</odoo>
