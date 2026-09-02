@@ -135,8 +135,8 @@ Log "Generating odoo.conf from template..."
 $odooConfTemplate = @'
 [options]
 ; Database
-db_host = ${POSTGRES_HOST:-db}
-db_port = ${POSTGRES_PORT:-5432}
+db_host = ${POSTGRES_HOST}
+db_port = ${POSTGRES_PORT}
 db_user = ${POSTGRES_USER}
 db_password = ${POSTGRES_PASSWORD}
 
@@ -154,9 +154,9 @@ data_dir = /var/lib/odoo
 log_level = info
 
 ; Performance
-workers = ${WORKERS:-4}
-max_cron_threads = ${MAX_CRON_THREADS:-2}
-gevent_port = ${GEVENT_PORT:-8072}
+workers = ${WORKERS}
+max_cron_threads = ${MAX_CRON_THREADS}
+gevent_port = ${GEVENT_PORT}
 '@
 
 $odooConfContent = Replace-EnvInTemplate -Template $odooConfTemplate
@@ -247,28 +247,28 @@ function New-OdooTask {
         [string]$TaskName,
         [string]$Description,
         [string]$Command,
-        [string]$Trigger  # e.g. "15Minute" or "DailyAt0215"
+        [string]$TriggerType  # Changed from $Trigger to avoid variable collision
     )
     $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -Command `"$Command`""
-    if ($Trigger -eq "15Minute") {
-        $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 15)
-    } elseif ($Trigger -eq "DailyAt0215") {
-        $trigger = New-ScheduledTaskTrigger -Daily -At "02:15"
+
+    if ($TriggerType -eq "15Minute") {
+        $taskTrigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 15)
+    } elseif ($TriggerType -eq "DailyAt0215") {
+        $taskTrigger = New-ScheduledTaskTrigger -Daily -At "02:15"
     } else {
         throw "Unknown trigger type"
     }
-    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
-    Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Settings $settings -Description $Description -Force
-}
 
-# Task 1: Filestore sync every 15 minutes
+    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+    # Pass $taskTrigger instead of $trigger
+    Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $taskTrigger -Settings $settings -Description $Description -Force
+}
 $syncCmd = "docker run --rm -v odoo_19_data:/data -v `"${backupRootUnix}/filestore:/backup`" odoo_filestore_sync"
-New-OdooTask -TaskName "OdooFilestoreSync" -Description "Sync Odoo filestore to backup every 15 min" -Command $syncCmd -Trigger "15Minute"
+New-OdooTask -TaskName "OdooFilestoreSync" -Description "Sync Odoo filestore to backup every 15 min" -Command $syncCmd -TriggerType "15Minute"
 
 # Task 2: Full DB backup daily at 02:15
 $backupCmd = "docker compose -f `"$REPO_DIR\docker-compose.yml`" exec -T -u postgres db pgbackrest --stanza=$STANZA --type=full backup"
-New-OdooTask -TaskName "OdooDBBackup" -Description "Full pgBackRest backup daily at 02:15" -Command $backupCmd -Trigger "DailyAt0215"
-
+New-OdooTask -TaskName "OdooDBBackup" -Description "Full pgBackRest backup daily at 02:15" -Command $backupCmd -TriggerType "DailyAt0215"
 # --- 15. Final verification ---
 Log "Verifying backup health..."
 docker compose exec -T -u postgres db pgbackrest --stanza="$STANZA" check

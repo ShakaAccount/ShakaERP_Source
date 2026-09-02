@@ -59,7 +59,9 @@ RUN useradd -m -U -s /bin/bash odoo \
 
 # 7. Copy Entrypoint
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
+RUN sed -i 's/\r$//' /opt/odoo/odoo-bin 2>/null || true
+#RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 
