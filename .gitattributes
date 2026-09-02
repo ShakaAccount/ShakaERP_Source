@@ -1,0 +1,11 @@
+# Normalize line endings so Linux checkouts and Windows checkouts (core.autocrlf=true)
+# produce byte-identical images. Without this, entrypoint.sh gets CRLF on Windows ->
+# "exec format error" inside the container.
+* text=auto eol=lf
+*.ps1 text eol=crlf
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff binary
+*.ttf binary
+*.pdf binary

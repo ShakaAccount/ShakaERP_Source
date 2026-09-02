@@ -1,6 +1,6 @@
 # sphinx build directories
 _build/
-
+addons/powerbi/
 # dotfiles
 .*
 !.gitignore
@@ -52,3 +52,7 @@ package.json
 /share/
 /src/
 /addons/estate/
+
+# but track deploy/POSIX scripts and gitattributes
+!.gitattributes
+!deploy_init.sh

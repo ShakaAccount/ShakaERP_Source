@@ -58,10 +58,10 @@ RUN useradd -m -U -s /bin/bash odoo \
     && chown -R odoo:odoo /var/lib/odoo /home/odoo
 
 # 7. Copy Entrypoint
+# Strip CR *before* chmod: a Windows checkout with core.autocrlf=true gives CRLF + mode 644,
+# which yields "exec format error". chmod after sed guarantees the exec bit.
 COPY entrypoint.sh /entrypoint.sh
-RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
-RUN sed -i 's/\r$//' /opt/odoo/odoo-bin 2>/null || true
-#RUN chmod +x /entrypoint.sh
+RUN sed -i -e 's/\r$//' -e '1s|^#!/bin/bash|#!/usr/bin/env bash|' /entrypoint.sh && chmod 755 /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 
