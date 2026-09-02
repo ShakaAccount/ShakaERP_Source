@@ -36,7 +36,11 @@ function Log {
 
 function Gen-Password {
     # Generate a 32‑character random password (alphanumeric + safe symbols, no /+=)
-    $bytes = [System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32)
+    $bytes = New-Object Byte[] 32
+    $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+    $rng.GetBytes($bytes)
+    $rng.Dispose()
+
     $base64 = [Convert]::ToBase64String($bytes)
     # Remove '/', '+', '=' and take first 32 characters
     $clean = $base64 -replace '[/+=]', ''
@@ -75,10 +79,10 @@ if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
     Write-Error "Docker not installed. Aborting."
     exit 1
 }
-if (-not (Get-Command "docker compose" -ErrorAction SilentlyContinue)) {
-    Write-Error "Docker Compose plugin not installed. Aborting."
-    exit 1
-}
+#if (-not (Get-Command "docker compose" -ErrorAction SilentlyContinue)) {
+#    Write-Error "Docker Compose plugin not installed. Aborting."
+#    exit 1
+#}
 # Optionally check version: docker compose version | Select-String v2
 
 # --- 2. Use repository location ---
