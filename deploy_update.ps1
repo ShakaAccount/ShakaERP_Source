@@ -1,29 +1,37 @@
 <#
 .SYNOPSIS
-    deploy_update.ps1 — Pull latest code and redeploy Odoo 19 stack (preserves data & backups).
+    deploy_update.ps1 — Windows counterpart of deploy_update.sh (same steps, same names).
 .DESCRIPTION
-    This script updates an existing Odoo 19 installation by rebuilding images, applying database
-    migrations, and restarting services without touching data volumes. It replaces the original
-    Bash update script.
+    Updates an existing Odoo 19 installation: rebuilds images, applies DB migrations,
+    restarts services without touching data volumes or backups.
 .NOTES
-    Requires: Docker Desktop, Docker Compose v2, and administrator privileges.
-    Must be run from the repository root containing .env and docker-compose.yml.
+    Requires: Docker Desktop, Docker Compose v2. Run from anywhere; paths auto-locate.
+    .env must already exist (run deploy_init.ps1 first).
 #>
 
 # --- Strict mode & error handling ---
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-$PSDefaultParameterValues['*:ErrorAction'] = 'Stop'
 
-# --- Configuration (repo‑location‑aware) ---
-$SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$REPO_DIR = if ($env:REPO_DIR) { $env:REPO_DIR } else { $SCRIPT_DIR }
-$BACKUP_ROOT = if ($env:BACKUP_ROOT) {
-    $env:BACKUP_ROOT
-} else {
-    Join-Path (Split-Path $REPO_DIR -Parent) "backups"
+# NOTE: native commands do NOT stop the script on non-zero exit codes;
+# Invoke-Native checks $LASTEXITCODE (bash set -e equivalent).
+
+# --- Configuration (defaults are repo-location-aware) ---
+$SCRIPT_DIR  = Split-Path -Parent $MyInvocation.MyCommand.Definition
+$REPO_DIR    = if ($env:REPO_DIR)    { $env:REPO_DIR }    else { $SCRIPT_DIR }
+$BACKUP_ROOT = if ($env:BACKUP_ROOT) { $env:BACKUP_ROOT } else { Join-Path (Split-Path $REPO_DIR -Parent) "backups" }
+$STANZA   = "shaka_db"
+$DB_IMAGE = "odoo_19_db:pg16"
+
+# Helper: run a native command; abort on non-zero exit (mimics bash set -e).
+function Invoke-Native {
+    param([scriptblock]$Block, [string]$What)
+    & $Block
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "$What failed (exit code $LASTEXITCODE). Aborting."
+        exit $LASTEXITCODE
+    }
 }
-$STANZA = "shaka_db"
 
 # --- Helper functions ---
 function Log {
@@ -36,9 +44,7 @@ function Set-EnvFromFile {
     if (Test-Path $FilePath) {
         Get-Content $FilePath | ForEach-Object {
             if ($_ -match '^\s*([^#][^=]+)=(.*)$') {
-                $key = $Matches[1].Trim()
-                $value = $Matches[2].Trim()
-                [Environment]::SetEnvironmentVariable($key, $value, 'Process')
+                [Environment]::SetEnvironmentVariable($Matches[1].Trim(), $Matches[2].Trim(), 'Process')
             }
         }
     }
@@ -46,14 +52,22 @@ function Set-EnvFromFile {
 
 function Replace-EnvInTemplate {
     param([string]$Template)
-    $result = $Template
-    [regex]::Matches($Template, '\$\{([^}]+)\}') | ForEach-Object {
-        $varName = $_.Groups[1].Value
-        $value = [Environment]::GetEnvironmentVariable($varName)
-        if ($null -eq $value) { $value = '' }
-        $result = $result -replace [regex]::Escape($_.Value), $value
-    }
-    return $result
+    # envsubst semantics: ${VAR} and ${VAR:-default} (default used when unset or empty)
+    return [regex]::Replace($Template, '\$\{([^}]+)\}', {
+        param($m)
+        $spec    = $m.Groups[1].Value
+        $name    = $spec
+        $default = $null
+        $idx = $spec.IndexOf(':-')
+        if ($idx -ge 0) {
+            $name    = $spec.Substring(0, $idx)
+            $default = $spec.Substring($idx + 2)
+        }
+        $v = [Environment]::GetEnvironmentVariable($name, 'Process')
+        if (-not [string]::IsNullOrEmpty($v)) { return $v }
+        if ($null -ne $default) { return $default }
+        return ''
+    })
 }
 
 # --- 1. Prerequisites ---
@@ -62,10 +76,7 @@ if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
     Write-Error "Docker not installed. Aborting."
     exit 1
 }
-if (-not (Get-Command "docker compose" -ErrorAction SilentlyContinue)) {
-    Write-Error "Docker Compose plugin not installed. Aborting."
-    exit 1
-}
+Invoke-Native { docker compose version } "Docker Compose v2 check" | Out-Null
 
 # --- 2. Go to repo and (optionally) pull latest ---
 Log "Using repository at $REPO_DIR"
@@ -73,7 +84,7 @@ Set-Location $REPO_DIR
 
 # Uncomment the next lines if you want to automatically git pull:
 # Log "Updating repository via git pull..."
-# git pull --ff-only
+# Invoke-Native { git pull --ff-only } "git pull"
 
 # --- 3. Ensure .env exists and source it ---
 $envFile = Join-Path $REPO_DIR ".env"
@@ -83,7 +94,10 @@ if (-not (Test-Path $envFile)) {
 }
 Set-EnvFromFile $envFile
 
-# --- 4. Re-generate odoo.conf from template ---
+# --- 4. Re-generate odoo.conf from embedded template ---
+# (bash version runs envsubst over the existing odoo.conf, which is already
+#  fully substituted — a no-op. Regenerating from template + .env actually
+#  picks up changed credentials. Defaults match deploy_init.ps1.)
 Log "Regenerating odoo.conf from environment..."
 $odooConfTemplate = @'
 [options]
@@ -111,36 +125,36 @@ workers = ${WORKERS:-4}
 max_cron_threads = ${MAX_CRON_THREADS:-2}
 gevent_port = ${GEVENT_PORT:-8072}
 '@
-
 $odooConfContent = Replace-EnvInTemplate -Template $odooConfTemplate
 $odooConfPath = Join-Path $REPO_DIR "odoo.conf"
-$odooConfContent | Set-Content -Path $odooConfPath -Encoding UTF8
+# ascii => ANSI with CRLF (PS 5.1 -Encoding UTF8 writes UTF-16 + BOM, which breaks odoo)
+$odooConfContent | Set-Content -Path $odooConfPath -Encoding ascii
 
 # --- 5. Rebuild images (only if Dockerfiles changed) ---
 Log "Building images (db, filestore-sync)..."
-docker compose build db
-docker build -f filestore-sync.Dockerfile -t odoo_filestore_sync .
+Invoke-Native { docker compose build db } "docker compose build db"
+Invoke-Native { docker build -f filestore-sync.Dockerfile -t odoo_filestore_sync . } "docker build filestore-sync"
 
-# --- 6. Stop web and nginx (keep db running) ---
+# --- 6. Stop web and nginx (keep db running for zero-downtime migrations) ---
 Log "Stopping web and nginx..."
-docker compose stop web nginx
+Invoke-Native { docker compose stop web nginx } "docker compose stop web nginx"
 
 # --- 7. Run Odoo database migrations ---
 Log "Running Odoo database migrations..."
-# Retrieve credentials from environment (already set)
-$pgUser = [Environment]::GetEnvironmentVariable("POSTGRES_USER")
-$pgPass = [Environment]::GetEnvironmentVariable("POSTGRES_PASSWORD")
+$pgUser = [Environment]::GetEnvironmentVariable("POSTGRES_USER", 'Process')
+$pgPass = [Environment]::GetEnvironmentVariable("POSTGRES_PASSWORD", 'Process')
 if ([string]::IsNullOrEmpty($pgUser) -or [string]::IsNullOrEmpty($pgPass)) {
-    Write-Error "POSTGRES_USER or POSTGRES_PASSWORD not set in environment. Aborting."
+    Write-Error "POSTGRES_USER or POSTGRES_PASSWORD not set in .env. Aborting."
     exit 1
 }
-
-docker compose run --rm -T web `
-    ./odoo-bin -c /etc/odoo/odoo.conf --db_host=db -r "$pgUser" -w "$pgPass" -u all --stop-after-init
+Invoke-Native {
+    docker compose run --rm -T web `
+        ./odoo-bin -c /etc/odoo/odoo.conf --db_host=db -r "$pgUser" -w "$pgPass" -u all --stop-after-init
+} "Odoo migration (-u all)"
 
 # --- 8. Start all services ---
 Log "Starting web and nginx..."
-docker compose up -d web nginx
+Invoke-Native { docker compose up -d web nginx } "docker compose up web nginx"
 
 # --- 9. Verify health ---
 Log "Verifying deployment..."
@@ -149,12 +163,12 @@ docker compose ps
 
 # --- 10. Quick backup health check ---
 Log "Checking pgBackRest repo..."
-docker compose exec -T -u postgres db pgbackrest --stanza="$STANZA" check
+Invoke-Native { docker compose exec -T -u postgres db pgbackrest --stanza="$STANZA" check } "pgbackrest check"
 
 Log "Update complete."
 Write-Host ""
 Write-Host "=== SUMMARY ==="
-Write-Host "Repository:    $REPO_DIR (updated via git pull if uncommented)"
+Write-Host "Repository:    $REPO_DIR (git pull optional, commented out)"
 Write-Host "Data volumes:  PRESERVED (pg_data, odoo_data)"
 Write-Host "Backups:       $BACKUP_ROOT (unchanged)"
 Write-Host "Services:      db, web, nginx restarted"
