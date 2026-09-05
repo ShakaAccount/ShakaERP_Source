@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_powerbi_report_group_visibility" model="ir.rule">
+        <field name="name">Power BI Report: visible only to allowed groups</field>
+        <field name="model_id" ref="model_powerbi_report"/>
+        <field name="domain_force"><![CDATA[
+            [(1, '=', 1)] if user.has_group('base.group_system') else ['|', '|', '&', ('managed_by_discovery', '=', False), ('allowed_group_ids', '=', False), ('allowed_group_ids', 'in', user.group_ids.ids), ('allowed_user_ids', 'in', [user.id])]
+        ]]></field>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <!-- No groups set on the rule itself -> applies globally to every user for this model -->
+    </record>
+</odoo>

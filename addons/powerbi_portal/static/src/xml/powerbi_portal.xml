@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="powerbi_portal.Portal" owl="1">
+        <div class="o_powerbi_portal">
+            <div class="o_powerbi_sidebar">
+                <div class="o_powerbi_sidebar_header">Power BI Reports</div>
+
+                <t t-if="state.loading">
+                    <div class="o_powerbi_status">Loading reports...</div>
+                </t>
+                <t t-elif="state.error">
+                    <div class="o_powerbi_status o_powerbi_error" t-esc="state.error"/>
+                </t>
+                <t t-elif="!state.tree.folders.length and !state.tree.reports.length">
+                    <div class="o_powerbi_status">No reports are available to you yet.</div>
+                </t>
+                <t t-else="">
+                    <TreeNode
+                        node="state.tree"
+                        expanded="state.expanded"
+                        selectedReport="state.selectedReport"
+                        toggleFolder="toggleFolder"
+                        selectReport="selectReport"/>
+                </t>
+            </div>
+
+            <div class="o_powerbi_main">
+                <t t-if="state.selectedReport">
+                    <iframe t-att-src="state.selectedReport.url"
+                            class="o_powerbi_iframe"
+                            t-att-title="state.selectedReport.name"/>
+                </t>
+                <t t-else="">
+                    <div class="o_powerbi_placeholder">Select a report from the list on the left.</div>
+                </t>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="powerbi_portal.TreeNode" owl="1">
+        <div class="o_powerbi_tree_level">
+            <t t-foreach="props.node.folders" t-as="folder" t-key="folder.fullPath">
+                <div class="o_powerbi_folder_header" t-on-click="() => this.toggleFolder(folder.fullPath)">
+                    <i t-attf-class="fa {{ isExpanded(folder.fullPath) ? 'fa-caret-down' : 'fa-caret-right' }} o_powerbi_caret"/>
+                    <i class="fa fa-folder-o o_powerbi_folder_icon"/>
+                    <span t-esc="folder.name"/>
+                </div>
+                <t t-if="isExpanded(folder.fullPath)">
+                    <TreeNode
+                        node="folder"
+                        expanded="props.expanded"
+                        selectedReport="props.selectedReport"
+                        toggleFolder="props.toggleFolder"
+                        selectReport="props.selectReport"/>
+                </t>
+            </t>
+            <t t-foreach="props.node.reports" t-as="report" t-key="report.id">
+                <div class="o_powerbi_report_item"
+                     t-att-class="isSelected(report) ? 'active' : ''"
+                     t-att-title="report.description"
+                     t-on-click="() => this.selectReport(report)">
+                    <i class="fa fa-bar-chart o_powerbi_report_icon"/>
+                    <span t-esc="report.name"/>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

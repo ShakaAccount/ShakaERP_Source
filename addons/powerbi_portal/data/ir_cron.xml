@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_cron_ad_group_sync" model="ir.cron">
+        <field name="name">AD Group Sync: sync all active mappings</field>
+        <field name="model_id" ref="model_ad_group_mapping"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_sync_all()</field>
+        <field name="interval_number">30</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+    </record>
+
+    <record id="ir_cron_pbirs_discovery" model="ir.cron">
+        <field name="name">PBIRS Discovery: sync reports/groups from Report Server</field>
+        <field name="model_id" ref="model_pbirs_discovery_config"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_discover_all()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

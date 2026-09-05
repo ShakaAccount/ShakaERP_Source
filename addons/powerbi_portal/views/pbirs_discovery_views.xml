@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_pbirs_discovery_config_form" model="ir.ui.view">
+        <field name="name">pbirs.discovery.config.form</field>
+        <field name="model">pbirs.discovery.config</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_test_connection" type="object"
+                            string="Test SQL Connection" class="btn-secondary"/>
+                    <button name="action_discover_now" type="object"
+                            string="Discover &amp; Sync Now" class="btn-primary"/>
+                    <button name="action_test_soap_connection" type="object"
+                            string="Test SOAP Connection" class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <group string="Discovery (read-only, pulls FROM PBIRS)">
+                        <field name="name"/>
+                        <field name="sql_server"/>
+                        <field name="sql_database"/>
+                        <field name="odbc_driver" placeholder="e.g. SQL Server, or ODBC Driver 17 for SQL Server"/>
+                        <field name="auth_mode"/>
+                        <field name="sql_username" invisible="auth_mode == 'windows'"/>
+                        <field name="sql_password" password="True" invisible="auth_mode == 'windows'"/>
+                        <field name="trust_server_certificate"/>
+                        <field name="portal_base_url"/>
+                        <field name="active"/>
+                    </group>
+                    <group string="Access Push (writes TO PBIRS)">
+                        <field name="soap_url" placeholder="https://pbirs.company.local/ReportServer/ReportService2010.asmx"/>
+                        <field name="soap_auth_mode"/>
+                        <field name="soap_domain" invisible="soap_auth_mode == 'windows_current'"/>
+                        <field name="soap_username" invisible="soap_auth_mode == 'windows_current'"/>
+                        <field name="soap_password" password="True" invisible="soap_auth_mode == 'windows_current'"/>
+                    </group>
+                    <group string="Last Run">
+                        <field name="last_run_date"/>
+                        <field name="last_run_summary" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_pbirs_discovery_config_list" model="ir.ui.view">
+        <field name="name">pbirs.discovery.config.list</field>
+        <field name="model">pbirs.discovery.config</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="sql_server"/>
+                <field name="last_run_date"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_pbirs_discovery_config" model="ir.actions.act_window">
+        <field name="name">PBIRS Discovery</field>
+        <field name="res_model">pbirs.discovery.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_pbirs_discovery" name="PBIRS Discovery"
+              parent="menu_powerbi_portal_root"
+              action="action_pbirs_discovery_config"
+              sequence="110"
+              groups="base.group_system"/>
+
+    <!-- Show discovery status on the report form, and make discovery-owned
+         fields read-only there since Discover & Sync will overwrite them -->
+    <record id="view_powerbi_report_form_discovery" model="ir.ui.view">
+        <field name="name">powerbi.report.form.discovery</field>
+        <field name="model">powerbi.report</field>
+        <field name="inherit_id" ref="view_powerbi_report_form"/>
+        <field name="arch" type="xml">
+            <group name="visibility_group" position="before">
+                <field name="managed_by_discovery" invisible="1"/>
+                <div class="alert alert-info" role="alert" invisible="not managed_by_discovery">
+                    This report is managed by PBIRS Discovery. Its URL and
+                    Visible To Groups are overwritten automatically on each
+                    sync to match the Report Server's own permissions.
+                    Saving Visible To Groups/Users here automatically pushes
+                    that access back to PBIRS - the next Discovery sync will
+                    then read it back and should match. If Discovery's own
+                    sync writes to this report, that pull does NOT trigger
+                    another push back (avoids a pull/push loop).
+                </div>
+            </group>
+        </field>
+    </record>
+
+</odoo>

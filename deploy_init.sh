@@ -122,6 +122,15 @@ until [[ "$(docker inspect -f '{{.State.Health.Status}}' "$DB_CONTAINER" 2>/dev/
 done
 log "Database healthy."
 
+# 8b. Re-run safety: POSTGRES_PASSWORD only takes effect on FIRST volume init.
+# If the role password drifted from .env (re-runs with a regenerated .env), resync it.
+log "Checking database password matches .env..."
+if ! docker compose exec -T -e PGPASSWORD="$POSTGRES_PASSWORD" db psql -h db -U "$POSTGRES_USER" -d postgres -tAc 'SELECT 1' >/dev/null 2>&1; then
+    log "Role password differs from .env — resyncing..."
+    docker compose exec -T -u postgres db psql -U "$POSTGRES_USER" -d postgres \
+        -c "ALTER USER ${POSTGRES_USER} WITH PASSWORD '$POSTGRES_PASSWORD';"
+fi
+
 # --- 9. Initialize pgBackRest stanza ---
 log "Creating pgBackRest stanza '$STANZA'..."
 docker compose exec -T -u postgres db pgbackrest --stanza="$STANZA" stanza-create

@@ -52,6 +52,15 @@ WORKDIR /opt/odoo
 COPY requirements.txt /opt/odoo/requirements.txt
 RUN pip install --no-cache-dir -r /opt/odoo/requirements.txt
 
+# 5b. powerbi_portal external dependencies (manifest external_dependencies.python)
+# pyodbc needs unixODBC runtime + MS ODBC driver to connect to SQL Server (PBIRS).
+RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/ms.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/ms.gpg] https://packages.microsoft.com/debian/12/prod bookworm main" > /etc/apt/sources.list.d/mssql.list \
+    && apt-get update \
+    && env ACCEPT_EULA=Y apt-get install -y --no-install-recommends unixodbc msodbcsql18 \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install --no-cache-dir ldap3 pyodbc
+
 # 6. Create unprivileged odoo user and directories
 RUN useradd -m -U -s /bin/bash odoo \
     && mkdir -p /var/lib/odoo /home/odoo/.local \

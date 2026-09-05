@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ad_group_sync_config_manager,ad.group.sync.config.manager,model_ad_group_sync_config,base.group_system,1,1,1,1
+access_ad_group_mapping_manager,ad.group.mapping.manager,model_ad_group_mapping,base.group_system,1,1,1,1
+access_powerbi_report_user,powerbi.report.user,model_powerbi_report,base.group_user,1,0,0,0
+access_powerbi_report_manager,powerbi.report.manager,model_powerbi_report,base.group_system,1,1,1,1
+access_pbirs_discovery_config_manager,pbirs.discovery.config.manager,model_pbirs_discovery_config,base.group_system,1,1,1,1
