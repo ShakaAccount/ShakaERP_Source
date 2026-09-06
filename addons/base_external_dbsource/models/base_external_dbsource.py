@@ -176,7 +176,9 @@ class BaseExternalDbsource(models.Model):
         """It tests the connection
 
         Raises:
-            Validation message with the result of the connection (fail or success)
+            ValidationError with the failure reason.
+        Returns:
+            display_notification action (green toast) on success.
         """
         try:
             with self.connection_open():
@@ -188,9 +190,16 @@ class BaseExternalDbsource(models.Model):
                     error=str(e),
                 )
             ) from e
-        raise ValidationError(
-            self.env._("Connection test succeeded:\nEverything seems properly set up!")
-        )
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": "Connection test succeeded",
+                "message": "Everything seems properly set up!",
+                "type": "success",
+                "sticky": False,
+            },
+        }
 
     def remote_browse(self, record_ids, *args, **kwargs):
         """It browses for and returns the records from remote by ID

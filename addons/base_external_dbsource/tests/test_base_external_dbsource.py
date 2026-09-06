@@ -265,7 +265,7 @@ class TestBaseExternalDbsource(common.TransactionCase):
         self.assertEqual(self.dbsource.current_table, "res_partner")
 
     def test_connection_test_success(self):
-        """It should raise a success ValidationError when the connection opens"""
+        """It should return a success notification action when the connection opens"""
 
         @contextmanager
         def _connection_open_ok(self):
@@ -274,9 +274,10 @@ class TestBaseExternalDbsource(common.TransactionCase):
         with mock.patch.object(
             type(self.dbsource), "connection_open", _connection_open_ok
         ):
-            with self.assertRaises(ValidationError) as ctx:
-                self.dbsource.connection_test()
-        self.assertIn("Connection test succeeded", str(ctx.exception))
+            result = self.dbsource.connection_test()
+        self.assertEqual(result["type"], "ir.actions.client")
+        self.assertEqual(result["tag"], "display_notification")
+        self.assertEqual(result["params"]["type"], "success")
 
     def test_connection_test_failure(self):
         """It should raise a failure ValidationError when the connection fails"""
