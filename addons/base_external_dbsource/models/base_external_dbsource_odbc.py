@@ -36,10 +36,9 @@ class BaseExternalDbsource(models.Model):
         return connection.close()
 
     def connection_open_mssql(self):
-        # conn_string_full carries %s placeholder -> pyodbc params won't be
-        # consumed there; quote percent signs the DSN string may contain.
-        conn = self.conn_string_full
-        return pyodbc.connect(conn, timeout=15)
+        # strip(): Text field may carry trailing newline/whitespace; a value
+        # like "yes\n" makes the driver reject the last attribute (08001).
+        return pyodbc.connect(self.conn_string_full.strip(), timeout=15)
 
     def execute_mssql(self, query, params, metadata):
         return self._execute_odbc(query, params, metadata)
@@ -50,7 +49,8 @@ class BaseExternalDbsource(models.Model):
         return connection.close()
 
     def connection_open_odbc(self):
-        return pyodbc.connect(self.conn_string_full, timeout=15)
+        # strip(): trailing newline breaks last attribute parsing (08001)
+        return pyodbc.connect(self.conn_string_full.strip(), timeout=15)
 
     def execute_odbc(self, query, params, metadata):
         return self._execute_odbc(query, params, metadata)
