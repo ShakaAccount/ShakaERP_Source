@@ -30,15 +30,22 @@ class BaseExternalDbsource(models.Model):
     # pyodbc uses the same PWD=%s; placeholder as the base class.
     PWD_STRING = "PWD=%s;"
 
+    @staticmethod
+    def _normalize_odbc_conn(conn):
+        # Textarea artifacts break ODBC parsing: the driver does NOT treat
+        # newlines as separators, so "TSC=yes\nPWD=x" makes TSC's value
+        # "yes\nPWD=x" -> 08001. Treat newlines as ';', trim every token.
+        parts = (conn.replace("\r", "").replace("\n", ";")).split(";")
+        return ";".join(p.strip() for p in parts if p.strip())
+
     # --- MSSQL (via ODBC Driver 18) ---
 
     def connection_close_mssql(self, connection):
         return connection.close()
 
     def connection_open_mssql(self):
-        # strip(): Text field may carry trailing newline/whitespace; a value
-        # like "yes\n" makes the driver reject the last attribute (08001).
-        return pyodbc.connect(self.conn_string_full.strip(), timeout=15)
+        # normalize(): textarea newlines break attribute parsing (08001)
+        return pyodbc.connect(self._normalize_odbc_conn(self.conn_string_full), timeout=15)
 
     def execute_mssql(self, query, params, metadata):
         return self._execute_odbc(query, params, metadata)
@@ -49,8 +56,8 @@ class BaseExternalDbsource(models.Model):
         return connection.close()
 
     def connection_open_odbc(self):
-        # strip(): trailing newline breaks last attribute parsing (08001)
-        return pyodbc.connect(self.conn_string_full.strip(), timeout=15)
+        # normalize(): textarea newlines break attribute parsing (08001)
+        return pyodbc.connect(self._normalize_odbc_conn(self.conn_string_full), timeout=15)
 
     def execute_odbc(self, query, params, metadata):
         return self._execute_odbc(query, params, metadata)
