@@ -1,0 +1,6 @@
+<odoo>
+    <record id="group_accountant" model="res.groups">
+        <field name="name">حسابدار</field>
+        <field name="comment">Can review and mark payment request stages (مرحله پرداخت).</field>
+    </record>
+</odoo>

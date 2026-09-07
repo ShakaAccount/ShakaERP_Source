@@ -1,0 +1,96 @@
+<odoo>
+    <record id="view_payment_request_list" model="ir.ui.view">
+        <field name="name">payment.request.list</field>
+        <field name="model">payment_request.payment_request</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="number"/>
+                <field name="date"/>
+                <field name="unit_id"/>
+                <field name="party_id"/>
+                <field name="reason_id"/>
+                <field name="formality"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_payment_request_form" model="ir.ui.view">
+        <field name="name">payment.request.form</field>
+        <field name="model">payment_request.payment_request</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="number" readonly="1"/>
+                            <field name="date"/>
+                            <field name="formality"/>
+                        </group>
+                        <group>
+                            <field name="unit_id"/>
+                            <field name="party_id"/>
+                            <field name="reason_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                    <notebook>
+                        <page string="جزئیات درخواست پرداخت">
+                            <field name="detail_ids">
+                                <list editable="bottom">
+                                    <field name="line_no" string="#" readonly="1"/>
+                                    <field name="sequence" column_invisible="1"/>
+                                    <field name="name"/>
+                                    <field name="paytype_id"/>
+                                    <field name="costcenter_id"/>
+                                    <field name="amount" sum="جمع"/>
+                                    <field name="vat" sum="جمع"/>
+                                    <field name="net_amount" sum="جمع"/>
+                                    <field name="agreed_date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="مرحله پرداخت">
+                            <field name="stage_ids" readonly="not is_accountant">
+                                <list editable="bottom" create="0" delete="0" no_open="1">
+                                    <field name="sequence" column_invisible="1"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="state" decoration-danger="state == 'failed'" decoration-success="state == 'checked'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="اطلاعات تکمیلی">
+                            <field name="extra_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="key"/>
+                                    <field name="value"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="اطلاعات پرداخت شده">
+                            <field name="paid_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="date"/>
+                                    <field name="amount" sum="جمع"/>
+                                    <field name="description"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_payment_request" model="ir.actions.act_window">
+        <field name="name">درخواست پرداخت</field>
+        <field name="res_model">payment_request.payment_request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_payment_request_root" name="درخواست پرداخت" sequence="140"/>
+    <menuitem id="menu_payment_request" name="درخواست‌ها" action="action_payment_request" parent="menu_payment_request_root"/>
+</odoo>

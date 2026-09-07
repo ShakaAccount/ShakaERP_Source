@@ -1,0 +1,43 @@
+<odoo>
+    <record id="view_lookup_value_list" model="ir.ui.view">
+        <field name="name">lookup.value.list</field>
+        <field name="model">lookup.value</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="type_id"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="sequence"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lookup_value_form" model="ir.ui.view">
+        <field name="name">lookup.value.form</field>
+        <field name="model">lookup.value</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="type_id"/>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lookup_value" model="ir.actions.act_window">
+        <field name="name">Lookup Values</field>
+        <field name="res_model">lookup.value</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_lookup_root" name="Lookup Data" sequence="150"/>
+    <menuitem id="menu_lookup_type" name="Lookup Types" action="action_lookup_type" parent="menu_lookup_root"/>
+    <menuitem id="menu_lookup_value" name="Lookup Values" action="action_lookup_value" parent="menu_lookup_root"/>
+</odoo>

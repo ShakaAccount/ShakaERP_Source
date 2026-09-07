@@ -1,0 +1,65 @@
+<odoo>
+    <record id="view_leave_request_form" model="ir.ui.view">
+        <field name="name">leave.request.form</field>
+        <field name="model">leave.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" string="Send" type="object"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve" type="object"
+                            class="btn-primary" invisible="state != 'submitted'"
+                            groups="leave_request.group_leave_admin"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            class="btn-danger" invisible="state != 'submitted'"
+                            groups="leave_request.group_leave_admin"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                            invisible="state not in ('submitted','rejected')"
+                            groups="leave_request.group_leave_admin"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved,rejected"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="employee_id"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="reason"/>
+                        <field name="admin_note" groups="leave_request.group_leave_admin"/>
+                    </group>
+                </sheet>
+                <!-- Chatter: this IS your visible log -->
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_leave_request_list" model="ir.ui.view">
+        <field name="name">leave.request.list</field>
+        <field name="model">leave.request</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'approved'"
+                       decoration-danger="state == 'rejected'"
+                       decoration-info="state == 'submitted'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_leave_request" model="ir.actions.act_window">
+        <field name="name">Leave Requests</field>
+        <field name="res_model">leave.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_leave_root" name="Leave Requests"/>
+    <menuitem id="menu_leave_request" name="Requests"
+              parent="menu_leave_root"
+              action="action_leave_request"/>
+</odoo>
