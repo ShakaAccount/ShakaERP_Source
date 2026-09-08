@@ -40,10 +40,12 @@ RUN curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmo
 RUN npm install -g rtlcss
 
 # 4. Install patched wkhtmltopdf (0.12.6.1-3) for proper Odoo PDF reports
-RUN wget -q https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends ./wkhtmltox_0.12.6.1-3.bookworm_amd64.deb \
-    && rm wkhtmltox_0.12.6.1-3.bookworm_amd64.deb \
+# Vendored .deb: GitHub releases CDN unreachable from some networks - no build-time fetch.
+# sha256(wkhtmltox_0.12.6.1-3.bookworm_amd64.deb) = 98ba0d157b50d36f23bd0dedf4c0aa28c7b0c50fcdcdc54aa5b6bbba81a3941d
+COPY wkhtmltox_0.12.6.1-3.bookworm_amd64.deb /tmp/wkhtmltox.deb
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends /tmp/wkhtmltox.deb \
+    && rm /tmp/wkhtmltox.deb \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/odoo
