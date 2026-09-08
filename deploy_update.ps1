@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    deploy_update.ps1 — Windows counterpart of deploy_update.sh (same steps, same names).
+    deploy_update.ps1 -- Windows counterpart of deploy_update.sh (same steps, same names).
 .DESCRIPTION
     Updates an existing Odoo 19 installation: rebuilds images, applies DB migrations,
     restarts services without touching data volumes or backups.
@@ -89,14 +89,14 @@ Set-Location $REPO_DIR
 # --- 3. Ensure .env exists and source it ---
 $envFile = Join-Path $REPO_DIR ".env"
 if (-not (Test-Path $envFile)) {
-    Write-Error ".env not found — run deploy_init.ps1 first."
+    Write-Error ".env not found -- run deploy_init.ps1 first."
     exit 1
 }
 Set-EnvFromFile $envFile
 
 # --- 4. Re-generate odoo.conf from embedded template ---
 # (bash version runs envsubst over the existing odoo.conf, which is already
-#  fully substituted — a no-op. Regenerating from template + .env actually
+#  fully substituted -- a no-op. Regenerating from template + .env actually
 #  picks up changed credentials. Defaults match deploy_init.ps1.)
 Log "Regenerating odoo.conf from environment..."
 $odooConfTemplate = @'

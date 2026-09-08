@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    deploy_init.ps1 — Windows counterpart of deploy_init.sh (same steps, same names).
+    deploy_init.ps1 -- Windows counterpart of deploy_init.sh (same steps, same names).
 .DESCRIPTION
     Sets up Odoo 19 using Docker, configures pgBackRest for continuous WAL archiving
     and daily full backups, and creates scheduled tasks for filestore sync and DB backups.
@@ -75,7 +75,7 @@ function Replace-EnvInTemplate {
 function Get-HealthStatus {
     # Health of $DB_CONTAINER; 'starting' if container not found yet (like the bash fallback).
     # PS 5.1 gotcha: with $ErrorActionPreference='Stop', redirecting native stderr (2>$null)
-    # turns stderr lines into ErrorRecords and can throw — relax EAP around the redirect.
+    # turns stderr lines into ErrorRecords and can throw -- relax EAP around the redirect.
     $prev = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
     try {
@@ -244,7 +244,7 @@ try {
     $ErrorActionPreference = $prev
 }
 if ($checkExit -ne 0) {
-    Log "Role password differs from .env — resyncing..."
+    Log "Role password differs from .env -- resyncing..."
     Invoke-Native { docker compose exec -T -u postgres db psql -U $pgUser -d postgres -c "ALTER USER $pgUser WITH PASSWORD '$env:POSTGRES_PASSWORD';" } "password resync"
 }
 
@@ -256,7 +256,7 @@ Log "Running pgBackRest check..."
 Invoke-Native { docker compose exec -T -u postgres db pgbackrest --stanza="$STANZA" check } "pgbackrest check"
 
 # --- 10. Initial full backup if none exist ---
-# (relax EAP around 2>$null redirect — PS 5.1 NativeCommandError, see Get-HealthStatus)
+# (relax EAP around 2>$null redirect -- PS 5.1 NativeCommandError, see Get-HealthStatus)
 $prev = $ErrorActionPreference
 $ErrorActionPreference = 'Continue'
 try {
