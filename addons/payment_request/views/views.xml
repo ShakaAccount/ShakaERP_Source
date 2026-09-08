@@ -10,6 +10,11 @@
                 <field name="party_id"/>
                 <field name="reason_id"/>
                 <field name="formality"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'unit_review'"
+                       decoration-warning="state == 'accounting'"
+                       decoration-success="state in ('accounting_approved', 'paid')"
+                       decoration-danger="state == 'rejected'"/>
             </list>
         </field>
     </record>
@@ -19,12 +24,33 @@
         <field name="model">payment_request.payment_request</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_submit" type="object" string="ارسال برای تایید"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_manager_accept" type="object" string="تایید مدیر"
+                            class="btn-primary" invisible="state != 'unit_review'"
+                            groups="payment_request.group_unit_manager"/>
+                    <button name="action_manager_reject" type="object" string="رد"
+                            invisible="state != 'unit_review'"
+                            groups="payment_request.group_unit_manager"/>
+                    <button name="action_accountant_accept" type="object" string="تایید حسابداری"
+                            class="btn-primary" invisible="state != 'accounting'"
+                            groups="payment_request.group_accountant"/>
+                    <button name="action_accountant_mark_paid" type="object" string="پرداخت شد"
+                            invisible="state != 'accounting_approved'"
+                            groups="payment_request.group_accountant"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,unit_review,accounting,accounting_approved,paid"/>
+                </header>
                 <sheet>
+                    <field name="is_accountant" invisible="1"/>
+                    <field name="is_unit_manager" invisible="1"/>
+                    <field name="is_site_admin" invisible="1"/>
                     <group>
                         <group>
                             <field name="number" readonly="1"/>
                             <field name="date"/>
                             <field name="formality"/>
+                            <field name="unit_manager_id" invisible="state != 'draft' and not is_accountant and not is_site_admin"/>
                         </group>
                         <group>
                             <field name="unit_id"/>
@@ -51,15 +77,6 @@
                                 </list>
                             </field>
                         </page>
-                        <page string="مرحله پرداخت">
-                            <field name="stage_ids" readonly="not is_accountant">
-                                <list editable="bottom" create="0" delete="0" no_open="1">
-                                    <field name="sequence" column_invisible="1"/>
-                                    <field name="name" readonly="1"/>
-                                    <field name="state" decoration-danger="state == 'failed'" decoration-success="state == 'checked'"/>
-                                </list>
-                            </field>
-                        </page>
                         <page string="اطلاعات تکمیلی">
                             <field name="extra_ids">
                                 <list editable="bottom">
@@ -79,8 +96,18 @@
                                 </list>
                             </field>
                         </page>
+                        <page string="مرحله پرداخت" invisible="is_unit_manager and not is_accountant">
+                            <field name="stage_ids" readonly="not is_accountant">
+                                <list editable="bottom" create="0" delete="0" no_open="1">
+                                    <field name="sequence" column_invisible="1"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="state" decoration-danger="state == 'failed'" decoration-success="state == 'checked'"/>
+                                </list>
+                            </field>
+                        </page>
                     </notebook>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>

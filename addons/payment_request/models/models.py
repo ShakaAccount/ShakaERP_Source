@@ -1,6 +1,8 @@
 import datetime as _dt
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
+from odoo.tools.translate import _
 
 
 # ponytail: stdlib jalali converter (~25 lines) instead of jdatetime dep;
@@ -52,11 +54,20 @@ class PaymentRequest(models.Model):
     _description = 'Payment Request'
     _rec_name = 'number'
     _order = 'date desc, id desc'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     # ponytail: not required=True — readonly+required+empty blocks web-client
     # save; create() always fills it from the sequence instead
     number = fields.Char(string='شماره')
     date = fields.Date(string='تاریخ', default=fields.Date.context_today, required=True)
+    state = fields.Selection(
+        [('draft', 'پیش‌نویس'), ('unit_review', 'در انتظار مدیر واحد'),
+         ('rejected', 'رد شده'), ('accounting', 'در انتظار حسابدار'),
+         ('accounting_approved', 'تایید حسابدار'), ('paid', 'پرداخت شده')],
+        string='وضعیت', default='draft', required=True, tracking=True)
+    unit_manager_id = fields.Many2one(
+        'res.users', string='مدیر واحد',
+        help='Unit manager this request is submitted to for approval.')
     unit_id = fields.Many2one(
         'odoo.raes.dim.company', string='واحد سازمانی', required=True)
     party_id = fields.Many2one(
@@ -78,12 +89,16 @@ class PaymentRequest(models.Model):
     paid_ids = fields.One2many(
         'payment_request.paid', 'request_id', string='اطلاعات پرداخت شده')
     is_accountant = fields.Boolean(compute='_compute_is_accountant')
+    is_unit_manager = fields.Boolean(compute='_compute_is_accountant')
+    is_site_admin = fields.Boolean(compute='_compute_is_accountant')
 
     def _compute_is_accountant(self):
-        in_grp = self.env.user.has_group(
-            'payment_request.group_accountant')
         for rec in self:
-            rec.is_accountant = in_grp
+            rec.is_accountant = self.env.user.has_group(
+                'payment_request.group_accountant')
+            rec.is_unit_manager = self.env.user.has_group(
+                'payment_request.group_unit_manager')
+            rec.is_site_admin = self.env.user.has_group('base.group_system')
     stage_ids = fields.One2many(
         'payment_request.stage', 'request_id', string='مرحله پرداخت')
 
@@ -111,7 +126,68 @@ class PaymentRequest(models.Model):
             rec.sudo().stage_ids = [
                 (0, 0, {'sequence': s, 'name': n, 'state': 'unattended'})
                 for s, n in self.STAGE_STEPS]
+            rec.message_subscribe(
+                partner_ids=rec.create_uid.partner_id.ids)
+            rec.message_post(
+                body=f"درخواست {rec.number} ثبت شد.", message_type='comment')
         return recs
+
+    # ---------------- workflow ----------------
+
+    def action_submit(self):
+        for rec in self:
+            if not rec.unit_manager_id:
+                raise UserError(_('مدیر واحد را انتخاب کنید.'))
+            rec.state = 'unit_review'
+            rec.message_post(
+                body=f"برای تایید به مدیر واحد ({rec.unit_manager_id.name}) ارسال شد.",
+                message_type='comment',
+                partner_ids=rec.unit_manager_id.partner_id.ids)
+
+    def action_manager_accept(self):
+        self._check_manager()
+        for rec in self:
+            rec.state = 'accounting'
+            accountant_grp = self.env.ref('payment_request.group_accountant')
+            partners = accountant_grp.all_user_ids.mapped('partner_id')
+            rec.message_post(
+                body="مدیر واحد تایید شد؛ در انتظار بررسی حسابدار.",
+                message_type='comment', partner_ids=partners.ids)
+
+    def action_manager_reject(self):
+        self._check_manager()
+        for rec in self:
+            rec.state = 'rejected'
+            rec.message_post(
+                body="مدیر واحد درخواست را رد کرد.",
+                message_type='comment',
+                partner_ids=rec.create_uid.partner_id.ids)
+
+    def action_accountant_accept(self):
+        self._check_accountant()
+        for rec in self:
+            rec.state = 'accounting_approved'
+            rec.message_post(
+                body="حسابدار تایید کرد.",
+                message_type='comment',
+                partner_ids=rec.create_uid.partner_id.ids)
+
+    def action_accountant_mark_paid(self):
+        self._check_accountant()
+        for rec in self:
+            rec.state = 'paid'
+            rec.message_post(
+                body="پرداخت انجام شد.",
+                message_type='comment',
+                partner_ids=rec.create_uid.partner_id.ids)
+
+    def _check_manager(self):
+        if not self.env.user.has_group('payment_request.group_unit_manager'):
+            raise UserError(_('فقط مدیر واحد مجاز است.'))
+
+    def _check_accountant(self):
+        if not self.env.user.has_group('payment_request.group_accountant'):
+            raise UserError(_('فقط حسابدار مجاز است.'))
 
     def _next_number(self, date=None):
         # max number among this jalali year's records + 1; resets at 1 Farvardin
