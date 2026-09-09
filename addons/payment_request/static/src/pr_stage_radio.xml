@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="payment_request.PrStageRadio">
+        <div class="pr-stage-radio d-inline-flex align-items-center gap-1">
+            <button type="button"
+                    class="btn btn-sm rounded-pill px-2 py-0 fw-semibold"
+                    t-att-class="{
+                        'btn-success': value === 'accept',
+                        'btn-outline-success': value !== 'accept',
+                    }"
+                    t-att-disabled="state.busy"
+                    t-on-click="() => this.onChange('accept')">
+                <i class="fa fa-check me-1"/>
+                تایید
+            </button>
+            <button type="button"
+                    class="btn btn-sm rounded-pill px-2 py-0 fw-semibold"
+                    t-att-class="{
+                        'btn-danger': value === 'reject',
+                        'btn-outline-danger': value !== 'reject',
+                    }"
+                    t-att-disabled="state.busy or !allowReject"
+                    t-att-title="!allowReject ? 'این مرحله قابل رد کردن نیست' : ''"
+                    t-on-click="() => this.onChange('reject')">
+                <i class="fa fa-times me-1"/>
+                رد
+            </button>
+        </div>
+    </t>
+
+</templates>
