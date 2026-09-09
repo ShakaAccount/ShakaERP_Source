@@ -295,8 +295,10 @@ class PaymentRequestExtra(models.Model):
     request_id = fields.Many2one(
         'payment_request.payment_request', required=True, ondelete='cascade')
     sequence = fields.Integer(default=10)
-    key = fields.Char(string='عنوان', required=True)
-    value = fields.Char(string='مقدار')
+    account_no = fields.Char(string='شماره حساب')
+    party_name = fields.Char(string='نام طرف شماره حساب')
+    sheba_no = fields.Char(string='شماره شبا')
+    description = fields.Char(string='توضیحات')
 
 
 class PaymentRequestPaid(models.Model):

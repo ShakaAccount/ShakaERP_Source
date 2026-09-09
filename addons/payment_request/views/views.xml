@@ -89,9 +89,10 @@
                         <page string="اطلاعات تکمیلی">
                             <field name="extra_ids" readonly="state != 'draft'">
                                 <list editable="bottom">
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="key"/>
-                                    <field name="value"/>
+                                    <field name="account_no"/>
+                                    <field name="party_name"/>
+                                    <field name="sheba_no"/>
+                                    <field name="description"/>
                                 </list>
                             </field>
                         </page>
