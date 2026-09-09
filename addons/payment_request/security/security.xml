@@ -7,7 +7,25 @@
     <record id="group_accountant" model="res.groups">
         <field name="name">حسابدار</field>
         <field name="privilege_id" ref="privilege_payment_request"/>
-        <field name="comment">Reviews payment request stages (مرحله پرداخت) and approves requests after unit manager.</field>
+        <field name="comment">Accepts requests after unit manager. Does NOT edit مرحله پرداخت.</field>
+    </record>
+
+    <record id="group_tax" model="res.groups">
+        <field name="name">مالیات</field>
+        <field name="privilege_id" ref="privilege_payment_request"/>
+        <field name="comment">Fills مرحله پرداخت stages, then sends to accounting management.</field>
+    </record>
+
+    <record id="group_acc_mgmt" model="res.groups">
+        <field name="name">مدیر حسابداری</field>
+        <field name="privilege_id" ref="privilege_payment_request"/>
+        <field name="comment">Accepts after tax group; sends to treasurer.</field>
+    </record>
+
+    <record id="group_treasurer" model="res.groups">
+        <field name="name">خزانه دار</field>
+        <field name="privilege_id" ref="privilege_payment_request"/>
+        <field name="comment">Records payments (مبلغ پرداخت شده/شماره پیگیری/شماره چک/شماره اعلامیه پرداخت/توضیحات).</field>
     </record>
 
     <record id="group_unit_manager" model="res.groups">
@@ -60,5 +78,40 @@
         <field name="perm_write" eval="1"/>
         <field name="perm_create" eval="1"/>
         <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <!-- workflow groups get same full read/write on requests; buttons
+         gate the transitions, record rules keep it simple -->
+    <record id="rule_payment_request_tax" model="ir.rule">
+        <field name="name">Payment Request: tax group sees all</field>
+        <field name="model_id" ref="model_payment_request_payment_request"/>
+        <field name="groups" eval="[(4, ref('group_tax'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_payment_request_acc_mgmt" model="ir.rule">
+        <field name="name">Payment Request: accounting mgmt sees all</field>
+        <field name="model_id" ref="model_payment_request_payment_request"/>
+        <field name="groups" eval="[(4, ref('group_acc_mgmt'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_payment_request_treasurer" model="ir.rule">
+        <field name="name">Payment Request: treasurer sees all</field>
+        <field name="model_id" ref="model_payment_request_payment_request"/>
+        <field name="groups" eval="[(4, ref('group_treasurer'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
     </record>
 </odoo>

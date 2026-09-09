@@ -4,7 +4,7 @@ access_payment_request_party_user,payment_request_party,model_odoo_raes_dim_part
 access_payment_request_user,payment_request.user,model_payment_request_payment_request,base.group_user,1,1,1,1
 access_payment_request_detail_user,payment_request.detail,model_payment_request_detail,base.group_user,1,1,1,1
 access_payment_request_stage_user,payment_request.stage,model_payment_request_stage,base.group_user,1,0,0,1
-access_payment_request_stage_accountant,payment_request.stage.accountant,model_payment_request_stage,payment_request.group_accountant,1,1,1,1
+access_payment_request_stage_tax,payment_request.stage.tax,model_payment_request_stage,payment_request.group_tax,1,1,1,1
 access_payment_request_extra_user,payment_request.extra,model_payment_request_extra,base.group_user,1,1,1,1
 access_payment_request_paid_user,payment_request.paid,model_payment_request_paid,base.group_user,1,1,1,1
 access_odoo_raes_dim_cost_center_user,odoo_raes_dim_cost_center_user,model_odoo_raes_dim_cost_center,base.group_user,1,0,0,0

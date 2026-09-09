@@ -62,8 +62,10 @@ class PaymentRequest(models.Model):
     date = fields.Date(string='تاریخ', default=fields.Date.context_today, required=True)
     state = fields.Selection(
         [('draft', 'پیش‌نویس'), ('unit_review', 'در انتظار مدیر واحد'),
-         ('rejected', 'رد شده'), ('accounting', 'در انتظار حسابدار'),
-         ('accounting_approved', 'تایید حسابدار'), ('paid', 'پرداخت شده')],
+         ('rejected', 'رد شده'), ('accountant_review', 'در انتظار حسابدار'),
+         ('tax_review', 'در انتظار مالیات'),
+         ('acc_mgmt_review', 'در انتظار مدیر حسابداری'),
+         ('treasury', 'در انتظار خزانه دار'), ('paid', 'پرداخت شده')],
         string='وضعیت', default='draft', required=True, tracking=True)
     unit_manager_id = fields.Many2one(
         'res.users', string='مدیر واحد',
@@ -90,14 +92,23 @@ class PaymentRequest(models.Model):
         'payment_request.paid', 'request_id', string='اطلاعات پرداخت شده')
     is_accountant = fields.Boolean(compute='_compute_is_accountant')
     is_unit_manager = fields.Boolean(compute='_compute_is_accountant')
+    is_tax = fields.Boolean(compute='_compute_is_accountant')
+    is_acc_mgmt = fields.Boolean(compute='_compute_is_accountant')
+    is_treasurer = fields.Boolean(compute='_compute_is_accountant')
     is_site_admin = fields.Boolean(compute='_compute_is_accountant')
 
+    @api.depends_context('uid')
     def _compute_is_accountant(self):
         for rec in self:
             rec.is_accountant = self.env.user.has_group(
                 'payment_request.group_accountant')
             rec.is_unit_manager = self.env.user.has_group(
                 'payment_request.group_unit_manager')
+            rec.is_tax = self.env.user.has_group('payment_request.group_tax')
+            rec.is_acc_mgmt = self.env.user.has_group(
+                'payment_request.group_acc_mgmt')
+            rec.is_treasurer = self.env.user.has_group(
+                'payment_request.group_treasurer')
             rec.is_site_admin = self.env.user.has_group('base.group_system')
     stage_ids = fields.One2many(
         'payment_request.stage', 'request_id', string='مرحله پرداخت')
@@ -147,7 +158,7 @@ class PaymentRequest(models.Model):
     def action_manager_accept(self):
         self._check_manager()
         for rec in self:
-            rec.state = 'accounting'
+            rec.state = 'accountant_review'
             accountant_grp = self.env.ref('payment_request.group_accountant')
             partners = accountant_grp.all_user_ids.mapped('partner_id')
             rec.message_post(
@@ -166,18 +177,43 @@ class PaymentRequest(models.Model):
     def action_accountant_accept(self):
         self._check_accountant()
         for rec in self:
-            rec.state = 'accounting_approved'
+            rec.state = 'tax_review'
+            tax_grp = self.env.ref('payment_request.group_tax')
+            partners = tax_grp.all_user_ids.mapped('partner_id')
             rec.message_post(
-                body="حسابدار تایید کرد.",
-                message_type='comment',
-                partner_ids=rec.create_uid.partner_id.ids)
+                body="حسابدار تایید کرد؛ در انتظار تکمیل مراحل توسط مالیات.",
+                message_type='comment', partner_ids=partners.ids)
 
-    def action_accountant_mark_paid(self):
-        self._check_accountant()
+    def action_tax_stages_done(self):
+        """گروه مالیات: مراحل را پر کرده و ارسال به مدیر حسابداری."""
+        self._check_tax()
         for rec in self:
+            rec.state = 'acc_mgmt_review'
+            grp = self.env.ref('payment_request.group_acc_mgmt')
+            partners = grp.all_user_ids.mapped('partner_id')
+            rec.message_post(
+                body="مراحل توسط مالیات تکمیل شد؛ در انتظار تایید مدیر حسابداری.",
+                message_type='comment', partner_ids=partners.ids)
+
+    def action_acc_mgmt_accept(self):
+        self._check_acc_mgmt()
+        for rec in self:
+            rec.state = 'treasury'
+            grp = self.env.ref('payment_request.group_treasurer')
+            partners = grp.all_user_ids.mapped('partner_id')
+            rec.message_post(
+                body="مدیر حسابداری تایید کرد؛ در انتظار پرداخت توسط خزانه دار.",
+                message_type='comment', partner_ids=partners.ids)
+
+    def action_treasurer_paid(self):
+        self._check_treasurer()
+        for rec in self:
+            if not rec.paid_ids:
+                raise UserError(
+                    _('حداقل یک ردیف پرداخت (اطلاعات پرداخت شده) وارد کنید.'))
             rec.state = 'paid'
             rec.message_post(
-                body="پرداخت انجام شد.",
+                body="پرداخت توسط خزانه دار ثبت شد؛ گردش کار تمام شد.",
                 message_type='comment',
                 partner_ids=rec.create_uid.partner_id.ids)
 
@@ -188,6 +224,18 @@ class PaymentRequest(models.Model):
     def _check_accountant(self):
         if not self.env.user.has_group('payment_request.group_accountant'):
             raise UserError(_('فقط حسابدار مجاز است.'))
+
+    def _check_tax(self):
+        if not self.env.user.has_group('payment_request.group_tax'):
+            raise UserError(_('فقط گروه مالیات مجاز است.'))
+
+    def _check_acc_mgmt(self):
+        if not self.env.user.has_group('payment_request.group_acc_mgmt'):
+            raise UserError(_('فقط مدیر حسابداری مجاز است.'))
+
+    def _check_treasurer(self):
+        if not self.env.user.has_group('payment_request.group_treasurer'):
+            raise UserError(_('فقط خزانه دار مجاز است.'))
 
     def _next_number(self, date=None):
         # max number among this jalali year's records + 1; resets at 1 Farvardin
@@ -259,9 +307,11 @@ class PaymentRequestPaid(models.Model):
     request_id = fields.Many2one(
         'payment_request.payment_request', required=True, ondelete='cascade')
     sequence = fields.Integer(default=10)
-    date = fields.Date(string='تاریخ')
-    amount = fields.Float(string='مبلغ')
-    description = fields.Char(string='شرح')
+    paid_amount = fields.Float(string='مبلغ پرداخت شده')
+    tracking_no = fields.Char(string='شماره پیگیری')
+    cheque_no = fields.Char(string='شماره چک')
+    payment_declaration_no = fields.Char(string='شماره اعلامیه پرداخت')
+    description = fields.Char(string='توضیحات')
 
 
 class PaymentRequestStage(models.Model):
