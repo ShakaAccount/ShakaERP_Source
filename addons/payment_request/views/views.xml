@@ -97,19 +97,27 @@
                             </field>
                         </page>
                         <page string="مرحله پرداخت" invisible="is_unit_manager and not is_tax and not is_site_admin">
-                            <field name="stage_ids"
-                                   readonly="not (is_tax or is_site_admin)">
-                                <list editable="bottom" create="0" delete="0" no_open="1"
-                                      decoration-muted="parent_id and parent_id.state == 'failed'">
+                            <field name="stage_ids" readonly="not (is_tax or is_site_admin)">
+                                <list create="0" delete="0" no_open="1"
+                                      decoration-muted="state == 'failed' and not is_frontier"
+                                      decoration-success="state == 'checked'">
                                     <field name="sequence" column_invisible="1"/>
-                                    <field name="parent_id" optional="show" string="مرحله والد"/>
+                                    <field name="is_frontier" column_invisible="1"/>
+                                    <field name="allow_reject" column_invisible="1"/>
                                     <field name="name" readonly="1"/>
-                                    <field name="state" decoration-danger="state == 'failed'" decoration-success="state == 'checked'"/>
+                                    <field name="state" readonly="1"
+                                           decoration-danger="state == 'failed'" decoration-success="state == 'checked'"/>
+                                    <button name="action_accept" type="object" string="تایید"
+                                            icon="fa-check" invisible="state != 'unattended' or not is_frontier"
+                                            class="btn-success"/>
+                                    <button name="action_reject" type="object" string="رد"
+                                            icon="fa-times" invisible="state != 'unattended' or not is_frontier or not allow_reject"
+                                            class="btn-danger"/>
                                 </list>
                             </field>
                             <div class="text-muted">
-                                اگر مرحله‌ای رد شود، همه زیرمرحله‌هایش هم خودکار رد می‌شوند.
-                                ارسال به مدیر حسابداری فقط وقتی ممکن است که همه مراحل تایید شده باشند.
+                                آبشاری: فقط مرحله جاری قابل تایید/رد است؛ مراحل بعدی خودکار رد شده‌اند
+                                و با پیشرفت آبشار آزاد می‌شوند. رد کردن هر مرحله = رد کل درخواست.
                             </div>
                         </page>
                         <page string="اطلاعات پرداخت شده">

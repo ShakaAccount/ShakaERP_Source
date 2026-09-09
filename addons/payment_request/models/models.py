@@ -212,7 +212,7 @@ class PaymentRequest(models.Model):
                 message_type='comment', partner_ids=partners.ids)
 
     def action_treasurer_paid(self):
-        self._check_treasurer()z
+        self._check_treasurer()
         for rec in self:
             if not rec.paid_ids:
                 raise UserError(
@@ -334,28 +334,82 @@ class PaymentRequestStage(models.Model):
     parent_id = fields.Many2one(
         'payment_request.stage', string='مرحله والد', index=True,
         domain="[('request_id', '=', request_id), "
-              "('id', '!=', id), ('parent_id', '=', False)]",
-        help='If this step fails, all child steps fail too. Child steps '
-             'cannot be checked while the parent is failed/unattended.')
+              "('id', '!=', id), ('parent_id', '=', False)]")
     child_ids = fields.One2many(
         'payment_request.stage', 'parent_id', string='زیرمرحله‌ها')
+    allow_reject = fields.Boolean(
+        string='قابل رد', default=True,
+        help='If off, this step can only be accepted.')
     state = fields.Selection(
         [('unattended', 'بررسی نشده'), ('checked', 'تایید شده'),
          ('failed', 'رد شده')],
         string='وضعیت', default='unattended', required=True)
+    is_frontier = fields.Boolean(compute='_compute_is_frontier')
 
-    def write(self, vals):
-        recs = super().write(vals)
-        if 'state' in vals:
-            self._cascade_state()
-        return recs
-
-    def _cascade_state(self):
-        """failed parent -> failed children (recursively)."""
+    def _compute_is_frontier(self):
         for rec in self:
-            if rec.state == 'failed':
-                rec.child_ids.write({'state': 'failed'})
+            rec.is_frontier = bool(rec.id) and rec._frontier().id == rec.id
 
-    # tax cannot send the request unless every top-level step is checked
+    # ---------------- waterfall ----------------
+
+    def _frontier(self):
+        """The single actionable row: first row not yet checked (waterfall).
+        Always computed over the request's FULL stage set. Everything after
+        it stays failed by default."""
+        rows = (self.mapped('request_id.stage_ids') or self).sorted('sequence')
+        for row in rows:
+            if row.state != 'checked':
+                return row
+        return rows[-1:] if rows else self.browse()
+
+    def _apply_waterfall(self):
+        """Enforce: rows after the frontier are failed; the frontier row that
+        just became actionable resets from failed to unattended."""
+        for req in self.mapped('request_id'):
+            rows = req.stage_ids.sorted('sequence')
+            frontier = rows._frontier()
+            reached = False
+            for row in rows:
+                if row.id == frontier.id:
+                    reached = True
+                    if row.state == 'failed':
+                        # frontier reached it: becomes actionable again
+                        row.state = 'unattended'
+                    continue
+                if reached and row.state != 'checked':
+                    row.state = 'failed'
+
+    # ---------------- per-row actions ----------------
+
+    def action_accept(self):
+        for rec in self:
+            if rec._frontier().id != rec.id:
+                raise UserError(_(
+                    'فقط مرحله جاری قابل تایید است. ابتدا «%s» را بررسی کنید.',
+                    rec._frontier().name))
+            rec.state = 'checked'
+            rec._apply_waterfall()
+            rec.request_id.message_post(
+                body=f"مرحله «{rec.name}» تایید شد.", message_type='comment')
+
+    def action_reject(self):
+        for rec in self:
+            if not rec.allow_reject:
+                raise UserError(_('این مرحله قابل رد کردن نیست.'))
+            if rec._frontier().id != rec.id:
+                raise UserError(_(
+                    'فقط مرحله جاری قابل رد است. ابتدا «%s» را بررسی کنید.',
+                    rec._frontier().name))
+            rec.state = 'failed'
+            # children fail too
+            rec.child_ids.write({'state': 'failed'})
+            # rejecting any step rejects the whole form
+            req = rec.request_id
+            req.state = 'rejected'
+            req.message_post(
+                body=f"مرحله «{rec.name}» رد شد؛ درخواست رد شد.",
+                message_type='comment',
+                partner_ids=req.create_uid.partner_id.ids)
+
     def _all_checked(self):
         return all(s.state == 'checked' for s in self)
