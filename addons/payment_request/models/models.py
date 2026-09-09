@@ -188,6 +188,9 @@ class PaymentRequest(models.Model):
         """گروه مالیات: مراحل را پر کرده و ارسال به مدیر حسابداری."""
         self._check_tax()
         for rec in self:
+            if rec.state == 'rejected':
+                # pre-save of the form already rejected it (radio reject)
+                continue
             if not rec.stage_ids._all_checked():
                 bad = rec.stage_ids.filtered(
                     lambda s: s.state != 'checked')
@@ -366,24 +369,19 @@ class PaymentRequestStage(models.Model):
 
     @api.onchange('decision')
     def _onchange_decision(self):
-        # visual live feedback in the form: rows above become accepted,
-        # rows below go back to pending (not rejected)
+        # visual live feedback in the form only; persisted on save, where
+        # write() runs the real waterfall
         if not self.decision:
             return
         rows = self.request_id.stage_ids.sorted('sequence')
-        for row in rows:
-            if row.id == self.id:
-                break
-            if row.state != 'checked':
-                row.state = 'checked'
-        for row in rows:
-            after = False
-            for r in rows:
-                if r.id == row.id:
-                    after = True
-                    continue
-                if after and r.id != self.id and r.state == 'failed':
-                    r.state = 'unattended'
+        idx = rows.ids.index(self.id) if self.id in rows.ids else -1
+        if self.decision == 'accept':
+            rows[:idx + 1].filtered(
+                lambda s: s.state != 'checked').state = 'checked'
+            rows[idx + 1:].filtered(
+                lambda s: s.state == 'failed').state = 'unattended'
+        elif self.decision == 'reject' and self.allow_reject:
+            self.state = 'failed'
 
     def write(self, vals):
         recs = super().write(vals)

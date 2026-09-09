@@ -12,13 +12,6 @@
         'views/dw_connection_views.xml',
         'views/dw_remote_table_views.xml',
     ],
-    'assets': {
-        'web.assets_backend': [
-            'payment_request/static/src/pr_stage_radio.js',
-            'payment_request/static/src/pr_stage_radio.xml',
-            'payment_request/static/src/pr_stage_radio.scss',
-        ],
-    },
     'installable': True,
     'application': False,
 }

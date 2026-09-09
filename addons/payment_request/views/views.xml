@@ -97,8 +97,9 @@
                             </field>
                         </page>
                         <page string="مرحله پرداخت" invisible="is_unit_manager and not is_tax and not is_site_admin">
-                            <field name="stage_ids" readonly="not (is_tax or is_site_admin)">
-                                <list create="0" delete="0" no_open="1"
+                            <field name="stage_ids"
+                                   readonly="state != 'tax_review' or not (is_tax or is_site_admin)">
+                                <list editable="bottom" create="0" delete="0" no_open="1"
                                       decoration-success="state == 'checked'"
                                       decoration-muted="state == 'failed'">
                                     <field name="sequence" column_invisible="1"/>
@@ -107,8 +108,8 @@
                                     <field name="state" readonly="1"
                                            decoration-danger="state == 'failed'" decoration-success="state == 'checked'"
                                            widget="badge"/>
-                                    <field name="decision" widget="radio_pr_stage"
-                                           options="{'horizontal': true}" nolabel="1"/>
+                                    <field name="decision" nolabel="1"
+                                           invisible="not parent.is_tax and not parent.is_site_admin"/>
                                 </list>
                             </field>
                             <div class="text-muted">
