@@ -20,8 +20,13 @@ class OdooRaesDimCostCenter(models.Model):
     lastupdate = fields.Datetime(string='Last Update', readonly=True)
 
     def init(self):
-        self._cr.execute("DROP VIEW IF EXISTS odoo_raes_dim_cost_center CASCADE")
-        self._cr.execute("""
+        # alias view may be absent on fresh DBs (see dim_party.init)
+        self.env.cr.execute(
+            "SELECT 1 FROM pg_views WHERE viewname = 'raes_dim_cost_center_view'")
+        if not self.env.cr.fetchone():
+            return
+        self.env.cr.execute("DROP VIEW IF EXISTS odoo_raes_dim_cost_center CASCADE")
+        self.env.cr.execute("""
             CREATE VIEW odoo_raes_dim_cost_center AS (
                 SELECT
                     costcenterid AS id,

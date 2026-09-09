@@ -9,6 +9,8 @@
         'security/ir.model.access.csv',
         'data/lookup_data.xml',
         'views/views.xml',
+        'views/dw_connection_views.xml',
+        'views/dw_remote_table_views.xml',
     ],
     'installable': True,
     'application': False,

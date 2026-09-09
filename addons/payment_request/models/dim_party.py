@@ -19,8 +19,16 @@ class RaesDimParty(models.Model):
     lastupdate = fields.Datetime(string='Last Update', readonly=True)
 
     def init(self):
-        self._cr.execute("""
-            DROP VIEW IF EXISTS odoo_raes_dim_party CASCADE;
+        # alias view (raes_dim_party_view) is created by the DW Connection
+        # bootstrap (Settings -> DW Connections) or by hand; it may legitimately
+        # be absent (fresh DB / DW not wired yet) -> skip instead of blocking
+        # module install
+        self.env.cr.execute(
+            "SELECT 1 FROM pg_views WHERE viewname = 'raes_dim_party_view'")
+        if not self.env.cr.fetchone():
+            return
+        self.env.cr.execute("DROP VIEW IF EXISTS odoo_raes_dim_party CASCADE")
+        self.env.cr.execute("""
             CREATE VIEW odoo_raes_dim_party AS (
                 SELECT
                     PartyID AS id,

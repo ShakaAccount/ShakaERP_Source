@@ -1,0 +1,28 @@
+<odoo>
+    <record id="view_raes_dw_remote_table_list" model="ir.ui.view">
+        <field name="name">raes.dw.remote_table.list</field>
+        <field name="model">raes.dw.remote_table</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="selected" widget="boolean_toggle"/>
+                <field name="remote_schema"/>
+                <field name="remote_table"/>
+                <field name="row_count" optional="show"/>
+                <field name="mapped_view" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_raes_dw_remote_table_search" model="ir.ui.view">
+        <field name="name">raes.dw.remote_table.search</field>
+        <field name="model">raes.dw.remote_table</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="remote_table"/>
+                <field name="remote_schema"/>
+                <filter name="group_schema" string="Schema"
+                        context="{'group_by': 'remote_schema'}"/>
+            </search>
+        </field>
+    </record>
+</odoo>

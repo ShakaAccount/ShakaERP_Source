@@ -8,3 +8,6 @@ access_payment_request_stage_accountant,payment_request.stage.accountant,model_p
 access_payment_request_extra_user,payment_request.extra,model_payment_request_extra,base.group_user,1,1,1,1
 access_payment_request_paid_user,payment_request.paid,model_payment_request_paid,base.group_user,1,1,1,1
 access_odoo_raes_dim_cost_center_user,odoo_raes_dim_cost_center_user,model_odoo_raes_dim_cost_center,base.group_user,1,0,0,0
+access_raes_dw_connection_admin,raes.dw.connection.admin,model_raes_dw_connection,base.group_system,1,1,1,1
+access_raes_dw_table_map_admin,raes.dw.table_map.admin,model_raes_dw_table_map,base.group_system,1,1,1,1
+access_raes_dw_remote_table_admin,raes.dw.remote_table.admin,model_raes_dw_remote_table,base.group_system,1,1,1,1

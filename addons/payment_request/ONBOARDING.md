@@ -94,7 +94,21 @@ State ها: `draft` پیش‌نویس، `unit_review` در انتظار مدیر
 3. مقادیر lookup را بسازید: منوی Lookup Data → Values:
    - نوع «بابت پرداخت» (code `payment_reason`)
    - نوع «نوع پرداخت» (code `payment_type`)
-4. FDW و user mapping برای دسترسی `odoo` به `raes_dim_*_view` باید از قبل برقرار باشد (MSSQL linked server).
+4. اتصال DW: یک رکورد در Settings → Technical → DW Connections بسازید و «ساخت جدول‌های خارجی» را بزنید (بخش DW Connection پایین).
+
+## DW Connection (admin self-service)
+
+`raes.dw.connection` (Settings → Technical → DW Connections): admin ثبت اتصال MSSQL را انجام می‌دهد — host/port/db/user/password + اسکیمای ریموت (پیش‌فرض `BI`) + لیست جدول‌ها. دو دکمه:
+
+- **تست اتصال**: server موقتی + user mapping + import یک جدول + count → نتیجه در تب «وضعیت».
+- **ساخت جدول‌های خارجی** (bootstrap): `CREATE SERVER`/`ALTER SERVER` با نام `raes_dw_<id>`، user mapping برای role دیتابیس اودو، `IMPORT FOREIGN SCHEMA ... LIMIT TO` در اسکیمای `fdw_raes`، سپس ساخت view های alias عمومی با ستون‌های lowercase (نگاشت در تب «نگاشت به View اودو»: remote_table → local_view_name).
+
+یک بار برای همیشه خارج از اپ (superuser):
+```sql
+CREATE EXTENSION IF NOT EXISTS tds_fdw;
+GRANT USAGE ON FOREIGN DATA WRAPPER tds_fdw TO odoo;
+```
+نکته‌ها: `LIMIT TO` در tds_fdw به حروف بزرگ/کوچک حساس است (با quote حل شده)؛ view های قدیمی دست‌ساز owner متفاوت دارند — bootstrap اول DROP می‌کند؛ بعد از تغییر نگاشت باید یکبار `-u payment_request` تا `init()` مدل‌های dim دوباره view های `odoo_raes_*` را بسازد.
 
 ## Dev notes / gotchas
 

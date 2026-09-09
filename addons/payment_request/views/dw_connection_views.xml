@@ -1,0 +1,87 @@
+<odoo>
+    <record id="view_raes_dw_connection_form" model="ir.ui.view">
+        <field name="name">raes.dw.connection.form</field>
+        <field name="model">raes.dw.connection</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_test_connection" type="object"
+                            string="تست اتصال" class="btn-secondary"/>
+                    <button name="action_browse_tables" type="object"
+                            string="مرور جدول‌ها" class="btn-secondary"/>
+                    <button name="action_bootstrap" type="object"
+                            string="ساخت جدول‌های خارجی" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="host"/>
+                            <field name="port"/>
+                            <field name="database"/>
+                        </group>
+                        <group>
+                            <field name="mssql_user"/>
+                            <field name="mssql_password"/>
+                            <field name="remote_schema"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="جدول‌های MSSQL">
+                        <field name="tables_to_import" nolabel="1" colspan="2"
+                               placeholder="DimCompany, DimParty, DimCostCenter"/>
+                    </group>
+                    <notebook>
+                        <page string="نگاشت به View اودو">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="remote_table"/>
+                                    <field name="local_view_name"/>
+                                </list>
+                            </field>
+                            <div class="text-muted">
+                                مدل‌های dim با <code>_auto=False</code> از این
+                                view ها تغذیه می‌شوند (raes_dim_*_view).
+                            </div>
+                        </page>
+                        <page string="وضعیت">
+                            <group>
+                                <field name="last_test"/>
+                                <field name="last_test_result"/>
+                                <field name="last_bootstrap"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_raes_dw_connection_list" model="ir.ui.view">
+        <field name="name">raes.dw.connection.list</field>
+        <field name="model">raes.dw.connection</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="host"/>
+                <field name="database"/>
+                <field name="remote_schema"/>
+                <field name="last_test"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_raes_dw_connection" model="ir.actions.act_window">
+        <field name="name">DW Connections</field>
+        <field name="res_model">raes.dw.connection</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_raes_dw_connection"
+              name="DW Connections"
+              parent="base.menu_administration"
+              action="action_raes_dw_connection"
+              sequence="60"/>
+</odoo>
