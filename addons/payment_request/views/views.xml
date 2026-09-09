@@ -96,7 +96,8 @@
                                 </list>
                             </field>
                         </page>
-                        <page string="مرحله پرداخت" invisible="is_unit_manager and not is_tax and not is_site_admin">
+                        <page string="مرحله پرداخت"
+                              invisible="not (is_tax or is_site_admin)">
                             <field name="stage_ids"
                                    readonly="state != 'tax_review' or not (is_tax or is_site_admin)">
                                 <list editable="bottom" create="0" delete="0" no_open="1"
@@ -135,12 +136,23 @@
         </field>
     </record>
 
-    <record id="action_payment_request" model="ir.actions.act_window">
-        <field name="name">درخواست پرداخت</field>
+    <record id="action_payment_request_mine" model="ir.actions.act_window">
+        <field name="name">درخواست‌های من</field>
+        <field name="res_model">payment_request.payment_request</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('create_uid', '=', uid)]</field>
+    </record>
+
+    <record id="action_payment_request_all" model="ir.actions.act_window">
+        <field name="name">همه درخواست‌ها</field>
         <field name="res_model">payment_request.payment_request</field>
         <field name="view_mode">list,form</field>
     </record>
 
     <menuitem id="menu_payment_request_root" name="درخواست پرداخت" sequence="140"/>
-    <menuitem id="menu_payment_request" name="درخواست‌ها" action="action_payment_request" parent="menu_payment_request_root"/>
+    <menuitem id="menu_payment_request_mine" name="درخواست‌های من"
+              action="action_payment_request_mine" parent="menu_payment_request_root"/>
+    <menuitem id="menu_payment_request_all" name="همه درخواست‌ها"
+              action="action_payment_request_all" parent="menu_payment_request_root"
+              groups="payment_request.group_unit_manager,payment_request.group_accountant,payment_request.group_tax,payment_request.group_acc_mgmt,payment_request.group_treasurer,base.group_system"/>
 </odoo>

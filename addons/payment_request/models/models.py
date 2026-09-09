@@ -55,6 +55,8 @@ class PaymentRequest(models.Model):
     _rec_name = 'number'
     _order = 'date desc, id desc'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    # posting notes requires only read access (any user can comment)
+    _mail_post_access = 'read'
 
     # ponytail: not required=True — readonly+required+empty blocks web-client
     # save; create() always fills it from the sequence instead
@@ -149,40 +151,42 @@ class PaymentRequest(models.Model):
         for rec in self:
             if not rec.unit_manager_id:
                 raise UserError(_('مدیر واحد را انتخاب کنید.'))
-            rec.state = 'unit_review'
+            # post before state change: after the write the record leaves the
+            # author's record-rule domain and message_post loses read access
             rec.message_post(
                 body=f"برای تایید به مدیر واحد ({rec.unit_manager_id.name}) ارسال شد.",
                 message_type='comment',
                 partner_ids=rec.unit_manager_id.partner_id.ids)
+            rec.state = 'unit_review'
 
     def action_manager_accept(self):
         self._check_manager()
         for rec in self:
-            rec.state = 'accountant_review'
-            accountant_grp = self.env.ref('payment_request.group_accountant')
-            partners = accountant_grp.all_user_ids.mapped('partner_id')
+            grp = self.env.ref('payment_request.group_accountant')
+            partners = grp.all_user_ids.mapped('partner_id')
             rec.message_post(
                 body="مدیر واحد تایید شد؛ در انتظار بررسی حسابدار.",
                 message_type='comment', partner_ids=partners.ids)
+            rec.state = 'accountant_review'
 
     def action_manager_reject(self):
         self._check_manager()
         for rec in self:
-            rec.state = 'rejected'
             rec.message_post(
                 body="مدیر واحد درخواست را رد کرد.",
                 message_type='comment',
                 partner_ids=rec.create_uid.partner_id.ids)
+            rec.state = 'rejected'
 
     def action_accountant_accept(self):
         self._check_accountant()
         for rec in self:
-            rec.state = 'tax_review'
             tax_grp = self.env.ref('payment_request.group_tax')
             partners = tax_grp.all_user_ids.mapped('partner_id')
             rec.message_post(
                 body="حسابدار تایید کرد؛ در انتظار تکمیل مراحل توسط مالیات.",
                 message_type='comment', partner_ids=partners.ids)
+            rec.state = 'tax_review'
 
     def action_tax_stages_done(self):
         """گروه مالیات: مراحل را پر کرده و ارسال به مدیر حسابداری."""
@@ -197,22 +201,22 @@ class PaymentRequest(models.Model):
                 raise UserError(_(
                     'همه مراحل باید تایید شده باشند. باقی‌مانده: %s',
                     ', '.join(bad.mapped('name'))))
-            rec.state = 'acc_mgmt_review'
             grp = self.env.ref('payment_request.group_acc_mgmt')
             partners = grp.all_user_ids.mapped('partner_id')
             rec.message_post(
                 body="مراحل توسط مالیات تکمیل شد؛ در انتظار تایید مدیر حسابداری.",
                 message_type='comment', partner_ids=partners.ids)
+            rec.state = 'acc_mgmt_review'
 
     def action_acc_mgmt_accept(self):
         self._check_acc_mgmt()
         for rec in self:
-            rec.state = 'treasury'
             grp = self.env.ref('payment_request.group_treasurer')
             partners = grp.all_user_ids.mapped('partner_id')
             rec.message_post(
                 body="مدیر حسابداری تایید کرد؛ در انتظار پرداخت توسط خزانه دار.",
                 message_type='comment', partner_ids=partners.ids)
+            rec.state = 'treasury'
 
     def action_treasurer_paid(self):
         self._check_treasurer()
@@ -220,11 +224,11 @@ class PaymentRequest(models.Model):
             if not rec.paid_ids:
                 raise UserError(
                     _('حداقل یک ردیف پرداخت (اطلاعات پرداخت شده) وارد کنید.'))
-            rec.state = 'paid'
             rec.message_post(
                 body="پرداخت توسط خزانه دار ثبت شد؛ گردش کار تمام شد.",
                 message_type='comment',
                 partner_ids=rec.create_uid.partner_id.ids)
+            rec.state = 'paid'
 
     def _check_manager(self):
         if not self.env.user.has_group('payment_request.group_unit_manager'):
