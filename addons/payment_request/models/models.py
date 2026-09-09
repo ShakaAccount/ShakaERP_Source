@@ -339,77 +339,87 @@ class PaymentRequestStage(models.Model):
         'payment_request.stage', 'parent_id', string='زیرمرحله‌ها')
     allow_reject = fields.Boolean(
         string='قابل رد', default=True,
-        help='If off, this step can only be accepted.')
+        help='If off, the reject option is disabled for this step.')
     state = fields.Selection(
         [('unattended', 'بررسی نشده'), ('checked', 'تایید شده'),
          ('failed', 'رد شده')],
         string='وضعیت', default='unattended', required=True)
+    # radio selector: '', 'accept', 'reject'
+    decision = fields.Selection(
+        [('accept', 'تایید'), ('reject', 'رد')],
+        string='تصمیم', default=False)
     is_frontier = fields.Boolean(compute='_compute_is_frontier')
 
     def _compute_is_frontier(self):
         for rec in self:
             rec.is_frontier = bool(rec.id) and rec._frontier().id == rec.id
 
-    # ---------------- waterfall ----------------
-
     def _frontier(self):
-        """The single actionable row: first row not yet checked (waterfall).
-        Always computed over the request's FULL stage set. Everything after
-        it stays failed by default."""
+        """First row whose state != checked, over the request's full set."""
         rows = (self.mapped('request_id.stage_ids') or self).sorted('sequence')
         for row in rows:
             if row.state != 'checked':
                 return row
         return rows[-1:] if rows else self.browse()
 
-    def _apply_waterfall(self):
-        """Enforce: rows after the frontier are failed; the frontier row that
-        just became actionable resets from failed to unattended."""
-        for req in self.mapped('request_id'):
-            rows = req.stage_ids.sorted('sequence')
-            frontier = rows._frontier()
-            reached = False
-            for row in rows:
-                if row.id == frontier.id:
-                    reached = True
-                    if row.state == 'failed':
-                        # frontier reached it: becomes actionable again
-                        row.state = 'unattended'
+    # ---------------- radio decision ----------------
+
+    @api.onchange('decision')
+    def _onchange_decision(self):
+        # visual live feedback in the form: rows above become accepted,
+        # rows below go back to pending (not rejected)
+        if not self.decision:
+            return
+        rows = self.request_id.stage_ids.sorted('sequence')
+        for row in rows:
+            if row.id == self.id:
+                break
+            if row.state != 'checked':
+                row.state = 'checked'
+        for row in rows:
+            after = False
+            for r in rows:
+                if r.id == row.id:
+                    after = True
                     continue
-                if reached and row.state != 'checked':
-                    row.state = 'failed'
+                if after and r.id != self.id and r.state == 'failed':
+                    r.state = 'unattended'
 
-    # ---------------- per-row actions ----------------
+    def write(self, vals):
+        recs = super().write(vals)
+        if vals.get('decision'):
+            self._apply_decision()
+        return recs
 
-    def action_accept(self):
+    def _apply_decision(self):
+        """accept: this row + every row above become checked, rows below
+        reset to pending. reject: row failed -> whole request rejected."""
         for rec in self:
-            if rec._frontier().id != rec.id:
-                raise UserError(_(
-                    'فقط مرحله جاری قابل تایید است. ابتدا «%s» را بررسی کنید.',
-                    rec._frontier().name))
-            rec.state = 'checked'
-            rec._apply_waterfall()
-            rec.request_id.message_post(
-                body=f"مرحله «{rec.name}» تایید شد.", message_type='comment')
-
-    def action_reject(self):
-        for rec in self:
-            if not rec.allow_reject:
-                raise UserError(_('این مرحله قابل رد کردن نیست.'))
-            if rec._frontier().id != rec.id:
-                raise UserError(_(
-                    'فقط مرحله جاری قابل رد است. ابتدا «%s» را بررسی کنید.',
-                    rec._frontier().name))
-            rec.state = 'failed'
-            # children fail too
-            rec.child_ids.write({'state': 'failed'})
-            # rejecting any step rejects the whole form
-            req = rec.request_id
-            req.state = 'rejected'
-            req.message_post(
-                body=f"مرحله «{rec.name}» رد شد؛ درخواست رد شد.",
-                message_type='comment',
-                partner_ids=req.create_uid.partner_id.ids)
+            rows = rec.request_id.stage_ids.sorted('sequence')
+            idx = rows.ids.index(rec.id)
+            if rec.decision == 'accept':
+                above = rows[:idx + 1]
+                above.filtered(
+                    lambda s: s.state != 'checked').state = 'checked'
+                below = rows[idx + 1:]
+                below.filtered(lambda s: s.state == 'failed').state = (
+                    'unattended')
+                rec.request_id.message_post(
+                    body=f"تا مرحله «{rec.name}» تایید شد.",
+                    message_type='comment')
+            elif rec.decision == 'reject':
+                if not rec.allow_reject:
+                    rec.decision = False
+                    raise UserError(_('این مرحله قابل رد کردن نیست.'))
+                rec.state = 'failed'
+                rec.child_ids.state = 'failed'
+                req = rec.request_id
+                req.state = 'rejected'
+                req.message_post(
+                    body=f"مرحله «{rec.name}» رد شد؛ درخواست رد شد.",
+                    message_type='comment',
+                    partner_ids=req.create_uid.partner_id.ids)
+            rec.decision = False  # radio is an action, not a stored state
 
     def _all_checked(self):
         return all(s.state == 'checked' for s in self)
