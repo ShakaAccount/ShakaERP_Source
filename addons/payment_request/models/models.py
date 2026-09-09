@@ -188,6 +188,12 @@ class PaymentRequest(models.Model):
         """گروه مالیات: مراحل را پر کرده و ارسال به مدیر حسابداری."""
         self._check_tax()
         for rec in self:
+            if not rec.stage_ids._all_checked():
+                bad = rec.stage_ids.filtered(
+                    lambda s: s.state != 'checked')
+                raise UserError(_(
+                    'همه مراحل باید تایید شده باشند. باقی‌مانده: %s',
+                    ', '.join(bad.mapped('name'))))
             rec.state = 'acc_mgmt_review'
             grp = self.env.ref('payment_request.group_acc_mgmt')
             partners = grp.all_user_ids.mapped('partner_id')
@@ -206,7 +212,7 @@ class PaymentRequest(models.Model):
                 message_type='comment', partner_ids=partners.ids)
 
     def action_treasurer_paid(self):
-        self._check_treasurer()
+        self._check_treasurer()z
         for rec in self:
             if not rec.paid_ids:
                 raise UserError(
@@ -325,7 +331,31 @@ class PaymentRequestStage(models.Model):
         'payment_request.payment_request', required=True, ondelete='cascade')
     sequence = fields.Integer(string='ترتیب')
     name = fields.Char(string='مرحله')
+    parent_id = fields.Many2one(
+        'payment_request.stage', string='مرحله والد', index=True,
+        domain="[('request_id', '=', request_id), "
+              "('id', '!=', id), ('parent_id', '=', False)]",
+        help='If this step fails, all child steps fail too. Child steps '
+             'cannot be checked while the parent is failed/unattended.')
+    child_ids = fields.One2many(
+        'payment_request.stage', 'parent_id', string='زیرمرحله‌ها')
     state = fields.Selection(
         [('unattended', 'بررسی نشده'), ('checked', 'تایید شده'),
          ('failed', 'رد شده')],
         string='وضعیت', default='unattended', required=True)
+
+    def write(self, vals):
+        recs = super().write(vals)
+        if 'state' in vals:
+            self._cascade_state()
+        return recs
+
+    def _cascade_state(self):
+        """failed parent -> failed children (recursively)."""
+        for rec in self:
+            if rec.state == 'failed':
+                rec.child_ids.write({'state': 'failed'})
+
+    # tax cannot send the request unless every top-level step is checked
+    def _all_checked(self):
+        return all(s.state == 'checked' for s in self)

@@ -4,12 +4,12 @@
         <field name="model">payment_request.payment_request</field>
         <field name="arch" type="xml">
             <list>
-                <field name="number"/>
-                <field name="date"/>
-                <field name="unit_id"/>
-                <field name="party_id"/>
-                <field name="reason_id"/>
-                <field name="formality"/>
+                <field name="number" optional="hide"/>
+                <field name="date" optional="hide"/>
+                <field name="unit_id" optional="hide"/>
+                <field name="party_id" optional="hide"/>
+                <field name="reason_id" optional="hide"/>
+                <field name="formality" optional="hide"/>
                 <field name="state" widget="badge"
                        decoration-info="state in ('unit_review', 'accountant_review', 'tax_review', 'acc_mgmt_review')"
                        decoration-warning="state == 'treasury'"
@@ -99,12 +99,18 @@
                         <page string="مرحله پرداخت" invisible="is_unit_manager and not is_tax and not is_site_admin">
                             <field name="stage_ids"
                                    readonly="not (is_tax or is_site_admin)">
-                                <list editable="bottom" create="0" delete="0" no_open="1">
+                                <list editable="bottom" create="0" delete="0" no_open="1"
+                                      decoration-muted="parent_id and parent_id.state == 'failed'">
                                     <field name="sequence" column_invisible="1"/>
+                                    <field name="parent_id" optional="show" string="مرحله والد"/>
                                     <field name="name" readonly="1"/>
                                     <field name="state" decoration-danger="state == 'failed'" decoration-success="state == 'checked'"/>
                                 </list>
                             </field>
+                            <div class="text-muted">
+                                اگر مرحله‌ای رد شود، همه زیرمرحله‌هایش هم خودکار رد می‌شوند.
+                                ارسال به مدیر حسابداری فقط وقتی ممکن است که همه مراحل تایید شده باشند.
+                            </div>
                         </page>
                         <page string="اطلاعات پرداخت شده">
                             <field name="paid_ids" readonly="not (is_treasurer or is_site_admin) or state != 'treasury'">
