@@ -4,18 +4,21 @@
         <field name="model">payment_request.payment_request</field>
         <field name="arch" type="xml">
             <list>
-                <field name="number" optional="show"/>
-                <field name="date" optional="show"/>
-                <field name="unit_id" optional="show"/>
-                <field name="party_id" optional="show"/>
-                <field name="reason_id" optional="show"/>
-                <field name="formality" optional="show"/>
-                <field name="owner_id" optional="hide"/>
-                <field name="state" widget="badge"
-                       decoration-info="state in ('unit_review', 'accountant_review', 'tax_review', 'acc_mgmt_review')"
-                       decoration-warning="state == 'treasury'"
-                       decoration-success="state == 'paid'"
-                       decoration-danger="state == 'rejected'"/>
+                <field name="number" optional="show" />
+                <field name="date" optional="show" />
+                <field name="unit_id" optional="show" />
+                <field name="party_id" optional="show" />
+                <field name="reason_id" optional="show" />
+                <field name="formality" optional="show" />
+                <field name="owner_id" optional="hide" />
+                <field
+          name="state"
+          widget="badge"
+          decoration-info="state in ('unit_review', 'accountant_review', 'tax_review', 'acc_mgmt_review')"
+          decoration-warning="state == 'treasury'"
+          decoration-success="state == 'paid'"
+          decoration-danger="state == 'rejected'"
+        />
             </list>
         </field>
     </record>
@@ -26,114 +29,201 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_submit" type="object" string="ارسال برای تایید"
-                            class="btn-primary" invisible="state != 'draft'"/>
-                    <button name="action_manager_accept" type="object" string="تایید مدیر"
-                            class="btn-primary" invisible="state != 'unit_review'"
-                            groups="payment_request.group_unit_manager"/>
-                    <button name="action_manager_reject" type="object" string="رد"
-                            invisible="state != 'unit_review'"
-                            groups="payment_request.group_unit_manager"/>
-                    <button name="action_accountant_accept" type="object" string="تایید حسابدار"
-                            class="btn-primary" invisible="state != 'accountant_review'"
-                            groups="payment_request.group_accountant"/>
-                    <button name="action_tax_stages_done" type="object" string="مراحل تکمیل شد؛ ارسال به مدیر حسابداری"
-                            class="btn-primary" invisible="state != 'tax_review'"
-                            groups="payment_request.group_tax"/>
-                    <button name="action_acc_mgmt_accept" type="object" string="تایید مدیر حسابداری"
-                            class="btn-primary" invisible="state != 'acc_mgmt_review'"
-                            groups="payment_request.group_acc_mgmt"/>
-                    <button name="action_treasurer_paid" type="object" string="ثبت نهایی پرداخت"
-                            class="btn-primary" invisible="state != 'treasury'"
-                            groups="payment_request.group_treasurer"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,unit_review,accountant_review,tax_review,acc_mgmt_review,treasury,paid"/>
+                    <button
+            name="action_submit"
+            type="object"
+            string="ارسال برای تایید"
+            class="btn-primary"
+            invisible="state != 'draft'"
+          />
+                    <button
+            name="action_manager_accept"
+            type="object"
+            string="تایید مدیر"
+            class="btn-primary"
+            invisible="state != 'unit_review'"
+            groups="payment_request.group_unit_manager"
+          />
+                    <button
+            name="action_manager_reject"
+            type="object"
+            string="رد"
+            invisible="state != 'unit_review'"
+            groups="payment_request.group_unit_manager"
+          />
+                    <button
+            name="action_accountant_accept"
+            type="object"
+            string="تایید حسابدار"
+            class="btn-primary"
+            invisible="state != 'accountant_review'"
+            groups="payment_request.group_accountant"
+          />
+                    <button
+            name="action_tax_stages_done"
+            type="object"
+            string="مراحل تکمیل شد؛ ارسال به مدیر حسابداری"
+            class="btn-primary"
+            invisible="state != 'tax_review'"
+            groups="payment_request.group_tax"
+          />
+                    <button
+            name="action_acc_mgmt_accept"
+            type="object"
+            string="تایید مدیر حسابداری"
+            class="btn-primary"
+            invisible="state != 'acc_mgmt_review'"
+            groups="payment_request.group_acc_mgmt"
+          />
+                    <button
+            name="action_treasurer_paid"
+            type="object"
+            string="ثبت نهایی پرداخت"
+            class="btn-primary"
+            invisible="state != 'treasury'"
+            groups="payment_request.group_treasurer"
+          />
+                    <field
+            name="state"
+            widget="statusbar"
+            statusbar_visible="draft,unit_review,accountant_review,tax_review,acc_mgmt_review,treasury,paid"
+          />
                 </header>
                 <sheet>
-                    <field name="is_accountant" invisible="1"/>
-                    <field name="is_unit_manager" invisible="1"/>
-                    <field name="is_tax" invisible="1"/>
-                    <field name="is_acc_mgmt" invisible="1"/>
-                    <field name="is_treasurer" invisible="1"/>
-                    <field name="is_site_admin" invisible="1"/>
+                    <field name="is_accountant" invisible="1" />
+                    <field name="is_unit_manager" invisible="1" />
+                    <field name="is_tax" invisible="1" />
+                    <field name="is_acc_mgmt" invisible="1" />
+                    <field name="is_treasurer" invisible="1" />
+                    <field name="is_site_admin" invisible="1" />
                     <group>
                         <group>
-                            <field name="number" readonly="1"/>
-                            <field name="date"/>
-                            <field name="formality"/>
-                            <field name="owner_id" readonly="1" invisible="1"/>
-                            <field name="unit_manager_id" invisible="state != 'draft' and not is_accountant and not is_site_admin"/>
+                            <field name="number" readonly="1" />
+                            <field name="date" />
+                            <field name="formality" />
+                            <field name="owner_id" readonly="1" invisible="1" />
+                            <field
+                name="unit_manager_id"
+                invisible="state != 'draft' and not is_accountant and not is_site_admin"
+              />
                         </group>
                         <group>
-                            <field name="unit_id"/>
-                            <field name="party_id"/>
-                            <field name="reason_id"/>
+                            <field name="unit_id" />
+                            <field name="party_id" />
+                            <field name="reason_id" />
                         </group>
                     </group>
                     <group>
-                        <field name="description"/>
+                        <field name="description" />
                     </group>
                     <notebook>
                         <page string="جزئیات درخواست پرداخت">
-                            <field name="detail_ids" readonly="state != 'draft'">
+                            <field
+                name="detail_ids"
+                readonly="state != 'draft'"
+              >
                                 <list editable="bottom">
-                                    <field name="line_no" string="#" readonly="1"/>
-                                    <field name="sequence" column_invisible="1"/>
-                                    <field name="name"/>
-                                    <field name="paytype_id"/>
-                                    <field name="costcenter_id"/>
-                                    <field name="amount" sum="جمع"/>
-                                    <field name="vat" sum="جمع"/>
-                                    <field name="net_amount" sum="جمع"/>
-                                    <field name="agreed_date"/>
+                                    <field
+                    name="line_no"
+                    string="#"
+                    readonly="1"
+                  />
+                                    <field
+                    name="sequence"
+                    column_invisible="1"
+                  />
+                                    <field name="name" />
+                                    <field name="paytype_id" />
+                                    <field name="costcenter_id" />
+                                    <field name="amount" sum="جمع" />
+                                    <field name="vat" sum="جمع" />
+                                    <field name="net_amount" sum="جمع" />
+                                    <field name="agreed_date" />
                                 </list>
                             </field>
                         </page>
                         <page string="اطلاعات تکمیلی">
                             <field name="extra_ids" readonly="state != 'draft'">
                                 <list editable="bottom">
-                                    <field name="account_no"/>
-                                    <field name="party_name"/>
-                                    <field name="sheba_no"/>
-                                    <field name="description"/>
+                                    <field name="account_no" />
+                                    <field name="party_name" />
+                                    <field name="sheba_no" />
+                                    <field name="description" />
                                 </list>
                             </field>
                         </page>
-                        <page string="مرحله پرداخت"
-                              invisible="not (is_tax or is_site_admin)">
-                            <field name="stage_ids"
-                                   readonly="state != 'tax_review' or not (is_tax or is_site_admin)">
-                                <list editable="bottom" create="0" delete="0" no_open="1"
-                                      decoration-success="state == 'checked'"
-                                      decoration-muted="state == 'failed'">
-                                    <field name="sequence" column_invisible="1"/>
-                                    <field name="allow_reject" column_invisible="1"/>
-                                    <field name="name" readonly="1"/>
-                                    <field name="state" readonly="1"
-                                           decoration-danger="state == 'failed'" decoration-success="state == 'checked'"
-                                           widget="badge"/>
-                                    <field name="decision" nolabel="1"
-                                           invisible="not parent.is_tax and not parent.is_site_admin"/>
+                        <page
+              string="مرحله پرداخت"
+              invisible="not (is_tax or is_site_admin)"
+            >
+                            <field
+                name="stage_ids"
+                readonly="state != 'tax_review' or not (is_tax or is_site_admin)"
+              >
+                                <list
+                  editable="bottom"
+                  create="0"
+                  delete="0"
+                  no_open="1"
+                  decoration-success="state == 'checked'"
+                  decoration-muted="is_locked"
+                  decoration-danger="state == 'failed'"
+                >
+                                    <field
+                    name="sequence"
+                    column_invisible="1"
+                  />
+                                    <field
+                    name="allow_reject"
+                    column_invisible="1"
+                  />
+                                    <field
+                    name="is_locked"
+                    column_invisible="1"
+                  />
+                                    <field
+                    name="is_frontier"
+                    column_invisible="1"
+                  />
+                                    <field name="name" readonly="1" />
+                                    <field
+                    name="state"
+                    readonly="1"
+                    widget="badge"
+                    decoration-danger="state == 'failed'"
+                    decoration-success="state == 'checked'"
+                  />
+                                    <field
+                    name="decision"
+                    nolabel="1"
+                    widget="radio"
+                    readonly="state == 'checked' or is_locked"
+                    invisible="not parent.is_tax and not parent.is_site_admin"
+                  />
                                 </list>
                             </field>
                             <div class="text-muted">
                                 انتخاب «تایید»: همه مراحل بالای این مرحله هم تایید می‌شوند.
-                                انتخاب «رد»: درخواست کل رد می‌شود و مراحل پایین دست‌نخورده (بررسی نشده) می‌مانند.
+                                انتخاب «رد»: درخواست رد می‌شود و مراحل پایین‌تر قفل می‌شوند.
                             </div>
                         </page>
                         <page string="اطلاعات پرداخت شده">
-                            <field name="paid_ids" readonly="not (is_treasurer or is_site_admin) or state != 'treasury'">
+                            <field
+                name="paid_ids"
+                readonly="not (is_treasurer or is_site_admin) or state != 'treasury'"
+              >
                                 <list editable="bottom">
-                                    <field name="paid_amount" sum="جمع"/>
-                                    <field name="tracking_no"/>
-                                    <field name="cheque_no"/>
-                                    <field name="payment_declaration_no"/>
-                                    <field name="description"/>
+                                    <field name="paid_amount" sum="جمع" />
+                                    <field name="tracking_no" />
+                                    <field name="cheque_no" />
+                                    <field name="payment_declaration_no" />
+                                    <field name="description" />
                                 </list>
                             </field>
                         </page>
                     </notebook>
                 </sheet>
-                <chatter/>
+                <chatter />
             </form>
         </field>
     </record>
@@ -151,11 +241,23 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_payment_request_root" name="درخواست پرداخت" sequence="140"
-              action="action_payment_request_all"/>
-    <menuitem id="menu_payment_request_mine" name="درخواست‌های من"
-              action="action_payment_request_mine" parent="menu_payment_request_root"/>
-    <menuitem id="menu_payment_request_all" name="همه درخواست‌ها"
-              action="action_payment_request_all" parent="menu_payment_request_root"
-              groups="payment_request.group_unit_manager,payment_request.group_accountant,payment_request.group_tax,payment_request.group_acc_mgmt,payment_request.group_treasurer,base.group_system"/>
+    <menuitem
+    id="menu_payment_request_root"
+    name="درخواست پرداخت"
+    sequence="140"
+    action="action_payment_request_all"
+  />
+    <menuitem
+    id="menu_payment_request_mine"
+    name="درخواست‌های من"
+    action="action_payment_request_mine"
+    parent="menu_payment_request_root"
+  />
+    <menuitem
+    id="menu_payment_request_all"
+    name="همه درخواست‌ها"
+    action="action_payment_request_all"
+    parent="menu_payment_request_root"
+    groups="payment_request.group_unit_manager,payment_request.group_accountant,payment_request.group_tax,payment_request.group_acc_mgmt,payment_request.group_treasurer,base.group_system"
+  />
 </odoo>

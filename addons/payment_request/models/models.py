@@ -43,7 +43,8 @@ def _jalali_to_gregorian(jy, jm, jd):
         days = (days - 1) % 365
     gd = days + 1
     leap = (gy % 4 == 0 and gy % 100 != 0) or gy % 400 == 0
-    for gm, mdays in enumerate([31, 29 if leap else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31], 1):
+    for gm, mdays in enumerate(
+            [31, 29 if leap else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31], 1):
         if gd <= mdays:
             return gy, gm, gd
         gd -= mdays
@@ -61,7 +62,8 @@ class PaymentRequest(models.Model):
     # ponytail: not required=True — readonly+required+empty blocks web-client
     # save; create() always fills it from the sequence instead
     number = fields.Char(string='شماره')
-    date = fields.Date(string='تاریخ', default=fields.Date.context_today, required=True)
+    date = fields.Date(
+        string='تاریخ', default=fields.Date.context_today, required=True)
     state = fields.Selection(
         [('draft', 'پیش‌نویس'), ('unit_review', 'در انتظار مدیر واحد'),
          ('rejected', 'رد شده'), ('accountant_review', 'در انتظار حسابدار'),
@@ -87,14 +89,19 @@ class PaymentRequest(models.Model):
     formality = fields.Text(string='رسمی / غیر رسمی', required=True)
     description = fields.Text(string='توضیحات')
     detail_ids = fields.One2many(
-        'payment_request.detail', 'request_id', string='جزئیات درخواست پرداخت')
+        'payment_request.detail', 'request_id',
+        string='جزئیات درخواست پرداخت')
 
     _number_uniq = models.Constraint(
         'UNIQUE (number)', 'شماره must be unique')
+
     extra_ids = fields.One2many(
         'payment_request.extra', 'request_id', string='اطلاعات تکمیلی')
     paid_ids = fields.One2many(
         'payment_request.paid', 'request_id', string='اطلاعات پرداخت شده')
+    stage_ids = fields.One2many(
+        'payment_request.stage', 'request_id', string='مرحله پرداخت')
+
     is_accountant = fields.Boolean(compute='_compute_is_accountant')
     is_unit_manager = fields.Boolean(compute='_compute_is_accountant')
     is_tax = fields.Boolean(compute='_compute_is_accountant')
@@ -115,8 +122,6 @@ class PaymentRequest(models.Model):
             rec.is_treasurer = self.env.user.has_group(
                 'payment_request.group_treasurer')
             rec.is_site_admin = self.env.user.has_group('base.group_system')
-    stage_ids = fields.One2many(
-        'payment_request.stage', 'request_id', string='مرحله پرداخت')
 
     # ponytail: steps hardcoded here; move to ir.model.data rows when admins
     # need to edit steps without a code deploy
@@ -144,26 +149,38 @@ class PaymentRequest(models.Model):
             rec.sudo().stage_ids = [
                 (0, 0, {'sequence': s, 'name': n, 'state': 'unattended'})
                 for s, n in self.STAGE_STEPS]
-            rec.message_subscribe(
-                partner_ids=rec.create_uid.partner_id.ids)
+            rec.message_subscribe(partner_ids=rec.create_uid.partner_id.ids)
             rec.message_post(
-                body=f"درخواست {rec.number} ثبت شد.", message_type='comment')
+                body=_("درخواست %s ثبت شد.", rec.number),
+                message_type='comment')
         return recs
+
+    # ---------------- stage waterfall helpers ----------------
+
+    def _recompute_stage_state(self):
+        """After any stage row is saved, sync the parent's state with the
+        stage waterfall. Only auto-rejects; advancing is an explicit action."""
+        for rec in self:
+            rows = rec.stage_ids.sorted('sequence')
+            has_failed = any(s.state == 'failed' for s in rows)
+            if has_failed and rec.state not in ('rejected', 'paid'):
+                rec.state = 'rejected'
 
     # ---------------- workflow ----------------
 
     def action_submit(self):
-        for rec in self:
-            if not rec.unit_manager_id:
-                raise UserError(_('مدیر واحد را انتخاب کنید.'))
-            # post before state change: after the write the record leaves the
-            # author's record-rule domain and message_post loses read access
-            rec.message_post(
-                body=f"برای تایید به مدیر واحد ({rec.unit_manager_id.name}) ارسال شد.",
-                message_type='comment',
-                partner_ids=rec.unit_manager_id.partner_id.ids)
-            rec.state = 'unit_review'
-            rec._schedule_step_activity()
+        self.ensure_one()
+        if not self.unit_manager_id:
+            raise UserError(_('مدیر واحد را انتخاب کنید.'))
+        # post before state change: after the write the record leaves the
+        # author's record-rule domain and message_post loses read access
+        self.message_post(
+            body=_("برای تایید به مدیر واحد (%s) ارسال شد.",
+                   self.unit_manager_id.name),
+            message_type='comment',
+            partner_ids=self.unit_manager_id.partner_id.ids)
+        self.state = 'unit_review'
+        self._schedule_step_activity()
 
     def action_manager_accept(self):
         self._check_manager()
@@ -171,7 +188,7 @@ class PaymentRequest(models.Model):
             grp = self.env.ref('payment_request.group_accountant')
             partners = grp.all_user_ids.mapped('partner_id')
             rec.message_post(
-                body="مدیر واحد تایید شد؛ در انتظار بررسی حسابدار.",
+                body=_("مدیر واحد تایید شد؛ در انتظار بررسی حسابدار."),
                 message_type='comment', partner_ids=partners.ids)
             rec.state = 'accountant_review'
             rec._schedule_step_activity()
@@ -180,7 +197,7 @@ class PaymentRequest(models.Model):
         self._check_manager()
         for rec in self:
             rec.message_post(
-                body="مدیر واحد درخواست را رد کرد.",
+                body=_("مدیر واحد درخواست را رد کرد."),
                 message_type='comment',
                 partner_ids=rec.create_uid.partner_id.ids)
             rec.state = 'rejected'
@@ -192,7 +209,7 @@ class PaymentRequest(models.Model):
             tax_grp = self.env.ref('payment_request.group_tax')
             partners = tax_grp.all_user_ids.mapped('partner_id')
             rec.message_post(
-                body="حسابدار تایید کرد؛ در انتظار تکمیل مراحل توسط مالیات.",
+                body=_("حسابدار تایید کرد؛ در انتظار تکمیل مراحل توسط مالیات."),
                 message_type='comment', partner_ids=partners.ids)
             rec.state = 'tax_review'
             rec._schedule_step_activity()
@@ -206,15 +223,15 @@ class PaymentRequest(models.Model):
                 rec._schedule_step_activity()   # clears the open task
                 continue
             if not rec.stage_ids._all_checked():
-                bad = rec.stage_ids.filtered(
-                    lambda s: s.state != 'checked')
+                bad = rec.stage_ids.filtered(lambda s: s.state != 'checked')
                 raise UserError(_(
                     'همه مراحل باید تایید شده باشند. باقی‌مانده: %s',
                     ', '.join(bad.mapped('name'))))
             grp = self.env.ref('payment_request.group_acc_mgmt')
             partners = grp.all_user_ids.mapped('partner_id')
             rec.message_post(
-                body="مراحل توسط مالیات تکمیل شد؛ در انتظار تایید مدیر حسابداری.",
+                body=_("مراحل توسط مالیات تکمیل شد؛ "
+                       "در انتظار تایید مدیر حسابداری."),
                 message_type='comment', partner_ids=partners.ids)
             rec.state = 'acc_mgmt_review'
             rec._schedule_step_activity()
@@ -225,7 +242,8 @@ class PaymentRequest(models.Model):
             grp = self.env.ref('payment_request.group_treasurer')
             partners = grp.all_user_ids.mapped('partner_id')
             rec.message_post(
-                body="مدیر حسابداری تایید کرد؛ در انتظار پرداخت توسط خزانه دار.",
+                body=_("مدیر حسابداری تایید کرد؛ "
+                       "در انتظار پرداخت توسط خزانه دار."),
                 message_type='comment', partner_ids=partners.ids)
             rec.state = 'treasury'
             rec._schedule_step_activity()
@@ -234,17 +252,18 @@ class PaymentRequest(models.Model):
         self._check_treasurer()
         for rec in self:
             if not rec.paid_ids:
-                raise UserError(
-                    _('حداقل یک ردیف پرداخت (اطلاعات پرداخت شده) وارد کنید.'))
+                raise UserError(_(
+                    'حداقل یک ردیف پرداخت (اطلاعات پرداخت شده) وارد کنید.'))
             rec.message_post(
-                body="پرداخت توسط خزانه دار ثبت شد؛ گردش کار تمام شد.",
+                body=_("پرداخت توسط خزانه دار ثبت شد؛ گردش کار تمام شد."),
                 message_type='comment',
                 partner_ids=rec.create_uid.partner_id.ids)
             rec.state = 'paid'
             rec._schedule_step_activity()
 
     def _check_manager(self):
-        if not self.env.user.has_group('payment_request.group_unit_manager'):
+        if not self.env.user.has_group(
+                'payment_request.group_unit_manager'):
             raise UserError(_('فقط مدیر واحد مجاز است.'))
 
     def _check_accountant(self):
@@ -306,10 +325,12 @@ class PaymentRequest(models.Model):
             for user in users:
                 rec.activity_schedule(
                     act_type_xmlid=self.STEP_ACTIVITY, user_id=user.id,
-                    summary=f'درخواست {rec.number} در انتظار بررسی شما',
-                    note=note or 'درخواست پرداخت %s (وضعیت: %s)' % (
-                        rec.number, dict(rec._fields['state'].selection)
-                        .get(rec.state, rec.state)),
+                    summary=_('درخواست %s در انتظار بررسی شما', rec.number),
+                    note=note or _(
+                        'درخواست پرداخت %s (وضعیت: %s)',
+                        rec.number,
+                        dict(rec._fields['state'].selection).get(
+                            rec.state, rec.state)),
                     date_deadline=deadline)
 
     @api.model
@@ -322,7 +343,8 @@ class PaymentRequest(models.Model):
                 continue
             rec._schedule_step_activity()
             rec.message_post(
-                body=f"یادآوری: درخواست {rec.number} در انتظار اقدام شما است.",
+                body=_("یادآوری: درخواست %s در انتظار اقدام شما است.",
+                       rec.number),
                 message_type='comment',
                 partner_ids=rec._step_users().mapped('partner_id').ids)
 
@@ -358,6 +380,7 @@ class PaymentRequestDetail(models.Model):
         for req in self.request_id:
             for i, line in enumerate(req.detail_ids.sorted('sequence'), 1):
                 line.line_no = i
+
     name = fields.Char(string='شرح')
     paytype_id = fields.Many2one(
         'lookup.value', string='نوع پرداخت',
@@ -431,74 +454,84 @@ class PaymentRequestStage(models.Model):
     decision = fields.Selection(
         [('accept', 'تایید'), ('reject', 'رد')],
         string='تصمیم', default=False)
-    is_frontier = fields.Boolean(compute='_compute_is_frontier')
 
-    def _compute_is_frontier(self):
+    # ---- non-stored computes: recompute on every onchange, live in the UI ----
+    is_locked = fields.Boolean(
+        string='قفل شده', compute='_compute_is_locked', store=False)
+    is_frontier = fields.Boolean(
+        string='مرحله جاری', compute='_compute_is_frontier', store=False)
+
+    @api.depends('request_id.stage_ids.state',
+                 'request_id.stage_ids.sequence')
+    def _compute_is_locked(self):
+        """A row is locked if any row ABOVE it has failed."""
         for rec in self:
-            rec.is_frontier = bool(rec.id) and rec._frontier().id == rec.id
+            rows = rec.request_id.stage_ids.sorted('sequence')
+            rec.is_locked = any(
+                s.state == 'failed'
+                for s in rows
+                if s.sequence < rec.sequence
+            )
 
-    def _frontier(self):
-        """First row whose state != checked, over the request's full set."""
-        rows = (self.mapped('request_id.stage_ids') or self).sorted('sequence')
-        for row in rows:
-            if row.state != 'checked':
-                return row
-        return rows[-1:] if rows else self.browse()
+    @api.depends('request_id.stage_ids.state',
+                 'request_id.stage_ids.sequence')
+    def _compute_is_frontier(self):
+        """The frontier is the first row whose state != 'checked'."""
+        for rec in self:
+            rows = rec.request_id.stage_ids.sorted('sequence')
+            frontier = next(
+                (s for s in rows if s.state != 'checked'), None)
+            rec.is_frontier = frontier is not None and frontier.id == rec.id
 
-    # ---------------- radio decision ----------------
+    # ---------------- radio decision (live, client-side) ----------------
 
     @api.onchange('decision')
     def _onchange_decision(self):
-        # visual live feedback in the form only; persisted on save, where
-        # write() runs the real waterfall
-        if not self.decision:
-            return
-        rows = self.request_id.stage_ids.sorted('sequence')
-        idx = rows.ids.index(self.id) if self.id in rows.ids else -1
-        if self.decision == 'accept':
-            rows[:idx + 1].filtered(
-                lambda s: s.state != 'checked').state = 'checked'
-            rows[idx + 1:].filtered(
-                lambda s: s.state == 'failed').state = 'unattended'
-        elif self.decision == 'reject' and self.allow_reject:
-            self.state = 'failed'
-
-    def write(self, vals):
-        recs = super().write(vals)
-        if vals.get('decision'):
-            self._apply_decision()
-        return recs
-
-    def _apply_decision(self):
-        """accept: this row + every row above become checked, rows below
-        reset to pending. reject: row failed -> whole request rejected."""
         for rec in self:
+            if not rec.decision:
+                continue
             rows = rec.request_id.stage_ids.sorted('sequence')
             idx = rows.ids.index(rec.id)
+
             if rec.decision == 'accept':
-                above = rows[:idx + 1]
-                above.filtered(
-                    lambda s: s.state != 'checked').state = 'checked'
-                below = rows[idx + 1:]
-                below.filtered(lambda s: s.state == 'failed').state = (
-                    'unattended')
-                rec.request_id.message_post(
-                    body=f"تا مرحله «{rec.name}» تایید شد.",
-                    message_type='comment')
+                # everything up to and including this row → checked
+                for s in rows[:idx + 1]:
+                    if s.state != 'checked':
+                        s.state = 'checked'
+                # rows below: reset failed back to pending
+                for s in rows[idx + 1:]:
+                    if s.state == 'failed':
+                        s.state = 'unattended'
+                # clear other rows' pending decisions so they don't retrigger
+                for s in rows:
+                    if s.id != rec.id:
+                        s.decision = False
+
             elif rec.decision == 'reject':
                 if not rec.allow_reject:
                     rec.decision = False
                     raise UserError(_('این مرحله قابل رد کردن نیست.'))
                 rec.state = 'failed'
                 rec.child_ids.state = 'failed'
-                req = rec.request_id
-                req.state = 'rejected'
-                req.sudo()._schedule_step_activity()
-                req.message_post(
-                    body=f"مرحله «{rec.name}» رد شد؛ درخواست رد شد.",
-                    message_type='comment',
-                    partner_ids=req.create_uid.partner_id.ids)
-            rec.decision = False  # radio is an action, not a stored state
+                rec.request_id.state = 'rejected'
+                # rows below stay untouched → they become locked automatically
+                # because is_locked depends on rows above having state='failed'
+
+    # ---------------- persistence ----------------
+
+    def write(self, vals):
+        # server-side guard: refuse a decision on a locked row
+        if vals.get('decision'):
+            for rec in self:
+                rows = rec.request_id.stage_ids.sorted('sequence')
+                if any(s.state == 'failed' for s in rows
+                       if s.sequence < rec.sequence):
+                    raise UserError(_(
+                        'این مرحله قفل است؛ مرحله بالاتر رد شده است.'))
+        res = super().write(vals)
+        if 'decision' in vals:
+            self.mapped('request_id')._recompute_stage_state()
+        return res
 
     def _all_checked(self):
         return all(s.state == 'checked' for s in self)
