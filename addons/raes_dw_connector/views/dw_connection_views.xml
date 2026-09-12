@@ -80,8 +80,9 @@
     </record>
 
     <menuitem id="menu_raes_dw_connection"
-              name="DW Connections"
+              name="اتصال به انبار داده (DW)"
               parent="base.menu_administration"
               action="action_raes_dw_connection"
+              groups="base.group_system"
               sequence="60"/>
 </odoo>

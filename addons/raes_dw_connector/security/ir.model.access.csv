@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_raes_dw_connection_system,raes.dw.connection.system,model_raes_dw_connection,base.group_system,1,1,1,1
+access_raes_dw_table_map_system,raes.dw.table_map.system,model_raes_dw_table_map,base.group_system,1,1,1,1
+access_raes_dw_remote_table_system,raes.dw.remote_table.system,model_raes_dw_remote_table,base.group_system,1,1,1,1

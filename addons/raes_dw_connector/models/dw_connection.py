@@ -272,9 +272,11 @@ class RaesDwConnection(models.Model):
                         'local_view_name': local})]})
             cr.commit()
             # point the dim models at the freshly built alias views
+            # (they live in payment_request, which is optional)
             for model in ('odoo.raes.dim.company', 'odoo.raes.dim.party',
                           'odoo.raes.dim.cost_center'):
-                self.env[model].init()
+                if model in self.env:
+                    self.env[model].init()
             cr.commit()
             rec.write({'last_bootstrap': fields.Datetime.now()})
             rec.message_post(body=_(
