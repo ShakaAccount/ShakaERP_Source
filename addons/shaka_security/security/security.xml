@@ -1,0 +1,18 @@
+<odoo>
+    <record id="rule_shaka_access_matrix_admin" model="ir.rule">
+        <field name="name">ماتریس دسترسی: مدیر سیستم</field>
+        <field name="model_id" ref="model_shaka_access_form"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_branch_assigned_users" model="ir.rule">
+        <field name="name">شعبه: کاربران تخصیص‌یافته</field>
+        <field name="model_id" ref="model_daily_sales_branch"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('id', 'in', user.shaka_branch_access_ids.mapped('branch_id').ids)] if user.shaka_branch_access_ids else [(1, '=', 1)]</field>
+    </record>
+    <record id="rule_branch_admin_all" model="ir.rule">
+        <field name="name">شعبه: مدیر سیستم</field><field name="model_id" ref="model_daily_sales_branch"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/><field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>

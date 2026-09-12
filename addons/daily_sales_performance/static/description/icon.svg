@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Daily Sales Performance">
+  <rect width="256" height="256" rx="44" fill="#101713"/>
+  <rect x="18" y="18" width="220" height="220" rx="34" fill="#139447"/>
+  <path d="M54 183h148M63 169v-40h28v40m19 0V96h28v73m19 0V69h28v100" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="178" cy="67" r="29" fill="#101713" stroke="#fff" stroke-width="8"/>
+  <path d="M178 51v32m11-25c-4-4-8-6-13-6-7 0-12 4-12 9 0 14 25 8 25 21 0 6-5 10-13 10-6 0-11-2-15-6" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+</svg>
