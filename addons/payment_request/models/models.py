@@ -480,13 +480,17 @@ class PaymentRequestStage(models.Model):
             lambda s: s.state != 'unattended').write({'state': 'unattended'})
 
     def action_reject(self):
-        """Reject this row. Children inherit the failure. Writes
-        immediately."""
+        """Reject this row. Everything below is reset to 'unattended' so the
+        frontier moves back to the row right after the failed one. Children
+        inherit the failure."""
         self.ensure_one()
         if not self.allow_reject:
             raise UserError(_('این مرحله قابل رد کردن نیست.'))
+        _, below = self._rows_above_and_below()
         self.write({'state': 'failed'})
         self.child_ids.write({'state': 'failed'})
+        below.filtered(
+            lambda s: s.state != 'unattended').write({'state': 'unattended'})
 
     def _all_checked(self):
         return all(s.state == 'checked' for s in self)
