@@ -10,6 +10,7 @@
                 <field name="party_id" optional="show"/>
                 <field name="reason_id" optional="show"/>
                 <field name="formality" optional="show"/>
+                <field name="owner_id" optional="hide"/>
                 <field name="state" widget="badge"
                        decoration-info="state in ('unit_review', 'accountant_review', 'tax_review', 'acc_mgmt_review')"
                        decoration-warning="state == 'treasury'"
@@ -59,6 +60,7 @@
                             <field name="number" readonly="1"/>
                             <field name="date"/>
                             <field name="formality"/>
+                            <field name="owner_id" readonly="1" invisible="1"/>
                             <field name="unit_manager_id" invisible="state != 'draft' and not is_accountant and not is_site_admin"/>
                         </group>
                         <group>
@@ -140,7 +142,7 @@
         <field name="name">درخواست‌های من</field>
         <field name="res_model">payment_request.payment_request</field>
         <field name="view_mode">list,form</field>
-        <field name="domain">[('create_uid', '=', uid)]</field>
+        <field name="domain">[('owner_id', '=', uid)]</field>
     </record>
 
     <record id="action_payment_request_all" model="ir.actions.act_window">

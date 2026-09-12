@@ -72,6 +72,11 @@ class PaymentRequest(models.Model):
     unit_manager_id = fields.Many2one(
         'res.users', string='مدیر واحد',
         help='Unit manager this request is submitted to for approval.')
+    owner_id = fields.Many2one(
+        'res.users', string='مالک درخواست', index=True,
+        default=lambda self: self.env.user,
+        help='Only this user sees and edits the request while it is in '
+             'draft (پیش‌نویس). Set automatically on create.')
     unit_id = fields.Many2one(
         'odoo.raes.dim.company', string='واحد سازمانی', required=True)
     party_id = fields.Many2one(
@@ -79,9 +84,7 @@ class PaymentRequest(models.Model):
     reason_id = fields.Many2one(
         'lookup.value', string='بابت', required=True,
         domain=[('type_id.code', '=', 'payment_reason')])
-    formality = fields.Selection(
-        [('official', 'رسمی'), ('informal', 'غیر رسمی')],
-        string='رسمی / غیر رسمی', default='official', required=True)
+    formality = fields.Text(string='رسمی / غیر رسمی', required=True)
     description = fields.Text(string='توضیحات')
     detail_ids = fields.One2many(
         'payment_request.detail', 'request_id', string='جزئیات درخواست پرداخت')
@@ -131,6 +134,8 @@ class PaymentRequest(models.Model):
         for vals in vals_list:
             if not vals.get('number'):
                 vals['number'] = self._next_number(vals.get('date'))
+            # the creator owns the draft; never trust a client-sent owner
+            vals['owner_id'] = vals.get('owner_id') or self.env.user.id
             # stages are system-managed; never accept from client
             vals.pop('stage_ids', None)
         recs = super().create(vals_list)

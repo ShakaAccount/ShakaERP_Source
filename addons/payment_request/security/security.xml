@@ -34,24 +34,46 @@
         <field name="comment">Accepts/rejects payment requests submitted to him. Cannot see مرحله پرداخت.</field>
     </record>
 
-    <!-- READ: everyone reads every request. List scoping for draft editing
-         happens in the "درخواست‌های من" menu (create_uid domain). -->
-    <record id="rule_payment_request_read_all_everyone" model="ir.rule">
-        <field name="name">Payment Request: everyone reads all</field>
+    <!-- READ: submitted requests are visible to everyone; DRAFTS only to
+         their owner. Elevated groups are covered by the first clause, so they
+         never see someone else's پیش‌نویس. -->
+    <record id="rule_payment_request_read" model="ir.rule">
+        <field name="name">Payment Request: read all but drafts of others</field>
         <field name="model_id" ref="model_payment_request_payment_request"/>
         <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">['|', ('state', '!=', 'draft'), ('owner_id', '=', user.id)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+    <!-- site admin sees everything, drafts included -->
+    <record id="rule_payment_request_read_admin" model="ir.rule">
+        <field name="name">Payment Request: site admin reads all</field>
+        <field name="model_id" ref="model_payment_request_payment_request"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
         <field name="domain_force">[(1, '=', 1)]</field>
         <field name="perm_read" eval="1"/>
         <field name="perm_write" eval="0"/>
         <field name="perm_create" eval="0"/>
         <field name="perm_unlink" eval="0"/>
     </record>
-    <!-- WRITE: creator edits own records while DRAFT only; delete own drafts -->
+    <record id="rule_payment_request_write_admin" model="ir.rule">
+        <field name="name">Payment Request: site admin edits all</field>
+        <field name="model_id" ref="model_payment_request_payment_request"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="0"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+    <!-- WRITE: ONLY the owner touches the request while it is a draft -->
     <record id="rule_payment_request_own_write" model="ir.rule">
-        <field name="name">Payment Request: own records editable in draft</field>
+        <field name="name">Payment Request: owner edits own draft</field>
         <field name="model_id" ref="model_payment_request_payment_request"/>
         <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-        <field name="domain_force">[('create_uid', '=', user.id), ('state', '=', 'draft')]</field>
+        <field name="domain_force">[('owner_id', '=', user.id), ('state', '=', 'draft')]</field>
         <field name="perm_read" eval="0"/>
         <field name="perm_write" eval="1"/>
         <field name="perm_create" eval="0"/>
