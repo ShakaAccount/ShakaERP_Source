@@ -1,0 +1,49 @@
+<odoo>
+    <record id="view_daily_sales_pos_terminal_list" model="ir.ui.view">
+        <field name="name">daily.sales.pos.terminal.list</field>
+        <field name="model">daily.sales.pos.terminal</field>
+        <field name="arch" type="xml">
+            <list string="ترمینال‌های پوز" class="shaka-sales-list">
+                <field name="terminal_number"/>
+                <field name="branch_id"/>
+                <field name="description"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_daily_sales_pos_terminal_form" model="ir.ui.view">
+        <field name="name">daily.sales.pos.terminal.form</field>
+        <field name="model">daily.sales.pos.terminal</field>
+        <field name="arch" type="xml">
+            <form string="ترمینال پوز" class="shaka-sales-form shaka-terminal-form">
+                <sheet class="shaka-sales-sheet shaka-terminal-sheet">
+                    <div class="shaka-form-hero">
+                        <div class="shaka-form-hero__content">
+                            <div><h1>تعریف ترمینال پوز</h1></div>
+                        </div>
+                    </div>
+                    <div class="shaka-info-panel shaka-terminal-fields"><group>
+                        <field name="terminal_number" placeholder="برای مثال: 12345678"/>
+                        <field name="branch_id"/>
+                        <field name="description"/>
+                        <field name="active" widget="boolean_toggle"/>
+                    </group></div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_daily_sales_pos_terminal" model="ir.actions.act_window">
+        <field name="name">ترمینال‌های پوز</field>
+        <field name="res_model">daily.sales.pos.terminal</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_daily_sales_pos_terminal"
+              name="ترمینال‌های پوز"
+              parent="menu_daily_sales_root"
+              action="action_daily_sales_pos_terminal"
+              groups="base.group_system"
+              sequence="18"/>
+</odoo>

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_shaka_access_form_admin,shaka.access.form.admin,model_shaka_access_form,base.group_system,1,1,1,1
+access_shaka_access_form_stage_admin,shaka.access.form.stage.admin,model_shaka_access_form_stage,base.group_system,1,1,1,1
+access_shaka_user_form_access_admin,shaka.user.form.access.admin,model_shaka_user_form_access,base.group_system,1,1,1,1
+access_shaka_user_workflow_access_admin,shaka.user.workflow.access.admin,model_shaka_user_workflow_access,base.group_system,1,1,1,1
+access_shaka_user_branch_access_admin,shaka.user.branch.access.admin,model_shaka_user_branch_access,base.group_system,1,1,1,1
+access_daily_sales_branch_user,daily.sales.branch.user,model_daily_sales_branch,base.group_user,1,0,0,0
+access_daily_sales_branch_admin,daily.sales.branch.admin,model_daily_sales_branch,base.group_system,1,1,1,1

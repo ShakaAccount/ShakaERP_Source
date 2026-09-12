@@ -1,0 +1,30 @@
+{
+    'name': 'Daily Sales Performance',
+    'version': '19.0.1.0.0',
+    'summary': 'Daily branch sales performance with revenue and POS details',
+    'category': 'Sales',
+    'author': 'ShakaERP',
+    'license': 'LGPL-3',
+    'depends': ['base', 'mail', 'jalali_date', 'shaka_security'],
+    'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/sequence.xml',
+        'data/corrective_invoice_sequence.xml',
+        'data/return_sequence.xml',
+        'views/performance_views.xml',
+        'views/pos_terminal_views.xml',
+        'views/deposit_split_views.xml',
+        'views/reject_wizard_views.xml',
+        'views/corrective_invoice_views.xml',
+        'views/return_views.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'daily_sales_performance/static/src/scss/daily_sales_theme.scss',
+        ],
+    },
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

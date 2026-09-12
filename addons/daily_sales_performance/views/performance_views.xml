@@ -1,0 +1,158 @@
+<odoo>
+    <record id="view_daily_sales_performance_list" model="ir.ui.view">
+        <field name="name">daily.sales.performance.list</field>
+        <field name="model">daily.sales.performance</field>
+        <field name="arch" type="xml">
+            <list class="shaka-sales-list">
+                <field name="number"/>
+                <field name="date"/>
+                <field name="branch_id"/>
+                <field name="created_by"/>
+                <field name="total_revenue" sum="جمع درآمدها"/>
+                <field name="total_pos_amount" sum="جمع پوز"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'submitted'"
+                       decoration-success="state == 'approved'"
+                       decoration-danger="state == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_daily_sales_performance_selection_list" model="ir.ui.view">
+        <field name="name">daily.sales.performance.selection.list</field>
+        <field name="model">daily.sales.performance</field>
+        <field name="arch" type="xml">
+            <list string="انتخاب عملکرد روزانه" create="0" edit="0" delete="0">
+                <field name="number" string="شماره عملکرد"/>
+                <field name="date" string="تاریخ"/>
+                <field name="branch_id" string="شعبه"/>
+                <field name="created_by" string="ثبت‌کننده"/>
+                <field name="total_revenue" string="جمع درآمد (ریال)"/>
+                <field name="total_pos_amount" string="جمع پوز (ریال)"/>
+                <field name="state" string="وضعیت" widget="badge"
+                       decoration-info="state == 'submitted'"
+                       decoration-success="state == 'approved'"
+                       decoration-danger="state == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_daily_sales_performance_form" model="ir.ui.view">
+        <field name="name">daily.sales.performance.form</field>
+        <field name="model">daily.sales.performance</field>
+        <field name="arch" type="xml">
+            <form string="عملکرد روزانه فروش" class="shaka-sales-form shaka-performance-form">
+                <header>
+                    <button name="action_submit" type="object" string="ارسال برای تأیید" icon="fa-paper-plane"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="تأیید" icon="fa-check"
+                            class="btn-primary" invisible="state != 'submitted'"/>
+                    <button name="action_reject" type="object" string="رد" icon="fa-times"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_reset_to_draft" type="object" string="بازگشت به پیش‌نویس" icon="fa-undo"
+                            invisible="state not in ('rejected', 'approved')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,rejected"/>
+                </header>
+                <sheet class="shaka-sales-sheet">
+                    <div class="shaka-form-hero">
+                        <div class="shaka-form-hero__content">
+                            <div>
+                                <h1>عملکرد روزانه فروش</h1>
+                            </div>
+                            <div class="shaka-form-number">
+                                <span>شماره عملکرد</span>
+                                <strong><field name="number" readonly="1" nolabel="1"/></strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shaka-info-panel">
+                    <group class="shaka-main-info">
+                        <group>
+                            <field name="date" string="تاریخ *"/>
+                            <field name="branch_id" string="شعبه *" readonly="id"/>
+                            <field name="created_by" string="ثبت‌کننده *" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="description" placeholder="توضیحات عملکرد روزانه..."/>
+                        </group>
+                    </group>
+                    </div>
+
+                    <div class="shaka-kpi-grid">
+                        <div class="shaka-kpi-card shaka-kpi-card--green">
+                            <div class="shaka-kpi-icon"><i class="fa fa-money" role="img" aria-label="درآمد"/></div>
+                            <div><span>جمع کل درآمدها</span><field name="total_revenue" readonly="1" nolabel="1"/></div>
+                            <small>ریال</small>
+                        </div>
+                        <div class="shaka-kpi-card shaka-kpi-card--dark">
+                            <div class="shaka-kpi-icon"><i class="fa fa-credit-card" role="img" aria-label="پوز"/></div>
+                            <div><span>جمع کل پوز</span><field name="total_pos_amount" readonly="1" nolabel="1"/></div>
+                            <small>ریال</small>
+                        </div>
+                    </div>
+
+                    <div class="shaka-data-panel">
+                    <div class="shaka-section-heading"><div class="shaka-section-icon"><i class="fa fa-bar-chart" role="img" aria-label="درآمدها"/></div><div><h3>جزئیات درآمدهای روزانه</h3></div></div>
+                    <field name="revenue_line_ids" nolabel="1">
+                        <list editable="bottom" limit="1">
+                            <field name="cash_amount" string="نقد (ریال)"/>
+                            <field name="snapp_amount" string="اسنپ (ریال)"/>
+                            <field name="foodro_amount" string="فودرو (ریال)"/>
+                            <field name="payment_link_amount" string="لینک پرداخت (ریال)"/>
+                            <field name="website_amount" string="وب‌سایت (ریال)"/>
+                            <field name="customer_club_amount" string="باشگاه مشتریان (ریال)"/>
+                            <field name="palladium_customer_club_amount" string="باشگاه پلادیوم (ریال)"/>
+                            <field name="meeting_room_amount" string="رزرو اتاق جلسات (ریال)"/>
+                            <field name="total_revenue" string="جمع کل (ریال)" readonly="1"/>
+                        </list>
+                    </field>
+                    </div>
+
+                    <div class="shaka-data-panel">
+                    <div class="shaka-section-heading"><div class="shaka-section-icon"><i class="fa fa-credit-card-alt" role="img" aria-label="ترمینال‌های پوز"/></div><div><h3>جزئیات ترمینال‌های پوز</h3></div></div>
+                    <field name="pos_line_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field name="terminal_id" string="شماره ترمینال پوز *"
+                                   required="1"
+                                   domain="[('branch_id', '=', parent.branch_id)]"
+                                   options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                            <field name="terminal_number" column_invisible="1"/>
+                            <field name="pos_amount" string="مبلغ پوز (ریال) *"/>
+                        </list>
+                    </field>
+                    </div>
+
+                    <div class="shaka-form-hint">فیلدهای دارای * اجباری هستند.</div>
+                    <group string="اطلاعات گردش کار" class="shaka-workflow-panel" invisible="state == 'draft'">
+                        <group>
+                            <field name="submitted_by" readonly="1"/>
+                            <field name="submitted_date" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="approved_by" readonly="1"/>
+                            <field name="approved_date" readonly="1"/>
+                            <field name="rejected_by" readonly="1"/>
+                            <field name="rejected_date" readonly="1"/>
+                        </group>
+                        <field name="reject_reason" placeholder="دلیل رد..."/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_daily_sales_performance" model="ir.actions.act_window">
+        <field name="name">عملکردهای روزانه</field>
+        <field name="res_model">daily.sales.performance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_daily_sales_root" name="عملکرد روزانه فروش" sequence="145"/>
+    <menuitem id="menu_daily_sales_performance" name="عملکردهای روزانه"
+              parent="menu_daily_sales_root" action="action_daily_sales_performance" sequence="10"/>
+    <menuitem id="menu_daily_sales_branch" name="شعبات"
+              parent="menu_daily_sales_root" action="shaka_security.action_daily_sales_branch"
+              groups="base.group_system" sequence="20"/>
+</odoo>

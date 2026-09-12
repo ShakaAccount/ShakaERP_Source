@@ -1,0 +1,90 @@
+<odoo>
+    <record id="access_form_daily_sales_performance" model="shaka.access.form">
+        <field name="name">عملکرد روزانه فروش</field>
+        <field name="model_name">daily.sales.performance</field>
+        <field name="sequence">10</field>
+        <field name="has_workflow">1</field>
+    </record>
+    <record id="access_stage_daily_sales_draft" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_performance"/>
+        <field name="name">پیش‌نویس</field><field name="code">draft</field><field name="sequence">10</field>
+    </record>
+    <record id="access_stage_daily_sales_submitted" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_performance"/>
+        <field name="name">ارسال‌شده</field><field name="code">submitted</field><field name="sequence">20</field>
+    </record>
+    <record id="access_stage_daily_sales_approved" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_performance"/>
+        <field name="name">تأییدشده</field><field name="code">approved</field><field name="sequence">30</field>
+    </record>
+    <record id="access_stage_daily_sales_rejected" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_performance"/>
+        <field name="name">ردشده</field><field name="code">rejected</field><field name="sequence">40</field>
+    </record>
+    <record id="access_form_daily_sales_deposit_split" model="shaka.access.form">
+        <field name="name">تفکیک واریزی</field>
+        <field name="model_name">daily.sales.deposit.split</field>
+        <field name="sequence">20</field>
+        <field name="has_workflow">1</field>
+    </record>
+    <record id="access_stage_deposit_split_draft" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_deposit_split"/>
+        <field name="name">پیش‌نویس</field><field name="code">draft</field><field name="sequence">10</field>
+    </record>
+    <record id="access_stage_deposit_split_submitted" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_deposit_split"/>
+        <field name="name">ارسال‌شده</field><field name="code">submitted</field><field name="sequence">20</field>
+    </record>
+    <record id="access_stage_deposit_split_approved" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_deposit_split"/>
+        <field name="name">تأییدشده</field><field name="code">approved</field><field name="sequence">30</field>
+    </record>
+    <record id="access_stage_deposit_split_rejected" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_deposit_split"/>
+        <field name="name">ردشده</field><field name="code">rejected</field><field name="sequence">40</field>
+    </record>
+    <record id="access_form_daily_sales_corrective_invoice" model="shaka.access.form">
+        <field name="name">فاکتور اصلاحی</field>
+        <field name="model_name">daily.sales.corrective.invoice</field>
+        <field name="sequence">30</field>
+        <field name="has_workflow">1</field>
+    </record>
+    <record id="access_stage_corrective_invoice_draft" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_corrective_invoice"/>
+        <field name="name">پیش‌نویس</field><field name="code">draft</field><field name="sequence">10</field>
+    </record>
+    <record id="access_stage_corrective_invoice_submitted" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_corrective_invoice"/>
+        <field name="name">ارسال‌شده</field><field name="code">submitted</field><field name="sequence">20</field>
+    </record>
+    <record id="access_stage_corrective_invoice_approved" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_corrective_invoice"/>
+        <field name="name">تأییدشده</field><field name="code">approved</field><field name="sequence">30</field>
+    </record>
+    <record id="access_stage_corrective_invoice_rejected" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_corrective_invoice"/>
+        <field name="name">ردشده</field><field name="code">rejected</field><field name="sequence">40</field>
+    </record>
+    <record id="access_form_daily_sales_return" model="shaka.access.form">
+        <field name="name">عودت</field>
+        <field name="model_name">daily.sales.return</field>
+        <field name="sequence">40</field>
+        <field name="has_workflow">1</field>
+    </record>
+    <record id="access_stage_return_draft" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_return"/>
+        <field name="name">پیش‌نویس</field><field name="code">draft</field><field name="sequence">10</field>
+    </record>
+    <record id="access_stage_return_submitted" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_return"/>
+        <field name="name">ارسال‌شده</field><field name="code">submitted</field><field name="sequence">20</field>
+    </record>
+    <record id="access_stage_return_approved" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_return"/>
+        <field name="name">تأییدشده</field><field name="code">approved</field><field name="sequence">30</field>
+    </record>
+    <record id="access_stage_return_rejected" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_daily_sales_return"/>
+        <field name="name">ردشده</field><field name="code">rejected</field><field name="sequence">40</field>
+    </record>
+</odoo>
