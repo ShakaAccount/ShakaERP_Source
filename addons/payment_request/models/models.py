@@ -163,6 +163,7 @@ class PaymentRequest(models.Model):
                 message_type='comment',
                 partner_ids=rec.unit_manager_id.partner_id.ids)
             rec.state = 'unit_review'
+            rec._schedule_step_activity()
 
     def action_manager_accept(self):
         self._check_manager()
@@ -173,6 +174,7 @@ class PaymentRequest(models.Model):
                 body="مدیر واحد تایید شد؛ در انتظار بررسی حسابدار.",
                 message_type='comment', partner_ids=partners.ids)
             rec.state = 'accountant_review'
+            rec._schedule_step_activity()
 
     def action_manager_reject(self):
         self._check_manager()
@@ -182,6 +184,7 @@ class PaymentRequest(models.Model):
                 message_type='comment',
                 partner_ids=rec.create_uid.partner_id.ids)
             rec.state = 'rejected'
+            rec._schedule_step_activity()
 
     def action_accountant_accept(self):
         self._check_accountant()
@@ -192,6 +195,7 @@ class PaymentRequest(models.Model):
                 body="حسابدار تایید کرد؛ در انتظار تکمیل مراحل توسط مالیات.",
                 message_type='comment', partner_ids=partners.ids)
             rec.state = 'tax_review'
+            rec._schedule_step_activity()
 
     def action_tax_stages_done(self):
         """گروه مالیات: مراحل را پر کرده و ارسال به مدیر حسابداری."""
@@ -199,6 +203,7 @@ class PaymentRequest(models.Model):
         for rec in self:
             if rec.state == 'rejected':
                 # pre-save of the form already rejected it (radio reject)
+                rec._schedule_step_activity()   # clears the open task
                 continue
             if not rec.stage_ids._all_checked():
                 bad = rec.stage_ids.filtered(
@@ -212,6 +217,7 @@ class PaymentRequest(models.Model):
                 body="مراحل توسط مالیات تکمیل شد؛ در انتظار تایید مدیر حسابداری.",
                 message_type='comment', partner_ids=partners.ids)
             rec.state = 'acc_mgmt_review'
+            rec._schedule_step_activity()
 
     def action_acc_mgmt_accept(self):
         self._check_acc_mgmt()
@@ -222,6 +228,7 @@ class PaymentRequest(models.Model):
                 body="مدیر حسابداری تایید کرد؛ در انتظار پرداخت توسط خزانه دار.",
                 message_type='comment', partner_ids=partners.ids)
             rec.state = 'treasury'
+            rec._schedule_step_activity()
 
     def action_treasurer_paid(self):
         self._check_treasurer()
@@ -234,6 +241,7 @@ class PaymentRequest(models.Model):
                 message_type='comment',
                 partner_ids=rec.create_uid.partner_id.ids)
             rec.state = 'paid'
+            rec._schedule_step_activity()
 
     def _check_manager(self):
         if not self.env.user.has_group('payment_request.group_unit_manager'):
@@ -254,6 +262,69 @@ class PaymentRequest(models.Model):
     def _check_treasurer(self):
         if not self.env.user.has_group('payment_request.group_treasurer'):
             raise UserError(_('فقط خزانه دار مجاز است.'))
+
+    # ---------------- scheduled follow-up tasks (mail.activity) ----------------
+
+    STEP_ACTIVITY = 'payment_request.activity_pr_review'
+    STEP_DEADLINE_DAYS = 3
+    OPEN_STATES = ('unit_review', 'accountant_review', 'tax_review',
+                   'acc_mgmt_review', 'treasury')
+
+    def _step_users(self):
+        """Users responsible for the request's CURRENT step."""
+        self.ensure_one()
+        if self.state == 'unit_review':
+            return self.unit_manager_id
+        xmlid = {
+            'accountant_review': 'payment_request.group_accountant',
+            'tax_review': 'payment_request.group_tax',
+            'acc_mgmt_review': 'payment_request.group_acc_mgmt',
+            'treasury': 'payment_request.group_treasurer',
+        }.get(self.state)
+        if not xmlid:
+            return self.env['res.users']
+        users = self.env.ref(xmlid).all_user_ids
+        # site admins supervise, they don't get per-step tasks (they are in
+        # every group, so without this filter admin receives each task)
+        staff = users.filtered(
+            lambda u: not u.has_group('base.group_system'))
+        return staff or users
+
+    def _schedule_step_activity(self, note=''):
+        """Drop the closed step's task and schedule the next one for whoever
+        now holds the request. sudo: the workflow assigns the task — the
+        acting user loses write access the moment the state moves."""
+        for rec in self.sudo():
+            rec.activity_unlink([self.STEP_ACTIVITY])
+            if rec.state not in self.OPEN_STATES:
+                continue
+            users = rec._step_users()
+            if not users:
+                continue
+            deadline = fields.Date.context_today(rec) + _dt.timedelta(
+                days=self.STEP_DEADLINE_DAYS)
+            for user in users:
+                rec.activity_schedule(
+                    act_type_xmlid=self.STEP_ACTIVITY, user_id=user.id,
+                    summary=f'درخواست {rec.number} در انتظار بررسی شما',
+                    note=note or 'درخواست پرداخت %s (وضعیت: %s)' % (
+                        rec.number, dict(rec._fields['state'].selection)
+                        .get(rec.state, rec.state)),
+                    date_deadline=deadline)
+
+    @api.model
+    def _cron_remind_pending_steps(self):
+        """Daily sweep: whoever holds a request gets the task (re)scheduled and
+        a chatter nudge, so an idle step cannot sit unnoticed."""
+        recs = self.search([('state', 'in', self.OPEN_STATES)])
+        for rec in recs:
+            if rec.activity_ids:
+                continue
+            rec._schedule_step_activity()
+            rec.message_post(
+                body=f"یادآوری: درخواست {rec.number} در انتظار اقدام شما است.",
+                message_type='comment',
+                partner_ids=rec._step_users().mapped('partner_id').ids)
 
     def _next_number(self, date=None):
         # max number among this jalali year's records + 1; resets at 1 Farvardin
@@ -422,6 +493,7 @@ class PaymentRequestStage(models.Model):
                 rec.child_ids.state = 'failed'
                 req = rec.request_id
                 req.state = 'rejected'
+                req.sudo()._schedule_step_activity()
                 req.message_post(
                     body=f"مرحله «{rec.name}» رد شد؛ درخواست رد شد.",
                     message_type='comment',

@@ -8,6 +8,7 @@
         'security/security.xml',
         'security/ir.model.access.csv',
         'data/lookup_data.xml',
+        'data/activity_data.xml',
         'views/views.xml',
     ],
     'installable': True,
