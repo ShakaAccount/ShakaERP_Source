@@ -1,5 +1,7 @@
 from odoo import models, fields
 
+from .dim_base import refresh_dim_view
+
 
 class OdooRaesDimCostCenter(models.Model):
     _name = 'odoo.raes.dim.cost_center'
@@ -20,26 +22,14 @@ class OdooRaesDimCostCenter(models.Model):
     lastupdate = fields.Datetime(string='Last Update', readonly=True)
 
     def init(self):
-        # alias view may be absent on fresh DBs (see dim_party.init)
-        self.env.cr.execute(
-            "SELECT 1 FROM pg_views WHERE viewname = 'raes_dim_cost_center_view'")
-        if not self.env.cr.fetchone():
-            return
-        self.env.cr.execute("DROP VIEW IF EXISTS odoo_raes_dim_cost_center CASCADE")
-        self.env.cr.execute("""
-            CREATE VIEW odoo_raes_dim_cost_center AS (
-                SELECT
-                    costcenterid AS id,
-                    costcenterid,
-                    code,
-                    title,
-                    grouptitle,
-                    englishtitle,
-                    englishgrouptitle,
-                    companyid,
-                    datasourceid,
-                    moduleid,
-                    lastupdate
-                FROM raes_dim_cost_center_view
-            )
-        """)
+        # rebuild the read-only view; missing/partial DW source -> empty view
+        refresh_dim_view(
+            self.env, 'odoo_raes_dim_cost_center', 'costcenterid',
+            {'costcenterid': 'integer', 'code': 'text', 'title': 'text',
+             'grouptitle': 'text', 'englishtitle': 'text',
+             'englishgrouptitle': 'text', 'companyid': 'integer',
+             'datasourceid': 'integer', 'moduleid': 'integer',
+             'lastupdate': 'timestamp'},
+            ['raes_dim_cost_center_view', 'raes_dim_cost_center',
+             'raees_dim_cost_center_view', 'raes_dimcostcenter'],
+            'DimCostCenter')

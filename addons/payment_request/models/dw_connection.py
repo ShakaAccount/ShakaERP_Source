@@ -241,26 +241,40 @@ class RaesDwConnection(models.Model):
                         raise UserError(_(
                             "جدول %(t)s در اسکیمای %(s)s پیدا نشد: %(e)s",
                             t=table, s=rec.remote_schema, e=str(e)[:200]))
-            for line in rec.line_ids:
-                # drop first: CREATE OR REPLACE fails if an older view exists
-                # with a different owner (e.g. created by hand via psql)
-                src = f"{_ident(schema)}.{_ident(line.remote_table)}"
+            for table in ok + skipped:
+                # one public alias view per imported table (lowercased cols);
+                # the mapping line is registered on the fly so the dim models
+                # find the view without a second manual step
+                line = rec.line_ids.filtered(
+                    lambda l: l.remote_table.lower() == table.lower())[:1]
+                local = line.local_view_name if line else 'raes_' + ''.join(
+                    c for c in table.lower() if c.isalnum() or c == '_')
+                src = f"{_ident(schema)}.{_ident(table)}"
                 cr.execute(
-                    f"DROP VIEW IF EXISTS public.{_ident(line.local_view_name)}")
+                    f"DROP VIEW IF EXISTS public.{_ident(local)}")
                 # foreign columns keep MSSQL casing; dim models expect
                 # lowercase -> alias every column to lower()
                 cr.execute(
                     "SELECT column_name FROM information_schema.columns "
                     "WHERE table_schema = %s AND table_name = %s "
                     "ORDER BY ordinal_position",
-                    [schema, line.remote_table])
+                    [schema, table])
                 cols = [r[0] for r in cr.fetchall()]
                 sel = ", ".join(
                     f"{_ident(c)} AS {c.lower().replace(' ', '_')}"
                     for c in cols)
                 cr.execute(
-                    f"CREATE VIEW public.{_ident(line.local_view_name)} AS "
+                    f"CREATE VIEW public.{_ident(local)} AS "
                     f"SELECT {sel} FROM {src}")
+                if not line:
+                    rec.write({'line_ids': [(0, 0, {
+                        'remote_table': table,
+                        'local_view_name': local})]})
+            cr.commit()
+            # point the dim models at the freshly built alias views
+            for model in ('odoo.raes.dim.company', 'odoo.raes.dim.party',
+                          'odoo.raes.dim.cost_center'):
+                self.env[model].init()
             cr.commit()
             rec.write({'last_bootstrap': fields.Datetime.now()})
             rec.message_post(body=_(

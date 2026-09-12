@@ -1,5 +1,7 @@
 from odoo import models, fields
 
+from .dim_base import refresh_dim_view
+
 class RaesDimParty(models.Model):
     _name = 'odoo.raes.dim.party'
     _description = 'RAES Dimension Party (Read-Only, from Shaka_DW)'
@@ -19,29 +21,14 @@ class RaesDimParty(models.Model):
     lastupdate = fields.Datetime(string='Last Update', readonly=True)
 
     def init(self):
-        # alias view (raes_dim_party_view) is created by the DW Connection
-        # bootstrap (Settings -> DW Connections) or by hand; it may legitimately
-        # be absent (fresh DB / DW not wired yet) -> skip instead of blocking
-        # module install
-        self.env.cr.execute(
-            "SELECT 1 FROM pg_views WHERE viewname = 'raes_dim_party_view'")
-        if not self.env.cr.fetchone():
-            return
-        self.env.cr.execute("DROP VIEW IF EXISTS odoo_raes_dim_party CASCADE")
-        self.env.cr.execute("""
-            CREATE VIEW odoo_raes_dim_party AS (
-                SELECT
-                    PartyID AS id,
-                    PartyID,
-                    TypeCode,
-                    TypeTitle,
-                    EnglishTypeTitle,
-                    Title,
-                    EnglishTitle,
-                    CompanyID,
-                    DataSourceID,
-                    ModuleID,
-                    LastUpdate
-                FROM raes_dim_party_view
-            )
-        """)
+        # rebuild the read-only view; missing/partial DW source -> empty view
+        refresh_dim_view(
+            self.env, 'odoo_raes_dim_party', 'partyid',
+            {'partyid': 'integer', 'typecode': 'integer',
+             'typetitle': 'text', 'englishtypetitle': 'text',
+             'title': 'text', 'englishtitle': 'text',
+             'companyid': 'integer', 'datasourceid': 'integer',
+             'moduleid': 'integer', 'lastupdate': 'timestamp'},
+            ['raes_dim_party_view', 'raes_dim_party',
+             'raees_dim_party_view', 'raes_dimparty'],
+            'DimParty')

@@ -1,5 +1,7 @@
 from odoo import models, fields
 
+from .dim_base import refresh_dim_view
+
 class DimCompany(models.Model):
     _name = 'odoo.raes.dim.company'
     _description = 'Company Dimension (Read-Only, from Shaka_DW)'
@@ -17,24 +19,12 @@ class DimCompany(models.Model):
     companytitle = fields.Char(string='Company Title', readonly=True)
 
     def init(self):
-        # alias view may be absent on fresh DBs (see dim_party.init)
-        self.env.cr.execute(
-            "SELECT 1 FROM pg_views WHERE viewname = 'raees_dim_company_view'")
-        if not self.env.cr.fetchone():
-            return
-        self.env.cr.execute("DROP VIEW IF EXISTS odoo_raes_dim_company CASCADE")
-        self.env.cr.execute("""
-            CREATE VIEW odoo_raes_dim_company AS (
-                SELECT
-                    companyid AS id,
-                    companyid,
-                    parentid,
-                    entitle,
-                    level0,
-                    level1,
-                    level2,
-                    level3,
-                    companytitle
-                FROM raees_dim_company_view
-            )
-        """)
+        # rebuild the read-only view; missing/partial DW source -> empty view
+        refresh_dim_view(
+            self.env, 'odoo_raes_dim_company', 'companyid',
+            {'companyid': 'integer', 'parentid': 'integer',
+             'entitle': 'text', 'level0': 'text', 'level1': 'text',
+             'level2': 'text', 'level3': 'text', 'companytitle': 'text'},
+            ['raes_dim_company_view', 'raes_dim_company',
+             'raees_dim_company_view', 'raes_dimcompany'],
+            'DimCompany')
