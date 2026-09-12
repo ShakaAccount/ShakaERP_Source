@@ -44,7 +44,8 @@ def _jalali_to_gregorian(jy, jm, jd):
     gd = days + 1
     leap = (gy % 4 == 0 and gy % 100 != 0) or gy % 400 == 0
     for gm, mdays in enumerate(
-            [31, 29 if leap else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31], 1):
+            [31, 29 if leap else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+            1):
         if gd <= mdays:
             return gy, gm, gd
         gd -= mdays
@@ -116,12 +117,14 @@ class PaymentRequest(models.Model):
                 'payment_request.group_accountant')
             rec.is_unit_manager = self.env.user.has_group(
                 'payment_request.group_unit_manager')
-            rec.is_tax = self.env.user.has_group('payment_request.group_tax')
+            rec.is_tax = self.env.user.has_group(
+                'payment_request.group_tax')
             rec.is_acc_mgmt = self.env.user.has_group(
                 'payment_request.group_acc_mgmt')
             rec.is_treasurer = self.env.user.has_group(
                 'payment_request.group_treasurer')
-            rec.is_site_admin = self.env.user.has_group('base.group_system')
+            rec.is_site_admin = self.env.user.has_group(
+                'base.group_system')
 
     # ponytail: steps hardcoded here; move to ir.model.data rows when admins
     # need to edit steps without a code deploy
@@ -154,17 +157,6 @@ class PaymentRequest(models.Model):
                 body=_("درخواست %s ثبت شد.", rec.number),
                 message_type='comment')
         return recs
-
-    # ---------------- stage waterfall helpers ----------------
-
-    def _recompute_stage_state(self):
-        """After any stage row is saved, sync the parent's state with the
-        stage waterfall. Only auto-rejects; advancing is an explicit action."""
-        for rec in self:
-            rows = rec.stage_ids.sorted('sequence')
-            has_failed = any(s.state == 'failed' for s in rows)
-            if has_failed and rec.state not in ('rejected', 'paid'):
-                rec.state = 'rejected'
 
     # ---------------- workflow ----------------
 
@@ -209,7 +201,8 @@ class PaymentRequest(models.Model):
             tax_grp = self.env.ref('payment_request.group_tax')
             partners = tax_grp.all_user_ids.mapped('partner_id')
             rec.message_post(
-                body=_("حسابدار تایید کرد؛ در انتظار تکمیل مراحل توسط مالیات."),
+                body=_("حسابدار تایید کرد؛ در انتظار تکمیل مراحل توسط "
+                       "مالیات."),
                 message_type='comment', partner_ids=partners.ids)
             rec.state = 'tax_review'
             rec._schedule_step_activity()
@@ -223,15 +216,16 @@ class PaymentRequest(models.Model):
                 rec._schedule_step_activity()   # clears the open task
                 continue
             if not rec.stage_ids._all_checked():
-                bad = rec.stage_ids.filtered(lambda s: s.state != 'checked')
+                bad = rec.stage_ids.filtered(
+                    lambda s: s.state != 'checked')
                 raise UserError(_(
                     'همه مراحل باید تایید شده باشند. باقی‌مانده: %s',
                     ', '.join(bad.mapped('name'))))
             grp = self.env.ref('payment_request.group_acc_mgmt')
             partners = grp.all_user_ids.mapped('partner_id')
             rec.message_post(
-                body=_("مراحل توسط مالیات تکمیل شد؛ "
-                       "در انتظار تایید مدیر حسابداری."),
+                body=_("مراحل توسط مالیات تکمیل شد؛ در انتظار تایید "
+                       "مدیر حسابداری."),
                 message_type='comment', partner_ids=partners.ids)
             rec.state = 'acc_mgmt_review'
             rec._schedule_step_activity()
@@ -242,8 +236,8 @@ class PaymentRequest(models.Model):
             grp = self.env.ref('payment_request.group_treasurer')
             partners = grp.all_user_ids.mapped('partner_id')
             rec.message_post(
-                body=_("مدیر حسابداری تایید کرد؛ "
-                       "در انتظار پرداخت توسط خزانه دار."),
+                body=_("مدیر حسابداری تایید کرد؛ در انتظار پرداخت توسط "
+                       "خزانه دار."),
                 message_type='comment', partner_ids=partners.ids)
             rec.state = 'treasury'
             rec._schedule_step_activity()
@@ -267,7 +261,8 @@ class PaymentRequest(models.Model):
             raise UserError(_('فقط مدیر واحد مجاز است.'))
 
     def _check_accountant(self):
-        if not self.env.user.has_group('payment_request.group_accountant'):
+        if not self.env.user.has_group(
+                'payment_request.group_accountant'):
             raise UserError(_('فقط حسابدار مجاز است.'))
 
     def _check_tax(self):
@@ -275,11 +270,13 @@ class PaymentRequest(models.Model):
             raise UserError(_('فقط گروه مالیات مجاز است.'))
 
     def _check_acc_mgmt(self):
-        if not self.env.user.has_group('payment_request.group_acc_mgmt'):
+        if not self.env.user.has_group(
+                'payment_request.group_acc_mgmt'):
             raise UserError(_('فقط مدیر حسابداری مجاز است.'))
 
     def _check_treasurer(self):
-        if not self.env.user.has_group('payment_request.group_treasurer'):
+        if not self.env.user.has_group(
+                'payment_request.group_treasurer'):
             raise UserError(_('فقط خزانه دار مجاز است.'))
 
     # ---------------- scheduled follow-up tasks (mail.activity) ----------------
@@ -335,8 +332,8 @@ class PaymentRequest(models.Model):
 
     @api.model
     def _cron_remind_pending_steps(self):
-        """Daily sweep: whoever holds a request gets the task (re)scheduled and
-        a chatter nudge, so an idle step cannot sit unnoticed."""
+        """Daily sweep: whoever holds a request gets the task (re)scheduled
+        and a chatter nudge, so an idle step cannot sit unnoticed."""
         recs = self.search([('state', 'in', self.OPEN_STATES)])
         for rec in recs:
             if rec.activity_ids:
@@ -450,88 +447,46 @@ class PaymentRequestStage(models.Model):
         [('unattended', 'بررسی نشده'), ('checked', 'تایید شده'),
          ('failed', 'رد شده')],
         string='وضعیت', default='unattended', required=True)
-    # radio selector: '', 'accept', 'reject'
-    decision = fields.Selection(
-        [('accept', 'تایید'), ('reject', 'رد')],
-        string='تصمیم', default=False)
 
-    # ---- non-stored computes: recompute on every onchange, live in the UI ----
-    is_locked = fields.Boolean(
-        string='قفل شده', compute='_compute_is_locked', store=False)
-    is_frontier = fields.Boolean(
-        string='مرحله جاری', compute='_compute_is_frontier', store=False)
+    # ---------------- helpers ----------------
 
-    @api.depends('request_id.stage_ids.state',
-                 'request_id.stage_ids.sequence')
-    def _compute_is_locked(self):
-        """A row is locked if any row ABOVE it has failed."""
-        for rec in self:
-            rows = rec.request_id.stage_ids.sorted('sequence')
-            rec.is_locked = any(
-                s.state == 'failed'
-                for s in rows
-                if s.sequence < rec.sequence
-            )
+    def _rows_above_and_below(self):
+        """Return (rows_up_to_and_including_self, rows_after_self) in
+        sequence order, as recordsets."""
+        self.ensure_one()
+        rows = self.request_id.stage_ids.sorted('sequence')
+        above = self.browse()
+        below = self.browse()
+        passed = False
+        for s in rows:
+            if not passed:
+                above |= s
+                if s == self:
+                    passed = True
+            else:
+                below |= s
+        return above, below
 
-    @api.depends('request_id.stage_ids.state',
-                 'request_id.stage_ids.sequence')
-    def _compute_is_frontier(self):
-        """The frontier is the first row whose state != 'checked'."""
-        for rec in self:
-            rows = rec.request_id.stage_ids.sorted('sequence')
-            frontier = next(
-                (s for s in rows if s.state != 'checked'), None)
-            rec.is_frontier = frontier is not None and frontier.id == rec.id
+    # ---------------- row actions ----------------
 
-    # ---------------- radio decision (live, client-side) ----------------
+    def action_accept(self):
+        """Accept this row and every row above it. Every row below is reset
+        to 'unattended'. Writes immediately (button click = commit)."""
+        self.ensure_one()
+        above, below = self._rows_above_and_below()
+        above.filtered(
+            lambda s: s.state != 'checked').write({'state': 'checked'})
+        below.filtered(
+            lambda s: s.state != 'unattended').write({'state': 'unattended'})
 
-    @api.onchange('decision')
-    def _onchange_decision(self):
-        for rec in self:
-            if not rec.decision:
-                continue
-            rows = rec.request_id.stage_ids.sorted('sequence')
-            idx = rows.ids.index(rec.id)
-
-            if rec.decision == 'accept':
-                # everything up to and including this row → checked
-                for s in rows[:idx + 1]:
-                    if s.state != 'checked':
-                        s.state = 'checked'
-                # rows below: reset failed back to pending
-                for s in rows[idx + 1:]:
-                    if s.state == 'failed':
-                        s.state = 'unattended'
-                # clear other rows' pending decisions so they don't retrigger
-                for s in rows:
-                    if s.id != rec.id:
-                        s.decision = False
-
-            elif rec.decision == 'reject':
-                if not rec.allow_reject:
-                    rec.decision = False
-                    raise UserError(_('این مرحله قابل رد کردن نیست.'))
-                rec.state = 'failed'
-                rec.child_ids.state = 'failed'
-                rec.request_id.state = 'rejected'
-                # rows below stay untouched → they become locked automatically
-                # because is_locked depends on rows above having state='failed'
-
-    # ---------------- persistence ----------------
-
-    def write(self, vals):
-        # server-side guard: refuse a decision on a locked row
-        if vals.get('decision'):
-            for rec in self:
-                rows = rec.request_id.stage_ids.sorted('sequence')
-                if any(s.state == 'failed' for s in rows
-                       if s.sequence < rec.sequence):
-                    raise UserError(_(
-                        'این مرحله قفل است؛ مرحله بالاتر رد شده است.'))
-        res = super().write(vals)
-        if 'decision' in vals:
-            self.mapped('request_id')._recompute_stage_state()
-        return res
+    def action_reject(self):
+        """Reject this row. Children inherit the failure. Writes
+        immediately."""
+        self.ensure_one()
+        if not self.allow_reject:
+            raise UserError(_('این مرحله قابل رد کردن نیست.'))
+        self.write({'state': 'failed'})
+        self.child_ids.write({'state': 'failed'})
 
     def _all_checked(self):
         return all(s.state == 'checked' for s in self)
