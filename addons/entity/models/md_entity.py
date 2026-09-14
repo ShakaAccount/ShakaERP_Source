@@ -8,12 +8,7 @@ ENTITY_SYSTEM_LOOKUP_CATEGORY = '1004'
 
 
 class StrSelection(fields.Selection):
-    """Selection whose stored value is exposed as a string on read.
-
-    The DW tables store the *_lu columns as **integers** while Odoo's
-    Selection keys are strings; without this, read() returns int and the
-    web client cannot resolve the label.
-    """
+    """Selection that exposes the DB value as a string on read."""
 
     def convert_to_read(self, value, record, use_display_name=True):
         if value is None or value is False:
@@ -35,6 +30,9 @@ class RaesMdEntity(models.Model):
     _order = 'schema_name, name'
     _description = 'MD Entity (md.entity)'
 
+    # ------------------------------------------------------------------
+    # Selections
+    # ------------------------------------------------------------------
     @api.model
     def _selection_entity_type_lu(self):
         fallback = [('1', 'Dim'), ('2', 'Fact')]
@@ -66,6 +64,9 @@ class RaesMdEntity(models.Model):
             return []
         return [(str(lk.code), lk.value or str(lk.code)) for lk in lookups]
 
+    # ------------------------------------------------------------------
+    # Fields
+    # ------------------------------------------------------------------
     entity_type_lu = StrSelection(
         selection='_selection_entity_type_lu',
         string='Entity Type',
@@ -114,6 +115,64 @@ class RaesMdEntity(models.Model):
     modification_date = fields.Datetime()
     database_name = fields.Char()
 
+    # ------------------------------------------------------------------
+    # PK column helpers
+    # ------------------------------------------------------------------
+    @staticmethod
+    def _pk_column_name(entity_name, entity_type_lu):
+        """Return the name of the auto-generated PK column for an entity.
+
+        Dim (entity_type_lu == '1')  ->  ``{entity_name}ID`` (DimSalesID)
+        Anything else (Fact, ...)    ->  ``id``
+        """
+        if str(entity_type_lu) == '1':
+            return f'{entity_name}ID'
+        return 'id'
+
+    def _ensure_pk_column(self):
+        """Create or synchronise the auto PK column.
+
+        Keeps the name (Dim vs Fact rule) and ``is_identity`` in sync with
+        the entity's current ``name`` and ``entity_type_lu``.
+        """
+        Column = self.env['raes.md.entity_column'].with_context(
+            skip_ordinal_check=True,
+            skip_is_user_defined_force=True,
+        )
+        for entity in self:
+            expected_name = self._pk_column_name(
+                entity.name, entity.entity_type_lu)
+            expected_identity = str(entity.entity_type_lu) == '2'
+
+            existing = entity.column_ids.filtered(
+                lambda c: c.ordinal_position == 1)
+
+            if existing:
+                updates = {}
+                if existing.name != expected_name:
+                    updates['name'] = expected_name
+                if existing.is_identity != expected_identity:
+                    updates['is_identity'] = expected_identity
+                if updates:
+                    existing.with_context(
+                        skip_ordinal_check=True,
+                    ).write(updates)
+                continue
+
+            Column.create({
+                'entity_id': entity.id,
+                'name': expected_name,
+                'title': 'کلید اصلی',
+                'data_type': 'int',
+                'ordinal_position': 1,
+                'is_primary_key': True,
+                'is_identity': expected_identity,
+                'is_user_defined': 0,
+            })
+
+    # ------------------------------------------------------------------
+    # Constraints
+    # ------------------------------------------------------------------
     @api.constrains('name', 'schema_name')
     def _check_name_unique(self):
         for rec in self:
@@ -131,6 +190,9 @@ class RaesMdEntity(models.Model):
                     "'%(s)s'.",
                     n=rec.name, s=rec.schema_name or '—'))
 
+    # ------------------------------------------------------------------
+    # Lifecycle
+    # ------------------------------------------------------------------
     def init(self):
         refresh_md_view(self.env, *MD_ENTITY_VIEW)
 
@@ -153,20 +215,7 @@ class RaesMdEntity(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         entities = super().create(vals_list)
-        Column = self.env['raes.md.entity_column']
-        for entity in entities:
-            if entity.column_ids.filtered(lambda c: c.name == 'id'):
-                continue
-            Column.create({
-                'entity_id': entity.id,
-                'name': 'id',
-                'title': 'کلید اصلی',
-                'data_type': 'int',
-                'ordinal_position': 1,
-                'is_primary_key': True,
-                'is_identity': str(entity.entity_type_lu) == '2',
-                'is_user_defined': 0,
-            })
+        entities._ensure_pk_column()
         return entities
 
     def write(self, vals):
@@ -176,11 +225,9 @@ class RaesMdEntity(models.Model):
             vals['editor_user_id'] = self.env.uid
         res = super().write(vals)
 
-        if 'entity_type_lu' in vals:
-            is_fact = str(vals['entity_type_lu']) == '2'
-            for entity in self:
-                id_cols = entity.column_ids.filtered(
-                    lambda c: c.name == 'id')
-                if id_cols:
-                    id_cols.write({'is_identity': is_fact})
+        # Any change to `name` or `entity_type_lu` may affect the PK
+        # column's name and/or is_identity — resync it.
+        if 'name' in vals or 'entity_type_lu' in vals:
+            self._ensure_pk_column()
+
         return res

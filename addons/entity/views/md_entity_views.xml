@@ -72,13 +72,24 @@
                         <page string="Columns" name="columns">
                             <field name="column_ids">
                                 <list editable="bottom">
-                                    <field name="ordinal_position"/>
+                                    <field name="ordinal_position"
+                                           help="Position 1 is reserved for the auto PK column. User columns start at 2 and must be continuous."/>
                                     <field name="name"/>
                                     <field name="title"/>
-                                    <field name="data_type"/>
+                                    <field name="data_type"
+                                           readonly="reference_entity_id"
+                                           force_save="1"/>
                                     <field name="size"
-                                           invisible="data_type not in ['decimal', 'nvarchar', 'varchar', 'char', 'nchar']"/>
-                                    <field name="reference_entity_id"/>
+                                           invisible="data_type not in ['decimal', 'nvarchar', 'varchar', 'char', 'nchar']"
+                                           force_save="1"/>
+                                    <field name="reference_entity_id"
+                                           options="{'no_create': True, 'no_open': True}"/>
+                                    <button name="action_clear_reference_entity"
+                                            type="object"
+                                            icon="fa-times"
+                                            class="btn-link"
+                                            title="Clear reference"
+                                            invisible="not reference_entity_id"/>
                                     <field name="column_type_lu"/>
                                 </list>
                             </field>
