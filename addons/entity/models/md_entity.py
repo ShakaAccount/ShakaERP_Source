@@ -3,9 +3,28 @@ from odoo.exceptions import ValidationError
 
 from .md_view import MD_ENTITY_VIEW, refresh_md_view
 
-# GNR.LookUp category used for the entity-type dropdown
 ENTITY_TYPE_LOOKUP_CATEGORY = '1001'
 ENTITY_SYSTEM_LOOKUP_CATEGORY = '1004'
+
+
+class StrSelection(fields.Selection):
+    """Selection whose stored value is exposed as a string on read.
+
+    The DW tables store the *_lu columns as **integers** while Odoo's
+    Selection keys are strings; without this, read() returns int and the
+    web client cannot resolve the label.
+    """
+
+    def convert_to_read(self, value, record, use_display_name=True):
+        if value is None or value is False:
+            return value
+        return str(value)
+
+    def convert_to_record(self, value, record):
+        if value is None or value is False:
+            return value
+        return str(value)
+
 
 class RaesMdEntity(models.Model):
     _name = 'raes.md.entity'
@@ -17,41 +36,7 @@ class RaesMdEntity(models.Model):
     _description = 'MD Entity (md.entity)'
 
     @api.model
-    def _selection_entity_system_lu(self):
-        """Populate the Entity system dropdown from GNR.LookUp
-        (category_code = 1004).  Shows `value`, stores `code`."""
-        fallback = [('1', 'Dim'), ('2', 'Fact')]
-        Lookup = self.env.get('raes.gnr.lookup')
-        if Lookup is None:
-            return fallback
-        try:
-            lookups = Lookup.search(
-                [('category_code', '=', ENTITY_SYSTEM_LOOKUP_CATEGORY)],
-                order='code',
-            )
-        except Exception:
-            # lookup table / view not ready (module load, DW reload, ...)
-            return fallback
-        if not lookups:
-            return fallback
-        return [
-            (str(lk.code), lk.value or str(lk.code))
-            for lk in lookups
-        ]
-
-    # 1 = Dim, 2 = Fact (codes come from GNR.LookUp category 1001)
-    system_lu = fields.Selection(
-        selection='_selection_entity_system_lu',
-        string='Entity System',
-        required=True,
-        default='1',
-    )
-
-
-    @api.model
     def _selection_entity_type_lu(self):
-        """Populate the Entity Type dropdown from GNR.LookUp
-        (category_code = 1001).  Shows `value`, stores `code`."""
         fallback = [('1', 'Dim'), ('2', 'Fact')]
         Lookup = self.env.get('raes.gnr.lookup')
         if Lookup is None:
@@ -62,26 +47,39 @@ class RaesMdEntity(models.Model):
                 order='code',
             )
         except Exception:
-            # lookup table / view not ready (module load, DW reload, ...)
             return fallback
         if not lookups:
             return fallback
-        return [
-            (str(lk.code), lk.value or str(lk.code))
-            for lk in lookups
-        ]
+        return [(str(lk.code), lk.value or str(lk.code)) for lk in lookups]
 
-    # 1 = Dim, 2 = Fact (codes come from GNR.LookUp category 1001)
-    entity_type_lu = fields.Selection(
+    @api.model
+    def _selection_entity_system_lu(self):
+        Lookup = self.env.get('raes.gnr.lookup')
+        if Lookup is None:
+            return []
+        try:
+            lookups = Lookup.search(
+                [('category_code', '=', ENTITY_SYSTEM_LOOKUP_CATEGORY)],
+                order='code',
+            )
+        except Exception:
+            return []
+        return [(str(lk.code), lk.value or str(lk.code)) for lk in lookups]
+
+    entity_type_lu = StrSelection(
         selection='_selection_entity_type_lu',
         string='Entity Type',
         required=True,
         default='1',
     )
 
+    system_lu = StrSelection(
+        selection='_selection_entity_system_lu',
+        string='Entity System',
+    )
+
     schema_name = fields.Char(index=True)
     name = fields.Char(required=True, index=True)
-    # Persian label / display name
     title = fields.Char(string='Persian Name')
 
     module_id = fields.Many2one(
@@ -105,9 +103,7 @@ class RaesMdEntity(models.Model):
 
     entity_full_name = fields.Char(
         string='Entity Full Name',
-        related='name',
-        store=False,
-        readonly=True,
+        related='name', store=False, readonly=True,
     )
 
     creator_user_id = fields.Integer(
@@ -116,7 +112,6 @@ class RaesMdEntity(models.Model):
         required=True, default=fields.Datetime.now)
     editor_user_id = fields.Integer()
     modification_date = fields.Datetime()
-    # system_lu = fields.Integer()
     database_name = fields.Char()
 
     @api.constrains('name', 'schema_name')
@@ -169,7 +164,6 @@ class RaesMdEntity(models.Model):
                 'data_type': 'int',
                 'ordinal_position': 1,
                 'is_primary_key': True,
-                # Fact (code 2) -> identity, otherwise not
                 'is_identity': str(entity.entity_type_lu) == '2',
                 'is_user_defined': 0,
             })

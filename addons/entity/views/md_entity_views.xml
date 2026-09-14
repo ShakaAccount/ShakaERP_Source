@@ -76,9 +76,9 @@
                                     <field name="name"/>
                                     <field name="title"/>
                                     <field name="data_type"/>
-                                    <field name="size"/>
+                                    <field name="size"
+                                           invisible="data_type not in ['decimal', 'nvarchar', 'varchar', 'char', 'nchar']"/>
                                     <field name="reference_entity_id"/>
-<!--                                    <field name="is_user_defined"/>-->
                                     <field name="column_type_lu"/>
                                 </list>
                             </field>
