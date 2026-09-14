@@ -3,6 +3,9 @@ from odoo.exceptions import ValidationError
 
 from .md_view import MD_ENTITY_VIEW, refresh_md_view
 
+# GNR.LookUp category used for the entity-type dropdown
+ENTITY_TYPE_LOOKUP_CATEGORY = '1001'
+
 
 class RaesMdEntity(models.Model):
     _name = 'raes.md.entity'
@@ -13,16 +16,37 @@ class RaesMdEntity(models.Model):
     _order = 'schema_name, name'
     _description = 'MD Entity (md.entity)'
 
-    # 1 = Dim, 2 = Fact
+    @api.model
+    def _selection_entity_type_lu(self):
+        """Populate the Entity Type dropdown from GNR.LookUp
+        (category_code = 1001).  Shows `value`, stores `code`."""
+        fallback = [('1', 'Dim'), ('2', 'Fact')]
+        Lookup = self.env.get('raes.gnr.lookup')
+        if Lookup is None:
+            return fallback
+        try:
+            lookups = Lookup.search(
+                [('category_code', '=', ENTITY_TYPE_LOOKUP_CATEGORY)],
+                order='code',
+            )
+        except Exception:
+            # lookup table / view not ready (module load, DW reload, ...)
+            return fallback
+        if not lookups:
+            return fallback
+        return [
+            (str(lk.code), lk.value or str(lk.code))
+            for lk in lookups
+        ]
+
+    # 1 = Dim, 2 = Fact (codes come from GNR.LookUp category 1001)
     entity_type_lu = fields.Selection(
-        selection=[
-            ('1', 'Dim'),
-            ('2', 'Fact'),
-        ],
+        selection='_selection_entity_type_lu',
         string='Entity Type',
         required=True,
         default='1',
     )
+
     schema_name = fields.Char(index=True)
     name = fields.Char(required=True, index=True)
     # Persian label / display name
@@ -47,7 +71,6 @@ class RaesMdEntity(models.Model):
     column_count = fields.Integer(
         compute='_compute_column_count', string='Columns')
 
-    # Always mirrors `name` (auto-populated on creation/edit)
     entity_full_name = fields.Char(
         string='Entity Full Name',
         related='name',
@@ -105,18 +128,17 @@ class RaesMdEntity(models.Model):
         entities = super().create(vals_list)
         Column = self.env['raes.md.entity_column']
         for entity in entities:
-            # skip if somehow already present (idempotent)
             if entity.column_ids.filtered(lambda c: c.name == 'id'):
                 continue
             Column.create({
                 'entity_id': entity.id,
                 'name': 'id',
-                'title': 'کلید اصلی',          # Persian name for PK
+                'title': 'کلید اصلی',
                 'data_type': 'int',
                 'ordinal_position': 1,
                 'is_primary_key': True,
-                # Fact -> identity, Dim -> not identity
-                'is_identity': entity.entity_type_lu == '2',
+                # Fact (code 2) -> identity, otherwise not
+                'is_identity': str(entity.entity_type_lu) == '2',
                 'is_user_defined': 0,
             })
         return entities
@@ -128,12 +150,11 @@ class RaesMdEntity(models.Model):
             vals['editor_user_id'] = self.env.uid
         res = super().write(vals)
 
-        # Keep the auto-generated id column in sync with the entity type
         if 'entity_type_lu' in vals:
             is_fact = str(vals['entity_type_lu']) == '2'
             for entity in self:
-                id_cols = entity.column_ids.filtered(lambda c: c.name == 'id')
+                id_cols = entity.column_ids.filtered(
+                    lambda c: c.name == 'id')
                 if id_cols:
                     id_cols.write({'is_identity': is_fact})
         return res
-

@@ -57,6 +57,17 @@
                             <field name="system_lu"/>
                         </group>
                     </group>
+                    <group>
+                        <group string="Hierarchy">
+                            <field name="master_entity_id"/>
+                            <field name="child_ids" widget="many2many_tags"/>
+                        </group>
+                        <group string="Flags">
+                            <field name="is_category_based"/>
+                            <field name="is_user_defined"/>
+                            <field name="is_company_based"/>
+                        </group>
+                    </group>
                     <notebook>
                         <page string="Columns" name="columns">
                             <field name="column_ids">
@@ -123,6 +134,7 @@
             </search>
         </field>
     </record>
+
     <record id="action_raes_md_entity" model="ir.actions.act_window">
         <field name="name">MD Entities</field>
         <field name="res_model">raes.md.entity</field>
