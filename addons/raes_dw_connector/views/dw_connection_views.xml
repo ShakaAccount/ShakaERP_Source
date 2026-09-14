@@ -11,6 +11,8 @@
                             string="مرور جدول‌ها" class="btn-secondary"/>
                     <button name="action_bootstrap" type="object"
                             string="ساخت جدول‌های خارجی" class="btn-primary"/>
+                    <button name="action_build_catalog" type="object"
+                            string="Build Catalog" class="btn-primary"/>
                 </header>
                 <sheet>
                     <group>
