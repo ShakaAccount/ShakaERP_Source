@@ -7,13 +7,14 @@
         <field name="arch" type="xml">
             <list string="MD Entities">
                 <field name="id"/>
+                <field name="connection_id"/>
+                <field name="database_name"/>
                 <field name="schema_name"/>
                 <field name="name"/>
                 <field name="title"/>
                 <field name="entity_full_name"/>
                 <field name="entity_type_lu"/>
                 <field name="module_id"/>
-                <field name="database_name"/>
                 <field name="priority"/>
                 <field name="column_count"/>
                 <field name="is_active"/>
@@ -28,6 +29,17 @@
             <form string="MD Entity">
                 <sheet>
                     <div class="oe_button_box" name="button_box">
+                        <button name="action_open_connection" type="object"
+                                class="oe_stat_button" icon="fa-database"
+                                invisible="not connection_id">
+                            <span>DW Connection</span>
+                        </button>
+                        <button name="action_rebuild_catalog" type="object"
+                                class="oe_stat_button" icon="fa-refresh"
+                                invisible="not connection_id"
+                                title="Rebuild the catalog of the linked connection">
+                            <span>Rebuild Catalog</span>
+                        </button>
                         <button name="action_open_columns" type="object"
                                 class="oe_stat_button" icon="fa-columns">
                             <field name="column_count" widget="statinfo"
@@ -45,16 +57,20 @@
                     <group>
                         <group string="Identity">
                             <field name="id"/>
-                            <field name="schema_name"/>
-                            <field name="entity_full_name"/>
+                            <field name="connection_id"
+                                   options="{'no_create': True, 'no_open': True}"/>
                             <field name="database_name"/>
+                            <field name="schema_id"
+                                   domain="[('connection_id', '=', connection_id)]"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                            <field name="entity_full_name"/>
                             <field name="is_active"/>
                         </group>
                         <group string="Classification">
                             <field name="entity_type_lu"/>
+                            <field name="system_lu"/>
                             <field name="module_id"/>
                             <field name="priority"/>
-                            <field name="system_lu"/>
                         </group>
                     </group>
                     <group>
@@ -76,14 +92,11 @@
                                            help="Position 1 is reserved for the auto PK column. User columns start at 2 and must be continuous."/>
                                     <field name="name"/>
                                     <field name="title"/>
-                                    <field name="data_type"
-                                           readonly="reference_entity_id"
-                                           force_save="1"/>
+                                    <field name="data_type"/>
                                     <field name="size"
-                                           invisible="data_type not in ['decimal', 'nvarchar', 'varchar', 'char', 'nchar']"
-                                           force_save="1"/>
+                                           invisible="data_type not in ['decimal', 'nvarchar', 'varchar', 'char', 'nchar']"/>
                                     <field name="reference_entity_id"
-                                           options="{'no_create': True, 'no_open': True}"/>
+                                           options="{'no_create': True}"/>
                                     <button name="action_clear_reference_entity"
                                             type="object"
                                             icon="fa-times"
@@ -120,6 +133,8 @@
                 <field name="name"/>
                 <field name="title"/>
                 <field name="schema_name"/>
+                <field name="connection_id"/>
+                <field name="database_name"/>
                 <field name="module_id"/>
 
                 <filter name="filter_active" string="Active"
@@ -136,6 +151,8 @@
                 <filter name="filter_dim" string="Dim"
                         domain="[('entity_type_lu','=','1')]"/>
                 <separator/>
+                <filter name="group_connection" string="DW Connection"
+                        context="{'group_by':'connection_id'}"/>
                 <filter name="group_schema" string="Schema"
                         context="{'group_by':'schema_name'}"/>
                 <filter name="group_module" string="Module"

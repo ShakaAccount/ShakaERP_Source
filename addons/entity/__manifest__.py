@@ -5,7 +5,7 @@
     'author': 'RAES',
     'category': 'Technical',
     'license': 'LGPL-3',
-    'depends': ['base'],
+    'depends': ['base','raes_dw_connector'],
     'data': [
         'security/ir.model.access.csv',
         'views/gnr_module_views.xml',

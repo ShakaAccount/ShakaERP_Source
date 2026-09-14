@@ -7,3 +7,7 @@ access_raes_md_entity_column_user,raes.md.entity_column.user,model_raes_md_entit
 access_raes_md_entity_column_manager,raes.md.entity_column.manager,model_raes_md_entity_column,base.group_system,1,1,1,1
 access_raes_gnr_lookup_user,raes.gnr.lookup.user,model_raes_gnr_lookup,base.group_user,1,0,0,0
 access_raes_gnr_lookup_manager,raes.gnr.lookup.manager,model_raes_gnr_lookup,base.group_system,1,1,1,1
+access_raes_md_entity_config_user,raes.md.entity.config.user,model_raes_md_entity_config,base.group_user,1,1,1,1
+access_raes_md_entity_config_manager,raes.md.entity.config.manager,model_raes_md_entity_config,base.group_system,1,1,1,1
+access_raes_dw_schema_user,raes.dw.schema.user,model_raes_dw_schema,base.group_user,1,1,1,1
+access_raes_dw_schema_manager,raes.dw.schema.manager,model_raes_dw_schema,base.group_system,1,1,1,1

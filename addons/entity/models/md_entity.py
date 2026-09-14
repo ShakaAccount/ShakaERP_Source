@@ -1,5 +1,5 @@
 from odoo import _, api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 from .md_view import MD_ENTITY_VIEW, refresh_md_view
 
@@ -79,7 +79,32 @@ class RaesMdEntity(models.Model):
         string='Entity System',
     )
 
-    schema_name = fields.Char(index=True)
+    # Companion-table backed relation (raes.md.entity.config).
+    # NOTE: store=False + compute means the value lives in the companion
+    # table, not in raes_md_entity. The inverse writes it there.
+    connection_id = fields.Many2one(
+        'raes.dw.connection', string='DW Connection',
+        compute='_compute_connection_id',
+        inverse='_inverse_connection_id',
+        store=False,
+        help='Foreign Data Wrapper connection this entity belongs to. '
+             'Stored in raes.md.entity.config, not in the DW.')
+
+    database_name = fields.Char(
+        string='Database Name', readonly=True,
+        help='Filled automatically from the linked DW connection.')
+
+    # Raw value that ends up in the DW column md.entity.schema_name
+    schema_name = fields.Char(string='Schema')
+
+    # UI picker — dropdown backed by raes.dw.schema, filtered by connection
+    schema_id = fields.Many2one(
+        'raes.dw.schema', string='Schema',
+        compute='_compute_schema_id',
+        inverse='_inverse_schema_id',
+        store=False,
+    )
+
     name = fields.Char(required=True, index=True)
     title = fields.Char(string='Persian Name')
 
@@ -113,16 +138,76 @@ class RaesMdEntity(models.Model):
         required=True, default=fields.Datetime.now)
     editor_user_id = fields.Integer()
     modification_date = fields.Datetime()
-    database_name = fields.Char()
+
+    # ------------------------------------------------------------------
+    # connection_id — companion table compute / inverse
+    # ------------------------------------------------------------------
+    def _compute_connection_id(self):
+        Config = self.env['raes.md.entity.config'].sudo()
+        configs = Config.search([('entity_id', 'in', self.ids)])
+        by_entity = {c.entity_id.id: c.connection_id for c in configs}
+        for rec in self:
+            rec.connection_id = by_entity.get(rec.id, False)
+
+    def _inverse_connection_id(self):
+        Config = self.env['raes.md.entity.config'].sudo()
+        for rec in self:
+            config = Config.search([('entity_id', '=', rec.id)], limit=1)
+            if rec.connection_id:
+                if config:
+                    if config.connection_id != rec.connection_id:
+                        config.connection_id = rec.connection_id.id
+                else:
+                    Config.create({
+                        'entity_id': rec.id,
+                        'connection_id': rec.connection_id.id,
+                    })
+            elif config:
+                config.connection_id = False
+
+    # ------------------------------------------------------------------
+    # schema_id — picker compute / inverse
+    # ------------------------------------------------------------------
+    @api.depends('schema_name')
+    def _compute_schema_id(self):
+        Schema = self.env['raes.dw.schema'].sudo()
+        for rec in self:
+            conn = rec.connection_id
+            if rec.schema_name and conn:
+                rec.schema_id = Schema.search([
+                    ('connection_id', '=', conn.id),
+                    ('name', '=', rec.schema_name),
+                ], limit=1)
+            else:
+                rec.schema_id = False
+
+    def _inverse_schema_id(self):
+        for rec in self:
+            rec.schema_name = rec.schema_id.name if rec.schema_id else False
+
+    # ------------------------------------------------------------------
+    # Onchange — keep DB name + schema in sync with connection
+    # ------------------------------------------------------------------
+    @api.onchange('connection_id')
+    def _onchange_connection_id(self):
+        if self.connection_id:
+            self.database_name = self.connection_id.database
+            # If the picked schema doesn't belong to the new connection,
+            # drop it and clear the raw value.
+            if self.schema_id and self.schema_id.connection_id != self.connection_id:
+                self.schema_id = False
+                self.schema_name = False
+        else:
+            self.database_name = False
+            self.schema_id = False
+            self.schema_name = False
 
     # ------------------------------------------------------------------
     # PK column helpers
     # ------------------------------------------------------------------
     @staticmethod
     def _pk_column_name(entity_name, entity_type_lu):
-        """Return the name of the auto-generated PK column for an entity.
-
-        Dim (entity_type_lu == '1')  ->  ``{entity_name}ID`` (DimSalesID)
+        """Dim (entity_type_lu == '1')  ->  ``{entity_name}ID``
         Anything else (Fact, ...)    ->  ``id``
         """
         if str(entity_type_lu) == '1':
@@ -130,11 +215,7 @@ class RaesMdEntity(models.Model):
         return 'id'
 
     def _ensure_pk_column(self):
-        """Create or synchronise the auto PK column.
-
-        Keeps the name (Dim vs Fact rule) and ``is_identity`` in sync with
-        the entity's current ``name`` and ``entity_type_lu``.
-        """
+        """Create or synchronise the auto PK column."""
         Column = self.env['raes.md.entity_column'].with_context(
             skip_ordinal_check=True,
             skip_is_user_defined_force=True,
@@ -212,8 +293,45 @@ class RaesMdEntity(models.Model):
             'context': {'default_entity_id': self.id},
         }
 
+    def action_open_connection(self):
+        self.ensure_one()
+        if not self.connection_id:
+            raise UserError(_('No DW connection linked to this entity.'))
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('DW Connection'),
+            'res_model': 'raes.dw.connection',
+            'res_id': self.connection_id.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
+
+    def action_rebuild_catalog(self):
+        self.ensure_one()
+        if not self.connection_id:
+            raise UserError(_('No DW connection linked to this entity.'))
+        # sync_connection is decorated with @api.model in the DW connector
+        # addon, so call it on the catalog model itself.
+        self.env['raes.dw.catalog'].sync_connection(self.connection_id)
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Catalog rebuilt'),
+                'message': _('Schemas of %s refreshed.',
+                             self.connection_id.display_name),
+                'type': 'success',
+                'sticky': False,
+            },
+        }
+
     @api.model_create_multi
     def create(self, vals_list):
+        for vals in vals_list:
+            conn_id = vals.get('connection_id')
+            if conn_id and not vals.get('database_name'):
+                conn = self.env['raes.dw.connection'].browse(conn_id)
+                vals['database_name'] = conn.database
         entities = super().create(vals_list)
         entities._ensure_pk_column()
         return entities
@@ -223,10 +341,17 @@ class RaesMdEntity(models.Model):
             vals['modification_date'] = fields.Datetime.now()
         if 'editor_user_id' not in vals:
             vals['editor_user_id'] = self.env.uid
+
+        if 'connection_id' in vals:
+            conn_id = vals['connection_id']
+            if conn_id:
+                conn = self.env['raes.dw.connection'].browse(conn_id)
+                vals.setdefault('database_name', conn.database)
+            else:
+                vals.setdefault('database_name', False)
+
         res = super().write(vals)
 
-        # Any change to `name` or `entity_type_lu` may affect the PK
-        # column's name and/or is_identity — resync it.
         if 'name' in vals or 'entity_type_lu' in vals:
             self._ensure_pk_column()
 
