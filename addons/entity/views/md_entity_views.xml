@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_raes_md_entity_list" model="ir.ui.view">
+        <field name="name">raes.md.entity.list</field>
+        <field name="model">raes.md.entity</field>
+        <field name="arch" type="xml">
+            <list string="MD Entities">
+                <field name="id"/>
+                <field name="schema_name"/>
+                <field name="name"/>
+                <field name="title"/>
+                <field name="entity_full_name"/>
+                <field name="entity_type_lu"/>
+                <field name="module_id"/>
+                <field name="database_name"/>
+                <field name="priority"/>
+                <field name="column_count"/>
+                <field name="is_active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_raes_md_entity_form" model="ir.ui.view">
+        <field name="name">raes.md.entity.form</field>
+        <field name="model">raes.md.entity</field>
+        <field name="arch" type="xml">
+            <form string="MD Entity">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_columns" type="object"
+                                class="oe_stat_button" icon="fa-columns">
+                            <field name="column_count" widget="statinfo"
+                                   string="Columns"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Name"/>
+                        </h1>
+                        <h3>
+                            <field name="title" placeholder="Persian Name"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group string="Identity">
+                            <field name="id"/>
+                            <field name="schema_name"/>
+                            <field name="entity_full_name"/>
+                            <field name="database_name"/>
+                            <field name="is_active"/>
+                        </group>
+                        <group string="Classification">
+                            <field name="entity_type_lu"/>
+                            <field name="module_id"/>
+                            <field name="priority"/>
+                            <field name="system_lu"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Columns" name="columns">
+                            <field name="column_ids">
+                                <list editable="bottom">
+                                    <field name="ordinal_position"/>
+                                    <field name="name"/>
+                                    <field name="title"/>
+                                    <field name="data_type"/>
+                                    <field name="size"/>
+                                    <field name="reference_entity_id"/>
+                                    <field name="is_user_defined"/>
+                                    <field name="column_type_lu"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Audit" name="audit">
+                            <group>
+                                <group string="Creation">
+                                    <field name="creator_user_id"/>
+                                    <field name="creation_date"/>
+                                </group>
+                                <group string="Last edit">
+                                    <field name="editor_user_id"/>
+                                    <field name="modification_date"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_raes_md_entity_search" model="ir.ui.view">
+        <field name="name">raes.md.entity.search</field>
+        <field name="model">raes.md.entity</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="title"/>
+                <field name="schema_name"/>
+                <field name="module_id"/>
+
+                <filter name="filter_active" string="Active"
+                        domain="[('is_active','=',True)]"/>
+                <filter name="filter_inactive" string="Inactive"
+                        domain="[('is_active','=',False)]"/>
+                <separator/>
+                <filter name="filter_user_defined" string="User Defined"
+                        domain="[('is_user_defined','=',True)]"/>
+                <filter name="filter_company_based" string="Company Based"
+                        domain="[('is_company_based','=',True)]"/>
+                <filter name="filter_fact" string="Fact"
+                        domain="[('entity_type_lu','=','2')]"/>
+                <filter name="filter_dim" string="Dim"
+                        domain="[('entity_type_lu','=','1')]"/>
+                <separator/>
+                <filter name="group_schema" string="Schema"
+                        context="{'group_by':'schema_name'}"/>
+                <filter name="group_module" string="Module"
+                        context="{'group_by':'module_id'}"/>
+                <filter name="group_database" string="Database"
+                        context="{'group_by':'database_name'}"/>
+            </search>
+        </field>
+    </record>
+    <record id="action_raes_md_entity" model="ir.actions.act_window">
+        <field name="name">MD Entities</field>
+        <field name="res_model">raes.md.entity</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_raes_md_entity_column" model="ir.actions.act_window">
+        <field name="name">Columns</field>
+        <field name="res_model">raes.md.entity_column</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_raes_gnr_lookup" model="ir.actions.act_window">
+        <field name="name">LookUp</field>
+        <field name="res_model">raes.gnr.lookup</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_raes_md_root"
+              name="MD Data"
+              web_icon="entity,static/description/icon.png"
+              sequence="90"/>
+
+    <menuitem id="menu_raes_gnr_module"
+              name="Modules"
+              parent="menu_raes_md_root"
+              action="action_raes_gnr_module"
+              sequence="10"/>
+
+    <menuitem id="menu_raes_md_entity"
+              name="Entities"
+              parent="menu_raes_md_root"
+              action="action_raes_md_entity"
+              sequence="20"/>
+
+    <menuitem id="menu_raes_md_entity_column"
+              name="Columns"
+              parent="menu_raes_md_root"
+              action="action_raes_md_entity_column"
+              sequence="30"/>
+
+    <menuitem id="menu_raes_gnr_lookup"
+              name="LookUp"
+              parent="menu_raes_md_root"
+              action="action_raes_gnr_lookup"
+              sequence="40"/>
+
+</odoo>

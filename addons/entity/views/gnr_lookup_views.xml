@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_raes_gnr_lookup_list" model="ir.ui.view">
+        <field name="name">raes.gnr.lookup.list</field>
+        <field name="model">raes.gnr.lookup</field>
+        <field name="arch" type="xml">
+            <list string="LookUp">
+                <field name="category_code"/>
+                <field name="category_title"/>
+                <field name="category_title_en"/>
+                <field name="code"/>
+                <field name="value"/>
+                <field name="modification_date" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_raes_gnr_lookup_form" model="ir.ui.view">
+        <field name="name">raes.gnr.lookup.form</field>
+        <field name="model">raes.gnr.lookup</field>
+        <field name="arch" type="xml">
+            <form string="LookUp">
+                <sheet>
+                    <group>
+                        <group string="Category">
+                            <field name="category_code"/>
+                            <field name="category_title"/>
+                            <field name="category_title_en"/>
+                        </group>
+                        <group string="Entry">
+                            <field name="code"/>
+                            <field name="value"/>
+                        </group>
+                    </group>
+                    <group string="Audit">
+                        <group string="Creation">
+                            <field name="creator_user_id"/>
+                            <field name="creation_date"/>
+                        </group>
+                        <group string="Last edit">
+                            <field name="editor_user_id"/>
+                            <field name="modification_date"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_raes_gnr_lookup_search" model="ir.ui.view">
+        <field name="name">raes.gnr.lookup.search</field>
+        <field name="model">raes.gnr.lookup</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="category_code"/>
+                <field name="category_title"/>
+                <field name="category_title_en"/>
+                <field name="value"/>
+                <field name="code"/>
+                <filter name="group_category" string="Category"
+                        context="{'group_by': 'category_code'}"/>
+            </search>
+        </field>
+    </record>
+
+
+</odoo>

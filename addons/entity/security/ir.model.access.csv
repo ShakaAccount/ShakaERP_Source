@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_raes_gnr_module_user,raes.gnr.module.user,model_raes_gnr_module,base.group_user,1,0,0,0
+access_raes_gnr_module_manager,raes.gnr.module.manager,model_raes_gnr_module,base.group_system,1,1,1,1
+access_raes_md_entity_user,raes.md.entity.user,model_raes_md_entity,base.group_user,1,0,0,0
+access_raes_md_entity_manager,raes.md.entity.manager,model_raes_md_entity,base.group_system,1,1,1,1
+access_raes_md_entity_column_user,raes.md.entity_column.user,model_raes_md_entity_column,base.group_user,1,0,0,0
+access_raes_md_entity_column_manager,raes.md.entity_column.manager,model_raes_md_entity_column,base.group_system,1,1,1,1
+access_raes_gnr_lookup_user,raes.gnr.lookup.user,model_raes_gnr_lookup,base.group_user,1,0,0,0
+access_raes_gnr_lookup_manager,raes.gnr.lookup.manager,model_raes_gnr_lookup,base.group_system,1,1,1,1
