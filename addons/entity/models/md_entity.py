@@ -1,7 +1,12 @@
+import logging
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
+from . import ddl_builder
 from .md_view import MD_ENTITY_VIEW, refresh_md_view
+
+_logger = logging.getLogger(__name__)
 
 ENTITY_TYPE_LOOKUP_CATEGORY = '1001'
 ENTITY_SYSTEM_LOOKUP_CATEGORY = '1004'
@@ -42,8 +47,7 @@ class RaesMdEntity(models.Model):
         try:
             lookups = Lookup.search(
                 [('category_code', '=', ENTITY_TYPE_LOOKUP_CATEGORY)],
-                order='code',
-            )
+                order='code')
         except Exception:
             return fallback
         if not lookups:
@@ -58,8 +62,7 @@ class RaesMdEntity(models.Model):
         try:
             lookups = Lookup.search(
                 [('category_code', '=', ENTITY_SYSTEM_LOOKUP_CATEGORY)],
-                order='code',
-            )
+                order='code')
         except Exception:
             return []
         return [(str(lk.code), lk.value or str(lk.code)) for lk in lookups]
@@ -79,9 +82,6 @@ class RaesMdEntity(models.Model):
         string='Entity System',
     )
 
-    # Companion-table backed relation (raes.md.entity.config).
-    # NOTE: store=False + compute means the value lives in the companion
-    # table, not in raes_md_entity. The inverse writes it there.
     connection_id = fields.Many2one(
         'raes.dw.connection', string='DW Connection',
         compute='_compute_connection_id',
@@ -94,10 +94,8 @@ class RaesMdEntity(models.Model):
         string='Database Name', readonly=True,
         help='Filled automatically from the linked DW connection.')
 
-    # Raw value that ends up in the DW column md.entity.schema_name
     schema_name = fields.Char(string='Schema')
 
-    # UI picker — dropdown backed by raes.dw.schema, filtered by connection
     schema_id = fields.Many2one(
         'raes.dw.schema', string='Schema',
         compute='_compute_schema_id',
@@ -192,8 +190,6 @@ class RaesMdEntity(models.Model):
     def _onchange_connection_id(self):
         if self.connection_id:
             self.database_name = self.connection_id.database
-            # If the picked schema doesn't belong to the new connection,
-            # drop it and clear the raw value.
             if self.schema_id and self.schema_id.connection_id != self.connection_id:
                 self.schema_id = False
                 self.schema_name = False
@@ -201,6 +197,33 @@ class RaesMdEntity(models.Model):
             self.database_name = False
             self.schema_id = False
             self.schema_name = False
+
+    # ------------------------------------------------------------------
+    # DW connection lookup + table sync
+    # ------------------------------------------------------------------
+    def _get_dw_connection(self):
+        self.ensure_one()
+        config = self.env['raes.md.entity.config'].sudo().search(
+            [('entity_id', '=', self.id)], limit=1)
+        return config.connection_id if config else False
+
+    def _sync_dw_table(self):
+        for rec in self:
+            if not rec.schema_name or not rec.name:
+                continue
+            connection = rec._get_dw_connection()
+            if not connection:
+                # No DW connection linked — nothing to create on.
+                continue
+            try:
+                ddl_builder.sync_table(connection, rec)
+            except Exception as e:
+                _logger.exception(
+                    "DW table sync failed for %s", rec.display_name)
+                raise UserError(_(
+                    "Could not create or update the DW table for "
+                    "'%(e)s':\n%(msg)s",
+                    e=rec.display_name, msg=str(e)[:500]))
 
     # ------------------------------------------------------------------
     # PK column helpers
@@ -219,6 +242,7 @@ class RaesMdEntity(models.Model):
         Column = self.env['raes.md.entity_column'].with_context(
             skip_ordinal_check=True,
             skip_is_user_defined_force=True,
+            skip_dw_sync=True,
         )
         for entity in self:
             expected_name = self._pk_column_name(
@@ -231,6 +255,12 @@ class RaesMdEntity(models.Model):
             if existing:
                 updates = {}
                 if existing.name != expected_name:
+                    conn = entity._get_dw_connection()
+                    if conn and entity.schema_name and entity.name:
+                        ddl_builder.rename_column(
+                            conn,
+                            entity.schema_name, entity.name,
+                            existing.name, expected_name)
                     updates['name'] = expected_name
                 if existing.is_identity != expected_identity:
                     updates['is_identity'] = expected_identity
@@ -310,8 +340,6 @@ class RaesMdEntity(models.Model):
         self.ensure_one()
         if not self.connection_id:
             raise UserError(_('No DW connection linked to this entity.'))
-        # sync_connection is decorated with @api.model in the DW connector
-        # addon, so call it on the catalog model itself.
         self.env['raes.dw.catalog'].sync_connection(self.connection_id)
         return {
             'type': 'ir.actions.client',
@@ -325,6 +353,27 @@ class RaesMdEntity(models.Model):
             },
         }
 
+    def action_sync_dw_table(self):
+        self.ensure_one()
+        if not self.schema_name or not self.name:
+            raise UserError(_(
+                'Set a Schema and a Name before syncing the DW table.'))
+        if not self._get_dw_connection():
+            raise UserError(_(
+                'Link a DW Connection before syncing the DW table.'))
+        self._sync_dw_table()
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('DW table synced'),
+                'message': _('Table %(s)s.%(t)s is up to date.',
+                             s=self.schema_name, t=self.name),
+                'type': 'success',
+                'sticky': False,
+            },
+        }
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -332,11 +381,19 @@ class RaesMdEntity(models.Model):
             if conn_id and not vals.get('database_name'):
                 conn = self.env['raes.dw.connection'].browse(conn_id)
                 vals['database_name'] = conn.database
+
         entities = super().create(vals_list)
         entities._ensure_pk_column()
+        entities._sync_dw_table()
         return entities
 
     def write(self, vals):
+        # Capture old name/schema for the DB rename
+        old_meta = {}
+        if 'name' in vals or 'schema_name' in vals:
+            for rec in self:
+                old_meta[rec.id] = (rec.name, rec.schema_name)
+
         if 'modification_date' not in vals:
             vals['modification_date'] = fields.Datetime.now()
         if 'editor_user_id' not in vals:
@@ -352,7 +409,25 @@ class RaesMdEntity(models.Model):
 
         res = super().write(vals)
 
+        # Rename the DW table when entity name/schema changed
+        for rec in self:
+            old = old_meta.get(rec.id)
+            if not old:
+                continue
+            old_name, old_schema = old
+            if old_name != rec.name or old_schema != rec.schema_name:
+                conn = rec._get_dw_connection()
+                if conn:
+                    ddl_builder.rename_table(
+                        conn,
+                        old_schema, old_name,
+                        rec.schema_name, rec.name)
+
+        # Keep PK column name/identity in sync
         if 'name' in vals or 'entity_type_lu' in vals:
             self._ensure_pk_column()
+
+        # Add missing columns / refresh FKs
+        self._sync_dw_table()
 
         return res

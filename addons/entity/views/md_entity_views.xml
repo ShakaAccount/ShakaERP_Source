@@ -29,8 +29,14 @@
             <form string="MD Entity">
                 <sheet>
                     <div class="oe_button_box" name="button_box">
+                        <button name="action_sync_dw_table" type="object"
+                                class="oe_stat_button" icon="fa-cloud-upload"
+                                invisible="not schema_name or not name"
+                                title="Create or refresh the table on the linked MSSQL server">
+                            <span>Sync DW Table</span>
+                        </button>
                         <button name="action_open_connection" type="object"
-                                class="oe_stat_button" icon="fa-database"
+                                class="oe_stat_button" icon="fa-plug"
                                 invisible="not connection_id">
                             <span>DW Connection</span>
                         </button>
@@ -42,8 +48,30 @@
                         </button>
                         <button name="action_open_columns" type="object"
                                 class="oe_stat_button" icon="fa-columns">
-                            <field name="column_count" widget="statinfo"
-                                   string="Columns"/>
+                            <field name="column_count" widget="statinfo" string="Columns"/>
+                        </button>
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_sync_dw_table" type="object"
+                                class="oe_stat_button" icon="fa-cloud-upload"
+                                invisible="not schema_name or not name"
+                                title="Create or refresh the table on the linked MSSQL server">
+                            <span>Sync DW Table</span>
+                        </button>
+                        <button name="action_open_connection" type="object"
+                                class="oe_stat_button" icon="fa-plug"
+                                invisible="not connection_id">
+                            <span>DW Connection</span>
+                        </button>
+                        <button name="action_rebuild_catalog" type="object"
+                                class="oe_stat_button" icon="fa-refresh"
+                                invisible="not connection_id"
+                                title="Rebuild the catalog of the linked connection">
+                            <span>Rebuild Catalog</span>
+                        </button>
+                        <button name="action_open_columns" type="object"
+                                class="oe_stat_button" icon="fa-columns">
+                            <field name="column_count" widget="statinfo" string="Columns"/>
                         </button>
                     </div>
                     <div class="oe_title">

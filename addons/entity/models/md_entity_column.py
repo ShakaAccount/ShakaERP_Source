@@ -1,7 +1,12 @@
+import logging
+
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
+from . import ddl_builder
 from .md_view import MD_ENTITY_COLUMN_VIEW, refresh_md_view
+
+_logger = logging.getLogger(__name__)
 
 COLUMN_TYPE_LOOKUP_CATEGORY = '1005'
 
@@ -140,7 +145,6 @@ class RaesMdEntityColumn(models.Model):
             ])
             positions = sorted(c.ordinal_position for c in cols)
 
-            # Duplicate check
             if len(positions) != len(set(positions)):
                 raise ValidationError(_(
                     "Two columns of entity '%(e)s' cannot share the same "
@@ -148,7 +152,6 @@ class RaesMdEntityColumn(models.Model):
                     e=rec.entity_id.display_name, p=positions,
                 ))
 
-            # Continuity check
             expected = list(range(1, len(positions) + 1))
             if positions != expected:
                 raise ValidationError(_(
@@ -166,6 +169,21 @@ class RaesMdEntityColumn(models.Model):
     def _onchange_data_type_clear_size(self):
         if self.data_type and self.data_type not in SIZE_REQUIRED_TYPES:
             self.size = False
+
+    @api.onchange('reference_entity_id')
+    def _onchange_reference_entity_set_bigint(self):
+        if self.reference_entity_id:
+            self.data_type = 'bigint'
+            self.size = False
+
+    @api.constrains('reference_entity_id', 'data_type')
+    def _check_reference_entity_forces_bigint(self):
+        for rec in self:
+            if rec.reference_entity_id and rec.data_type != 'bigint':
+                raise ValidationError(_(
+                    "Column '%(c)s' references entity '%(e)s', so its "
+                    "Data Type must be BigInt.",
+                    c=rec.name, e=rec.reference_entity_id.display_name))
 
     # ------------------------------------------------------------------
     # Lifecycle
@@ -194,26 +212,38 @@ class RaesMdEntityColumn(models.Model):
             for vals in vals_list:
                 vals['is_user_defined'] = 1
         for vals in vals_list:
-            # Reference entity forces bigint
             if vals.get('reference_entity_id'):
                 vals['data_type'] = 'bigint'
                 vals['size'] = False
-            # Otherwise drop size for types that don't use it
             dt = vals.get('data_type')
             if dt and dt not in SIZE_REQUIRED_TYPES:
                 vals['size'] = False
-        return super().create(vals_list)
+
+        res = super().create(vals_list)
+
+        if not self.env.context.get('skip_dw_sync'):
+            for entity in res.mapped('entity_id'):
+                try:
+                    entity._sync_dw_table()
+                except Exception:
+                    _logger.exception(
+                        "DW table sync after column create failed "
+                        "for entity %s", entity.display_name)
+        return res
 
     def write(self, vals):
+        # Capture old names to rename the DB column
+        old_names = {}
+        if 'name' in vals:
+            for rec in self:
+                old_names[rec.id] = rec.name
+
         vals.pop('is_user_defined', None)
 
         if 'reference_entity_id' in vals:
             if vals['reference_entity_id']:
-                # Setting a reference → force BigInt
                 vals['data_type'] = 'bigint'
                 vals['size'] = False
-            # else: clearing the reference — no forced data_type, user keeps
-            # whatever they pick next
 
         new_type = vals.get('data_type')
         if new_type is not None and new_type not in SIZE_REQUIRED_TYPES:
@@ -223,19 +253,42 @@ class RaesMdEntityColumn(models.Model):
             vals['modification_date'] = fields.Datetime.now()
         if 'editor_user_id' not in vals:
             vals['editor_user_id'] = self.env.uid
-        return super().write(vals)
+
+        # Rename the DB column on MSSQL before touching metadata
+        if 'name' in vals:
+            for rec in self:
+                old_name = old_names.get(rec.id, rec.name)
+                new_name = vals['name']
+                if (old_name != new_name
+                        and rec.entity_id.schema_name):
+                    conn = rec.entity_id._get_dw_connection()
+                    if conn:
+                        ddl_builder.rename_column(
+                            conn,
+                            rec.entity_id.schema_name,
+                            rec.entity_id.name,
+                            old_name, new_name)
+
+        res = super().write(vals)
+
+        if not self.env.context.get('skip_dw_sync'):
+            for entity in self.mapped('entity_id'):
+                try:
+                    entity._sync_dw_table()
+                except Exception:
+                    _logger.exception(
+                        "DW table sync after column write failed "
+                        "for entity %s", entity.display_name)
+        return res
 
     def action_clear_reference_entity(self):
         """Clear the reference and re-enable the Data Type field."""
         self.ensure_one()
         self.reference_entity_id = False
-        # Do NOT touch data_type here — the user picks the new one.
 
     def unlink(self):
-        # Capture affected entities before delete
         entities = self.mapped('entity_id')
 
-        # Do not allow removing the auto PK column via the UI
         pk_cols = self.filtered(lambda c: c.ordinal_position == 1)
         if pk_cols:
             raise ValidationError(_(
@@ -255,9 +308,3 @@ class RaesMdEntityColumn(models.Model):
                 if col.ordinal_position != i:
                     col.write({'ordinal_position': i})
         return res
-
-    @api.onchange('reference_entity_id')
-    def _onchange_reference_entity_set_bigint(self):
-        if self.reference_entity_id:
-            self.data_type = 'bigint'
-            self.size = False
