@@ -78,7 +78,7 @@
                                     <field name="data_type"/>
                                     <field name="size"/>
                                     <field name="reference_entity_id"/>
-                                    <field name="is_user_defined"/>
+<!--                                    <field name="is_user_defined"/>-->
                                     <field name="column_type_lu"/>
                                 </list>
                             </field>

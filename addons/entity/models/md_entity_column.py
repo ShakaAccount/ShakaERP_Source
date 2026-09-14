@@ -3,6 +3,9 @@ from odoo.exceptions import ValidationError
 
 from .md_view import MD_ENTITY_COLUMN_VIEW, refresh_md_view
 
+# GNR.LookUp category used for the column-type dropdown
+COLUMN_TYPE_LOOKUP_CATEGORY = '1005'
+
 
 class RaesMdEntityColumn(models.Model):
     """Direct mapping of the existing md.entity_column table."""
@@ -33,9 +36,37 @@ class RaesMdEntityColumn(models.Model):
         'raes.md.entity', string='Reference Entity',
         ondelete='set null', index=True)
 
+    # Always 1 for user-created columns; never exposed to the UI.
     is_user_defined = fields.Integer(
-        help='The DDL declares this as int4, not bool — kept as Integer.')
-    column_type_lu = fields.Integer()
+        string='User Defined',
+        default=1,
+        readonly=True,
+        help='The DDL declares this as int4, not bool — kept as Integer. '
+             'Always forced to 1 for columns created through Odoo.')
+
+    @api.model
+    def _selection_column_type_lu(self):
+        """Populate the Column Type dropdown from GNR.LookUp
+        (category_code = 1005).  Shows `value`, stores `code`."""
+        Lookup = self.env.get('raes.gnr.lookup')
+        if Lookup is None:
+            return []
+        try:
+            lookups = Lookup.search(
+                [('category_code', '=', COLUMN_TYPE_LOOKUP_CATEGORY)],
+                order='code',
+            )
+        except Exception:
+            return []
+        return [
+            (str(lk.code), lk.value or str(lk.code))
+            for lk in lookups
+        ]
+
+    column_type_lu = fields.Selection(
+        selection='_selection_column_type_lu',
+        string='Column Type',
+    )
 
     creator_user_id = fields.Integer(
         required=True, default=lambda self: self.env.uid)
@@ -70,7 +101,16 @@ class RaesMdEntityColumn(models.Model):
                     "'%(e)s'.",
                     c=rec.name, e=rec.entity_id.display_name))
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            # Force the flag regardless of what the caller passed
+            vals['is_user_defined'] = 1
+        return super().create(vals_list)
+
     def write(self, vals):
+        # Never let the flag be overwritten
+        vals.pop('is_user_defined', None)
         if 'modification_date' not in vals:
             vals['modification_date'] = fields.Datetime.now()
         if 'editor_user_id' not in vals:

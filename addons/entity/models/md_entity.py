@@ -5,7 +5,7 @@ from .md_view import MD_ENTITY_VIEW, refresh_md_view
 
 # GNR.LookUp category used for the entity-type dropdown
 ENTITY_TYPE_LOOKUP_CATEGORY = '1001'
-
+ENTITY_SYSTEM_LOOKUP_CATEGORY = '1004'
 
 class RaesMdEntity(models.Model):
     _name = 'raes.md.entity'
@@ -15,6 +15,38 @@ class RaesMdEntity(models.Model):
     _rec_name = 'name'
     _order = 'schema_name, name'
     _description = 'MD Entity (md.entity)'
+
+    @api.model
+    def _selection_entity_system_lu(self):
+        """Populate the Entity system dropdown from GNR.LookUp
+        (category_code = 1004).  Shows `value`, stores `code`."""
+        fallback = [('1', 'Dim'), ('2', 'Fact')]
+        Lookup = self.env.get('raes.gnr.lookup')
+        if Lookup is None:
+            return fallback
+        try:
+            lookups = Lookup.search(
+                [('category_code', '=', ENTITY_SYSTEM_LOOKUP_CATEGORY)],
+                order='code',
+            )
+        except Exception:
+            # lookup table / view not ready (module load, DW reload, ...)
+            return fallback
+        if not lookups:
+            return fallback
+        return [
+            (str(lk.code), lk.value or str(lk.code))
+            for lk in lookups
+        ]
+
+    # 1 = Dim, 2 = Fact (codes come from GNR.LookUp category 1001)
+    system_lu = fields.Selection(
+        selection='_selection_entity_system_lu',
+        string='Entity System',
+        required=True,
+        default='1',
+    )
+
 
     @api.model
     def _selection_entity_type_lu(self):
@@ -84,7 +116,7 @@ class RaesMdEntity(models.Model):
         required=True, default=fields.Datetime.now)
     editor_user_id = fields.Integer()
     modification_date = fields.Datetime()
-    system_lu = fields.Integer()
+    # system_lu = fields.Integer()
     database_name = fields.Char()
 
     @api.constrains('name', 'schema_name')
