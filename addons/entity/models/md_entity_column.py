@@ -82,8 +82,9 @@ class RaesMdEntityColumn(models.Model):
 
     ordinal_position = fields.Integer(string='Ordinal Position')
 
-    is_primary_key = fields.Boolean(readonly=True)
-    is_identity = fields.Boolean(readonly=True)
+    # Editable now — user picks them explicitly.
+    is_primary_key = fields.Boolean(string='Primary Key')
+    is_identity = fields.Boolean(string='Identity')
 
     reference_entity_id = fields.Many2one(
         'raes.md.entity', string='Reference Entity',
@@ -127,43 +128,66 @@ class RaesMdEntityColumn(models.Model):
     )
 
     # ------------------------------------------------------------------
-    # Ordinal position rules
-    #   - position 1 is reserved for the auto PK column
-    #   - the sequence 1..N must be continuous (no gaps, no duplicates)
-    #   - user-created columns therefore start at 2
+    # Ordinal position rules — 1..N, no gaps, no duplicates.
+    #
+    # The constraint is deferred when an ordinal change is part of a
+    # batch (see md_entity.write/create): the parent sets
+    # ``skip_ordinal_check`` in context so intermediate states during
+    # a swap are not rejected. The parent then runs the full validation
+    # once after all child writes complete.
     # ------------------------------------------------------------------
     @api.constrains('ordinal_position', 'entity_id')
     def _check_ordinal_position(self):
         if self.env.context.get('skip_ordinal_check'):
             return
-        for rec in self:
-            if not rec.entity_id:
-                continue
-            cols = self.search([
-                ('entity_id', '=', rec.entity_id.id),
-                ('ordinal_position', '!=', False),
-            ])
-            positions = sorted(c.ordinal_position for c in cols)
-
-            if len(positions) != len(set(positions)):
-                raise ValidationError(_(
-                    "Two columns of entity '%(e)s' cannot share the same "
-                    "ordinal position. Used positions: %(p)s.",
-                    e=rec.entity_id.display_name, p=positions,
-                ))
-
-            expected = list(range(1, len(positions) + 1))
-            if positions != expected:
-                raise ValidationError(_(
-                    "Ordinal positions of entity '%(e)s' must be "
-                    "continuous, starting from 1 with no gaps. "
-                    "Expected %(exp)s, got %(got)s.",
-                    e=rec.entity_id.display_name,
-                    exp=expected, got=positions,
-                ))
+        # Delegate to the entity so the same error text and logic is
+        # used whether the column was written directly or via a batch.
+        for entity in self.mapped('entity_id'):
+            entity._validate_column_ordinals()
 
     # ------------------------------------------------------------------
-    # Size handling
+    # One PK and one identity per entity
+    # ------------------------------------------------------------------
+    @api.constrains('is_primary_key', 'entity_id')
+    def _check_single_primary_key(self):
+        if self.env.context.get('skip_single_pk_check'):
+            return
+        for rec in self:
+            if not rec.is_primary_key or not rec.entity_id:
+                continue
+            others = self.search([
+                ('entity_id', '=', rec.entity_id.id),
+                ('is_primary_key', '=', True),
+                ('id', '!=', rec.id),
+            ], limit=1)
+            if others:
+                raise ValidationError(_(
+                    "Entity '%(e)s' already has a primary-key column "
+                    "('%(c)s'). Only one column can be the primary key.",
+                    e=rec.entity_id.display_name,
+                    c=others.name))
+
+    @api.constrains('is_identity', 'entity_id')
+    def _check_single_identity(self):
+        if self.env.context.get('skip_single_identity_check'):
+            return
+        for rec in self:
+            if not rec.is_identity or not rec.entity_id:
+                continue
+            others = self.search([
+                ('entity_id', '=', rec.entity_id.id),
+                ('is_identity', '=', True),
+                ('id', '!=', rec.id),
+            ], limit=1)
+            if others:
+                raise ValidationError(_(
+                    "Entity '%(e)s' already has an identity column "
+                    "('%(c)s'). Only one column can be identity.",
+                    e=rec.entity_id.display_name,
+                    c=others.name))
+
+    # ------------------------------------------------------------------
+    # Size / reference handling
     # ------------------------------------------------------------------
     @api.onchange('data_type')
     def _onchange_data_type_clear_size(self):
@@ -208,10 +232,8 @@ class RaesMdEntityColumn(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        if not self.env.context.get('skip_is_user_defined_force'):
-            for vals in vals_list:
-                vals['is_user_defined'] = 1
         for vals in vals_list:
+            vals['is_user_defined'] = 1
             if vals.get('reference_entity_id'):
                 vals['data_type'] = 'bigint'
                 vals['size'] = False
@@ -223,12 +245,9 @@ class RaesMdEntityColumn(models.Model):
 
         if not self.env.context.get('skip_dw_sync'):
             for entity in res.mapped('entity_id'):
-                try:
-                    entity._sync_dw_table()
-                except Exception:
-                    _logger.exception(
-                        "DW table sync after column create failed "
-                        "for entity %s", entity.display_name)
+                # Let UserError propagate so the user sees the reason
+                # the FK could not be created.
+                entity._sync_dw_table()
         return res
 
     def write(self, vals):
@@ -273,12 +292,7 @@ class RaesMdEntityColumn(models.Model):
 
         if not self.env.context.get('skip_dw_sync'):
             for entity in self.mapped('entity_id'):
-                try:
-                    entity._sync_dw_table()
-                except Exception:
-                    _logger.exception(
-                        "DW table sync after column write failed "
-                        "for entity %s", entity.display_name)
+                entity._sync_dw_table()
         return res
 
     def action_clear_reference_entity(self):
@@ -289,22 +303,15 @@ class RaesMdEntityColumn(models.Model):
     def unlink(self):
         entities = self.mapped('entity_id')
 
-        pk_cols = self.filtered(lambda c: c.ordinal_position == 1)
-        if pk_cols:
-            raise ValidationError(_(
-                "The primary-key column cannot be deleted."
-            ))
-
         res = super().unlink()
 
-        # Close ordinal gaps: renumber remaining user columns 2, 3, 4, ...
+        # Close ordinal gaps: renumber remaining columns 1, 2, 3, ...
         Column = self.with_context(skip_ordinal_check=True)
         for entity in entities:
             cols = Column.search([
                 ('entity_id', '=', entity.id),
-                ('ordinal_position', '>', 1),
             ], order='ordinal_position')
-            for i, col in enumerate(cols, start=2):
+            for i, col in enumerate(cols, start=1):
                 if col.ordinal_position != i:
                     col.write({'ordinal_position': i})
         return res

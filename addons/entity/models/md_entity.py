@@ -133,7 +133,7 @@ class RaesMdEntity(models.Model):
     creator_user_id = fields.Integer(
         required=True, default=lambda self: self.env.uid)
     creation_date = fields.Datetime(
-        required=True, default=fields.Datetime.now)
+        required=True, default=lambda self: fields.Datetime.now())
     editor_user_id = fields.Integer()
     modification_date = fields.Datetime()
 
@@ -213,7 +213,6 @@ class RaesMdEntity(models.Model):
                 continue
             connection = rec._get_dw_connection()
             if not connection:
-                # No DW connection linked — nothing to create on.
                 continue
             try:
                 ddl_builder.sync_table(connection, rec)
@@ -226,60 +225,41 @@ class RaesMdEntity(models.Model):
                     e=rec.display_name, msg=str(e)[:500]))
 
     # ------------------------------------------------------------------
-    # PK column helpers
+    # Ordinal position validation (shared with md.entity.column)
     # ------------------------------------------------------------------
-    @staticmethod
-    def _pk_column_name(entity_name, entity_type_lu):
-        """Dim (entity_type_lu == '1')  ->  ``{entity_name}ID``
-        Anything else (Fact, ...)    ->  ``id``
-        """
-        if str(entity_type_lu) == '1':
-            return f'{entity_name}ID'
-        return 'id'
-
-    def _ensure_pk_column(self):
-        """Create or synchronise the auto PK column."""
-        Column = self.env['raes.md.entity_column'].with_context(
-            skip_ordinal_check=True,
-            skip_is_user_defined_force=True,
-            skip_dw_sync=True,
-        )
+    def _validate_column_ordinals(self):
+        """Ensure each entity's columns form a gap-free 1..N sequence."""
         for entity in self:
-            expected_name = self._pk_column_name(
-                entity.name, entity.entity_type_lu)
-            expected_identity = str(entity.entity_type_lu) == '2'
-
-            existing = entity.column_ids.filtered(
-                lambda c: c.ordinal_position == 1)
-
-            if existing:
-                updates = {}
-                if existing.name != expected_name:
-                    conn = entity._get_dw_connection()
-                    if conn and entity.schema_name and entity.name:
-                        ddl_builder.rename_column(
-                            conn,
-                            entity.schema_name, entity.name,
-                            existing.name, expected_name)
-                    updates['name'] = expected_name
-                if existing.is_identity != expected_identity:
-                    updates['is_identity'] = expected_identity
-                if updates:
-                    existing.with_context(
-                        skip_ordinal_check=True,
-                    ).write(updates)
+            cols = entity.column_ids.filtered(
+                lambda c: c.ordinal_position and c.ordinal_position > 0
+            ).sorted('ordinal_position')
+            if not cols:
                 continue
 
-            Column.create({
-                'entity_id': entity.id,
-                'name': expected_name,
-                'title': 'کلید اصلی',
-                'data_type': 'int',
-                'ordinal_position': 1,
-                'is_primary_key': True,
-                'is_identity': expected_identity,
-                'is_user_defined': 0,
-            })
+            positions = [c.ordinal_position for c in cols]
+
+            if len(positions) != len(set(positions)):
+                dupes = sorted({p for p in positions
+                                if positions.count(p) > 1})
+                raise ValidationError(_(
+                    "Entity '%(e)s' has more than one column sharing "
+                    "ordinal position %(p)s. Each column must have a "
+                    "unique position starting from 1.",
+                    e=entity.display_name,
+                    p=', '.join(str(d) for d in dupes),
+                ))
+
+            expected = list(range(1, len(positions) + 1))
+            if positions != expected:
+                raise ValidationError(_(
+                    "Ordinal positions of entity '%(e)s' must form a "
+                    "gap-free sequence 1..%(n)s. Current positions: "
+                    "%(got)s. Renumber your columns so they read "
+                    "1, 2, 3, ... with no gaps.",
+                    e=entity.display_name,
+                    n=len(positions),
+                    got=', '.join(str(p) for p in positions),
+                ))
 
     # ------------------------------------------------------------------
     # Constraints
@@ -382,8 +362,20 @@ class RaesMdEntity(models.Model):
                 conn = self.env['raes.dw.connection'].browse(conn_id)
                 vals['database_name'] = conn.database
 
-        entities = super().create(vals_list)
-        entities._ensure_pk_column()
+        # If the create payload includes columns, suppress the per-line
+        # ordinal constraint while Odoo inserts them one by one; the
+        # full validation runs once everything is in place.
+        has_columns = any(v.get('column_ids') for v in vals_list)
+        if has_columns:
+            self_ctx = self.with_context(skip_ordinal_check=True)
+        else:
+            self_ctx = self
+
+        entities = super(RaesMdEntity, self_ctx).create(vals_list)
+
+        if has_columns:
+            entities._validate_column_ordinals()
+
         entities._sync_dw_table()
         return entities
 
@@ -407,7 +399,17 @@ class RaesMdEntity(models.Model):
             else:
                 vals.setdefault('database_name', False)
 
-        res = super().write(vals)
+        # If the write includes column changes (editable list), suppress
+        # the per-line ordinal check while Odoo applies each child
+        # write — a swap like (2↔3) produces transient duplicates that
+        # are resolved once both writes land. We validate after.
+        batch_ordinals = 'column_ids' in vals
+        if batch_ordinals:
+            self_ctx = self.with_context(skip_ordinal_check=True)
+        else:
+            self_ctx = self
+
+        res = super(RaesMdEntity, self_ctx).write(vals)
 
         # Rename the DW table when entity name/schema changed
         for rec in self:
@@ -423,11 +425,35 @@ class RaesMdEntity(models.Model):
                         old_schema, old_name,
                         rec.schema_name, rec.name)
 
-        # Keep PK column name/identity in sync
-        if 'name' in vals or 'entity_type_lu' in vals:
-            self._ensure_pk_column()
+        # Full ordinal validation once every child write is done
+        if batch_ordinals:
+            self._validate_column_ordinals()
 
         # Add missing columns / refresh FKs
         self._sync_dw_table()
 
         return res
+
+    def unlink(self):
+        """Drop the DW table on the linked MSSQL server, then delete the
+        metadata.
+
+        A refusal from ``ddl_builder.drop_table`` (non-empty table or
+        incoming foreign keys) aborts the whole unlink *before* any
+        metadata is removed, so the entity is left untouched.
+        """
+        for entity in self:
+            if not entity.schema_name or not entity.name:
+                continue
+            conn = entity._get_dw_connection()
+            if not conn:
+                continue
+            ddl_builder.drop_table(conn, entity.schema_name, entity.name)
+
+        # Companion config rows carry a FK to raes.md.entity; clear them
+        # explicitly so the ORM's cascade on a view-backed model cannot
+        # trip on a missing real FK.
+        self.env['raes.md.entity.config'].sudo().search(
+            [('entity_id', 'in', self.ids)]).unlink()
+
+        return super().unlink()
