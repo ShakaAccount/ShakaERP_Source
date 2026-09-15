@@ -1,5 +1,18 @@
-"""Writable public mirror views for md.category / md.category_member."""
-from odoo.addons.entity.models.md_view import refresh_writable_view
+"""Writable public mirror views for md.category / md.category_member.
+
+``refresh_writable_view`` is re-exported explicitly: ``category.py``
+imports it from here, so it must be a real name of this module rather
+than an incidental side effect of the import below.
+"""
+from odoo.addons.entity.models.md_view import (  # noqa: F401
+    refresh_md_view,
+    refresh_writable_view,
+)
+
+__all__ = [
+    'CATEGORY_VIEW', 'CATEGORY_MEMBER_VIEW',
+    'refresh_md_view', 'refresh_writable_view',
+]
 
 _CATEGORY_COLUMNS = {
     'id': 'bigint',

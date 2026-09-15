@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 class RaesMdCategory(models.Model):
     _name = 'raes.md.category'
     _table = 'raes_md_category'
-    _auto = False              # Odoo must NOT create the table
+    _auto = False
     _log_access = False
     _rec_name = 'title'
     _description = 'MD Category (md.category)'
@@ -48,13 +48,49 @@ class RaesMdCategory(models.Model):
                                  string='Members')
 
     def init(self):
-        # init() runs on install AND on every upgrade. Rebuild the writable
-        # view so a DW reload that CASCADEd it away does not break the ORM.
         try:
             refresh_writable_view(self.env, *CATEGORY_VIEW)
         except Exception:
             _logger.exception("Could not (re)build view raes_md_category")
             raise
+
+    @api.constrains('parent_id', 'entity_id')
+    def _check_same_entity_as_root(self):
+        """A node must share its tree root's entity.
+
+        The legacy ``md.category_same_entity`` trigger already enforces
+        this with a recursive ancestor walk, but it raises a raw
+        PostgreSQL error. Checking here turns that into a proper
+        ValidationError the UI can display.
+        """
+        for rec in self:
+            root = rec._get_tree_root()
+            if root and root.entity_id and rec.entity_id != root.entity_id:
+                raise ValidationError(_(
+                    'Category "%(title)s" belongs to entity "%(root)s" '
+                    '(tree root "%(root_title)s"). A sub-category must use '
+                    'the same entity as its tree root.',
+                    title=rec.title,
+                    root=root.entity_id.display_name,
+                    root_title=root.title,
+                ))
+
+    def _get_tree_root(self):
+        """Return the root record of this node's branch.
+
+        Follows ``parent_id`` upward (falling back to ``root_id`` when it
+        is already correct) and tolerates a broken/cyclic chain by
+        returning an empty recordset.
+        """
+        self.ensure_one()
+        seen = set()
+        node = self
+        while node and node.id not in seen:
+            seen.add(node.id)
+            if not node.parent_id:
+                return node
+            node = node.parent_id
+        return self.browse()
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -62,12 +98,97 @@ class RaesMdCategory(models.Model):
             vals.setdefault('company_id', self.env.company.id)
             vals.setdefault('creator_user_id', self.env.uid)
             vals.setdefault('creation_date', fields.Datetime.now())
-        return super().create(vals_list)
+            vals.setdefault('is_user_defined', True)
+            if not vals.get('root_id'):
+                parent_id = vals.get('parent_id')
+                if parent_id:
+                    parent = self.browse(parent_id)
+                    # Inherit the parent's entity when not supplied.
+                    if not vals.get('entity_id') and parent.entity_id:
+                        vals['entity_id'] = parent.entity_id.id
+                    vals['root_id'] = parent.root_id.id or parent.id
+
+            # --- Pre-validate entity consistency BEFORE the DB trigger
+            # fires. The legacy md.category_same_entity() trigger raises
+            # a raw Postgres error that leaves the ORM cache broken
+            # (MissingError on read-back). Catching it here yields a
+            # proper ValidationError the UI can render.
+            parent_id = vals.get('parent_id')
+            entity_id = vals.get('entity_id')
+            if parent_id and entity_id:
+                parent = self.browse(parent_id)
+                if parent.exists():
+                    root = parent._get_tree_root() or parent
+                    if root.entity_id and root.entity_id.id != entity_id:
+                        raise ValidationError(_(
+                            'A sub-category must belong to the same entity '
+                            'as its tree root "%(root)s" (entity %(ent)s).',
+                            root=root.title,
+                            ent=root.entity_id.display_name,
+                        ))
+
+        records = super().create(vals_list)
+        # A brand-new root has no root_id yet: it is its own root.
+        for rec in records.filtered(lambda r: not r.root_id):
+            rec.sudo().write({'root_id': rec.id})
+        return records
 
     def write(self, vals):
+        vals = dict(vals)
+        # Re-parenting must keep root_id in sync and must not create a
+        # cycle (a node cannot become its own ancestor).
+        if 'parent_id' in vals:
+            new_parent = (self.browse(vals['parent_id']) if vals['parent_id']
+                          else self.browse())
+            for rec in self:
+                if new_parent:
+                    # Reject a cycle: the new parent must not sit below
+                    # this record in the tree.
+                    node, seen = new_parent, set()
+                    while node and node.id not in seen:
+                        if node.id == rec.id:
+                            raise ValidationError(_(
+                                'Cannot move "%(title)s" under its own '
+                                'descendant "%(parent)s".',
+                                title=rec.title,
+                                parent=new_parent.title,
+                            ))
+                        seen.add(node.id)
+                        node = node.parent_id
+
+                    # Pre-validate entity match on re-parent.
+                    root = new_parent._get_tree_root() or new_parent
+                    if (root.entity_id and rec.entity_id
+                            and rec.entity_id.id != root.entity_id.id):
+                        raise ValidationError(_(
+                            'Cannot move "%(t)s": a sub-category must share '
+                            "its tree root's entity (\"%(r)s\").",
+                            t=rec.title, r=root.title,
+                        ))
+
+                    vals.setdefault(
+                        'root_id', new_parent.root_id.id or new_parent.id)
+                else:
+                    vals.setdefault('root_id', rec.id)
+
         vals.setdefault('editor_user_id', self.env.uid)
         vals.setdefault('modification_date', fields.Datetime.now())
-        return super().write(vals)
+        result = super().write(vals)
+        # A node that became a root must point at itself.
+        if 'parent_id' in vals and not vals['parent_id']:
+            for rec in self.filtered(lambda r: r.root_id.id != r.id):
+                rec.sudo().write({'root_id': rec.id})
+        return result
+
+    def unlink(self):
+        """Delete members first, then the category.
+
+        ``md.category_member`` has no ON DELETE CASCADE toward
+        ``md.category`` (legacy table we must not alter), so the member
+        rows have to be removed explicitly.
+        """
+        self.mapped('member_ids').sudo().unlink()
+        return super().unlink()
 
 
 class RaesMdCategoryMember(models.Model):
@@ -91,10 +212,6 @@ class RaesMdCategoryMember(models.Model):
     entity_id = fields.Many2one('raes.md.entity', required=True,
                                 ondelete='cascade')
 
-    # NOTE: this model is _auto = False and backed by a view, so a
-    # _sql_constraints entry can never be materialised in the database
-    # (verified: no matching row in pg_constraint). Uniqueness is
-    # enforced in Python instead.
     @api.constrains('category_id', 'member_id', 'entity_id')
     def _check_unique_member(self):
         for rec in self:
@@ -121,3 +238,9 @@ class RaesMdCategoryMember(models.Model):
             vals.setdefault('creator_user_id', self.env.uid)
             vals.setdefault('creation_date', fields.Datetime.now())
         return super().create(vals_list)
+
+    def write(self, vals):
+        vals = dict(vals)
+        vals.setdefault('editor_user_id', self.env.uid)
+        vals.setdefault('modification_date', fields.Datetime.now())
+        return super().write(vals)

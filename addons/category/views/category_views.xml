@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- Client action hosting the standalone 3-pane OWL Category Manager.
+         `tag` must match the key registered in the "actions" registry by
+         static/src/js/category_manager.js. -->
     <record id="action_category_manager" model="ir.actions.client">
         <field name="name">Category Manager</field>
         <field name="tag">category.category_manager</field>
     </record>
 
-    <menuitem id="menu_category_root" name="Categories" sequence="10"/>
+    <menuitem id="menu_category_root"
+              name="Categories"
+              sequence="10"/>
+
     <menuitem id="menu_category_manager"
               name="Category Manager"
               parent="menu_category_root"
-              action="action_category_manager"/>
+              action="action_category_manager"
+              sequence="10"/>
 
 </odoo>

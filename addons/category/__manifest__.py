@@ -1,44 +1,39 @@
 {
-    'name': "category",
-
-    'summary': "Short (1 phrase/line) summary of the module's purpose",
-
+    'name': 'Category',
+    'summary': 'Standalone 3-pane Category Manager over md.category / '
+               'md.category_member (Shaka DW).',
     'description': """
-Long description of module's purpose
-    """,
+Category Manager
+================
+A standalone OWL client action that links rows of a dynamic data-warehouse
+table to the legacy ``md.category`` hierarchy through
+``md.category_member``.
 
-    'author': "My Company",
-    'website': "https://www.yourcompany.com",
-
-    # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
-    # for the full list
-    'category': 'Uncategorized',
-    'version': '0.1',
+The legacy tables live in the ``md`` schema and cannot be modified, so Odoo
+addresses them through writable public mirror views
+(``public.raes_md_category`` / ``public.raes_md_category_member``) rebuilt by
+``refresh_writable_view`` on every install and upgrade.
+""",
+    'author': 'RAES',
+    'website': 'https://www.yourcompany.com',
+    'category': 'Technical',
+    'version': '19.0.1.0.0',
+    'license': 'LGPL-3',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','web','entity'],
+    'depends': ['base', 'web', 'entity'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
         'views/category_views.xml',
-        # 'views/actions.xml',
     ],
     'assets': {
         'web.assets_backend': [
-            'category/static/src/js/split_view.js',
-            'category/static/src/xml/split_view.xml',
             'category/static/src/js/category_manager.js',
             'category/static/src/xml/category_manager.xml',
-            # 'my_module/static/src/scss/split_view.scss',  # Optional for custom styling
         ],
     },
-    # only loaded in demonstration mode
-    'demo': [
-        'demo/demo.xml',
-    ],
     'installable': True,
     'application': True,
 }
-

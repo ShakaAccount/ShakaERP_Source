@@ -465,20 +465,34 @@ class RaesMdEntity(models.Model):
 
     @api.model
     def get_dw_records(self, entity_id, offset=0, limit=10, search_term=''):
-        'Fetch records dynamically from the DW table linked to this entity.'
-        empty = {'records': [], 'total': 0}
+        """Fetch records dynamically from the DW table linked to this entity.
+
+        Returns ``{'records': [...], 'total': n, 'reason': str|None}``.
+        Each record carries a normalized ``id`` (the resolved DW primary
+        key) and a display ``label`` in addition to the raw DW columns —
+        the raw PK column is a lowercased MSSQL name (``partyid``,
+        ``detailedledgerid``, ...), so callers must not assume
+        ``record.id`` exists unless it is normalized here.
+        """
+        empty = {'records': [], 'total': 0, 'reason': None}
         entity = self.browse(entity_id)
         if not entity.exists():
-            return empty
+            return dict(empty, reason='no-entity')
 
         conn, relation, source = self._dw_resolve_relation(entity)
         if not relation:
             _logger.info(
                 'DW relation unresolved for entity %s (%s.%s): %s',
                 entity.id, entity.schema_name, entity.name, source)
-            return empty
+            return dict(empty, reason=source or 'unresolved')
 
-        pk = self._dw_pk_column(entity, relation) or 'id'
+        pk = self._dw_pk_column(entity, relation)
+        if not pk:
+            _logger.warning(
+                'No PK column resolvable for entity %s on %s',
+                entity.id, relation)
+            return dict(empty, reason='no-pk')
+
         clause, params = self._build_dw_where(
             search_term, self._dw_search_columns(entity, relation))
         where = 'WHERE ' + clause if clause else ''
@@ -493,8 +507,9 @@ class RaesMdEntity(models.Model):
             'SELECT t.* FROM %s t %s ORDER BY t.%s LIMIT %%s OFFSET %%s'
             % (relation, where, pk), params + [limit, offset])
         cols = [c[0] for c in self.env.cr.description]
-        records = [dict(zip(cols, r)) for r in self.env.cr.fetchall()]
-        return {'records': records, 'total': total}
+        raw = [dict(zip(cols, r)) for r in self.env.cr.fetchall()]
+        records = [self._dw_normalize_record(r, pk) for r in raw]
+        return {'records': records, 'total': total, 'reason': None}
 
     def unlink(self):
         """Drop the DW table on the linked MSSQL server, then delete the
@@ -678,27 +693,36 @@ class RaesMdEntity(models.Model):
                  in_category):
         """Shared implementation of the two category item panes.
 
-        Returns ``{'records': [...], 'total': n}``. Unresolvable DW
-        relations degrade to an empty page instead of raising.
+        Returns ``{'records': [...], 'total': n, 'reason': str|None}``.
+
+        Every record carries a normalized ``id`` (the DW primary key, i.e.
+        the value stored in ``md.category_member.member_id``) and a
+        display ``label``. The raw DW columns are preserved alongside
+        those two keys so callers can render extra detail.
+
+        Unresolvable DW relations degrade to an empty page instead of
+        raising, but the ``reason`` key names the failing branch
+        (``'no-connection'``, ``'not-imported'``, ``'no-pk'``) so the UI
+        can explain the empty pane instead of silently showing nothing.
         """
-        empty = {'records': [], 'total': 0}
+        empty = {'records': [], 'total': 0, 'reason': None}
         entity = self.browse(entity_id)
         if not entity.exists():
-            return empty
+            return dict(empty, reason='no-entity')
 
         conn, relation, source = self._dw_resolve_relation(entity)
         if not relation:
             _logger.info(
                 "DW relation unresolved for entity %s (%s.%s): %s",
                 entity.id, entity.schema_name, entity.name, source)
-            return empty
+            return dict(empty, reason=source or 'unresolved')
 
         pk = self._dw_pk_column(entity, relation)
         if not pk:
             _logger.warning(
                 "No PK column resolvable for entity %s on %s",
                 entity.id, relation)
-            return empty
+            return dict(empty, reason='no-pk')
 
         clause, params = self._build_dw_where(
             search_term, self._dw_search_columns(entity, relation))
@@ -721,19 +745,222 @@ class RaesMdEntity(models.Model):
             f'SELECT t.* FROM {relation} t {where} '
             f'ORDER BY t.{pk} LIMIT %s OFFSET %s', params + [limit, offset])
         cols = [c[0] for c in self.env.cr.description]
-        records = [dict(zip(cols, r)) for r in self.env.cr.fetchall()]
-        return {'records': records, 'total': total}
+        raw = [dict(zip(cols, r)) for r in self.env.cr.fetchall()]
 
+        records = [self._dw_normalize_record(r, pk) for r in raw]
+        return {'records': records, 'total': total, 'reason': None}
+
+    _DW_LABEL_CANDIDATES = (
+        'title', 'name', 'englishtitle', 'english_title', 'codetitle',
+        'companytitle', 'partytitle', 'valuetitle', 'value',
+    )
+
+    def _dw_normalize_record(self, record, pk):
+        """Expose the DW primary key as ``id`` and pick a ``label``.
+
+        The DW column names are MSSQL PascalCase names lowercased by the
+        bootstrap alias view (``PartyID`` -> ``partyid``), so the client
+        cannot assume ``record.id`` exists. Without this normalization
+        ``record.id`` is ``undefined`` and the ``+`` button would post a
+        ``member_id`` of ``undefined``.
+        """
+        rec = dict(record)
+        rec['id'] = rec.get(pk)
+        rec['_pk'] = pk
+        label = None
+        for cand in self._DW_LABEL_CANDIDATES:
+            val = rec.get(cand)
+            if val not in (None, False, ''):
+                label = str(val).strip()
+                break
+        rec['label'] = label or f'#{rec["id"]}'
+        return rec
+
+    @api.model
+    def get_dw_pane_diagnostics(self, entity_id):
+        """Explain why a pane may be empty for `entity_id`.
+
+        Returns ``{'entity': str, 'schema': str, 'table': str,
+        'relation': str|None, 'source': str, 'pk': str|None,
+        'search_columns': [...], 'connection_id': int|None}``. Used by
+        the client action to show an actionable warning instead of a
+        blank pane.
+        """
+        entity = self.browse(entity_id)
+        if not entity.exists():
+            return {'error': 'Entity %s does not exist.' % entity_id}
+        conn, relation, source = self._dw_resolve_relation(entity)
+        return {
+            'entity': entity.display_name,
+            'schema': entity.schema_name or '',
+            'table': entity.name or '',
+            'connection_id': conn.id if conn else None,
+            'relation': relation,
+            'source': source,
+            'pk': self._dw_pk_column(entity, relation) if relation else None,
+            'search_columns': (self._dw_search_columns(entity, relation)
+                               if relation else []),
+        }
+
+    # ------------------------------------------------------------------
+    # Category pane fetch — LOCAL membership, REMOTE (MSSQL) row data
+    # ------------------------------------------------------------------
     @api.model
     def get_items_not_in_category(self, entity_id, category_id,
                                   offset=0, limit=20, search_term=''):
-        """DW rows NOT yet linked to `category_id`."""
-        return self._dw_pane(entity_id, category_id, offset, limit,
-                             search_term, in_category=False)
+        return self._dw_category_pane(
+            entity_id, category_id, offset, limit, search_term,
+            in_category=False)
 
     @api.model
     def get_items_in_category(self, entity_id, category_id,
                               offset=0, limit=20, search_term=''):
-        """DW rows already linked to `category_id`."""
-        return self._dw_pane(entity_id, category_id, offset, limit,
-                             search_term, in_category=True)
+        return self._dw_category_pane(
+            entity_id, category_id, offset, limit, search_term,
+            in_category=True)
+
+    def _dw_connection_for(self, entity):
+        """Return the raes.dw.connection for this entity, or empty recordset."""
+        config = self.env['raes.md.entity.config'].sudo().search(
+            [('entity_id', '=', entity.id)], limit=1)
+        return config.connection_id if config else self.env['raes.dw.connection']
+
+    def _dw_mssql_open(self, connection):
+        """Open the pymssql connection shared with the DDL builder."""
+        return self.env['raes.dw.catalog']._mssql_connect(connection)
+
+    def _dw_remote_pk(self, cur, entity):
+        """PK column name on the MSSQL side.
+
+        Metadata first (``column_ids.is_primary_key``), then live introspection.
+        """
+        meta_pk = entity.column_ids.filtered(lambda c: c.is_primary_key)[:1]
+        if meta_pk and meta_pk.name:
+            return meta_pk.name
+        cur.execute("""
+                    SELECT kcu.COLUMN_NAME
+                    FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
+                             JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
+                                  ON kcu.CONSTRAINT_NAME = tc.CONSTRAINT_NAME
+                                      AND kcu.TABLE_SCHEMA = tc.TABLE_SCHEMA
+                                      AND kcu.TABLE_NAME = tc.TABLE_NAME
+                    WHERE tc.CONSTRAINT_TYPE = 'PRIMARY KEY'
+                      AND tc.TABLE_SCHEMA = %s
+                      AND tc.TABLE_NAME = %s
+                    ORDER BY kcu.ORDINAL_POSITION
+                    """, (entity.schema_name, entity.name))
+        row = cur.fetchone()
+        return row[0] if row else None
+
+    def _dw_remote_search_columns(self, entity):
+        """Text-like, non-PK columns that are safe to ILIKE-search."""
+        text_types = {'varchar', 'nvarchar', 'char', 'nchar'}
+        return [
+            c.name for c in entity.column_ids
+            if c.name
+               and (c.data_type or '').lower() in text_types
+               and not c.is_primary_key
+        ]
+
+    def _dw_category_pane(self, entity_id, category_id, offset, limit,
+                          search_term, in_category):
+        """Fetch one page for one side of the Category Manager.
+
+        Membership (IN / NOT IN) is resolved against the **local** Postgres
+        ``md.category_member`` table; the row data itself comes from the
+        entity's MSSQL connection. Degrades to an empty page with a
+        ``reason`` instead of raising.
+        """
+        empty = {'records': [], 'total': 0, 'reason': None}
+
+        entity = self.browse(entity_id)
+        if not entity.exists():
+            return dict(empty, reason='no-entity')
+
+        connection = self._dw_connection_for(entity)
+        if not connection:
+            return dict(empty, reason='no-connection')
+        if not entity.schema_name or not entity.name:
+            return dict(empty, reason='no-table')
+
+        # 1. Members from the LOCAL postgres side -------------------------
+        self.env.cr.execute(
+            "SELECT member_id FROM md.category_member "
+            "WHERE category_id = %s AND entity_id = %s",
+            (category_id, entity_id))
+        member_ids = [r[0] for r in self.env.cr.fetchall()]
+
+        if in_category and not member_ids:
+            return empty  # nothing in this category yet
+
+        # 2. Open the MSSQL session and resolve identifiers ---------------
+        ms = None
+        try:
+            ms = self._dw_mssql_open(connection)
+            cur = ms.cursor()
+
+            pk = self._dw_remote_pk(cur, entity)
+            if not pk:
+                return dict(empty, reason='no-pk')
+
+            search_cols = self._dw_remote_search_columns(entity)
+            table = ddl_builder._qfull(connection.database,
+                                       entity.schema_name, entity.name)
+            pk_q = ddl_builder._q(pk)
+
+            # 3. Build the WHERE clause (pymssql: %s placeholders) --------
+            where_parts = []
+            params = []
+
+            if search_term and search_cols:
+                likes = []
+                for col in search_cols:
+                    likes.append(
+                        f'CAST({ddl_builder._q(col)} AS NVARCHAR(MAX)) '
+                        f'LIKE %s')
+                    params.append(f'%{search_term}%')
+                where_parts.append('(' + ' OR '.join(likes) + ')')
+
+            if member_ids:
+                placeholders = ','.join(['%s'] * len(member_ids))
+                op = 'IN' if in_category else 'NOT IN'
+                where_parts.append(f'{pk_q} {op} ({placeholders})')
+                params.extend(member_ids)
+
+            where_sql = ('WHERE ' + ' AND '.join(where_parts)) if where_parts \
+                else ''
+
+            # 4. Count ---------------------------------------------------
+            cur.execute(
+                f'SELECT COUNT_BIG(*) FROM {table} {where_sql}',
+                tuple(params))
+            row = cur.fetchone()
+            total = int(row[0] or 0) if row else 0
+
+            if total == 0:
+                return empty
+
+            # 5. Page ----------------------------------------------------
+            cur.execute(
+                f'SELECT * FROM {table} {where_sql} '
+                f'ORDER BY {pk_q} '
+                f'OFFSET %s ROWS FETCH NEXT %s ROWS ONLY',
+                tuple(params + [offset, limit]))
+            cols = [d[0] for d in cur.description]
+            raw = [dict(zip((c.lower() for c in cols), r))
+                   for r in cur.fetchall()]
+
+            records = [self._dw_normalize_record(r, pk.lower()) for r in raw]
+            return {'records': records, 'total': total, 'reason': None}
+
+        except Exception:
+            _logger.exception(
+                "MSSQL DW pane fetch failed for entity %s (relation %s.%s)",
+                entity_id, entity.schema_name, entity.name)
+            return dict(empty, reason='connection-error')
+        finally:
+            if ms is not None:
+                try:
+                    ms.close()
+                except Exception:
+                    pass
