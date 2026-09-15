@@ -69,6 +69,8 @@ export class CategoryManager extends Component {
             showNewCategory: false,
             newCategory: {title: "", code: "", entity_id: null},
             saving: false,
+            entityColumns: [],       // <-- ADD THIS BACK
+            labelColumn: "",         // currently-selected label column
         });
 
         // Bound once so they are stable references across re-renders; the
@@ -82,6 +84,21 @@ export class CategoryManager extends Component {
             await this.reloadTree();
         });
     }
+
+    _labelStorageKey(entityId) {
+        return `category_manager.label.${entityId}`;
+    }
+
+    /** Rebuild the column list from the currently-loaded records. */
+    refreshLabelOptions() {
+        const rec = (this.state.right.records[0] || this.state.left.records[0]);
+        if (!rec) return;
+        // Keys the DW record carries, minus our own metadata fields.
+        this.state.entityColumns = Object.keys(rec)
+            .filter(k => !["id", "_pk", "label"].includes(k))
+            .map(k => ({name: k, title: k}));
+    }
+
 
     // ---------- Tree ----------
     async reloadTree() {
@@ -108,6 +125,25 @@ export class CategoryManager extends Component {
         }
     }
 
+
+    async onLabelColumnChange(ev) {
+        const cat = this.state.selectedCategory;
+        if (!cat || !cat.entity_id) return;
+        const entityId = cat.entity_id[0];
+        const column = ev.target.value || false;
+        this.state.labelColumn = column;
+        try {
+            await this.orm.call(
+                "raes.md.entity", "set_entity_label_column",
+                [entityId, column]);
+            await this.reloadPanes();
+        } catch (e) {
+            console.error("set_entity_label_column failed", e);
+            this.notification.add(
+                "Could not save the label column.", {type: "danger"});
+        }
+    }
+
     get rootNodes() {
         return this.state.treeByParent[0] || [];
     }
@@ -122,11 +158,28 @@ export class CategoryManager extends Component {
             this.state[side].page = 1;
             this.state[side].search = "";
         }
+        this.state.labelColumn = "";
+        if (cat && cat.entity_id) {
+            try {
+                this.state.labelColumn =
+                    localStorage.getItem(this._labelStorageKey(cat.entity_id[0])) || "";
+            } catch (e) { /* ignore */
+            }
+        }
         await this.reloadPanes();
     }
 
     async reloadPanes() {
         await Promise.all([this.loadLeft(), this.loadRight()]);
+    }
+
+    /** Override record.label with the user's chosen column, if set. */
+    applyLabel(record) {
+        const col = this.state.labelColumn;
+        if (!col) return record;
+        const val = record[col];
+        if (val === undefined || val === null || val === "") return record;
+        return {...record, label: String(val)};
     }
 
     // ---------- DW item lists ----------
@@ -153,9 +206,10 @@ export class CategoryManager extends Component {
                 this.pageSize,
                 side.search || "",
             ]);
-            side.records = res.records || [];
+            side.records = (res.records || []).map(r => this.applyLabel(r));
             side.total = res.total || 0;
             side.reason = res.reason || null;
+            this.refreshLabelOptions();
         } catch (e) {
             console.error(`${method} failed`, e);
             side.records = [];

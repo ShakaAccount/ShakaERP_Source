@@ -756,17 +756,10 @@ class RaesMdEntity(models.Model):
     )
 
     def _dw_normalize_record(self, record, pk):
-        """Expose the DW primary key as ``id`` and pick a ``label``.
+        rec = {k.lower(): v for k, v in record.items()}
+        rec['id'] = rec.get(pk.lower())
+        rec['_pk'] = pk.lower()
 
-        The DW column names are MSSQL PascalCase names lowercased by the
-        bootstrap alias view (``PartyID`` -> ``partyid``), so the client
-        cannot assume ``record.id`` exists. Without this normalization
-        ``record.id`` is ``undefined`` and the ``+`` button would post a
-        ``member_id`` of ``undefined``.
-        """
-        rec = dict(record)
-        rec['id'] = rec.get(pk)
-        rec['_pk'] = pk
         label = None
         for cand in self._DW_LABEL_CANDIDATES:
             val = rec.get(cand)
@@ -955,7 +948,7 @@ class RaesMdEntity(models.Model):
 
         except Exception:
             _logger.exception(
-                "MSSQL DW pane fetch failed for entity %s (relation %s.%s)",
+                "MSSQL DW pane fetch failed for entity %s (%s.%s)",
                 entity_id, entity.schema_name, entity.name)
             return dict(empty, reason='connection-error')
         finally:

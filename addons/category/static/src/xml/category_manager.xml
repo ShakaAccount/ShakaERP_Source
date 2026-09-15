@@ -43,152 +43,183 @@
 
     <!-- ============ Main layout ============ -->
     <t t-name="category.CategoryManager">
-        <div class="category-manager d-flex h-100 w-100 bg-white">
+        <div class="category-manager d-flex flex-column h-100 w-100 bg-white">
 
-            <!-- ================= PANE 1: Tree ================= -->
-            <div class="pane-tree border-end d-flex flex-column" style="width: 280px;">
-                <div class="pane-header bg-light border-bottom d-flex justify-content-between align-items-center p-2">
-                    <strong>Categories</strong>
-                    <button class="btn btn-sm btn-primary"
-                            t-on-click="openNewCategory"
-                            title="New root category">+</button>
-                </div>
-                <div class="flex-grow-1 overflow-auto p-2">
-                    <t t-if="state.loading">
-                        <div class="text-muted small p-2">Loading&#8230;</div>
+            <!-- ================= LABEL COLUMN PICKER ================= -->
+            <div class="d-flex align-items-center gap-2 px-2 py-1 border-bottom bg-light">
+                <label class="small text-muted mb-0 text-nowrap">
+                    Display name:
+                </label>
+                <select class="form-select form-select-sm"
+                        style="max-width: 260px;"
+                        t-att-disabled="!state.selectedCategory or !state.entityColumns.length"
+                        t-on-change="onLabelColumnChange">
+                    <option value="">&#8212; Auto &#8212;</option>
+                    <t t-foreach="state.entityColumns" t-as="col" t-key="col.name">
+                        <option t-att-value="col.name"
+                                t-att-selected="col.name === state.labelColumn">
+                            <t t-esc="col.title"/>
+                        </option>
                     </t>
-                    <t t-elif="rootNodes.length === 0">
-                        <div class="text-muted small p-2">
-                            No categories yet. Click <b>+</b> to add one.
-                        </div>
-                    </t>
-                    <t t-else="">
-                        <t t-foreach="rootNodes" t-as="root" t-key="root.id">
-                            <CategoryNode
-                                category="root"
-                                children="getChildren(root)"
-                                selectedId="state.selectedCategory ? state.selectedCategory.id : -1"
-                                expandedIds="state.expandedIds"
-                                onSelect="onSelect"
-                                onToggle="onToggle"
-                                onAddChild="onAddChild"
-                                getChildren="getChildren"
-                                level="0"/>
+                </select>
+                <span class="small text-muted"
+                      t-if="state.selectedCategory and !state.entityColumns.length">
+                    No columns available for this entity.
+                </span>
+                <span class="small text-muted"
+                      t-if="!state.selectedCategory">
+                    Select a category to configure its display name.
+                </span>
+            </div>
+
+            <!-- ================= THREE PANES ================= -->
+            <div class="d-flex flex-grow-1 overflow-hidden">
+
+                <!-- ================= PANE 1: Tree ================= -->
+                <div class="pane-tree border-end d-flex flex-column" style="width: 280px;">
+                    <div class="pane-header bg-light border-bottom d-flex justify-content-between align-items-center p-2">
+                        <strong>Categories</strong>
+                        <button class="btn btn-sm btn-primary"
+                                t-on-click="openNewCategory"
+                                title="New root category">+</button>
+                    </div>
+                    <div class="flex-grow-1 overflow-auto p-2">
+                        <t t-if="state.loading">
+                            <div class="text-muted small p-2">Loading&#8230;</div>
                         </t>
-                    </t>
+                        <t t-elif="rootNodes.length === 0">
+                            <div class="text-muted small p-2">
+                                No categories yet. Click <b>+</b> to add one.
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <t t-foreach="rootNodes" t-as="root" t-key="root.id">
+                                <CategoryNode
+                                    category="root"
+                                    children="getChildren(root)"
+                                    selectedId="state.selectedCategory ? state.selectedCategory.id : -1"
+                                    expandedIds="state.expandedIds"
+                                    onSelect="onSelect"
+                                    onToggle="onToggle"
+                                    onAddChild="onAddChild"
+                                    getChildren="getChildren"
+                                    level="0"/>
+                            </t>
+                        </t>
+                    </div>
                 </div>
-            </div>
 
-            <!-- ================= PANE 2: Uncategorized ================= -->
-            <div class="pane-left border-end d-flex flex-column" style="flex: 1;">
-                <div class="pane-header bg-light border-bottom p-2 d-flex justify-content-between">
-                    <strong>
-                        Uncategorized
-                        <span class="badge bg-secondary ms-1" t-esc="state.left.total"/>
-                    </strong>
+                <!-- ================= PANE 2: Uncategorized ================= -->
+                <div class="pane-left border-end d-flex flex-column" style="flex: 1;">
+                    <div class="pane-header bg-light border-bottom p-2 d-flex justify-content-between">
+                        <strong>
+                            Uncategorized
+                            <span class="badge bg-secondary ms-1" t-esc="state.left.total"/>
+                        </strong>
+                    </div>
+                    <div class="p-2 border-bottom">
+                        <input type="text" class="form-control form-control-sm"
+                               placeholder="Search&#8230;"
+                               t-on-input="onSearchLeft"/>
+                    </div>
+                    <div class="flex-grow-1 overflow-auto">
+                        <t t-if="!state.selectedCategory">
+                            <div class="text-muted text-center mt-5">
+                                Select a category to begin.
+                            </div>
+                        </t>
+                        <t t-elif="state.left.reason">
+                            <div class="alert alert-warning small m-2"
+                                 t-esc="reasonMessage(state.left.reason)"/>
+                        </t>
+                        <t t-elif="state.left.records.length === 0">
+                            <div class="text-muted text-center mt-5 small">
+                                No uncategorized items.
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <table class="table table-sm table-hover mb-0">
+                                <tbody>
+                                    <tr t-foreach="state.left.records" t-as="rec" t-key="rec.id">
+                                        <td class="text-truncate" t-esc="recordLabel(rec)"/>
+                                        <td class="text-end" style="width:60px;">
+                                            <button class="btn btn-sm btn-outline-success"
+                                                    t-on-click="() => this.addToCategory(rec)"
+                                                    title="Add to category">+</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+                    <div class="pane-footer d-flex justify-content-between p-1 border-top">
+                        <button class="btn btn-sm btn-light"
+                                t-on-click="prevLeft"
+                                t-att-disabled="state.left.page === 1">&#9664;</button>
+                        <span class="small text-muted align-self-center"
+                              t-esc="'Page ' + state.left.page + ' / ' + leftPages"/>
+                        <button class="btn btn-sm btn-light"
+                                t-on-click="nextLeft"
+                                t-att-disabled="state.left.page >= leftPages">&#9654;</button>
+                    </div>
                 </div>
-                <div class="p-2 border-bottom">
-                    <input type="text" class="form-control form-control-sm"
-                           placeholder="Search&#8230;"
-                           t-on-input="onSearchLeft"/>
-                </div>
-                <div class="flex-grow-1 overflow-auto">
-                    <t t-if="!state.selectedCategory">
-                        <div class="text-muted text-center mt-5">
-                            Select a category to begin.
-                        </div>
-                    </t>
-                    <t t-elif="state.left.reason">
-                        <div class="alert alert-warning small m-2"
-                             t-esc="reasonMessage(state.left.reason)"/>
-                    </t>
-                    <t t-elif="state.left.records.length === 0">
-                        <div class="text-muted text-center mt-5 small">
-                            No uncategorized items.
-                        </div>
-                    </t>
-                    <t t-else="">
-                        <table class="table table-sm table-hover mb-0">
-                            <tbody>
-                                <tr t-foreach="state.left.records" t-as="rec" t-key="rec.id">
-                                    <td class="text-truncate" t-esc="recordLabel(rec)"/>
-                                    <td class="text-end" style="width:60px;">
-                                        <button class="btn btn-sm btn-outline-success"
-                                                t-on-click="() => this.addToCategory(rec)"
-                                                title="Add to category">+</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </t>
-                </div>
-                <div class="pane-footer d-flex justify-content-between p-1 border-top">
-                    <button class="btn btn-sm btn-light"
-                            t-on-click="prevLeft"
-                            t-att-disabled="state.left.page === 1">&#9664;</button>
-                    <span class="small text-muted align-self-center"
-                          t-esc="'Page ' + state.left.page + ' / ' + leftPages"/>
-                    <button class="btn btn-sm btn-light"
-                            t-on-click="nextLeft"
-                            t-att-disabled="state.left.page >= leftPages">&#9654;</button>
-                </div>
-            </div>
 
-            <!-- ================= PANE 3: In category ================= -->
-            <div class="pane-right d-flex flex-column" style="flex: 1;">
-                <div class="pane-header bg-light border-bottom p-2 d-flex justify-content-between">
-                    <strong>
-                        In this category
-                        <span class="badge bg-primary ms-1" t-esc="state.right.total"/>
-                    </strong>
+                <!-- ================= PANE 3: In category ================= -->
+                <div class="pane-right d-flex flex-column" style="flex: 1;">
+                    <div class="pane-header bg-light border-bottom p-2 d-flex justify-content-between">
+                        <strong>
+                            In this category
+                            <span class="badge bg-primary ms-1" t-esc="state.right.total"/>
+                        </strong>
+                    </div>
+                    <div class="p-2 border-bottom">
+                        <input type="text" class="form-control form-control-sm"
+                               placeholder="Search&#8230;"
+                               t-on-input="onSearchRight"/>
+                    </div>
+                    <div class="flex-grow-1 overflow-auto">
+                        <t t-if="!state.selectedCategory">
+                            <div class="text-muted text-center mt-5">
+                                Select a category to begin.
+                            </div>
+                        </t>
+                        <t t-elif="state.right.reason">
+                            <div class="alert alert-warning small m-2"
+                                 t-esc="reasonMessage(state.right.reason)"/>
+                        </t>
+                        <t t-elif="state.right.records.length === 0">
+                            <div class="text-muted text-center mt-5 small">
+                                Nothing in this category yet.
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <table class="table table-sm table-hover mb-0">
+                                <tbody>
+                                    <tr t-foreach="state.right.records" t-as="rec" t-key="rec.id">
+                                        <td class="text-truncate" t-esc="recordLabel(rec)"/>
+                                        <td class="text-end" style="width:60px;">
+                                            <button class="btn btn-sm btn-outline-danger"
+                                                    t-on-click="() => this.removeFromCategory(rec)"
+                                                    title="Remove">&#8722;</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+                    <div class="pane-footer d-flex justify-content-between p-1 border-top">
+                        <button class="btn btn-sm btn-light"
+                                t-on-click="prevRight"
+                                t-att-disabled="state.right.page === 1">&#9664;</button>
+                        <span class="small text-muted align-self-center"
+                              t-esc="'Page ' + state.right.page + ' / ' + rightPages"/>
+                        <button class="btn btn-sm btn-light"
+                                t-on-click="nextRight"
+                                t-att-disabled="state.right.page >= rightPages">&#9654;</button>
+                    </div>
                 </div>
-                <div class="p-2 border-bottom">
-                    <input type="text" class="form-control form-control-sm"
-                           placeholder="Search&#8230;"
-                           t-on-input="onSearchRight"/>
-                </div>
-                <div class="flex-grow-1 overflow-auto">
-                    <t t-if="!state.selectedCategory">
-                        <div class="text-muted text-center mt-5">
-                            Select a category to begin.
-                        </div>
-                    </t>
-                    <t t-elif="state.right.reason">
-                        <div class="alert alert-warning small m-2"
-                             t-esc="reasonMessage(state.right.reason)"/>
-                    </t>
-                    <t t-elif="state.right.records.length === 0">
-                        <div class="text-muted text-center mt-5 small">
-                            Nothing in this category yet.
-                        </div>
-                    </t>
-                    <t t-else="">
-                        <table class="table table-sm table-hover mb-0">
-                            <tbody>
-                                <tr t-foreach="state.right.records" t-as="rec" t-key="rec.id">
-                                    <td class="text-truncate" t-esc="recordLabel(rec)"/>
-                                    <td class="text-end" style="width:60px;">
-                                        <button class="btn btn-sm btn-outline-danger"
-                                                t-on-click="() => this.removeFromCategory(rec)"
-                                                title="Remove">&#8722;</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </t>
-                </div>
-                <div class="pane-footer d-flex justify-content-between p-1 border-top">
-                    <button class="btn btn-sm btn-light"
-                            t-on-click="prevRight"
-                            t-att-disabled="state.right.page === 1">&#9664;</button>
-                    <span class="small text-muted align-self-center"
-                          t-esc="'Page ' + state.right.page + ' / ' + rightPages"/>
-                    <button class="btn btn-sm btn-light"
-                            t-on-click="nextRight"
-                            t-att-disabled="state.right.page >= rightPages">&#9654;</button>
-                </div>
-            </div>
 
+            </div>
         </div>
 
         <!-- ============ New-category modal ============ -->
