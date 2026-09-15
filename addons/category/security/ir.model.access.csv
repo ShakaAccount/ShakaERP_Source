@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_raes_md_category,access.raes.md.category,model_raes_md_category,base.group_user,1,1,1,1
+access_raes_md_category_member,access.raes.md.category.member,model_raes_md_category_member,base.group_user,1,1,1,1
