@@ -69,8 +69,8 @@ export class CategoryManager extends Component {
             showNewCategory: false,
             newCategory: {title: "", code: "", entity_id: null},
             saving: false,
-            entityColumns: [],       // <-- ADD THIS BACK
-            labelColumn: "",         // currently-selected label column
+            entityColumns: [],   // {name, title} pairs, built from record keys
+            labelColumn: "",     // currently-selected label column (per entity)
         });
 
         // Bound once so they are stable references across re-renders; the
@@ -84,21 +84,6 @@ export class CategoryManager extends Component {
             await this.reloadTree();
         });
     }
-
-    _labelStorageKey(entityId) {
-        return `category_manager.label.${entityId}`;
-    }
-
-    /** Rebuild the column list from the currently-loaded records. */
-    refreshLabelOptions() {
-        const rec = (this.state.right.records[0] || this.state.left.records[0]);
-        if (!rec) return;
-        // Keys the DW record carries, minus our own metadata fields.
-        this.state.entityColumns = Object.keys(rec)
-            .filter(k => !["id", "_pk", "label"].includes(k))
-            .map(k => ({name: k, title: k}));
-    }
-
 
     // ---------- Tree ----------
     async reloadTree() {
@@ -125,25 +110,6 @@ export class CategoryManager extends Component {
         }
     }
 
-
-    async onLabelColumnChange(ev) {
-        const cat = this.state.selectedCategory;
-        if (!cat || !cat.entity_id) return;
-        const entityId = cat.entity_id[0];
-        const column = ev.target.value || false;
-        this.state.labelColumn = column;
-        try {
-            await this.orm.call(
-                "raes.md.entity", "set_entity_label_column",
-                [entityId, column]);
-            await this.reloadPanes();
-        } catch (e) {
-            console.error("set_entity_label_column failed", e);
-            this.notification.add(
-                "Could not save the label column.", {type: "danger"});
-        }
-    }
-
     get rootNodes() {
         return this.state.treeByParent[0] || [];
     }
@@ -158,13 +124,13 @@ export class CategoryManager extends Component {
             this.state[side].page = 1;
             this.state[side].search = "";
         }
+        // Restore the label preference for this entity (browser-local).
         this.state.labelColumn = "";
         if (cat && cat.entity_id) {
             try {
                 this.state.labelColumn =
                     localStorage.getItem(this._labelStorageKey(cat.entity_id[0])) || "";
-            } catch (e) { /* ignore */
-            }
+            } catch (e) { /* localStorage disabled — ignore */ }
         }
         await this.reloadPanes();
     }
@@ -173,12 +139,60 @@ export class CategoryManager extends Component {
         await Promise.all([this.loadLeft(), this.loadRight()]);
     }
 
-    /** Override record.label with the user's chosen column, if set. */
+    // ---------- Label column picker (front-end only) ----------
+    _labelStorageKey(entityId) {
+        return `category_manager.label.${entityId}`;
+    }
+
+    /** Rebuild the column list from the currently-loaded records. */
+    refreshLabelOptions() {
+        const rec = this.state.right.records[0] || this.state.left.records[0];
+        if (!rec) {
+            this.state.entityColumns = [];
+            return;
+        }
+        // Every DW column is a key on the record dict; strip our own
+        // metadata fields (id, _pk, label, _auto_label) from the list.
+        const skip = new Set(["id", "_pk", "label", "_auto_label"]);
+        this.state.entityColumns = Object.keys(rec)
+            .filter(k => !skip.has(k))
+            .map(k => ({name: k, title: k}));
+    }
+
+    onLabelColumnChange(ev) {
+        const cat = this.state.selectedCategory;
+        if (!cat || !cat.entity_id) {
+            return;
+        }
+        const entityId = cat.entity_id[0];
+        const column = ev.target.value || "";
+        this.state.labelColumn = column;
+        try {
+            if (column) {
+                localStorage.setItem(this._labelStorageKey(entityId), column);
+            } else {
+                localStorage.removeItem(this._labelStorageKey(entityId));
+            }
+        } catch (e) { /* localStorage disabled — ignore */ }
+
+        // Re-label the rows already in memory — no server round-trip.
+        this.state.left.records =
+            this.state.left.records.map(r => this.applyLabel(r));
+        this.state.right.records =
+            this.state.right.records.map(r => this.applyLabel(r));
+    }
+
+    /** Compute the display label for one record using the current choice. */
     applyLabel(record) {
         const col = this.state.labelColumn;
-        if (!col) return record;
+        if (!col) {
+            // No override: fall back to whatever the server computed.
+            return {...record, label: record._auto_label ?? record.label};
+        }
         const val = record[col];
-        if (val === undefined || val === null || val === "") return record;
+        if (val === undefined || val === null || val === "") {
+            return record;
+        }
         return {...record, label: String(val)};
     }
 
@@ -206,7 +220,12 @@ export class CategoryManager extends Component {
                 this.pageSize,
                 side.search || "",
             ]);
-            side.records = (res.records || []).map(r => this.applyLabel(r));
+            // Stash the server-computed label so the "Auto" option can
+            // restore it later, then apply the current override.
+            side.records = (res.records || []).map(r => {
+                r._auto_label = r.label;
+                return this.applyLabel(r);
+            });
             side.total = res.total || 0;
             side.reason = res.reason || null;
             this.refreshLabelOptions();
@@ -259,7 +278,7 @@ export class CategoryManager extends Component {
         if (!cat || !cat.entity_id) {
             return;
         }
-        // `record.id` is the DW primary key, normalised server-side by
+        // `record.id` is the DW primary key, normalized server-side by
         // _dw_normalize_record (the raw DW column is e.g. `partyid`).
         // Posting an undefined id would violate the NOT NULL on
         // md.category_member.member_id.
