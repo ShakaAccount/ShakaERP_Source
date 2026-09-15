@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_category_manager" model="ir.actions.client">
+        <field name="name">Category Manager</field>
+        <field name="tag">category.category_manager</field>
+    </record>
+
+    <menuitem id="menu_category_root" name="Categories" sequence="10"/>
+    <menuitem id="menu_category_manager"
+              name="Category Manager"
+              parent="menu_category_root"
+              action="action_category_manager"/>
+
+</odoo>

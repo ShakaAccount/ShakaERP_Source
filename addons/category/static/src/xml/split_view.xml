@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="my_module.MySplitView">
+        <div class="d-flex h-100 w-100 bg-white">
+
+            <!-- LEFT PANE: Category Details & Action -->
+            <div class="w-50 border-end d-flex flex-column">
+                <div class="p-2 bg-light border-bottom fw-bold text-center">
+                    Category Details
+                </div>
+                <div class="p-3 flex-grow-1" t-if="state.category">
+                    <h3 t-esc="state.category.title"/>
+                    <p class="text-muted">Entity: <t t-esc="state.category.entity_id[1]"/></p>
+
+                    <div class="mt-4" t-if="state.selectedRecord">
+                        <div class="alert alert-info">
+                            <strong>Selected DW Record ID:</strong> <t t-esc="state.selectedRecord.id"/>
+                        </div>
+                        <button class="btn btn-primary w-100" t-on-click="addSelectedToCategory">
+                            ➕ Add to Category
+                        </button>
+                    </div>
+                    <div class="mt-4 text-muted" t-else="">
+                        Select a record from the right to add it to this category.
+                    </div>
+                </div>
+                <div class="p-3 text-danger" t-else="">
+                    No Category ID provided in context.
+                </div>
+            </div>
+
+            <!-- MIDDLE PANE: Pagination -->
+            <div class="d-flex flex-column justify-content-center align-items-center px-2 bg-light" style="width: 60px;">
+                <button class="btn btn-sm btn-outline-secondary mb-2" t-on-click="firstPage">⏮</button>
+                <button class="btn btn-sm btn-outline-secondary mb-2" t-on-click="prevPage">◀</button>
+                <button class="btn btn-sm btn-outline-secondary mb-2" t-on-click="nextPage">▶</button>
+                <button class="btn btn-sm btn-outline-secondary" t-on-click="lastPage">⏭</button>
+            </div>
+
+            <!-- RIGHT PANE: DW Records List -->
+            <div class="w-50 d-flex flex-column border-start">
+                <div class="p-2 bg-secondary text-white fw-bold text-center">
+                    Data Warehouse Records
+                </div>
+                <div class="p-2 border-bottom">
+                    <input type="text" class="form-control" placeholder="Search DW records..." t-on-input="onSearch"/>
+                </div>
+                <div class="flex-grow-1 overflow-auto">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Record Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="state.records" t-as="record" t-key="record.id"
+                                t-on-click="() => this.selectRecord(record)"
+                                t-att-class="state.selectedRecord and state.selectedRecord.id === record.id ? 'table-active' : ''"
+                                style="cursor: pointer;">
+                                <td t-esc="record.id"/>
+                                <td>
+                                    <!-- Display a summary of the record. Adjust based on DW columns -->
+                                    <t t-esc="record.name || record.title || JSON.stringify(record).substring(0, 50)"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </t>
+</templates>

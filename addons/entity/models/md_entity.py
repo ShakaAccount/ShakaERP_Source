@@ -12,6 +12,35 @@ ENTITY_TYPE_LOOKUP_CATEGORY = '1001'
 ENTITY_SYSTEM_LOOKUP_CATEGORY = '1004'
 
 
+def _quote_ident(name):
+    """Quote a PostgreSQL identifier (local, trusted-by-origin names)."""
+    return '"' + str(name).replace('"', '""') + '"'
+
+
+def _split_relation(relation):
+    """``schema.table`` -> (schema, table); bare names -> (public, name)."""
+    if '.' in relation:
+        schema, table = relation.split('.', 1)
+        return schema.strip('"'), table.strip('"')
+    return 'public', relation.strip('"')
+
+
+def _localize_name(name, available):
+    """Map a catalog (MSSQL PascalCase) column name onto one that
+    really exists locally, matched case-insensitively. The bootstrap
+    alias views lowercase every column, hence the fallback."""
+    if not name:
+        return None
+    low = str(name).lower()
+    if low in available:
+        return low
+    compact = low.replace('_', '').replace(' ', '')
+    for cand in available:
+        if cand.replace('_', '').replace(' ', '') == compact:
+            return cand
+    return None
+
+
 class StrSelection(fields.Selection):
     """Selection that exposes the DB value as a string on read."""
 
@@ -434,6 +463,39 @@ class RaesMdEntity(models.Model):
 
         return res
 
+    @api.model
+    def get_dw_records(self, entity_id, offset=0, limit=10, search_term=''):
+        'Fetch records dynamically from the DW table linked to this entity.'
+        empty = {'records': [], 'total': 0}
+        entity = self.browse(entity_id)
+        if not entity.exists():
+            return empty
+
+        conn, relation, source = self._dw_resolve_relation(entity)
+        if not relation:
+            _logger.info(
+                'DW relation unresolved for entity %s (%s.%s): %s',
+                entity.id, entity.schema_name, entity.name, source)
+            return empty
+
+        pk = self._dw_pk_column(entity, relation) or 'id'
+        clause, params = self._build_dw_where(
+            search_term, self._dw_search_columns(entity, relation))
+        where = 'WHERE ' + clause if clause else ''
+
+        self.env.cr.execute(
+            'SELECT COUNT(*) FROM %s t %s' % (relation, where), params)
+        total = self.env.cr.fetchone()[0]
+
+        offset = max(int(offset or 0), 0)
+        limit = max(int(limit or 10), 1)
+        self.env.cr.execute(
+            'SELECT t.* FROM %s t %s ORDER BY t.%s LIMIT %%s OFFSET %%s'
+            % (relation, where, pk), params + [limit, offset])
+        cols = [c[0] for c in self.env.cr.description]
+        records = [dict(zip(cols, r)) for r in self.env.cr.fetchall()]
+        return {'records': records, 'total': total}
+
     def unlink(self):
         """Drop the DW table on the linked MSSQL server, then delete the
         metadata.
@@ -457,3 +519,221 @@ class RaesMdEntity(models.Model):
             [('entity_id', 'in', self.ids)]).unlink()
 
         return super().unlink()
+
+    # ------------------------------------------------------------------
+    # Category Manager helpers
+    # ------------------------------------------------------------------
+    @api.model
+    def get_category_tree(self):
+        """Return the full category tree as a flat list; the OWL side
+        assembles the hierarchy from parent_id."""
+        cats = self.env['raes.md.category'].search_read(
+            [], ['id', 'title', 'parent_id', 'entity_id', 'code'],
+            order='title',
+        )
+        return cats
+
+    # ------------------------------------------------------------------
+    # DW relation resolution (pluggable seam)
+    #
+    # The category panes must read MSSQL data (BI.DimX) that tds_fdw has
+    # imported into the local PostgreSQL instance. md.entity carries no FK
+    # to the connection - the link lives in raes.md.entity.config - and
+    # `schema_name`/`name` are MSSQL identifiers that do NOT exist as
+    # PostgreSQL relations. Everything below therefore resolves a LOCAL
+    # relation before any SQL is emitted.
+    #
+    # `_dw_resolve_relation` is the single extension point: an on-demand
+    # `IMPORT FOREIGN SCHEMA` path can be dropped in later without
+    # touching the RPCs.
+    # ------------------------------------------------------------------
+    _DW_SEARCH_COLUMN_WHITELIST = (
+        'title', 'englishtitle', 'english_title', 'name', 'code',
+        'companytitle', 'partytitle',
+    )
+
+    def _dw_resolve_relation(self, entity):
+        """Return ``(connection, local_relation, source)`` for `entity`.
+
+        `local_relation` is a name PostgreSQL can SELECT (the
+        ``public.raes_dimxxx`` alias view or an ``fdw_raes."DimXxx"``
+        foreign table); ``None`` when the DW table is not reachable.
+        `source` labels the branch that was taken, for logging/tests.
+
+        Resolution order:
+          1. ``raes.dw.table_map.local_view_name`` on the entity's
+             connection (what ``action_bootstrap`` maintains);
+          2. the ``fdw_raes`` foreign table, matched case-insensitively;
+          3. the connection's own ``remote_schema`` in the local DB.
+
+        Plug-in point (Phase 7): before returning ``(conn, None, ...)``
+        a branch may run ``IMPORT FOREIGN SCHEMA ... LIMIT TO (...)``
+        exactly as ``action_import_selected`` does, then re-probe.
+        """
+        if not entity.name:
+            return None, None, 'no-table-name'
+
+        conn = entity._get_dw_connection()
+        if not conn:
+            return None, None, 'no-connection'
+
+        wanted = entity.name.lower()
+
+        # 1. explicit mapping maintained by action_bootstrap /
+        #    action_import_selected
+        line = conn.line_ids.filtered(
+            lambda l: l.remote_table.lower() == wanted)[:1]
+        if line and line.local_view_name:
+            return conn, line.local_view_name, 'table_map'
+
+        # 2/3. probe the local catalog for the imported foreign table
+        cr = self.env.cr
+        schemas = ['fdw_raes']
+        if conn.remote_schema and conn.remote_schema not in schemas:
+            schemas.append(conn.remote_schema)
+        for schema in schemas:
+            cr.execute(
+                "SELECT c.relname FROM pg_class c "
+                "JOIN pg_namespace n ON n.oid = c.relnamespace "
+                "WHERE n.nspname = %s AND lower(c.relname) = %s "
+                "AND c.relkind IN ('r', 'v', 'f', 'm', 'p') "
+                "ORDER BY (c.relkind = 'f') DESC, c.relname LIMIT 1",
+                [schema, wanted])
+            row = cr.fetchone()
+            if row:
+                return conn, f'{schema}.{_quote_ident(row[0])}', \
+                       f'catalog:{schema}'
+
+        return conn, None, 'not-imported'
+
+    def _dw_column_names(self, relation):
+        """Real column names present on `relation`, lowercased."""
+        if not relation:
+            return set()
+        schema, table = _split_relation(relation)
+        self.env.cr.execute(
+            "SELECT column_name FROM information_schema.columns "
+            "WHERE table_schema = %s AND lower(table_name) = %s",
+            [schema, table.lower()])
+        return {r[0].lower() for r in self.env.cr.fetchall()}
+
+    def _dw_pk_column(self, entity, relation):
+        """Local (lowercased) PK column of the DW relation.
+
+        Prefers the ``md.entity_column`` catalog (``is_primary_key``),
+        which stores MSSQL PascalCase names, then falls back to
+        ``information_schema``: first an ``*id`` column, then nothing.
+        The bootstrap alias view lowercases every column name, so the
+        catalog name must be localised before use.
+        """
+        available = self._dw_column_names(relation)
+        if not available:
+            return None
+
+        catalog = self.env['raes.md.entity_column'].search(
+            [('entity_id', '=', entity.id),
+             ('is_primary_key', '=', True)], limit=1)
+        if catalog and catalog.name:
+            cand = _localize_name(catalog.name, available)
+            if cand:
+                return cand
+
+        ids = sorted(c for c in available if c.endswith('id'))
+        return ids[0] if ids else None
+
+    def _dw_search_columns(self, entity, relation):
+        """Whitelisted columns that actually exist on `relation`."""
+        available = self._dw_column_names(relation)
+        if not available:
+            return []
+        cols = [c for c in self._DW_SEARCH_COLUMN_WHITELIST
+                if c in available]
+        if cols:
+            return cols
+        for col in self.env['raes.md.entity_column'].search(
+                [('entity_id', '=', entity.id)]):
+            if not col.name:
+                continue
+            cand = _localize_name(col.name, available)
+            if cand and cand not in cols:
+                cols.append(cand)
+        return cols
+
+    def _build_dw_where(self, search_term, columns=None):
+        """Return ``(clause, params)`` for a free-text search.
+
+        `clause` carries NO ``WHERE`` keyword - callers prepend it - and
+        is empty when there is nothing to filter on. Columns are
+        resolved against the real relation, so a table lacking ``code``
+        drops that predicate instead of raising ``UndefinedColumn``.
+        """
+        cols = list(columns if columns is not None
+                    else self._DW_SEARCH_COLUMN_WHITELIST)
+        if not search_term or not cols:
+            return '', []
+        clauses = [f'CAST(t.{c} AS TEXT) ILIKE %s' for c in cols]
+        return '(' + ' OR '.join(clauses) + ')', [f'%{search_term}%'] * len(cols)
+
+    def _dw_pane(self, entity_id, category_id, offset, limit, search_term,
+                 in_category):
+        """Shared implementation of the two category item panes.
+
+        Returns ``{'records': [...], 'total': n}``. Unresolvable DW
+        relations degrade to an empty page instead of raising.
+        """
+        empty = {'records': [], 'total': 0}
+        entity = self.browse(entity_id)
+        if not entity.exists():
+            return empty
+
+        conn, relation, source = self._dw_resolve_relation(entity)
+        if not relation:
+            _logger.info(
+                "DW relation unresolved for entity %s (%s.%s): %s",
+                entity.id, entity.schema_name, entity.name, source)
+            return empty
+
+        pk = self._dw_pk_column(entity, relation)
+        if not pk:
+            _logger.warning(
+                "No PK column resolvable for entity %s on %s",
+                entity.id, relation)
+            return empty
+
+        clause, params = self._build_dw_where(
+            search_term, self._dw_search_columns(entity, relation))
+        op = 'IN' if in_category else 'NOT IN'
+        sub = (
+            f'SELECT member_id FROM md.category_member '
+            f'WHERE category_id = %s AND entity_id = %s'
+        )
+        where = (f'WHERE {clause} AND t.{pk} {op} ({sub})' if clause
+                 else f'WHERE t.{pk} {op} ({sub})')
+        params = list(params) + [category_id, entity_id]
+
+        self.env.cr.execute(
+            f'SELECT COUNT(*) FROM {relation} t {where}', params)
+        total = self.env.cr.fetchone()[0]
+
+        offset = max(int(offset or 0), 0)
+        limit = max(int(limit or 20), 1)
+        self.env.cr.execute(
+            f'SELECT t.* FROM {relation} t {where} '
+            f'ORDER BY t.{pk} LIMIT %s OFFSET %s', params + [limit, offset])
+        cols = [c[0] for c in self.env.cr.description]
+        records = [dict(zip(cols, r)) for r in self.env.cr.fetchall()]
+        return {'records': records, 'total': total}
+
+    @api.model
+    def get_items_not_in_category(self, entity_id, category_id,
+                                  offset=0, limit=20, search_term=''):
+        """DW rows NOT yet linked to `category_id`."""
+        return self._dw_pane(entity_id, category_id, offset, limit,
+                             search_term, in_category=False)
+
+    @api.model
+    def get_items_in_category(self, entity_id, category_id,
+                              offset=0, limit=20, search_term=''):
+        """DW rows already linked to `category_id`."""
+        return self._dw_pane(entity_id, category_id, offset, limit,
+                             search_term, in_category=True)
