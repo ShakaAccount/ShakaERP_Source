@@ -36,7 +36,8 @@ class RaesMdCategory(models.Model):
     editor_user_id = fields.Integer()
     modification_date = fields.Datetime()
 
-    company_id = fields.Many2one('res.company', default=lambda self: self.env.company,
+    company_id = fields.Many2one('res.company',
+                                 default=lambda self: self.env.company,
                                  required=True)
     entity_id = fields.Many2one('raes.md.entity', 'Entity', required=True,
                                 ondelete='cascade')
@@ -95,25 +96,28 @@ class RaesMdCategory(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
+            # Row-level security: the category's company is whatever the
+            # user has active in Odoo, unless a parent dictates otherwise.
             vals.setdefault('company_id', self.env.company.id)
             vals.setdefault('creator_user_id', self.env.uid)
             vals.setdefault('creation_date', fields.Datetime.now())
             vals.setdefault('is_user_defined', True)
-            if not vals.get('root_id'):
-                parent_id = vals.get('parent_id')
-                if parent_id:
-                    parent = self.browse(parent_id)
-                    # Inherit the parent's entity when not supplied.
-                    if not vals.get('entity_id') and parent.entity_id:
-                        vals['entity_id'] = parent.entity_id.id
-                    vals['root_id'] = parent.root_id.id or parent.id
 
-            # --- Pre-validate entity consistency BEFORE the DB trigger
+            parent_id = vals.get('parent_id')
+            if not vals.get('root_id') and parent_id:
+                parent = self.browse(parent_id)
+                # A child must share its tree root's company AND entity.
+                if parent.company_id:
+                    vals['company_id'] = parent.company_id.id
+                if not vals.get('entity_id') and parent.entity_id:
+                    vals['entity_id'] = parent.entity_id.id
+                vals['root_id'] = parent.root_id.id or parent.id
+
+            # Pre-validate entity consistency BEFORE the DB trigger
             # fires. The legacy md.category_same_entity() trigger raises
             # a raw Postgres error that leaves the ORM cache broken
             # (MissingError on read-back). Catching it here yields a
             # proper ValidationError the UI can render.
-            parent_id = vals.get('parent_id')
             entity_id = vals.get('entity_id')
             if parent_id and entity_id:
                 parent = self.browse(parent_id)
@@ -181,14 +185,37 @@ class RaesMdCategory(models.Model):
         return result
 
     def unlink(self):
-        """Delete members first, then the category.
+        """Delete this category, every descendant, and all member links.
 
-        ``md.category_member`` has no ON DELETE CASCADE toward
-        ``md.category`` (legacy table we must not alter), so the member
-        rows have to be removed explicitly.
+        The legacy ``md.category.parent_id`` FK is ON DELETE RESTRICT, so
+        children must go before their parents. ``md.category_member`` has
+        no ON DELETE CASCADE toward ``md.category``, so its rows are
+        removed explicitly for every node in the subtree.
         """
-        self.mapped('member_ids').sudo().unlink()
-        return super().unlink()
+        # 1. Collect every layer of the subtree, top-down (BFS).
+        layers = [self]
+        seen = set(self.ids)
+        layer = self
+        while layer:
+            children = self.search([('parent_id', 'in', layer.ids)])
+            children = children.filtered(lambda c: c.id not in seen)
+            if not children:
+                break
+            seen.update(children.ids)
+            layers.append(children)
+            layer = children
+
+        # 2. Delete member rows for every node in the subtree.
+        all_ids = [i for lyr in layers for i in lyr.ids]
+        self.env['raes.md.category.member'].sudo().search(
+            [('category_id', 'in', all_ids)]).unlink()
+
+        # 3. Delete categories deepest-first so the RESTRICT on
+        #    parent_id never blocks a parent that still has children.
+        for lyr in reversed(layers):
+            super(RaesMdCategory, lyr).unlink()
+
+        return True
 
 
 class RaesMdCategoryMember(models.Model):
