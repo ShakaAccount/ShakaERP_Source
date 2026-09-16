@@ -661,8 +661,14 @@ export class CategoryManager extends Component {
 
     // ---------- Misc ----------
     recordLabel(record) {
-        return record.label || record.title || record.name ||
-            record.englishtitle || record.english_title || `#${record.id}`;
+        const candidate =
+            record.label || record.title || record.name ||
+            record.englishtitle || record.english_title || "";
+        const trimmed = String(candidate).trim();
+        if (trimmed && trimmed !== "#0") {
+            return trimmed;
+        }
+        return `#${record.id}`;
     }
 
     reasonMessage(reason) {
@@ -670,6 +676,7 @@ export class CategoryManager extends Component {
         const table = sel && sel.entity_id ? sel.entity_id[1] : "this entity";
         switch (reason) {
             case "no-connection":
+                recordLabel
                 return `No SQL Server connection is configured for "${table}".`;
             case "no-table":
                 return `Entity "${table}" has no schema/table set.`;

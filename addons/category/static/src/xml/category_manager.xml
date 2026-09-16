@@ -10,9 +10,10 @@
              t-on-click="onClick">
             <span class="o_cat_node_toggle"
                   t-att-class="isOpen ? 'o_cat_node_toggle_open' : 'o_cat_node_toggle_closed'"
-                  t-on-click="onToggle">
-                <t t-if="hasChildren">&#9660;</t>
-                <t t-else="">&#8226;</t>
+                  t-on-click="onToggle"
+                  t-att-title="hasChildren ? (isOpen ? 'Collapse' : 'Expand') : ''">
+                <t t-if="hasChildren">&#10095;</t>
+                <t t-else="">&#9679;</t>
             </span>
             <span class="o_cat_node_label" t-esc="props.category.title"/>
             <button class="o_cat_node_add"
@@ -81,11 +82,11 @@
                 <!--  Pane 1: Tree  -->
                 <div class="o_cat_pane" style="width: 280px;">
                     <div class="o_cat_pane_head">
-                        <span>Categories</span>
-                        <button class="btn btn-sm btn-primary"
+                        <button class="o_cat_pane_head_btn"
                                 t-on-click="openNewCategory"
-                                title="New root category"
-                                style="padding: 1px 10px; border-radius: 6px;">+</button>
+                                title="New root category">+</button>
+                        <span>Categories</span>
+                        <span class="badge" t-esc="state.tree.length"/>
                     </div>
                     <div class="o_cat_list">
                         <div class="o_cat_tree">
