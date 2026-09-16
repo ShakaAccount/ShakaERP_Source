@@ -1,26 +1,42 @@
 .o_category_manager {
-    // ---------- Theme tokens (dark-mode aware) ----------
-    // All --bs-* vars come from Bootstrap 5 and are re-mapped by Odoo's
-    // dark theme; the hardcoded fallbacks only apply if a var is missing.
-    --cat-border: #{var(--bs-border-color, #dee2e6)};
-    --cat-border-soft: #{var(--bs-border-color-translucent, rgba(0, 0, 0, 0.1))};
-    --cat-bg: #{var(--bs-body-bg, #fff)};
-    --cat-bg-soft: #{var(--bs-tertiary-bg, #f8f9fa)};
-    --cat-bg-head: #{var(--bs-secondary-bg, #e9ecef)};
-    --cat-text: #{var(--bs-body-color, #212529)};
-    --cat-text-muted: #{var(--bs-secondary-color, #6c757d)};
-    --cat-accent: #{var(--o-brand-odoo, #714b67)};
-    --cat-accent-soft: rgba(113, 75, 103, 0.14);
-    --cat-hover: #{var(--bs-secondary-bg, #e9ecef)};
-    --cat-selected: rgba(113, 75, 103, 0.20);
-    --cat-danger: #{var(--bs-danger, #dc3545)};
-    --cat-success: #{var(--bs-success, #198754)};
+    // ---------- Light theme tokens (defaults) ----------
+    --cat-border: #dee2e6;
+    --cat-border-soft: rgba(0, 0, 0, 0.08);
+    --cat-bg: #fff;
+    --cat-bg-soft: #f8f9fa;
+    --cat-bg-head: #e9ecef;
+    --cat-text: #212529;
+    --cat-text-muted: #6c757d;
+    --cat-accent: var(--o-brand-odoo, #714b67);
+    --cat-accent-text: #fff;
+    --cat-accent-soft: rgba(113, 75, 103, 0.10);
+    --cat-hover: #f0f0f0;
+    --cat-selected: rgba(113, 75, 103, 0.14);
+    --cat-danger: #dc3545;
+    --cat-success: #198754;
     --cat-radius: 8px;
 
     font-family: inherit;
     font-size: $font-size-sm;
     color: var(--cat-text);
     background: var(--cat-bg);
+
+    // ---------- Dark theme overrides ----------
+    html[data-bs-theme="dark"] &,
+    html.o_dark_color_scheme &,
+    body.o_dark_color_scheme &,
+    .o_dark_color_scheme & {
+        --cat-border: #3a3a3a;
+        --cat-border-soft: rgba(255, 255, 255, 0.08);
+        --cat-bg: #1e1e1e;
+        --cat-bg-soft: #252525;
+        --cat-bg-head: #2a2a2a;
+        --cat-text: #e0e0e0;
+        --cat-text-muted: #999;
+        --cat-accent-soft: rgba(180, 140, 170, 0.18);
+        --cat-hover: #2d2d2d;
+        --cat-selected: rgba(180, 140, 170, 0.28);
+    }
 
     // ---------- Picker bar ----------
     .o_cat_picker_bar {
@@ -53,6 +69,7 @@
 
     // ---------- Pane shell ----------
     .o_cat_pane {
+        position: relative;               // <-- anchor for the floating bulk bar
         display: flex;
         flex-direction: column;
         background: var(--cat-bg);
@@ -74,6 +91,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        min-height: 40px;
 
         .badge {
             font-weight: 500;
@@ -85,36 +103,66 @@
         }
     }
 
-    // ---------- Bulk toolbar ----------
+    // ---------- Bulk toolbar (floating overlay) ----------
     .o_cat_bulk_bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 20;
         display: flex;
         align-items: center;
         gap: 6px;
-        padding: 6px 12px;
-        background: var(--cat-accent-soft);
-        border-bottom: 1px solid var(--cat-border);
+        padding: 0 12px;
+        height: 40px;
+        background: var(--cat-accent);
+        color: var(--cat-accent-text);
         font-size: 12px;
-        color: var(--cat-accent);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
 
-        .o_cat_bulk_count {
-            font-weight: 600;
-            color: var(--cat-accent);
-            margin-right: 4px;
+        // Smooth hide state
+        opacity: 0;
+        transform: translateY(-100%);
+        pointer-events: none;
+        transition:
+            opacity 220ms ease,
+            transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .o_cat_bulk_bar_visible {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    .o_cat_bulk_count {
+        font-weight: 600;
+        color: var(--cat-accent-text);
+        margin-right: 4px;
+    }
+
+    .o_cat_bulk_bar button.btn-link {
+        padding: 1px 6px;
+        font-size: 11px;
+        color: var(--cat-accent-text);
+        opacity: 0.85;
+        text-decoration: underline dotted;
+        text-underline-offset: 3px;
+
+        &:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.15);
+            text-decoration: none;
+            border-radius: 4px;
         }
+    }
 
-        button.btn-link {
-            padding: 1px 6px;
-            font-size: 11px;
-            color: var(--cat-accent);
-            text-decoration: underline dotted;
-            text-underline-offset: 3px;
-
-            &:hover {
-                background: var(--cat-accent-soft);
-                text-decoration: none;
-                border-radius: 4px;
-            }
-        }
+    .o_cat_bulk_bar .btn-success,
+    .o_cat_bulk_bar .btn-danger {
+        border-radius: 6px;
+        border: 0;
+        font-weight: 500;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
     }
 
     // ---------- Search ----------

@@ -130,11 +130,12 @@
                     </div>
 
                     <!-- Bulk toolbar -->
+                    <!-- Bulk toolbar (floats over the pane head) -->
                     <div class="o_cat_bulk_bar"
-                         t-if="selectedCount('left') > 0">
+                         t-att-class="{ 'o_cat_bulk_bar_visible': selectedCount('left') > 0 }">
                         <span class="o_cat_bulk_count"
                               t-esc="selectedCount('left') + ' selected'"/>
-                        <span class="text-muted">|</span>
+                        <span style="opacity:.5;">|</span>
                         <button class="btn btn-link btn-sm p-0"
                                 t-on-click="() => this.selectAllOnPage('left')">
                             Select all on page
@@ -149,13 +150,11 @@
                         </button>
                         <span class="flex-grow-1"/>
                         <button class="btn btn-sm btn-success"
-                                t-on-click="bulkAddSelected"
-                                style="border-radius: 6px;">
+                                t-on-click="bulkAddSelected">
                             Add <t t-esc="selectedCount('left')"/>
                             to category &#8594;
                         </button>
                     </div>
-
                     <div class="o_cat_search">
                         <input type="text" class="form-control form-control-sm"
                                placeholder="Search&#8230;"
@@ -216,11 +215,12 @@
                     </div>
 
                     <!-- Bulk toolbar -->
+                    <!-- Bulk toolbar (floats over the pane head) -->
                     <div class="o_cat_bulk_bar"
-                         t-if="selectedCount('right') > 0">
+                         t-att-class="{ 'o_cat_bulk_bar_visible': selectedCount('right') > 0 }">
                         <span class="o_cat_bulk_count"
                               t-esc="selectedCount('right') + ' selected'"/>
-                        <span class="text-muted">|</span>
+                        <span style="opacity:.5;">|</span>
                         <button class="btn btn-link btn-sm p-0"
                                 t-on-click="() => this.selectAllOnPage('right')">
                             Select all on page
@@ -235,12 +235,10 @@
                         </button>
                         <span class="flex-grow-1"/>
                         <button class="btn btn-sm btn-danger"
-                                t-on-click="bulkRemoveSelected"
-                                style="border-radius: 6px;">
+                                t-on-click="bulkRemoveSelected">
                             &#8592; Remove <t t-esc="selectedCount('right')"/>
                         </button>
                     </div>
-
                     <div class="o_cat_search">
                         <input type="text" class="form-control form-control-sm"
                                placeholder="Search&#8230;"
