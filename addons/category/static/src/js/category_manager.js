@@ -256,15 +256,11 @@ export class CategoryManager extends Component {
             });
             side.total = res.total || 0;
             side.reason = res.reason || null;
-            // Clear selections on reload to avoid stale ids.
-            side.selectedIds = {};
-            side.anchorIndex = null;
             this.refreshLabelOptions();
         } catch (e) {
             console.error(`${method} failed`, e);
             side.records = [];
             side.total = 0;
-            side.selectedIds = {};
             side.reason = "rpc-error";
             this.notification.add("Could not load DW items.", {type: "danger"});
         }
@@ -288,8 +284,7 @@ export class CategoryManager extends Component {
     }
 
     selectedRecords(sideName) {
-        const side = this.state[sideName];
-        return side.records.filter(r => side.selectedIds[r.id]);
+        return Object.values(this.state[sideName].selectedIds);
     }
 
     clearSelection(sideName) {
@@ -310,7 +305,7 @@ export class CategoryManager extends Component {
             for (let i = a; i <= b; i++) {
                 const r = side.records[i];
                 if (r) {
-                    next[r.id] = true;
+                    next[r.id] = r;
                 }
             }
             side.selectedIds = next;
@@ -319,16 +314,15 @@ export class CategoryManager extends Component {
             if (next[rec.id]) {
                 delete next[rec.id];
             } else {
-                next[rec.id] = true;
+                next[rec.id] = rec;
             }
             side.selectedIds = next;
             side.anchorIndex = idx;
         } else {
-            // plain click: toggle this one only
             if (side.selectedIds[rec.id] && this.selectedCount(sideName) === 1) {
                 side.selectedIds = {};
             } else {
-                side.selectedIds = {[rec.id]: true};
+                side.selectedIds = {[rec.id]: rec};
             }
             side.anchorIndex = idx;
         }
@@ -336,19 +330,21 @@ export class CategoryManager extends Component {
 
     selectAllOnPage(sideName) {
         const side = this.state[sideName];
-        const next = {};
+        const next = {...side.selectedIds};
         for (const r of side.records) {
-            next[r.id] = true;
+            next[r.id] = r;
         }
         side.selectedIds = next;
     }
 
     invertSelection(sideName) {
         const side = this.state[sideName];
-        const next = {};
+        const next = {...side.selectedIds};
         for (const r of side.records) {
-            if (!side.selectedIds[r.id]) {
-                next[r.id] = true;
+            if (next[r.id]) {
+                delete next[r.id];
+            } else {
+                next[r.id] = r;
             }
         }
         side.selectedIds = next;
@@ -364,6 +360,7 @@ export class CategoryManager extends Component {
         if (!recs.length) {
             return;
         }
+        const movedIds = new Set(recs.map(r => r.id));
         const vals = recs.map(r => ({
             category_id: cat.id,
             member_id: r.id,
@@ -371,6 +368,16 @@ export class CategoryManager extends Component {
         }));
         try {
             await this.orm.create("raes.md.category.member", vals);
+            // Those records have moved to the right side now: remove them
+            // from the left selection so the count reflects reality.
+            const next = {};
+            for (const [id, rec] of Object.entries(this.state.left.selectedIds)) {
+                if (!movedIds.has(id)) {
+                    next[id] = rec;
+                }
+            }
+            this.state.left.selectedIds = next;
+            this.state.left.anchorIndex = null;
             await this.reloadPanes();
             this.notification.add(
                 `Added ${vals.length} item(s) to the category.`,
@@ -392,6 +399,7 @@ export class CategoryManager extends Component {
         if (!recs.length) {
             return;
         }
+        const movedIds = new Set(recs.map(r => r.id));
         const memberIds = recs.map(r => r.id);
         try {
             const members = await this.orm.searchRead(
@@ -404,6 +412,15 @@ export class CategoryManager extends Component {
                 await this.orm.unlink(
                     "raes.md.category.member", members.map(m => m.id));
             }
+            // Remove the moved records from the right selection.
+            const next = {};
+            for (const [id, rec] of Object.entries(this.state.right.selectedIds)) {
+                if (!movedIds.has(id)) {
+                    next[id] = rec;
+                }
+            }
+            this.state.right.selectedIds = next;
+            this.state.right.anchorIndex = null;
             await this.reloadPanes();
             this.notification.add(
                 `Removed ${members.length} item(s) from the category.`,
@@ -475,12 +492,16 @@ export class CategoryManager extends Component {
     onSearchLeft(ev) {
         this.state.left.search = ev.target.value;
         this.state.left.page = 1;
+        this.state.left.selectedIds = {};
+        this.state.left.anchorIndex = null;
         this.loadLeft();
     }
 
     onSearchRight(ev) {
         this.state.right.search = ev.target.value;
         this.state.right.page = 1;
+        this.state.right.selectedIds = {};
+        this.state.right.anchorIndex = null;
         this.loadRight();
     }
 
@@ -495,6 +516,7 @@ export class CategoryManager extends Component {
     async nextLeft() {
         if (this.state.left.page < this.leftPages) {
             this.state.left.page++;
+            this.state.left.anchorIndex = null;
             await this.loadLeft();
         }
     }
@@ -502,6 +524,7 @@ export class CategoryManager extends Component {
     async prevLeft() {
         if (this.state.left.page > 1) {
             this.state.left.page--;
+            this.state.left.anchorIndex = null;
             await this.loadLeft();
         }
     }
@@ -509,6 +532,7 @@ export class CategoryManager extends Component {
     async nextRight() {
         if (this.state.right.page < this.rightPages) {
             this.state.right.page++;
+            this.state.right.anchorIndex = null;
             await this.loadRight();
         }
     }
@@ -516,6 +540,7 @@ export class CategoryManager extends Component {
     async prevRight() {
         if (this.state.right.page > 1) {
             this.state.right.page--;
+            this.state.right.anchorIndex = null;
             await this.loadRight();
         }
     }
