@@ -8,6 +8,8 @@ const TREE_WIDTH_KEY = "category_manager.tree_width";
 const TREE_MIN = 180;
 const TREE_MAX = 700;
 const COL_MIN = 60;
+const STAGGER_CAP_NODES = 25;   // disable stagger when the batch is larger
+const STAGGER_CAP_ROWS = 30;
 
 // ---------- Recursive tree node ----------
 export class CategoryNode extends Component {
@@ -44,6 +46,29 @@ export class CategoryNode extends Component {
         ev.stopPropagation();
         this.props.onDelete(this.props.category);
     }
+
+    /** Called by the "Load more" pseudo-row. */
+    onLoadMore(ev) {
+        ev.stopPropagation();
+        this.props.onLoadMore(this.props.category, ev);
+    }
+
+    /** Remaining children count for the current node. */
+    get remainingChildren() {
+        return this.props.childTotal(this.props.category)
+            - this.props.childShown(this.props.category);
+    }
+
+    get hasMoreChildren() {
+        return this.props.childHasMore(this.props.category);
+    }
+
+    /** Only the first N children get a stagger delay; beyond that they fade together. */
+    get staggerStyle() {
+        const idx = this.props.index || 0;
+        const delay = idx >= STAGGER_CAP_NODES ? 0 : Math.min(idx * 22, 260);
+        return `--stagger: ${delay}ms; padding-inline-start: ${this.props.level * 14 + 8}px`;
+    }
 }
 
 CategoryNode.template = "category.CategoryNode";
@@ -58,6 +83,10 @@ CategoryNode.props = {
     onAddChild: Function,
     onDelete: Function,
     getChildren: Function,
+    childTotal: Function,
+    childShown: Function,
+    childHasMore: Function,
+    onLoadMore: Function,
     level: Number,
     index: {type: Number, optional: true},
 };
@@ -124,6 +153,8 @@ export class CategoryManager extends Component {
             dragOverCol: null,
             resizingCol: null,
             resizingTree: false,
+            childPageSize: 50,
+            nodeLoadedCounts: {},
         });
 
         try {
@@ -142,12 +173,51 @@ export class CategoryManager extends Component {
         } catch (e) { /* ignore */
         }
 
+        // ---------- Child access (paginated) ----------
         this.getChildren = (cat) => {
             const all = this.state.treeByParent[cat.id] || [];
             const res = this._filterResult;
-            if (!res) return all;
-            return all.filter(c => res.visible.has(c.id));
+            const filtered = res ? all.filter(c => res.visible.has(c.id)) : all;
+
+            // Search mode: show everything, no pagination.
+            if (res) return filtered;
+
+            const shown = this.state.nodeLoadedCounts[cat.id]
+                || this.state.childPageSize;
+            if (filtered.length <= shown) return filtered;
+            return filtered.slice(0, shown);
         };
+
+        this.childTotal = (cat) => {
+            const all = this.state.treeByParent[cat.id] || [];
+            const res = this._filterResult;
+            if (!res) return all.length;
+            return all.filter(c => res.visible.has(c.id)).length;
+        };
+
+        this.childShown = (cat) => {
+            const total = this.childTotal(cat);
+            const res = this._filterResult;
+            if (res) return total;
+            const shown = this.state.nodeLoadedCounts[cat.id]
+                || this.state.childPageSize;
+            return Math.min(shown, total);
+        };
+
+        this.childHasMore = (cat) => this.childShown(cat) < this.childTotal(cat);
+
+        this.loadMoreChildren = (cat, ev) => {
+            if (ev) ev.stopPropagation();
+            const current = this.state.nodeLoadedCounts[cat.id]
+                || this.state.childPageSize;
+            const remaining = this.childTotal(cat) - current;
+            const step = remaining <= 500 ? remaining : this.state.childPageSize;
+            this.state.nodeLoadedCounts = {
+                ...this.state.nodeLoadedCounts,
+                [cat.id]: current + step,
+            };
+        };
+
         this.onSelect = (cat) => this.selectCategory(cat);
         this.onToggle = (id) => this.toggleExpand(id);
         this.onAddChild = (cat) => this.openNewCategory(cat);
@@ -192,6 +262,7 @@ export class CategoryManager extends Component {
             }
             this.state.tree = flat;
             this.state.treeByParent = byParent;
+            this.state.nodeLoadedCounts = {};    // reset pagination
             this._filterCacheKey = null;
         } catch (e) {
             console.error("get_category_tree failed", e);
@@ -592,7 +663,13 @@ export class CategoryManager extends Component {
         }
         const entityId = cat.entity_id[0];
         try {
-            const res = await this.orm.call("raes.md.entity", method, [entityId, cat.id, (side.page - 1) * this.state.pageSize, this.state.pageSize, side.search || "", side.searchColumn || false,]);
+            const res = await this.orm.call("raes.md.entity", method, [
+                entityId, cat.id,
+                (side.page - 1) * this.state.pageSize,
+                this.state.pageSize,
+                side.search || "",
+                side.searchColumn || false,
+            ]);
             side.records = res.records || [];
             side.total = res.total || 0;
             side.reason = res.reason || null;

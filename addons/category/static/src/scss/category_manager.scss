@@ -640,6 +640,9 @@
       cursor: pointer;
       user-select: none;
       transition: background 120ms ease, box-shadow 120ms ease;
+      // Skip rendering offscreen rows
+      content-visibility: auto;
+      contain-intrinsic-size: auto 34px;
 
       &:hover {
         background: var(--cat-hover);
@@ -853,6 +856,10 @@
       animation: o_cat_node_in 240ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
       animation-delay: var(--stagger, 0ms);
 
+      // Skip layout & paint for offscreen nodes
+      content-visibility: auto;
+      contain-intrinsic-size: auto 30px;
+
       .o_cat_node_company_btn {
         position: relative;
         flex: 0 0 auto;
@@ -1036,6 +1043,36 @@
           background: rgba(220, 38, 38, 0.18);
           color: var(--cat-danger);
         }
+      }
+    }
+
+    // ---------- "Load more" pseudo-row ----------
+    // Sits inside `.o_cat_tree_children` at the same level as real nodes.
+    // Overrides the entrance animation because it's a control, not data.
+    .o_cat_node_load_more {
+      animation: none !important;
+      cursor: pointer;
+      color: var(--cat-accent);
+      font-weight: 500;
+      font-size: 12px;
+      background: var(--cat-accent-soft);
+      border: 1px dashed var(--cat-accent);
+      min-height: 26px;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      padding-inline-end: 12px;
+
+      .o_cat_node_load_more_label {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &:hover {
+        background: var(--cat-accent);
+        color: #fff;
+        border-style: solid;
       }
     }
 
