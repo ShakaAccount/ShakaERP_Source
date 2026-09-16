@@ -1076,6 +1076,15 @@
       }
     }
 
+    .o_cat_node_sentinel {
+      width: 1px;
+      height: 1px;
+      margin: 0;
+      padding: 0;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
     .o_cat_tree_children {
       display: grid;
       grid-template-rows: 1fr;

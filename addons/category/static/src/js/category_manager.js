@@ -1,18 +1,54 @@
 /** @odoo-module **/
 import {registry} from "@web/core/registry";
 import {useService} from "@web/core/utils/hooks";
-import {Component, useState, onWillStart, useRef, useExternalListener} from "@odoo/owl";
+import {
+    Component, useState, onWillStart, onMounted, onPatched, onWillUnmount,
+    useRef, useExternalListener,
+} from "@odoo/owl";
 import {ConfirmationDialog} from "@web/core/confirmation_dialog/confirmation_dialog";
 
 const TREE_WIDTH_KEY = "category_manager.tree_width";
 const TREE_MIN = 180;
 const TREE_MAX = 700;
 const COL_MIN = 60;
-const STAGGER_CAP_NODES = 25;   // disable stagger when the batch is larger
+const STAGGER_CAP_NODES = 25;
 const STAGGER_CAP_ROWS = 30;
+// How far below the visible area (in px) the sentinel must be before it
+// triggers a load. Bigger = smoother, smaller = tighter memory.
+const SENTINEL_PRELOAD_PX = 800;
+// Cooldown between two auto-loads on the same node (ms). Prevents a cascade
+// when the sentinel stays in view after new children append.
+const SENTINEL_COOLDOWN_MS = 150;
+
 
 // ---------- Recursive tree node ----------
 export class CategoryNode extends Component {
+    setup() {
+        this.sentinelRef = useRef("sentinel");
+        this._sentinelEl = null;
+
+        this._syncSentinel = () => {
+            const el = this.sentinelRef.el;
+            if (el === this._sentinelEl) return;
+            if (this._sentinelEl) {
+                this.props.unregisterSentinel(this._sentinelEl);
+            }
+            this._sentinelEl = el || null;
+            if (el) {
+                this.props.registerSentinel(el, this.props.category);
+            }
+        };
+
+        onMounted(this._syncSentinel);
+        onPatched(this._syncSentinel);
+        onWillUnmount(() => {
+            if (this._sentinelEl) {
+                this.props.unregisterSentinel(this._sentinelEl);
+                this._sentinelEl = null;
+            }
+        });
+    }
+
     get hasChildren() {
         return !!(this.props.children && this.props.children.length);
     }
@@ -23,6 +59,16 @@ export class CategoryNode extends Component {
 
     get isOpen() {
         return !!this.props.expandedIds[this.props.category.id];
+    }
+
+    get hasMoreChildren() {
+        return this.props.childHasMore(this.props.category);
+    }
+
+    get staggerStyle() {
+        const idx = this.props.index || 0;
+        const delay = idx >= STAGGER_CAP_NODES ? 0 : Math.min(idx * 22, 260);
+        return `--stagger: ${delay}ms; padding-inline-start: ${this.props.level * 14 + 8}px`;
     }
 
     onClick(ev) {
@@ -46,29 +92,6 @@ export class CategoryNode extends Component {
         ev.stopPropagation();
         this.props.onDelete(this.props.category);
     }
-
-    /** Called by the "Load more" pseudo-row. */
-    onLoadMore(ev) {
-        ev.stopPropagation();
-        this.props.onLoadMore(this.props.category, ev);
-    }
-
-    /** Remaining children count for the current node. */
-    get remainingChildren() {
-        return this.props.childTotal(this.props.category)
-            - this.props.childShown(this.props.category);
-    }
-
-    get hasMoreChildren() {
-        return this.props.childHasMore(this.props.category);
-    }
-
-    /** Only the first N children get a stagger delay; beyond that they fade together. */
-    get staggerStyle() {
-        const idx = this.props.index || 0;
-        const delay = idx >= STAGGER_CAP_NODES ? 0 : Math.min(idx * 22, 260);
-        return `--stagger: ${delay}ms; padding-inline-start: ${this.props.level * 14 + 8}px`;
-    }
 }
 
 CategoryNode.template = "category.CategoryNode";
@@ -86,7 +109,8 @@ CategoryNode.props = {
     childTotal: Function,
     childShown: Function,
     childHasMore: Function,
-    onLoadMore: Function,
+    registerSentinel: Function,
+    unregisterSentinel: Function,
     level: Number,
     index: {type: Number, optional: true},
 };
@@ -108,6 +132,22 @@ export class CategoryManager extends Component {
         this._entitiesLoaded = false;
         this._filterCacheKey = null;
         this._filterCacheValue = null;
+        // Sentinel → callback map, and per-node debounce timestamps.
+        this._sentinelCallbacks = new WeakMap();
+        this._loadMoreDebounce = {};
+
+        // Shared IntersectionObserver for all paginated sentinels.
+        // rootMargin preloads children before they scroll into view.
+        this._sentinelObserver = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (!entry.isIntersecting) continue;
+                    const cb = this._sentinelCallbacks.get(entry.target);
+                    if (cb) cb();
+                }
+            },
+            {root: null, rootMargin: `0px 0px ${SENTINEL_PRELOAD_PX}px 0px`, threshold: 0}
+        );
 
         useExternalListener(document, "click", (ev) => {
             if (this.state.showLabelPicker) {
@@ -173,19 +213,18 @@ export class CategoryManager extends Component {
         } catch (e) { /* ignore */
         }
 
-        // ---------- Child access (paginated) ----------
+        // ---------- Child access (auto-paginated) ----------
         this.getChildren = (cat) => {
             const all = this.state.treeByParent[cat.id] || [];
             const res = this._filterResult;
             const filtered = res ? all.filter(c => res.visible.has(c.id)) : all;
 
-            // Search mode: show everything, no pagination.
+            // Search bypasses pagination — show all matches.
             if (res) return filtered;
 
             const shown = this.state.nodeLoadedCounts[cat.id]
                 || this.state.childPageSize;
-            if (filtered.length <= shown) return filtered;
-            return filtered.slice(0, shown);
+            return filtered.length <= shown ? filtered : filtered.slice(0, shown);
         };
 
         this.childTotal = (cat) => {
@@ -197,8 +236,7 @@ export class CategoryManager extends Component {
 
         this.childShown = (cat) => {
             const total = this.childTotal(cat);
-            const res = this._filterResult;
-            if (res) return total;
+            if (this._filterResult) return total;
             const shown = this.state.nodeLoadedCounts[cat.id]
                 || this.state.childPageSize;
             return Math.min(shown, total);
@@ -206,16 +244,37 @@ export class CategoryManager extends Component {
 
         this.childHasMore = (cat) => this.childShown(cat) < this.childTotal(cat);
 
-        this.loadMoreChildren = (cat, ev) => {
-            if (ev) ev.stopPropagation();
-            const current = this.state.nodeLoadedCounts[cat.id]
+        // Fired by the IntersectionObserver when a sentinel nears the view.
+        this.loadMoreChildren = (cat) => {
+            const catId = cat.id;
+            const now = Date.now();
+            const last = this._loadMoreDebounce[catId] || 0;
+            if (now - last < SENTINEL_COOLDOWN_MS) return;
+            this._loadMoreDebounce[catId] = now;
+
+            const current = this.state.nodeLoadedCounts[catId]
                 || this.state.childPageSize;
             const remaining = this.childTotal(cat) - current;
+            if (remaining <= 0) return;
+
+            // Small remainders load in one shot; otherwise one page at a time.
             const step = remaining <= 500 ? remaining : this.state.childPageSize;
             this.state.nodeLoadedCounts = {
                 ...this.state.nodeLoadedCounts,
-                [cat.id]: current + step,
+                [catId]: current + step,
             };
+        };
+
+        // Sentinel registration API, passed down to every CategoryNode.
+        this.registerSentinel = (el, category) => {
+            if (!el || !category) return;
+            this._sentinelCallbacks.set(el, () => this.loadMoreChildren(category));
+            this._sentinelObserver.observe(el);
+        };
+        this.unregisterSentinel = (el) => {
+            if (!el) return;
+            this._sentinelCallbacks.delete(el);
+            this._sentinelObserver.unobserve(el);
         };
 
         this.onSelect = (cat) => this.selectCategory(cat);
@@ -225,6 +284,9 @@ export class CategoryManager extends Component {
 
         onWillStart(async () => {
             await this.reloadTree();
+        });
+        onWillUnmount(() => {
+            this._sentinelObserver.disconnect();
         });
     }
 
@@ -262,7 +324,8 @@ export class CategoryManager extends Component {
             }
             this.state.tree = flat;
             this.state.treeByParent = byParent;
-            this.state.nodeLoadedCounts = {};    // reset pagination
+            this.state.nodeLoadedCounts = {};
+            this._loadMoreDebounce = {};
             this._filterCacheKey = null;
         } catch (e) {
             console.error("get_category_tree failed", e);
@@ -272,16 +335,50 @@ export class CategoryManager extends Component {
         }
     }
 
+    /**
+     * Forget how many children each of the given nodes (and all their
+     * descendants) has rendered, so the next expansion starts paginated
+     * again from `childPageSize`.
+     *
+     * Called on collapse — a node's whole subtree is unreachable until
+     * the user expands it again, so the loaded count is dead weight and
+     * keeps the DOM bound to whatever the user scrolled through last
+     * time.
+     */
+    _resetLoadedCounts(ids) {
+        const counts = {...this.state.nodeLoadedCounts};
+        const stack = [...ids];
+        const visited = new Set();
+        let dirty = false;
+        while (stack.length) {
+            const id = stack.pop();
+            if (visited.has(id)) continue;
+            visited.add(id);
+            if (id in counts) {
+                delete counts[id];
+                dirty = true;
+            }
+            for (const child of this.state.treeByParent[id] || []) {
+                stack.push(child.id);
+            }
+        }
+        if (dirty) {
+            this.state.nodeLoadedCounts = counts;
+        }
+    }
+
     // ---------- Tree search ----------
     onTreeSearch(ev) {
         this.state.treeSearch = ev.target.value;
         this._filterCacheKey = null;
+        this.state.nodeLoadedCounts = {};   // <-- ADD
     }
 
     clearTreeSearch(ev) {
         if (ev) ev.stopPropagation();
         this.state.treeSearch = "";
         this._filterCacheKey = null;
+        this.state.nodeLoadedCounts = {};   // <-- ADD
     }
 
     get _filterResult() {
@@ -354,6 +451,8 @@ export class CategoryManager extends Component {
             setTimeout(() => {
                 delete this.state.expandedIds[id];
                 delete this.state.closingIds[id];
+                // Free the paginated children of this whole subtree.
+                this._resetLoadedCounts([id]);
             }, 220);
         }
     }
