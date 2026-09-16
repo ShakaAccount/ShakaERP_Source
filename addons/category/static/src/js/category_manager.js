@@ -69,7 +69,6 @@ export class CategoryManager extends Component {
 
         this.labelPickerRef = useRef("labelPicker");
 
-        // Close the label-picker dropdown when clicking anywhere outside it.
         useExternalListener(document, "click", (ev) => {
             if (!this.state.showLabelPicker) return;
             const el = this.labelPickerRef.el;
@@ -91,7 +90,7 @@ export class CategoryManager extends Component {
             newCategory: {title: "", code: "", entity_id: null},
             saving: false,
             entityColumns: [],
-            labelColumns: [],       // ordered list of selected column names
+            labelColumns: [],
             showLabelPicker: false,
             pageSize: 20,
         });
@@ -102,7 +101,8 @@ export class CategoryManager extends Component {
             if (saved > 0) {
                 this.state.pageSize = saved;
             }
-        } catch (e) { /* ignore */ }
+        } catch (e) { /* ignore */
+        }
 
         this.getChildren = (cat) => this.state.treeByParent[cat.id] || [];
         this.onSelect = (cat) => this.selectCategory(cat);
@@ -213,19 +213,16 @@ export class CategoryManager extends Component {
             return [];
         }
         if (!raw) return [];
-
-        // Current format: JSON array of column names.
         if (raw.startsWith("[")) {
             try {
                 const parsed = JSON.parse(raw);
                 if (Array.isArray(parsed)) {
                     return parsed.filter(s => typeof s === "string" && s);
                 }
-            } catch (e) { /* fall through */ }
+            } catch (e) { /* fall through */
+            }
             return [];
         }
-
-        // Backward compat: single-column name stored as a plain string.
         return [raw];
     }
 
@@ -241,7 +238,8 @@ export class CategoryManager extends Component {
             } else {
                 localStorage.removeItem(this._labelStorageKey(entityId));
             }
-        } catch (e) { /* ignore */ }
+        } catch (e) { /* ignore */
+        }
     }
 
     toggleLabelPicker(ev) {
@@ -264,7 +262,6 @@ export class CategoryManager extends Component {
         } else {
             next.add(name);
         }
-        // Preserve the order in which columns appear in entityColumns.
         const order = new Map(
             this.state.entityColumns.map((c, i) => [c.name, i]));
         this.state.labelColumns = Array.from(next)
@@ -293,6 +290,17 @@ export class CategoryManager extends Component {
         if (n === 1) return this.state.labelColumns[0];
         if (n <= 3) return this.state.labelColumns.join(" · ");
         return `${n} columns`;
+    }
+
+    /** Columns to render in the item tables. */
+    get tableColumns() {
+        const avail = new Set(this.state.entityColumns.map(c => c.name));
+        const chosen = this.state.labelColumns.filter(n => avail.has(n));
+        if (chosen.length) {
+            return this.state.entityColumns.filter(c => chosen.includes(c.name));
+        }
+        // Auto mode: a single column carrying the server's auto-label.
+        return [{name: null, title: "Display name"}];
     }
 
     refreshLabelOptions() {
@@ -325,6 +333,18 @@ export class CategoryManager extends Component {
         return {...record, label: parts.join(" · ")};
     }
 
+    /** Value to render in a table cell for `colName` (null = auto column). */
+    cellValue(rec, colName) {
+        if (colName === null || colName === undefined) {
+            return this.recordLabel(rec);
+        }
+        const v = rec[colName];
+        if (v === null || v === undefined || v === false) {
+            return "";
+        }
+        return String(v);
+    }
+
     _pageSizeStorageKey() {
         return "category_manager.page_size";
     }
@@ -334,7 +354,8 @@ export class CategoryManager extends Component {
         this.state.pageSize = size;
         try {
             localStorage.setItem(this._pageSizeStorageKey(), String(size));
-        } catch (e) { /* ignore */ }
+        } catch (e) { /* ignore */
+        }
         for (const side of ["left", "right"]) {
             this.state[side].page = 1;
             this.state[side].selectedIds = {};
@@ -404,6 +425,21 @@ export class CategoryManager extends Component {
         const side = this.state[sideName];
         side.selectedIds = {};
         side.anchorIndex = null;
+    }
+
+    allOnPageSelected(sideName) {
+        const side = this.state[sideName];
+        if (!side.records.length) return false;
+        return side.records.every(r => !!side.selectedIds[r.id]);
+    }
+
+    toggleAllOnPage(sideName, ev) {
+        if (ev) ev.stopPropagation();
+        if (this.allOnPageSelected(sideName)) {
+            this.clearSelection(sideName);
+        } else {
+            this.selectAllOnPage(sideName);
+        }
     }
 
     toggleRow(sideName, rec, ev) {
