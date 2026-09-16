@@ -232,6 +232,16 @@
                         <input type="text" class="form-control form-control-sm"
                                placeholder="Search&#8230;"
                                t-on-input="onSearchLeft"/>
+                        <select class="form-select form-select-sm o_cat_search_col"
+                                t-on-change="(ev) => this.onSearchColumnChange('left', ev)">
+                            <option value="">All columns</option>
+                            <t t-foreach="state.entityColumns" t-as="col" t-key="col.name">
+                                <option t-att-value="col.name"
+                                        t-att-selected="col.name === state.left.searchColumn">
+                                    <t t-esc="col.title"/>
+                                </option>
+                            </t>
+                        </select>
                     </div>
 
                     <div class="o_cat_list">
@@ -356,6 +366,16 @@
                         <input type="text" class="form-control form-control-sm"
                                placeholder="Search&#8230;"
                                t-on-input="onSearchRight"/>
+                        <select class="form-select form-select-sm o_cat_search_col"
+                                t-on-change="(ev) => this.onSearchColumnChange('right', ev)">
+                            <option value="">All columns</option>
+                            <t t-foreach="state.entityColumns" t-as="col" t-key="col.name">
+                                <option t-att-value="col.name"
+                                        t-att-selected="col.name === state.right.searchColumn">
+                                    <t t-esc="col.title"/>
+                                </option>
+                            </t>
+                        </select>
                     </div>
 
                     <div class="o_cat_list">

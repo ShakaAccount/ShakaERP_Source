@@ -36,7 +36,8 @@ class RaesMdCategory(models.Model):
     editor_user_id = fields.Integer()
     modification_date = fields.Datetime()
 
-    company_id = fields.Many2one('res.company', default=lambda self: self.env.company,
+    company_id = fields.Many2one('res.company',
+                                 default=lambda self: self.env.company,
                                  required=True)
     entity_id = fields.Many2one('raes.md.entity', 'Entity', required=True,
                                 ondelete='cascade')
@@ -95,25 +96,28 @@ class RaesMdCategory(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
+            # Row-level security: the category's company is whatever the
+            # user has active in Odoo, unless a parent dictates otherwise.
             vals.setdefault('company_id', self.env.company.id)
             vals.setdefault('creator_user_id', self.env.uid)
             vals.setdefault('creation_date', fields.Datetime.now())
             vals.setdefault('is_user_defined', True)
-            if not vals.get('root_id'):
-                parent_id = vals.get('parent_id')
-                if parent_id:
-                    parent = self.browse(parent_id)
-                    # Inherit the parent's entity when not supplied.
-                    if not vals.get('entity_id') and parent.entity_id:
-                        vals['entity_id'] = parent.entity_id.id
-                    vals['root_id'] = parent.root_id.id or parent.id
 
-            # --- Pre-validate entity consistency BEFORE the DB trigger
+            parent_id = vals.get('parent_id')
+            if not vals.get('root_id') and parent_id:
+                parent = self.browse(parent_id)
+                # A child must share its tree root's company AND entity.
+                if parent.company_id:
+                    vals['company_id'] = parent.company_id.id
+                if not vals.get('entity_id') and parent.entity_id:
+                    vals['entity_id'] = parent.entity_id.id
+                vals['root_id'] = parent.root_id.id or parent.id
+
+            # Pre-validate entity consistency BEFORE the DB trigger
             # fires. The legacy md.category_same_entity() trigger raises
             # a raw Postgres error that leaves the ORM cache broken
             # (MissingError on read-back). Catching it here yields a
             # proper ValidationError the UI can render.
-            parent_id = vals.get('parent_id')
             entity_id = vals.get('entity_id')
             if parent_id and entity_id:
                 parent = self.browse(parent_id)
@@ -201,10 +205,7 @@ class RaesMdCategory(models.Model):
             layers.append(children)
             layer = children
 
-        # 2. Delete member rows for every node in the subtree. The view's
-        #    category_member rows must be gone before the category rows
-        #    they point at, or the legacy FK on md.category_member will
-        #    block the delete.
+        # 2. Delete member rows for every node in the subtree.
         all_ids = [i for lyr in layers for i in lyr.ids]
         self.env['raes.md.category.member'].sudo().search(
             [('category_id', 'in', all_ids)]).unlink()
@@ -261,46 +262,9 @@ class RaesMdCategoryMember(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            parent_id = vals.get('parent_id')
-
-            # Children inherit the parent's company; roots default to the
-            # user's active company. Same pattern as the entity_id
-            # inheritance already in place.
-            if parent_id:
-                parent = self.browse(parent_id)
-                if parent.exists() and parent.company_id:
-                    vals.setdefault('company_id', parent.company_id.id)
-
-            vals.setdefault('company_id', self.env.company.id)
             vals.setdefault('creator_user_id', self.env.uid)
             vals.setdefault('creation_date', fields.Datetime.now())
-            vals.setdefault('is_user_defined', True)
-
-            if not vals.get('root_id'):
-                if parent_id:
-                    parent = self.browse(parent_id)
-                    if not vals.get('entity_id') and parent.entity_id:
-                        vals['entity_id'] = parent.entity_id.id
-                    vals['root_id'] = parent.root_id.id or parent.id
-
-            # Pre-validate entity consistency BEFORE the DB trigger fires.
-            entity_id = vals.get('entity_id')
-            if parent_id and entity_id:
-                parent = self.browse(parent_id)
-                if parent.exists():
-                    root = parent._get_tree_root() or parent
-                    if root.entity_id and root.entity_id.id != entity_id:
-                        raise ValidationError(_(
-                            'A sub-category must belong to the same entity '
-                            'as its tree root "%(root)s" (entity %(ent)s).',
-                            root=root.title,
-                            ent=root.entity_id.display_name,
-                        ))
-
-        records = super().create(vals_list)
-        for rec in records.filtered(lambda r: not r.root_id):
-            rec.sudo().write({'root_id': rec.id})
-        return records
+        return super().create(vals_list)
 
     def write(self, vals):
         vals = dict(vals)

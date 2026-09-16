@@ -14,26 +14,32 @@ export class CategoryNode extends Component {
     get hasChildren() {
         return !!(this.props.children && this.props.children.length);
     }
+
     get isSelected() {
         return this.props.selectedId === this.props.category.id;
     }
+
     get isOpen() {
         return !!this.props.expandedIds[this.props.category.id];
     }
+
     onClick(ev) {
         ev.stopPropagation();
         this.props.onSelect(this.props.category);
     }
+
     onToggle(ev) {
         ev.stopPropagation();
         if (this.hasChildren) {
             this.props.onToggle(this.props.category.id);
         }
     }
+
     onAddChild(ev) {
         ev.stopPropagation();
         this.props.onAddChild(this.props.category);
     }
+
     onRemove(ev) {
         ev.stopPropagation();
         this.props.onDelete(this.props.category);
@@ -68,7 +74,6 @@ export class CategoryManager extends Component {
 
         this.labelPickerRef = useRef("labelPicker");
         this.entityPickerRef = useRef("entityPicker");
-        // Non-reactive drag bookkeeping.
         this._drag = null;
         this._entitiesLoaded = false;
         this._filterCacheKey = null;
@@ -125,7 +130,8 @@ export class CategoryManager extends Component {
             if (saved >= TREE_MIN && saved <= TREE_MAX) {
                 this.state.treeWidth = saved;
             }
-        } catch (e) { /* ignore */ }
+        } catch (e) { /* ignore */
+        }
 
         try {
             const saved = parseInt(
@@ -133,9 +139,9 @@ export class CategoryManager extends Component {
             if (saved > 0) {
                 this.state.pageSize = saved;
             }
-        } catch (e) { /* ignore */ }
+        } catch (e) { /* ignore */
+        }
 
-        // Filter-aware getChildren — recurses through the visible subset.
         this.getChildren = (cat) => {
             const all = this.state.treeByParent[cat.id] || [];
             const res = this._filterResult;
@@ -158,6 +164,7 @@ export class CategoryManager extends Component {
             total: 0,
             page: 1,
             search: "",
+            searchColumn: "",
             reason: null,
             selectedIds: {},
             anchorIndex: null,
@@ -291,6 +298,7 @@ export class CategoryManager extends Component {
         for (const side of ["left", "right"]) {
             this.state[side].page = 1;
             this.state[side].search = "";
+            this.state[side].searchColumn = "";
             this.state[side].selectedIds = {};
             this.state[side].anchorIndex = null;
         }
@@ -313,9 +321,11 @@ export class CategoryManager extends Component {
     _labelStorageKey(entityId) {
         return `category_manager.label.${entityId}`;
     }
+
     _colWidthsStorageKey(entityId) {
         return `category_manager.colwidths.${entityId}`;
     }
+
     _pageSizeStorageKey() {
         return "category_manager.page_size";
     }
@@ -335,7 +345,8 @@ export class CategoryManager extends Component {
                 if (Array.isArray(parsed)) {
                     return parsed.filter(s => typeof s === "string" && s);
                 }
-            } catch (e) { /* fall through */ }
+            } catch (e) { /* fall through */
+            }
             return [];
         }
         return [raw];
@@ -353,7 +364,8 @@ export class CategoryManager extends Component {
             } else {
                 localStorage.removeItem(this._labelStorageKey(entityId));
             }
-        } catch (e) { /* ignore */ }
+        } catch (e) { /* ignore */
+        }
     }
 
     _loadColWidths(entityId) {
@@ -374,7 +386,8 @@ export class CategoryManager extends Component {
             localStorage.setItem(
                 this._colWidthsStorageKey(cat.entity_id[0]),
                 JSON.stringify(this.state.colWidths));
-        } catch (e) { /* ignore */ }
+        } catch (e) { /* ignore */
+        }
     }
 
     toggleLabelPicker(ev) {
@@ -428,7 +441,6 @@ export class CategoryManager extends Component {
     refreshLabelOptions() {
         const rec = this.state.right.records[0] || this.state.left.records[0];
         if (!rec) {
-            this.state.entityColumns = [];
             return;
         }
         const skip = new Set(["id", "_pk", "label", "_auto_label"]);
@@ -554,7 +566,8 @@ export class CategoryManager extends Component {
             try {
                 localStorage.setItem(
                     TREE_WIDTH_KEY, String(this.state.treeWidth));
-            } catch (e) { /* ignore */ }
+            } catch (e) { /* ignore */
+            }
         } else if (d.type === "reorder") {
             const target = this.state.dragOverCol;
             if (d.moved && target && target !== d.colName) {
@@ -581,7 +594,8 @@ export class CategoryManager extends Component {
         this.state.pageSize = size;
         try {
             localStorage.setItem(this._pageSizeStorageKey(), String(size));
-        } catch (e) { /* ignore */ }
+        } catch (e) { /* ignore */
+        }
         for (const side of ["left", "right"]) {
             this.state[side].page = 1;
             this.state[side].selectedIds = {};
@@ -609,6 +623,7 @@ export class CategoryManager extends Component {
                 (side.page - 1) * this.state.pageSize,
                 this.state.pageSize,
                 side.search || "",
+                side.searchColumn || false,
             ]);
             side.records = res.records || [];
             side.total = res.total || 0;
@@ -626,6 +641,7 @@ export class CategoryManager extends Component {
     loadLeft() {
         return this.fetchPane("left", "get_items_not_in_category");
     }
+
     loadRight() {
         return this.fetchPane("right", "get_items_in_category");
     }
@@ -634,22 +650,27 @@ export class CategoryManager extends Component {
     isRowSelected(sideName, rec) {
         return !!this.state[sideName].selectedIds[rec.id];
     }
+
     selectedCount(sideName) {
         return Object.keys(this.state[sideName].selectedIds).length;
     }
+
     selectedRecords(sideName) {
         return Object.values(this.state[sideName].selectedIds);
     }
+
     clearSelection(sideName) {
         const side = this.state[sideName];
         side.selectedIds = {};
         side.anchorIndex = null;
     }
+
     allOnPageSelected(sideName) {
         const side = this.state[sideName];
         if (!side.records.length) return false;
         return side.records.every(r => !!side.selectedIds[r.id]);
     }
+
     toggleAllOnPage(sideName, ev) {
         if (ev) ev.stopPropagation();
         if (this.allOnPageSelected(sideName)) {
@@ -833,6 +854,7 @@ export class CategoryManager extends Component {
         this.state.left.anchorIndex = null;
         this.loadLeft();
     }
+
     onSearchRight(ev) {
         this.state.right.search = ev.target.value;
         this.state.right.page = 1;
@@ -841,9 +863,23 @@ export class CategoryManager extends Component {
         this.loadRight();
     }
 
+    onSearchColumnChange(sideName, ev) {
+        const col = ev.target.value || "";
+        this.state[sideName].searchColumn = col;
+        this.state[sideName].page = 1;
+        if (this.state[sideName].search) {
+            if (sideName === "left") {
+                this.loadLeft();
+            } else {
+                this.loadRight();
+            }
+        }
+    }
+
     get leftPages() {
         return Math.max(1, Math.ceil(this.state.left.total / this.state.pageSize));
     }
+
     get rightPages() {
         return Math.max(1, Math.ceil(this.state.right.total / this.state.pageSize));
     }
@@ -855,6 +891,7 @@ export class CategoryManager extends Component {
             await this.loadLeft();
         }
     }
+
     async prevLeft() {
         if (this.state.left.page > 1) {
             this.state.left.page--;
@@ -862,6 +899,7 @@ export class CategoryManager extends Component {
             await this.loadLeft();
         }
     }
+
     async nextRight() {
         if (this.state.right.page < this.rightPages) {
             this.state.right.page++;
@@ -869,6 +907,7 @@ export class CategoryManager extends Component {
             await this.loadRight();
         }
     }
+
     async prevRight() {
         if (this.state.right.page > 1) {
             this.state.right.page--;
@@ -934,7 +973,6 @@ export class CategoryManager extends Component {
         this.state.entityPickerOpen = true;
         this.state.entitySearch = "";
         this.state.entityHighlightIdx = 0;
-        // Wait for OWL to render the search input, then focus it.
         await new Promise((resolve) => setTimeout(resolve, 0));
         const el = this.entityPickerRef.el;
         const input = el && el.querySelector(".o_cat_entity_search");
@@ -1011,7 +1049,8 @@ export class CategoryManager extends Component {
                 `This action cannot be undone.`,
             confirmLabel: "Delete",
             confirm: () => this._deleteCategory(cat),
-            cancel: () => {},
+            cancel: () => {
+            },
         });
     }
 
@@ -1131,6 +1170,11 @@ export class CategoryManager extends Component {
 
 CategoryManager.template = "category.CategoryManager";
 CategoryManager.components = {CategoryNode};
-
+CategoryManager.props = {
+    action: {type: Object, optional: true},
+    actionId: {type: [Number, String], optional: true},
+    updateActionState: {type: Function, optional: true},
+    className: {type: String, optional: true},
+};
 registry.category("actions").add(
     "category.category_manager", CategoryManager);

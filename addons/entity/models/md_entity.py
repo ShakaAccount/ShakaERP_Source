@@ -11,6 +11,83 @@ _logger = logging.getLogger(__name__)
 ENTITY_TYPE_LOOKUP_CATEGORY = '1001'
 ENTITY_SYSTEM_LOOKUP_CATEGORY = '1004'
 
+# ----------------------------------------------------------------------
+# Arabic → Persian normalisation
+#
+# Persian text frequently contains Arabic codepoints that look identical
+# to the Persian ones but don't compare equal:
+#     ي (U+064A Arabic Yeh)  ≠ ی (U+06CC Persian Yeh)
+#     ك (U+0643 Arabic Kaf)  ≠ ک (U+06A9 Persian Kef)
+#     ة (U+0629 Teh Marbuta) ≠ ه (U+0647 Heh)
+# A search for "ی" therefore misses every row that stored "ي", and vice
+# versa. The map below normalises both the incoming search term and the
+# database value to a canonical Persian form before the LIKE runs.
+#
+# Diacritics (Harakat) are mapped to the empty string — they are
+# invisible in most Persian text, so stripping them makes search more
+# forgiving. Arabic-Indic digits (٠-٩) and extended Arabic-Indic digits
+# (۰-۹) are mapped to their ASCII forms so a search for "123" matches
+# "۱۲۳" and vice versa.
+# ----------------------------------------------------------------------
+_PERSIAN_NORMALIZE_MAP = {
+    # Letters
+    '\u064A': '\u06CC',  # ي Arabic Yeh       → ی Persian Yeh
+    '\u0649': '\u06CC',  # ى Alef Maksura     → ی
+    '\u0643': '\u06A9',  # ك Arabic Kaf       → ک Persian Kef
+    '\u0629': '\u0647',  # ة Teh Marbuta      → ه Heh
+    '\u06C0': '\u0647',  # ۀ Heh + Yeh        → ه
+    # Diacritics — removed
+    '\u064B': '', '\u064C': '', '\u064D': '',
+    '\u064E': '', '\u064F': '', '\u0650': '',
+    '\u0651': '', '\u0652': '',
+    '\u0653': '', '\u0654': '', '\u0655': '',
+    '\u0670': '',
+    # Arabic-Indic digits → ASCII
+    '\u0660': '0', '\u0661': '1', '\u0662': '2', '\u0663': '3',
+    '\u0664': '4', '\u0665': '5', '\u0666': '6', '\u0667': '7',
+    '\u0668': '8', '\u0669': '9',
+    # Extended Arabic-Indic (Persian) digits → ASCII
+    '\u06F0': '0', '\u06F1': '1', '\u06F2': '2', '\u06F3': '3',
+    '\u06F4': '4', '\u06F5': '5', '\u06F6': '6', '\u06F7': '7',
+    '\u06F8': '8', '\u06F9': '9',
+    # Decimal / thousands separators
+    '\u066B': '.', '\u066C': ',',
+}
+
+
+def _persian_normalize(text):
+    """Return *text* with Arabic codepoints mapped to Persian ones."""
+    if not text:
+        return text
+    for src, dst in _PERSIAN_NORMALIZE_MAP.items():
+        if src in text:
+            text = text.replace(src, dst)
+    return text
+
+
+def _sql_persian_normalize(column_expr, term=None, dialect='mssql'):
+    """Return a SQL expression that maps Arabic codepoints in
+    *column_expr* to their Persian equivalents.
+
+    When ``term`` (already normalised) is given, only the mappings
+    whose *target* character appears in the term are emitted — the DB
+    value for the other characters can't change whether ``term`` is a
+    substring of the normalised value. This keeps the REPLACE chain
+    short for typical searches.
+
+    ``dialect`` selects the string-literal prefix: ``N'…'`` for MSSQL
+    (Unicode), bare ``'…'`` for PostgreSQL (which is already UTF-8).
+    """
+    prefix = "N" if dialect == 'mssql' else ""
+    expr = column_expr
+    for src, dst in _PERSIAN_NORMALIZE_MAP.items():
+        if term is not None and dst and dst not in term:
+            continue
+        src_esc = src.replace("'", "''")
+        dst_esc = dst.replace("'", "''")
+        expr = f"REPLACE({expr}, {prefix}'{src_esc}', {prefix}'{dst_esc}')"
+    return expr
+
 
 def _quote_ident(name):
     """Quote a PostgreSQL identifier (local, trusted-by-origin names)."""
@@ -391,9 +468,6 @@ class RaesMdEntity(models.Model):
                 conn = self.env['raes.dw.connection'].browse(conn_id)
                 vals['database_name'] = conn.database
 
-        # If the create payload includes columns, suppress the per-line
-        # ordinal constraint while Odoo inserts them one by one; the
-        # full validation runs once everything is in place.
         has_columns = any(v.get('column_ids') for v in vals_list)
         if has_columns:
             self_ctx = self.with_context(skip_ordinal_check=True)
@@ -409,7 +483,6 @@ class RaesMdEntity(models.Model):
         return entities
 
     def write(self, vals):
-        # Capture old name/schema for the DB rename
         old_meta = {}
         if 'name' in vals or 'schema_name' in vals:
             for rec in self:
@@ -428,10 +501,6 @@ class RaesMdEntity(models.Model):
             else:
                 vals.setdefault('database_name', False)
 
-        # If the write includes column changes (editable list), suppress
-        # the per-line ordinal check while Odoo applies each child
-        # write — a swap like (2↔3) produces transient duplicates that
-        # are resolved once both writes land. We validate after.
         batch_ordinals = 'column_ids' in vals
         if batch_ordinals:
             self_ctx = self.with_context(skip_ordinal_check=True)
@@ -440,7 +509,6 @@ class RaesMdEntity(models.Model):
 
         res = super(RaesMdEntity, self_ctx).write(vals)
 
-        # Rename the DW table when entity name/schema changed
         for rec in self:
             old = old_meta.get(rec.id)
             if not old:
@@ -454,11 +522,9 @@ class RaesMdEntity(models.Model):
                         old_schema, old_name,
                         rec.schema_name, rec.name)
 
-        # Full ordinal validation once every child write is done
         if batch_ordinals:
             self._validate_column_ordinals()
 
-        # Add missing columns / refresh FKs
         self._sync_dw_table()
 
         return res
@@ -527,9 +593,6 @@ class RaesMdEntity(models.Model):
                 continue
             ddl_builder.drop_table(conn, entity.schema_name, entity.name)
 
-        # Companion config rows carry a FK to raes.md.entity; clear them
-        # explicitly so the ORM's cascade on a view-backed model cannot
-        # trip on a missing real FK.
         self.env['raes.md.entity.config'].sudo().search(
             [('entity_id', 'in', self.ids)]).unlink()
 
@@ -568,17 +631,6 @@ class RaesMdEntity(models.Model):
 
     # ------------------------------------------------------------------
     # DW relation resolution (pluggable seam)
-    #
-    # The category panes must read MSSQL data (BI.DimX) that tds_fdw has
-    # imported into the local PostgreSQL instance. md.entity carries no FK
-    # to the connection - the link lives in raes.md.entity.config - and
-    # `schema_name`/`name` are MSSQL identifiers that do NOT exist as
-    # PostgreSQL relations. Everything below therefore resolves a LOCAL
-    # relation before any SQL is emitted.
-    #
-    # `_dw_resolve_relation` is the single extension point: an on-demand
-    # `IMPORT FOREIGN SCHEMA` path can be dropped in later without
-    # touching the RPCs.
     # ------------------------------------------------------------------
     _DW_SEARCH_COLUMN_WHITELIST = (
         'title', 'englishtitle', 'english_title', 'name', 'code',
@@ -586,23 +638,7 @@ class RaesMdEntity(models.Model):
     )
 
     def _dw_resolve_relation(self, entity):
-        """Return ``(connection, local_relation, source)`` for `entity`.
-
-        `local_relation` is a name PostgreSQL can SELECT (the
-        ``public.raes_dimxxx`` alias view or an ``fdw_raes."DimXxx"``
-        foreign table); ``None`` when the DW table is not reachable.
-        `source` labels the branch that was taken, for logging/tests.
-
-        Resolution order:
-          1. ``raes.dw.table_map.local_view_name`` on the entity's
-             connection (what ``action_bootstrap`` maintains);
-          2. the ``fdw_raes`` foreign table, matched case-insensitively;
-          3. the connection's own ``remote_schema`` in the local DB.
-
-        Plug-in point (Phase 7): before returning ``(conn, None, ...)``
-        a branch may run ``IMPORT FOREIGN SCHEMA ... LIMIT TO (...)``
-        exactly as ``action_import_selected`` does, then re-probe.
-        """
+        """Return ``(connection, local_relation, source)`` for `entity`."""
         if not entity.name:
             return None, None, 'no-table-name'
 
@@ -612,14 +648,11 @@ class RaesMdEntity(models.Model):
 
         wanted = entity.name.lower()
 
-        # 1. explicit mapping maintained by action_bootstrap /
-        #    action_import_selected
         line = conn.line_ids.filtered(
             lambda l: l.remote_table.lower() == wanted)[:1]
         if line and line.local_view_name:
             return conn, line.local_view_name, 'table_map'
 
-        # 2/3. probe the local catalog for the imported foreign table
         cr = self.env.cr
         schemas = ['fdw_raes']
         if conn.remote_schema and conn.remote_schema not in schemas:
@@ -651,14 +684,7 @@ class RaesMdEntity(models.Model):
         return {r[0].lower() for r in self.env.cr.fetchall()}
 
     def _dw_pk_column(self, entity, relation):
-        """Local (lowercased) PK column of the DW relation.
-
-        Prefers the ``md.entity_column`` catalog (``is_primary_key``),
-        which stores MSSQL PascalCase names, then falls back to
-        ``information_schema``: first an ``*id`` column, then nothing.
-        The bootstrap alias view lowercases every column name, so the
-        catalog name must be localised before use.
-        """
+        """Local (lowercased) PK column of the DW relation."""
         available = self._dw_column_names(relation)
         if not available:
             return None
@@ -695,33 +721,29 @@ class RaesMdEntity(models.Model):
     def _build_dw_where(self, search_term, columns=None):
         """Return ``(clause, params)`` for a free-text search.
 
-        `clause` carries NO ``WHERE`` keyword - callers prepend it - and
-        is empty when there is nothing to filter on. Columns are
-        resolved against the real relation, so a table lacking ``code``
-        drops that predicate instead of raising ``UndefinedColumn``.
+        Both the search term and the underlying column values are passed
+        through Persian/Arabic normalization so a search for ``ی``
+        matches a stored ``ي`` and vice versa.
         """
         cols = list(columns if columns is not None
                     else self._DW_SEARCH_COLUMN_WHITELIST)
         if not search_term or not cols:
             return '', []
-        clauses = [f'CAST(t.{c} AS TEXT) ILIKE %s' for c in cols]
-        return '(' + ' OR '.join(clauses) + ')', [f'%{search_term}%'] * len(cols)
+        normalized = _persian_normalize(search_term)
+        clauses = []
+        for c in cols:
+            col_expr = _sql_persian_normalize(
+                f'CAST(t.{c} AS TEXT)',
+                term=normalized, dialect='postgresql')
+            clauses.append(f'{col_expr} ILIKE %s')
+        return '(' + ' OR '.join(clauses) + ')', [f'%{normalized}%'] * len(cols)
 
     def _dw_pane(self, entity_id, category_id, offset, limit, search_term,
                  in_category):
         """Shared implementation of the two category item panes.
 
-        Returns ``{'records': [...], 'total': n, 'reason': str|None}``.
-
-        Every record carries a normalized ``id`` (the DW primary key, i.e.
-        the value stored in ``md.category_member.member_id``) and a
-        display ``label``. The raw DW columns are preserved alongside
-        those two keys so callers can render extra detail.
-
-        Unresolvable DW relations degrade to an empty page instead of
-        raising, but the ``reason`` key names the failing branch
-        (``'no-connection'``, ``'not-imported'``, ``'no-pk'``) so the UI
-        can explain the empty pane instead of silently showing nothing.
+        Legacy Postgres path. The active category manager uses
+        ``_dw_category_pane`` (MSSQL) instead.
         """
         empty = {'records': [], 'total': 0, 'reason': None}
         entity = self.browse(entity_id)
@@ -775,11 +797,6 @@ class RaesMdEntity(models.Model):
 
     def _dw_normalize_record(self, record, pk):
         rec = {k.lower(): v for k, v in record.items()}
-        # Bigint PKs must travel as strings. JS numbers silently collapse
-        # distinct 17-digit IDs onto the same value (2^53 limit), which
-        # produces duplicate t-keys and cross-firing selections in the UI.
-        # Odoo's Integer field accepts the string and stores the int, so
-        # nothing downstream needs to change.
         pk_val = rec.get(pk.lower())
         rec['id'] = '' if pk_val is None else str(pk_val)
         rec['_pk'] = pk.lower()
@@ -796,14 +813,7 @@ class RaesMdEntity(models.Model):
 
     @api.model
     def get_dw_pane_diagnostics(self, entity_id):
-        """Explain why a pane may be empty for `entity_id`.
-
-        Returns ``{'entity': str, 'schema': str, 'table': str,
-        'relation': str|None, 'source': str, 'pk': str|None,
-        'search_columns': [...], 'connection_id': int|None}``. Used by
-        the client action to show an actionable warning instead of a
-        blank pane.
-        """
+        """Explain why a pane may be empty for `entity_id`."""
         entity = self.browse(entity_id)
         if not entity.exists():
             return {'error': 'Entity %s does not exist.' % entity_id}
@@ -825,17 +835,19 @@ class RaesMdEntity(models.Model):
     # ------------------------------------------------------------------
     @api.model
     def get_items_not_in_category(self, entity_id, category_id,
-                                  offset=0, limit=20, search_term=''):
+                                  offset=0, limit=20, search_term='',
+                                  search_column=None):
         return self._dw_category_pane(
             entity_id, category_id, offset, limit, search_term,
-            in_category=False)
+            in_category=False, search_column=search_column)
 
     @api.model
     def get_items_in_category(self, entity_id, category_id,
-                              offset=0, limit=20, search_term=''):
+                              offset=0, limit=20, search_term='',
+                              search_column=None):
         return self._dw_category_pane(
             entity_id, category_id, offset, limit, search_term,
-            in_category=True)
+            in_category=True, search_column=search_column)
 
     def _dw_connection_for(self, entity):
         """Return the raes.dw.connection for this entity, or empty recordset."""
@@ -848,10 +860,7 @@ class RaesMdEntity(models.Model):
         return self.env['raes.dw.catalog']._mssql_connect(connection)
 
     def _dw_remote_pk(self, cur, entity):
-        """PK column name on the MSSQL side.
-
-        Metadata first (``column_ids.is_primary_key``), then live introspection.
-        """
+        """PK column name on the MSSQL side."""
         meta_pk = entity.column_ids.filtered(lambda c: c.is_primary_key)[:1]
         if meta_pk and meta_pk.name:
             return meta_pk.name
@@ -881,20 +890,14 @@ class RaesMdEntity(models.Model):
         ]
 
     def _dw_category_pane(self, entity_id, category_id, offset, limit,
-                          search_term, in_category):
+                          search_term, in_category, search_column=None):
         """Fetch one page for one side of the Category Manager.
 
-        Membership (IN / NOT IN) is resolved against the **local** Postgres
-        ``md.category_member`` table; the row data itself comes from the
-        entity's MSSQL connection. Every row is scoped to a single company:
-
-        * If the category carries a ``company_id`` and that company is one
-          of the user's allowed companies, rows are filtered by it.
-        * If the category belongs to a company the user cannot see, the
-          pane degrades to empty with ``reason='company-mismatch'``.
-        * Otherwise the user's currently selected company
-          (``self.env.company``) is used — switching companies via the
-          Odoo company switcher changes what the user sees.
+        ``search_column`` — when set, the free-text filter is applied to
+        only that DW column; when empty, it applies to the default
+        whitelist of text columns. Both the search term and the stored
+        value are passed through Persian/Arabic normalization so ``ی``
+        matches ``ي``.
         """
         empty = {'records': [], 'total': 0, 'reason': None}
 
@@ -917,7 +920,6 @@ class RaesMdEntity(models.Model):
         if category.company_id and category.company_id.id in allowed:
             company_id = category.company_id.id
         elif category.company_id:
-            # Category belongs to a company this user cannot see.
             _logger.info(
                 "Category %s belongs to company %s which is not in %s",
                 category_id, category.company_id.id, allowed)
@@ -933,7 +935,7 @@ class RaesMdEntity(models.Model):
         member_ids = [r[0] for r in self.env.cr.fetchall()]
 
         if in_category and not member_ids:
-            return empty  # nothing in this category yet
+            return empty
 
         # 2. Open the MSSQL session and resolve identifiers ---------------
         ms = None
@@ -945,14 +947,21 @@ class RaesMdEntity(models.Model):
             if not pk:
                 return dict(empty, reason='no-pk')
 
-            search_cols = self._dw_remote_search_columns(entity)
+            if search_column:
+                wanted = search_column.lower()
+                real = next(
+                    (c.name for c in entity.column_ids
+                     if c.name and c.name.lower() == wanted),
+                    None,
+                ) or search_column
+                search_cols = [real]
+            else:
+                search_cols = self._dw_remote_search_columns(entity)
+
             table = ddl_builder._qfull(connection.database,
                                        entity.schema_name, entity.name)
             pk_q = ddl_builder._q(pk)
 
-            # Resolve the MSSQL CompanyID column name from metadata.
-            # Falls back to the canonical 'CompanyID' spelling if the
-            # entity has no column whose name lowercases to 'companyid'.
             company_col = next(
                 (c.name for c in entity.column_ids
                  if c.name and c.name.lower() in ('companyid', 'company_id')),
@@ -964,17 +973,18 @@ class RaesMdEntity(models.Model):
             where_parts = []
             params = []
 
-            # Company filter is always applied first.
             where_parts.append(f'CAST({company_q} AS INT) = %s')
             params.append(company_id)
 
             if search_term and search_cols:
+                normalized_term = _persian_normalize(search_term)
                 likes = []
                 for col in search_cols:
-                    likes.append(
-                        f'CAST({ddl_builder._q(col)} AS NVARCHAR(MAX)) '
-                        f'LIKE %s')
-                    params.append(f'%{search_term}%')
+                    col_expr = _sql_persian_normalize(
+                        f'CAST({ddl_builder._q(col)} AS NVARCHAR(MAX))',
+                        term=normalized_term, dialect='mssql')
+                    likes.append(f'{col_expr} LIKE %s')
+                    params.append(f'%{normalized_term}%')
                 where_parts.append('(' + ' OR '.join(likes) + ')')
 
             if member_ids:

@@ -533,6 +533,9 @@
   .o_cat_search {
     padding: 8px 12px;
     border-bottom: 1px solid var(--cat-border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 
     input.form-control-sm {
       background-color: var(--cat-bg);
@@ -550,6 +553,27 @@
 
       &::placeholder {
         color: var(--cat-text-muted);
+      }
+    }
+
+    .o_cat_search_col {
+      background-color: var(--cat-bg-soft);
+      color: var(--cat-text);
+      border-radius: var(--cat-radius);
+      border-color: var(--cat-border);
+      font-size: 11px;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      cursor: pointer;
+      transition: border-color 150ms, box-shadow 150ms;
+
+      &:hover {
+        border-color: var(--cat-accent);
+      }
+
+      &:focus {
+        border-color: var(--cat-accent);
+        box-shadow: 0 0 0 3px var(--cat-accent-soft);
       }
     }
   }
