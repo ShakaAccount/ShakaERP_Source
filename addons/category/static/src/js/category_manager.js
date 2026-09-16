@@ -59,6 +59,7 @@ CategoryNode.props = {
     onDelete: Function,
     getChildren: Function,
     level: Number,
+    index: {type: Number, optional: true},
 };
 CategoryNode.components = {CategoryNode};
 
@@ -134,8 +135,7 @@ export class CategoryManager extends Component {
         }
 
         try {
-            const saved = parseInt(
-                localStorage.getItem(this._pageSizeStorageKey()), 10);
+            const saved = parseInt(localStorage.getItem(this._pageSizeStorageKey()), 10);
             if (saved > 0) {
                 this.state.pageSize = saved;
             }
@@ -181,24 +181,21 @@ export class CategoryManager extends Component {
     // ---------- Tree ----------
     async reloadTree() {
         try {
-            const flat = await this.orm.call(
-                "raes.md.entity", "get_category_tree", []);
+            const flat = await this.orm.call("raes.md.entity", "get_category_tree", []);
             const byParent = {};
             for (const c of flat) {
                 const key = c.parent_id ? c.parent_id[0] : 0;
                 (byParent[key] = byParent[key] || []).push(c);
             }
             for (const k of Object.keys(byParent)) {
-                byParent[k].sort((a, b) =>
-                    (a.title || "").localeCompare(b.title || ""));
+                byParent[k].sort((a, b) => (a.title || "").localeCompare(b.title || ""));
             }
             this.state.tree = flat;
             this.state.treeByParent = byParent;
             this._filterCacheKey = null;
         } catch (e) {
             console.error("get_category_tree failed", e);
-            this.notification.add(
-                "Could not load the category tree.", {type: "danger"});
+            this.notification.add("Could not load the category tree.", {type: "danger"});
         } finally {
             this.state.loading = false;
         }
@@ -226,8 +223,7 @@ export class CategoryManager extends Component {
         const visible = new Set();
         const autoExpand = new Set();
         const byId = new Map(this.state.tree.map(c => [c.id, c]));
-        const hasChildren = (id) =>
-            (this.state.treeByParent[id] || []).length > 0;
+        const hasChildren = (id) => (this.state.treeByParent[id] || []).length > 0;
 
         for (const cat of this.state.tree) {
             const t = (cat.title || "").toLowerCase();
@@ -238,9 +234,7 @@ export class CategoryManager extends Component {
                 if (node.parent_id) {
                     autoExpand.add(node.parent_id[0]);
                 }
-                node = node.parent_id
-                    ? byId.get(node.parent_id[0])
-                    : null;
+                node = node.parent_id ? byId.get(node.parent_id[0]) : null;
             }
             if (hasChildren(cat.id)) {
                 autoExpand.add(cat.id);
@@ -359,8 +353,7 @@ export class CategoryManager extends Component {
         try {
             const cols = this.state.labelColumns;
             if (cols.length) {
-                localStorage.setItem(
-                    this._labelStorageKey(entityId), JSON.stringify(cols));
+                localStorage.setItem(this._labelStorageKey(entityId), JSON.stringify(cols));
             } else {
                 localStorage.removeItem(this._labelStorageKey(entityId));
             }
@@ -383,9 +376,7 @@ export class CategoryManager extends Component {
         const cat = this.state.selectedCategory;
         if (!cat || !cat.entity_id) return;
         try {
-            localStorage.setItem(
-                this._colWidthsStorageKey(cat.entity_id[0]),
-                JSON.stringify(this.state.colWidths));
+            localStorage.setItem(this._colWidthsStorageKey(cat.entity_id[0]), JSON.stringify(this.state.colWidths));
         } catch (e) { /* ignore */
         }
     }
@@ -466,11 +457,7 @@ export class CategoryManager extends Component {
         if (ev.button !== 0) return;
         ev.preventDefault();
         this._drag = {
-            type: "reorder",
-            colName,
-            startX: ev.clientX,
-            startY: ev.clientY,
-            moved: false,
+            type: "reorder", colName, startX: ev.clientX, startY: ev.clientY, moved: false,
         };
     }
 
@@ -479,15 +466,9 @@ export class CategoryManager extends Component {
         ev.preventDefault();
         ev.stopPropagation();
         const th = ev.target.closest("th");
-        const startWidth = th
-            ? Math.round(th.getBoundingClientRect().width)
-            : 120;
+        const startWidth = th ? Math.round(th.getBoundingClientRect().width) : 120;
         this._drag = {
-            type: "col",
-            colName,
-            startX: ev.clientX,
-            startWidth,
-            rtlSign: this._rtlSign(th),
+            type: "col", colName, startX: ev.clientX, startWidth, rtlSign: this._rtlSign(th),
         };
         this.state.resizingCol = colName;
     }
@@ -497,9 +478,7 @@ export class CategoryManager extends Component {
         ev.preventDefault();
         ev.stopPropagation();
         const container = ev.currentTarget.parentElement;
-        const treePane = container
-            ? container.querySelector(".o_cat_pane_tree")
-            : null;
+        const treePane = container ? container.querySelector(".o_cat_pane_tree") : null;
         this._drag = {
             type: "tree",
             startX: ev.clientX,
@@ -544,12 +523,9 @@ export class CategoryManager extends Component {
             }
             if (d.moved) {
                 const el = document.elementFromPoint(ev.clientX, ev.clientY);
-                const th = el && el.closest
-                    ? el.closest("th[data-col-name]")
-                    : null;
+                const th = el && el.closest ? el.closest("th[data-col-name]") : null;
                 const over = th ? th.getAttribute("data-col-name") : null;
-                this.state.dragOverCol =
-                    (over && over !== d.colName) ? over : null;
+                this.state.dragOverCol = (over && over !== d.colName) ? over : null;
             }
         }
     }
@@ -564,8 +540,7 @@ export class CategoryManager extends Component {
         } else if (d.type === "tree") {
             this.state.resizingTree = false;
             try {
-                localStorage.setItem(
-                    TREE_WIDTH_KEY, String(this.state.treeWidth));
+                localStorage.setItem(TREE_WIDTH_KEY, String(this.state.treeWidth));
             } catch (e) { /* ignore */
             }
         } else if (d.type === "reorder") {
@@ -617,14 +592,7 @@ export class CategoryManager extends Component {
         }
         const entityId = cat.entity_id[0];
         try {
-            const res = await this.orm.call("raes.md.entity", method, [
-                entityId,
-                cat.id,
-                (side.page - 1) * this.state.pageSize,
-                this.state.pageSize,
-                side.search || "",
-                side.searchColumn || false,
-            ]);
+            const res = await this.orm.call("raes.md.entity", method, [entityId, cat.id, (side.page - 1) * this.state.pageSize, this.state.pageSize, side.search || "", side.searchColumn || false,]);
             side.records = res.records || [];
             side.total = res.total || 0;
             side.reason = res.reason || null;
@@ -696,8 +664,7 @@ export class CategoryManager extends Component {
             side.selectedIds = next;
         } else if (multi) {
             const next = {...side.selectedIds};
-            if (next[rec.id]) delete next[rec.id];
-            else next[rec.id] = rec;
+            if (next[rec.id]) delete next[rec.id]; else next[rec.id] = rec;
             side.selectedIds = next;
             side.anchorIndex = idx;
         } else {
@@ -721,8 +688,7 @@ export class CategoryManager extends Component {
         const side = this.state[sideName];
         const next = {...side.selectedIds};
         for (const r of side.records) {
-            if (next[r.id]) delete next[r.id];
-            else next[r.id] = r;
+            if (next[r.id]) delete next[r.id]; else next[r.id] = r;
         }
         side.selectedIds = next;
     }
@@ -735,9 +701,7 @@ export class CategoryManager extends Component {
         if (!recs.length) return;
         const movedIds = new Set(recs.map(r => r.id));
         const vals = recs.map(r => ({
-            category_id: cat.id,
-            member_id: r.id,
-            entity_id: cat.entity_id[0],
+            category_id: cat.id, member_id: r.id, entity_id: cat.entity_id[0],
         }));
         try {
             await this.orm.create("raes.md.category.member", vals);
@@ -748,14 +712,10 @@ export class CategoryManager extends Component {
             this.state.left.selectedIds = next;
             this.state.left.anchorIndex = null;
             await this.reloadPanes();
-            this.notification.add(
-                `Added ${vals.length} item(s) to the category.`,
-                {type: "success"});
+            this.notification.add(`Added ${vals.length} item(s) to the category.`, {type: "success"});
         } catch (e) {
             console.error("bulk add failed", e);
-            this.notification.add(
-                "Could not add all selected records. Some may already be in the category.",
-                {type: "danger"});
+            this.notification.add("Could not add all selected records. Some may already be in the category.", {type: "danger"});
         }
     }
 
@@ -767,15 +727,9 @@ export class CategoryManager extends Component {
         const movedIds = new Set(recs.map(r => r.id));
         const memberIds = recs.map(r => r.id);
         try {
-            const members = await this.orm.searchRead(
-                "raes.md.category.member",
-                [["category_id", "=", cat.id],
-                    ["member_id", "in", memberIds],
-                    ["entity_id", "=", cat.entity_id[0]]],
-                ["id"]);
+            const members = await this.orm.searchRead("raes.md.category.member", [["category_id", "=", cat.id], ["member_id", "in", memberIds], ["entity_id", "=", cat.entity_id[0]]], ["id"]);
             if (members.length) {
-                await this.orm.unlink(
-                    "raes.md.category.member", members.map(m => m.id));
+                await this.orm.unlink("raes.md.category.member", members.map(m => m.id));
             }
             const next = {};
             for (const [id, rec] of Object.entries(this.state.right.selectedIds)) {
@@ -784,13 +738,10 @@ export class CategoryManager extends Component {
             this.state.right.selectedIds = next;
             this.state.right.anchorIndex = null;
             await this.reloadPanes();
-            this.notification.add(
-                `Removed ${members.length} item(s) from the category.`,
-                {type: "success"});
+            this.notification.add(`Removed ${members.length} item(s) from the category.`, {type: "success"});
         } catch (e) {
             console.error("bulk remove failed", e);
-            this.notification.add(
-                "Could not remove all selected records.", {type: "danger"});
+            this.notification.add("Could not remove all selected records.", {type: "danger"});
         }
     }
 
@@ -799,23 +750,17 @@ export class CategoryManager extends Component {
         const cat = this.state.selectedCategory;
         if (!cat || !cat.entity_id) return;
         if (record.id === undefined || record.id === null || record.id === "") {
-            this.notification.add(
-                "This DW row has no primary key; cannot add it.",
-                {type: "warning"});
+            this.notification.add("This DW row has no primary key; cannot add it.", {type: "warning"});
             return;
         }
         try {
             await this.orm.create("raes.md.category.member", [{
-                category_id: cat.id,
-                member_id: record.id,
-                entity_id: cat.entity_id[0],
+                category_id: cat.id, member_id: record.id, entity_id: cat.entity_id[0],
             }]);
             await this.reloadPanes();
         } catch (e) {
             console.error("create member failed", e);
-            this.notification.add(
-                "Could not add the record. It may already be in this category.",
-                {type: "danger"});
+            this.notification.add("Could not add the record. It may already be in this category.", {type: "danger"});
         }
     }
 
@@ -823,26 +768,17 @@ export class CategoryManager extends Component {
         const cat = this.state.selectedCategory;
         if (!cat || !cat.entity_id) return;
         try {
-            const members = await this.orm.searchRead(
-                "raes.md.category.member",
-                [["category_id", "=", cat.id],
-                    ["member_id", "=", record.id],
-                    ["entity_id", "=", cat.entity_id[0]]],
-                ["id"]);
+            const members = await this.orm.searchRead("raes.md.category.member", [["category_id", "=", cat.id], ["member_id", "=", record.id], ["entity_id", "=", cat.entity_id[0]]], ["id"]);
             if (!members.length) {
-                this.notification.add(
-                    "This record is no longer in the category.",
-                    {type: "warning"});
+                this.notification.add("This record is no longer in the category.", {type: "warning"});
                 await this.reloadPanes();
                 return;
             }
-            await this.orm.unlink(
-                "raes.md.category.member", members.map(m => m.id));
+            await this.orm.unlink("raes.md.category.member", members.map(m => m.id));
             await this.reloadPanes();
         } catch (e) {
             console.error("unlink member failed", e);
-            this.notification.add(
-                "Could not remove the record.", {type: "danger"});
+            this.notification.add("Could not remove the record.", {type: "danger"});
         }
     }
 
@@ -920,21 +856,16 @@ export class CategoryManager extends Component {
     async loadEntities() {
         if (this._entitiesLoaded) return;
         try {
-            const rows = await this.orm.searchRead(
-                "raes.md.entity",
-                [["entity_type_lu", "=", "1"]],
-                ["id", "name", "title"],
-                {limit: 500, order: "name"});
+            const rows = await this.orm.searchRead("raes.md.entity", [["entity_type_lu", "=", "1"]], ["id", "name", "title"], {
+                limit: 500, order: "name"
+            });
             this.state.entities = rows.map(e => ({
-                id: e.id,
-                name: e.name,
-                title: e.title || e.name,
+                id: e.id, name: e.name, title: e.title || e.name,
             }));
             this._entitiesLoaded = true;
         } catch (e) {
             console.error("loadEntities failed", e);
-            this.notification.add(
-                "Could not load the entity list.", {type: "danger"});
+            this.notification.add("Could not load the entity list.", {type: "danger"});
         }
     }
 
@@ -998,12 +929,10 @@ export class CategoryManager extends Component {
             ev.stopPropagation();
         } else if (ev.key === "ArrowDown") {
             ev.preventDefault();
-            this.state.entityHighlightIdx =
-                Math.min(this.state.entityHighlightIdx + 1, list.length - 1);
+            this.state.entityHighlightIdx = Math.min(this.state.entityHighlightIdx + 1, list.length - 1);
         } else if (ev.key === "ArrowUp") {
             ev.preventDefault();
-            this.state.entityHighlightIdx =
-                Math.max(this.state.entityHighlightIdx - 1, 0);
+            this.state.entityHighlightIdx = Math.max(this.state.entityHighlightIdx - 1, 0);
         } else if (ev.key === "Enter") {
             ev.preventDefault();
             const sel = list[this.state.entityHighlightIdx];
@@ -1043,10 +972,7 @@ export class CategoryManager extends Component {
     confirmDeleteCategory(cat) {
         this.dialog.add(ConfirmationDialog, {
             title: "Delete category",
-            body:
-                `Delete "${cat.title}" and every sub-category under it?\n\n` +
-                `This also removes all item assignments to those categories. ` +
-                `This action cannot be undone.`,
+            body: `Delete "${cat.title}" and every sub-category under it?\n\n` + `This also removes all item assignments to those categories. ` + `This action cannot be undone.`,
             confirmLabel: "Delete",
             confirm: () => this._deleteCategory(cat),
             cancel: () => {
@@ -1059,8 +985,7 @@ export class CategoryManager extends Component {
             await this.orm.unlink("raes.md.category", [cat.id]);
             await this.reloadTree();
             const remaining = new Set(this.state.tree.map(c => c.id));
-            if (this.state.selectedCategory &&
-                !remaining.has(this.state.selectedCategory.id)) {
+            if (this.state.selectedCategory && !remaining.has(this.state.selectedCategory.id)) {
                 this.state.selectedCategory = null;
                 this.state.left = this._blankSide();
                 this.state.right = this._blankSide();
@@ -1070,14 +995,10 @@ export class CategoryManager extends Component {
                     delete this.state.expandedIds[id];
                 }
             }
-            this.notification.add(
-                `Category "${cat.title}" and its sub-categories were deleted.`,
-                {type: "success"});
+            this.notification.add(`Category "${cat.title}" and its sub-categories were deleted.`, {type: "success"});
         } catch (e) {
             console.error("delete category failed", e);
-            this.notification.add(
-                "Could not delete the category. See the browser console for details.",
-                {type: "danger"});
+            this.notification.add("Could not delete the category. See the browser console for details.", {type: "danger"});
         }
     }
 
@@ -1093,17 +1014,13 @@ export class CategoryManager extends Component {
             return;
         }
         if (!nc.entity_id) {
-            this.notification.add(
-                "An entity is required — select a category first.",
-                {type: "warning"});
+            this.notification.add("An entity is required — select a category first.", {type: "warning"});
             return;
         }
         this.state.saving = true;
         try {
             const vals = {
-                title: nc.title,
-                code: nc.code || false,
-                entity_id: nc.entity_id ? parseInt(nc.entity_id, 10) : false,
+                title: nc.title, code: nc.code || false, entity_id: nc.entity_id ? parseInt(nc.entity_id, 10) : false,
             };
             if (nc.parent_id) {
                 vals.parent_id = nc.parent_id;
@@ -1114,17 +1031,10 @@ export class CategoryManager extends Component {
             if (nc.parent_id) {
                 this.state.expandedIds[nc.parent_id] = true;
             }
-            this.notification.add(
-                nc.parent_id
-                    ? `Sub-category created under "${nc.parent_title}".`
-                    : "Root category created.",
-                {type: "success"});
+            this.notification.add(nc.parent_id ? `Sub-category created under "${nc.parent_title}".` : "Root category created.", {type: "success"});
         } catch (e) {
             console.error("create category failed", e);
-            this.notification.add(
-                "Could not create the category. A sub-category must belong " +
-                "to the same entity as its tree root.",
-                {type: "danger"});
+            this.notification.add("Could not create the category. A sub-category must belong " + "to the same entity as its tree root.", {type: "danger"});
         } finally {
             this.state.saving = false;
         }
@@ -1132,9 +1042,7 @@ export class CategoryManager extends Component {
 
     // ---------- Misc ----------
     recordLabel(record) {
-        const candidate =
-            record.label || record.title || record.name ||
-            record.englishtitle || record.english_title || "";
+        const candidate = record.label || record.title || record.name || record.englishtitle || record.english_title || "";
         const trimmed = String(candidate).trim();
         if (trimmed && trimmed !== "#0") {
             return trimmed;
@@ -1171,10 +1079,7 @@ export class CategoryManager extends Component {
 CategoryManager.template = "category.CategoryManager";
 CategoryManager.components = {CategoryNode};
 CategoryManager.props = {
-    action: {type: Object, optional: true},
-    actionId: {type: [Number, String], optional: true},
-    updateActionState: {type: Function, optional: true},
-    className: {type: String, optional: true},
+    "*": true,
 };
-registry.category("actions").add(
-    "category.category_manager", CategoryManager);
+
+registry.category("actions").add("category.category_manager", CategoryManager);
