@@ -32,6 +32,7 @@ addresses them through writable public mirror views
         'web.assets_backend': [
             'category/static/src/js/category_manager.js',
             'category/static/src/xml/category_manager.xml',
+            'category/static/src/scss/category_manager.scss',
         ],
     },
     'installable': True,

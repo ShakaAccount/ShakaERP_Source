@@ -181,14 +181,40 @@ class RaesMdCategory(models.Model):
         return result
 
     def unlink(self):
-        """Delete members first, then the category.
+        """Delete this category, every descendant, and all member links.
 
-        ``md.category_member`` has no ON DELETE CASCADE toward
-        ``md.category`` (legacy table we must not alter), so the member
-        rows have to be removed explicitly.
+        The legacy ``md.category.parent_id`` FK is ON DELETE RESTRICT, so
+        children must go before their parents. ``md.category_member`` has
+        no ON DELETE CASCADE toward ``md.category``, so its rows are
+        removed explicitly for every node in the subtree.
         """
-        self.mapped('member_ids').sudo().unlink()
-        return super().unlink()
+        # 1. Collect every layer of the subtree, top-down (BFS).
+        layers = [self]
+        seen = set(self.ids)
+        layer = self
+        while layer:
+            children = self.search([('parent_id', 'in', layer.ids)])
+            children = children.filtered(lambda c: c.id not in seen)
+            if not children:
+                break
+            seen.update(children.ids)
+            layers.append(children)
+            layer = children
+
+        # 2. Delete member rows for every node in the subtree. The view's
+        #    category_member rows must be gone before the category rows
+        #    they point at, or the legacy FK on md.category_member will
+        #    block the delete.
+        all_ids = [i for lyr in layers for i in lyr.ids]
+        self.env['raes.md.category.member'].sudo().search(
+            [('category_id', 'in', all_ids)]).unlink()
+
+        # 3. Delete categories deepest-first so the RESTRICT on
+        #    parent_id never blocks a parent that still has children.
+        for lyr in reversed(layers):
+            super(RaesMdCategory, lyr).unlink()
+
+        return True
 
 
 class RaesMdCategoryMember(models.Model):

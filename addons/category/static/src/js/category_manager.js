@@ -5,7 +5,7 @@ import {Component, useState, onWillStart} from "@odoo/owl";
 
 const PAGE_SIZE = 20;
 
-// ---------- Recursive Tree Node ----------
+// ---------- Recursive tree node ----------
 export class CategoryNode extends Component {
     get hasChildren() {
         return !!(this.props.children && this.props.children.length);
@@ -13,6 +13,10 @@ export class CategoryNode extends Component {
 
     get isSelected() {
         return this.props.selectedId === this.props.category.id;
+    }
+
+    get isOpen() {
+        return !!this.props.expandedIds[this.props.category.id];
     }
 
     onClick(ev) {
@@ -27,7 +31,6 @@ export class CategoryNode extends Component {
         }
     }
 
-    /** Create a sub-category nested under this node. */
     onAddChild(ev) {
         ev.stopPropagation();
         this.props.onAddChild(this.props.category);
@@ -40,18 +43,16 @@ CategoryNode.props = {
     children: {type: Array, optional: true},
     selectedId: {type: Number, optional: true},
     expandedIds: Object,
+    closingIds: Object,          // <-- new
     onSelect: Function,
     onToggle: Function,
     onAddChild: Function,
     getChildren: Function,
     level: Number,
 };
-// Recursive components must be registered on themselves so the template
-// can reference <CategoryNode> while rendering a CategoryNode.
 CategoryNode.components = {CategoryNode};
 
-
-// ---------- Main Component ----------
+// ---------- Main component ----------
 export class CategoryManager extends Component {
     setup() {
         this.orm = useService("orm");
@@ -64,17 +65,16 @@ export class CategoryManager extends Component {
             loading: true,
             selectedCategory: null,
             expandedIds: {},
-            left: {records: [], total: 0, page: 1, search: "", reason: null},
-            right: {records: [], total: 0, page: 1, search: "", reason: null},
+            closingIds: {},          // <-- new
+            left: this._blankSide(),
+            right: this._blankSide(),
             showNewCategory: false,
             newCategory: {title: "", code: "", entity_id: null},
             saving: false,
-            entityColumns: [],   // {name, title} pairs, built from record keys
-            labelColumn: "",     // currently-selected label column (per entity)
+            entityColumns: [],
+            labelColumn: "",
         });
 
-        // Bound once so they are stable references across re-renders; the
-        // templates hand them down to every recursive node.
         this.getChildren = (cat) => this.state.treeByParent[cat.id] || [];
         this.onSelect = (cat) => this.selectCategory(cat);
         this.onToggle = (id) => this.toggleExpand(id);
@@ -83,6 +83,18 @@ export class CategoryManager extends Component {
         onWillStart(async () => {
             await this.reloadTree();
         });
+    }
+
+    _blankSide() {
+        return {
+            records: [],
+            total: 0,
+            page: 1,
+            search: "",
+            reason: null,
+            selectedIds: {},   // {id: true}
+            anchorIndex: null, // for shift-click range
+        };
     }
 
     // ---------- Tree ----------
@@ -115,7 +127,22 @@ export class CategoryManager extends Component {
     }
 
     toggleExpand(id) {
-        this.state.expandedIds[id] = !this.state.expandedIds[id];
+        const isOpen = !!this.state.expandedIds[id];
+        const isClosing = !!this.state.closingIds[id];
+        if (!isOpen) {
+            // Opening: show immediately, clear any stale closing flag.
+            this.state.expandedIds[id] = true;
+            if (this.state.closingIds[id]) {
+                delete this.state.closingIds[id];
+            }
+        } else if (!isClosing) {
+            // Closing: mark, wait for the animation, then unmount.
+            this.state.closingIds[id] = true;
+            setTimeout(() => {
+                delete this.state.expandedIds[id];
+                delete this.state.closingIds[id];
+            }, 200);
+        }
     }
 
     async selectCategory(cat) {
@@ -123,14 +150,16 @@ export class CategoryManager extends Component {
         for (const side of ["left", "right"]) {
             this.state[side].page = 1;
             this.state[side].search = "";
+            this.state[side].selectedIds = {};
+            this.state[side].anchorIndex = null;
         }
-        // Restore the label preference for this entity (browser-local).
         this.state.labelColumn = "";
         if (cat && cat.entity_id) {
             try {
                 this.state.labelColumn =
                     localStorage.getItem(this._labelStorageKey(cat.entity_id[0])) || "";
-            } catch (e) { /* localStorage disabled — ignore */ }
+            } catch (e) { /* ignore */
+            }
         }
         await this.reloadPanes();
     }
@@ -139,20 +168,17 @@ export class CategoryManager extends Component {
         await Promise.all([this.loadLeft(), this.loadRight()]);
     }
 
-    // ---------- Label column picker (front-end only) ----------
+    // ---------- Label column picker ----------
     _labelStorageKey(entityId) {
         return `category_manager.label.${entityId}`;
     }
 
-    /** Rebuild the column list from the currently-loaded records. */
     refreshLabelOptions() {
         const rec = this.state.right.records[0] || this.state.left.records[0];
         if (!rec) {
             this.state.entityColumns = [];
             return;
         }
-        // Every DW column is a key on the record dict; strip our own
-        // metadata fields (id, _pk, label, _auto_label) from the list.
         const skip = new Set(["id", "_pk", "label", "_auto_label"]);
         this.state.entityColumns = Object.keys(rec)
             .filter(k => !skip.has(k))
@@ -173,20 +199,18 @@ export class CategoryManager extends Component {
             } else {
                 localStorage.removeItem(this._labelStorageKey(entityId));
             }
-        } catch (e) { /* localStorage disabled — ignore */ }
+        } catch (e) { /* ignore */
+        }
 
-        // Re-label the rows already in memory — no server round-trip.
         this.state.left.records =
             this.state.left.records.map(r => this.applyLabel(r));
         this.state.right.records =
             this.state.right.records.map(r => this.applyLabel(r));
     }
 
-    /** Compute the display label for one record using the current choice. */
     applyLabel(record) {
         const col = this.state.labelColumn;
         if (!col) {
-            // No override: fall back to whatever the server computed.
             return {...record, label: record._auto_label ?? record.label};
         }
         const val = record[col];
@@ -196,18 +220,14 @@ export class CategoryManager extends Component {
         return {...record, label: String(val)};
     }
 
-    // ---------- DW item lists ----------
-    /**
-     * Fetch one pane. `entity_id` is mandatory: without it there is no DW
-     * table to read from, so bail out early rather than issue an RPC that
-     * can only fail.
-     */
+    // ---------- Fetch ----------
     async fetchPane(sideName, method) {
         const side = this.state[sideName];
         const cat = this.state.selectedCategory;
         if (!cat || !cat.entity_id) {
             side.records = [];
             side.total = 0;
+            side.selectedIds = {};
             side.reason = cat ? "no-entity" : null;
             return;
         }
@@ -220,19 +240,21 @@ export class CategoryManager extends Component {
                 this.pageSize,
                 side.search || "",
             ]);
-            // Stash the server-computed label so the "Auto" option can
-            // restore it later, then apply the current override.
             side.records = (res.records || []).map(r => {
                 r._auto_label = r.label;
                 return this.applyLabel(r);
             });
             side.total = res.total || 0;
             side.reason = res.reason || null;
+            // Clear selections on reload to avoid stale ids.
+            side.selectedIds = {};
+            side.anchorIndex = null;
             this.refreshLabelOptions();
         } catch (e) {
             console.error(`${method} failed`, e);
             side.records = [];
             side.total = 0;
+            side.selectedIds = {};
             side.reason = "rpc-error";
             this.notification.add("Could not load DW items.", {type: "danger"});
         }
@@ -246,42 +268,149 @@ export class CategoryManager extends Component {
         return this.fetchPane("right", "get_items_in_category");
     }
 
-    /** Explain an empty pane caused by an unresolved DW relation. */
-    reasonMessage(reason) {
-        const sel = this.state.selectedCategory;
-        const table = sel && sel.entity_id ? sel.entity_id[1] : "this entity";
-        switch (reason) {
-            case "no-connection":
-                return `No SQL Server connection is configured for "${table}". ` +
-                    `Set one on the entity's configuration to link items.`;
-            case "no-table":
-                return `Entity "${table}" has no schema/table set.`;
-            case "no-pk":
-                return `No primary key column could be resolved for "${table}".`;
-            case "no-entity":
-                return `This category has no entity assigned.`;
-            case "no-entity-record":
-                return `The entity assigned to this category no longer exists.`;
-            case "connection-error":
-                return `Could not reach the SQL Server for "${table}" — check ` +
-                    `the connection settings and the browser console.`;
-            case "rpc-error":
-                return `The data-warehouse query failed — see the browser console.`;
-            default:
-                return "";
+    // ---------- Selection helpers ----------
+    isRowSelected(sideName, rec) {
+        return !!this.state[sideName].selectedIds[rec.id];
+    }
+
+    selectedCount(sideName) {
+        return Object.keys(this.state[sideName].selectedIds).length;
+    }
+
+    selectedRecords(sideName) {
+        const side = this.state[sideName];
+        return side.records.filter(r => side.selectedIds[r.id]);
+    }
+
+    clearSelection(sideName) {
+        const side = this.state[sideName];
+        side.selectedIds = {};
+        side.anchorIndex = null;
+    }
+
+    toggleRow(sideName, rec, ev) {
+        const side = this.state[sideName];
+        const idx = side.records.findIndex(r => r.id === rec.id);
+        const shift = ev && ev.shiftKey;
+        const multi = ev && (ev.ctrlKey || ev.metaKey);
+
+        if (shift && side.anchorIndex !== null) {
+            const [a, b] = [side.anchorIndex, idx].sort((x, y) => x - y);
+            const next = {...side.selectedIds};
+            for (let i = a; i <= b; i++) {
+                const r = side.records[i];
+                if (r) {
+                    next[r.id] = true;
+                }
+            }
+            side.selectedIds = next;
+        } else if (multi) {
+            const next = {...side.selectedIds};
+            if (next[rec.id]) {
+                delete next[rec.id];
+            } else {
+                next[rec.id] = true;
+            }
+            side.selectedIds = next;
+            side.anchorIndex = idx;
+        } else {
+            // plain click: toggle this one only
+            if (side.selectedIds[rec.id] && this.selectedCount(sideName) === 1) {
+                side.selectedIds = {};
+            } else {
+                side.selectedIds = {[rec.id]: true};
+            }
+            side.anchorIndex = idx;
         }
     }
 
-    // ---------- Add / remove ----------
+    selectAllOnPage(sideName) {
+        const side = this.state[sideName];
+        const next = {};
+        for (const r of side.records) {
+            next[r.id] = true;
+        }
+        side.selectedIds = next;
+    }
+
+    invertSelection(sideName) {
+        const side = this.state[sideName];
+        const next = {};
+        for (const r of side.records) {
+            if (!side.selectedIds[r.id]) {
+                next[r.id] = true;
+            }
+        }
+        side.selectedIds = next;
+    }
+
+    // ---------- Bulk move ----------
+    async bulkAddSelected() {
+        const cat = this.state.selectedCategory;
+        if (!cat || !cat.entity_id) {
+            return;
+        }
+        const recs = this.selectedRecords("left");
+        if (!recs.length) {
+            return;
+        }
+        const vals = recs.map(r => ({
+            category_id: cat.id,
+            member_id: r.id,
+            entity_id: cat.entity_id[0],
+        }));
+        try {
+            await this.orm.create("raes.md.category.member", vals);
+            await this.reloadPanes();
+            this.notification.add(
+                `Added ${vals.length} item(s) to the category.`,
+                {type: "success"});
+        } catch (e) {
+            console.error("bulk add failed", e);
+            this.notification.add(
+                "Could not add all selected records. Some may already be in the category.",
+                {type: "danger"});
+        }
+    }
+
+    async bulkRemoveSelected() {
+        const cat = this.state.selectedCategory;
+        if (!cat || !cat.entity_id) {
+            return;
+        }
+        const recs = this.selectedRecords("right");
+        if (!recs.length) {
+            return;
+        }
+        const memberIds = recs.map(r => r.id);
+        try {
+            const members = await this.orm.searchRead(
+                "raes.md.category.member",
+                [["category_id", "=", cat.id],
+                    ["member_id", "in", memberIds],
+                    ["entity_id", "=", cat.entity_id[0]]],
+                ["id"]);
+            if (members.length) {
+                await this.orm.unlink(
+                    "raes.md.category.member", members.map(m => m.id));
+            }
+            await this.reloadPanes();
+            this.notification.add(
+                `Removed ${members.length} item(s) from the category.`,
+                {type: "success"});
+        } catch (e) {
+            console.error("bulk remove failed", e);
+            this.notification.add(
+                "Could not remove all selected records.", {type: "danger"});
+        }
+    }
+
+    // ---------- Single actions ----------
     async addToCategory(record) {
         const cat = this.state.selectedCategory;
         if (!cat || !cat.entity_id) {
             return;
         }
-        // `record.id` is the DW primary key, normalized server-side by
-        // _dw_normalize_record (the raw DW column is e.g. `partyid`).
-        // Posting an undefined id would violate the NOT NULL on
-        // md.category_member.member_id.
         if (record.id === undefined || record.id === null) {
             this.notification.add(
                 "This DW row has no primary key; cannot add it.",
@@ -296,7 +425,7 @@ export class CategoryManager extends Component {
             }]);
             await this.reloadPanes();
         } catch (e) {
-            console.error("create raes.md.category.member failed", e);
+            console.error("create member failed", e);
             this.notification.add(
                 "Could not add the record. It may already be in this category.",
                 {type: "danger"});
@@ -314,8 +443,7 @@ export class CategoryManager extends Component {
                 [["category_id", "=", cat.id],
                     ["member_id", "=", record.id],
                     ["entity_id", "=", cat.entity_id[0]]],
-                ["id"],
-            );
+                ["id"]);
             if (!members.length) {
                 this.notification.add(
                     "This record is no longer in the category.",
@@ -324,15 +452,16 @@ export class CategoryManager extends Component {
                 return;
             }
             await this.orm.unlink(
-                "raes.md.category.member", members.map((m) => m.id));
+                "raes.md.category.member", members.map(m => m.id));
             await this.reloadPanes();
         } catch (e) {
-            console.error("unlink raes.md.category.member failed", e);
+            console.error("unlink member failed", e);
             this.notification.add(
                 "Could not remove the record.", {type: "danger"});
         }
     }
 
+    // ---------- Search + pagination ----------
     onSearchLeft(ev) {
         this.state.left.search = ev.target.value;
         this.state.left.page = 1;
@@ -382,14 +511,6 @@ export class CategoryManager extends Component {
     }
 
     // ---------- New category ----------
-    /**
-     * Open the create modal.
-     *
-     * `parentCat` is set when the user clicks the `+` on a tree node, in
-     * which case the new category is nested under it and inherits its
-     * entity (md.category_same_entity() requires a child to share its
-     * tree root's entity_id, so this must not be freely editable).
-     */
     openNewCategory(parentCat) {
         const parent = parentCat || this.state.selectedCategory;
         const nested = !!parentCat;
@@ -398,11 +519,8 @@ export class CategoryManager extends Component {
             code: "",
             parent_id: nested ? parent.id : null,
             parent_title: nested ? parent.title : null,
-            // The entity is fixed to the tree root's entity when nested:
-            // the legacy trigger rejects a mismatching child.
             entity_id: parent && parent.entity_id ? parent.entity_id[0] : null,
         };
-        // Auto-expand the parent so the new child is immediately visible.
         if (nested) {
             this.state.expandedIds[parentCat.id] = true;
         }
@@ -421,7 +539,7 @@ export class CategoryManager extends Component {
         }
         if (!nc.entity_id) {
             this.notification.add(
-                "An entity is required — select a category first, or type an entity id.",
+                "An entity is required — select a category first.",
                 {type: "warning"});
             return;
         }
@@ -447,7 +565,7 @@ export class CategoryManager extends Component {
                     : "Root category created.",
                 {type: "success"});
         } catch (e) {
-            console.error("create raes.md.category failed", e);
+            console.error("create category failed", e);
             this.notification.add(
                 "Could not create the category. A sub-category must belong " +
                 "to the same entity as its tree root.",
@@ -457,11 +575,33 @@ export class CategoryManager extends Component {
         }
     }
 
-    // ---------- View helpers ----------
-    /** Server computes `label`; keep a fallback for safety. */
+    // ---------- Misc ----------
     recordLabel(record) {
         return record.label || record.title || record.name ||
             record.englishtitle || record.english_title || `#${record.id}`;
+    }
+
+    reasonMessage(reason) {
+        const sel = this.state.selectedCategory;
+        const table = sel && sel.entity_id ? sel.entity_id[1] : "this entity";
+        switch (reason) {
+            case "no-connection":
+                return `No SQL Server connection is configured for "${table}".`;
+            case "no-table":
+                return `Entity "${table}" has no schema/table set.`;
+            case "no-pk":
+                return `No primary key column could be resolved for "${table}".`;
+            case "no-entity":
+                return `This category has no entity assigned.`;
+            case "no-entity-record":
+                return `The entity assigned to this category no longer exists.`;
+            case "connection-error":
+                return `Could not reach the SQL Server for "${table}".`;
+            case "rpc-error":
+                return `The data-warehouse query failed — see the browser console.`;
+            default:
+                return "";
+        }
     }
 }
 

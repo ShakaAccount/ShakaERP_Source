@@ -18,7 +18,7 @@ class RaesMdEntityConfig(models.Model):
     connection_id = fields.Many2one(
         'raes.dw.connection', string='DW Connection',
         ondelete='restrict', index=True)
-
+    # entity_column_name_id = fields.Many2one('raes.md.entity_column', strintg='Entity Name Column')
     _entity_config_uniq = models.Constraint(
         'UNIQUE (entity_id)',
         'Only one configuration row per entity is allowed.')

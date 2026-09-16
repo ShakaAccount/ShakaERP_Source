@@ -757,8 +757,15 @@ class RaesMdEntity(models.Model):
 
     def _dw_normalize_record(self, record, pk):
         rec = {k.lower(): v for k, v in record.items()}
-        rec['id'] = rec.get(pk.lower())
+        # Bigint PKs must travel as strings. JS numbers silently collapse
+        # distinct 17-digit IDs onto the same value (2^53 limit), which
+        # produces duplicate t-keys and cross-firing selections in the UI.
+        # Odoo's Integer field accepts the string and stores the int, so
+        # nothing downstream needs to change.
+        pk_val = rec.get(pk.lower())
+        rec['id'] = '' if pk_val is None else str(pk_val)
         rec['_pk'] = pk.lower()
+        rec[rec['_pk']] = str(rec[rec['_pk']])
 
         label = None
         for cand in self._DW_LABEL_CANDIDATES:
@@ -766,7 +773,7 @@ class RaesMdEntity(models.Model):
             if val not in (None, False, ''):
                 label = str(val).strip()
                 break
-        rec['label'] = label or f'#{rec["id"]}'
+        rec['label'] = label or (f'#{rec["id"]}' if rec['id'] else '—')
         return rec
 
     @api.model

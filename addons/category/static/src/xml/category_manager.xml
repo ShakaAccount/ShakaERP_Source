@@ -3,53 +3,51 @@
 
     <!-- ============ Recursive tree node ============ -->
     <t t-name="category.CategoryNode">
-        <div class="category-node d-flex align-items-center"
-             t-att-class="{ 'bg-primary text-white': isSelected }"
-             t-att-style="'padding-left:' + (props.level * 16) + 'px'"
+        <div class="o_cat_node"
+             t-att-class="{ 'o_cat_node_selected': isSelected }"
+             t-att-style="'padding-left:' + (props.level * 14 + 8) + 'px'"
              t-att-title="props.category.title"
              t-on-click="onClick">
-            <span class="toggle-icon me-1"
-                  t-att-class="{ 'text-muted': !hasChildren }"
+            <span class="o_cat_node_toggle"
+                  t-att-class="isOpen ? 'o_cat_node_toggle_open' : 'o_cat_node_toggle_closed'"
                   t-on-click="onToggle">
-                <t t-if="hasChildren">
-                    <t t-if="props.expandedIds[props.category.id]">&#9660;</t>
-                    <t t-else="">&#9654;</t>
-                </t>
-                <t t-else="">&#160;&#160;</t>
+                <t t-if="hasChildren">&#9660;</t>
+                <t t-else="">&#8226;</t>
             </span>
-            <span class="text-truncate flex-grow-1" t-esc="props.category.title"/>
-            <!-- Create a sub-category nested under this node -->
-            <button class="btn btn-sm border-0 py-0 px-1 node-add-child"
-                    t-att-class="{ 'text-white': isSelected }"
+            <span class="o_cat_node_label" t-esc="props.category.title"/>
+            <button class="o_cat_node_add"
                     t-on-click="onAddChild"
                     title="Add a sub-category here">+</button>
         </div>
 
         <t t-if="props.expandedIds[props.category.id]">
-            <t t-foreach="props.children" t-as="child" t-key="child.id">
-                <CategoryNode
-                    category="child"
-                    children="props.getChildren(child)"
-                    selectedId="props.selectedId"
-                    expandedIds="props.expandedIds"
-                    onSelect="props.onSelect"
-                    onToggle="props.onToggle"
-                    onAddChild="props.onAddChild"
-                    getChildren="props.getChildren"
-                    level="props.level + 1"/>
-            </t>
-        </t>
-    </t>
+            <div class="o_cat_tree_children"
+                 t-att-class="{ 'o_cat_tree_children_closing': props.closingIds[props.category.id] }">
+                <div class="o_cat_tree_children_inner">
+                    <t t-foreach="props.children" t-as="child" t-key="child.id">
+                        <CategoryNode
+                                category="child"
+                                children="props.getChildren(child)"
+                                selectedId="props.selectedId"
+                                expandedIds="props.expandedIds"
+                                closingIds="props.closingIds"
+                                onSelect="props.onSelect"
+                                onToggle="props.onToggle"
+                                onAddChild="props.onAddChild"
+                                getChildren="props.getChildren"
+                                level="props.level + 1"/>
+                    </t>
+                </div>
+            </div>
+        </t>    </t>
 
     <!-- ============ Main layout ============ -->
     <t t-name="category.CategoryManager">
-        <div class="category-manager d-flex flex-column h-100 w-100 bg-white">
+        <div class="o_category_manager d-flex flex-column h-100 w-100 bg-white">
 
-            <!-- ================= LABEL COLUMN PICKER ================= -->
-            <div class="d-flex align-items-center gap-2 px-2 py-1 border-bottom bg-light">
-                <label class="small text-muted mb-0 text-nowrap">
-                    Display name:
-                </label>
+            <!-- ============ Picker bar ============ -->
+            <div class="o_cat_picker_bar d-flex align-items-center">
+                <label class="mb-0 text-nowrap">Display name</label>
                 <select class="form-select form-select-sm"
                         style="max-width: 260px;"
                         t-att-disabled="!state.selectedCategory or !state.entityColumns.length"
@@ -62,69 +60,106 @@
                         </option>
                     </t>
                 </select>
-                <span class="small text-muted"
+                <span class="ms-2 text-muted small"
                       t-if="state.selectedCategory and !state.entityColumns.length">
                     No columns available for this entity.
                 </span>
-                <span class="small text-muted"
+                <span class="ms-2 text-muted small"
                       t-if="!state.selectedCategory">
                     Select a category to configure its display name.
                 </span>
             </div>
 
-            <!-- ================= THREE PANES ================= -->
+            <!-- ============ Three panes ============ -->
             <div class="d-flex flex-grow-1 overflow-hidden">
 
-                <!-- ================= PANE 1: Tree ================= -->
-                <div class="pane-tree border-end d-flex flex-column" style="width: 280px;">
-                    <div class="pane-header bg-light border-bottom d-flex justify-content-between align-items-center p-2">
-                        <strong>Categories</strong>
+                <!--  Pane 1: Tree  -->
+                <div class="o_cat_pane" style="width: 280px;">
+                    <div class="o_cat_pane_head">
+                        <span>Categories</span>
                         <button class="btn btn-sm btn-primary"
                                 t-on-click="openNewCategory"
-                                title="New root category">+</button>
+                                title="New root category"
+                                style="padding: 1px 10px; border-radius: 6px;">+</button>
                     </div>
-                    <div class="flex-grow-1 overflow-auto p-2">
-                        <t t-if="state.loading">
-                            <div class="text-muted small p-2">Loading&#8230;</div>
-                        </t>
-                        <t t-elif="rootNodes.length === 0">
-                            <div class="text-muted small p-2">
-                                No categories yet. Click <b>+</b> to add one.
-                            </div>
-                        </t>
-                        <t t-else="">
-                            <t t-foreach="rootNodes" t-as="root" t-key="root.id">
-                                <CategoryNode
-                                    category="root"
-                                    children="getChildren(root)"
-                                    selectedId="state.selectedCategory ? state.selectedCategory.id : -1"
-                                    expandedIds="state.expandedIds"
-                                    onSelect="onSelect"
-                                    onToggle="onToggle"
-                                    onAddChild="onAddChild"
-                                    getChildren="getChildren"
-                                    level="0"/>
+                    <div class="o_cat_list">
+                        <div class="o_cat_tree">
+                            <t t-if="state.loading">
+                                <div class="o_cat_empty">
+                                    <div class="o_cat_empty_icon">&#8635;</div>
+                                    Loading&#8230;
+                                </div>
                             </t>
-                        </t>
+                            <t t-elif="rootNodes.length === 0">
+                                <div class="o_cat_empty">
+                                    <div class="o_cat_empty_icon">&#128193;</div>
+                                    No categories yet.
+                                    <div class="mt-1">Click <b>+</b> to add one.</div>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <t t-foreach="rootNodes" t-as="root" t-key="root.id">
+                                    <CategoryNode
+                                            category="root"
+                                            children="getChildren(root)"
+                                            selectedId="state.selectedCategory ? state.selectedCategory.id : -1"
+                                            expandedIds="state.expandedIds"
+                                            closingIds="state.closingIds"
+                                            onSelect="onSelect"
+                                            onToggle="onToggle"
+                                            onAddChild="onAddChild"
+                                            getChildren="getChildren"
+                                            level="0"/>
+                                </t>
+                            </t>
+                        </div>
                     </div>
                 </div>
 
-                <!-- ================= PANE 2: Uncategorized ================= -->
-                <div class="pane-left border-end d-flex flex-column" style="flex: 1;">
-                    <div class="pane-header bg-light border-bottom p-2 d-flex justify-content-between">
-                        <strong>
-                            Uncategorized
-                            <span class="badge bg-secondary ms-1" t-esc="state.left.total"/>
-                        </strong>
+                <!--  Pane 2: Uncategorized  -->
+                <div class="o_cat_pane" style="flex: 1;">
+                    <div class="o_cat_pane_head">
+                        <span>Uncategorized</span>
+                        <span class="badge" t-esc="state.left.total"/>
                     </div>
-                    <div class="p-2 border-bottom">
+
+                    <!-- Bulk toolbar -->
+                    <div class="o_cat_bulk_bar"
+                         t-if="selectedCount('left') > 0">
+                        <span class="o_cat_bulk_count"
+                              t-esc="selectedCount('left') + ' selected'"/>
+                        <span class="text-muted">|</span>
+                        <button class="btn btn-link btn-sm p-0"
+                                t-on-click="() => this.selectAllOnPage('left')">
+                            Select all on page
+                        </button>
+                        <button class="btn btn-link btn-sm p-0"
+                                t-on-click="() => this.invertSelection('left')">
+                            Inverse
+                        </button>
+                        <button class="btn btn-link btn-sm p-0"
+                                t-on-click="() => this.clearSelection('left')">
+                            Clear
+                        </button>
+                        <span class="flex-grow-1"/>
+                        <button class="btn btn-sm btn-success"
+                                t-on-click="bulkAddSelected"
+                                style="border-radius: 6px;">
+                            Add <t t-esc="selectedCount('left')"/>
+                            to category &#8594;
+                        </button>
+                    </div>
+
+                    <div class="o_cat_search">
                         <input type="text" class="form-control form-control-sm"
                                placeholder="Search&#8230;"
                                t-on-input="onSearchLeft"/>
                     </div>
-                    <div class="flex-grow-1 overflow-auto">
+
+                    <div class="o_cat_list">
                         <t t-if="!state.selectedCategory">
-                            <div class="text-muted text-center mt-5">
+                            <div class="o_cat_empty">
+                                <div class="o_cat_empty_icon">&#9757;</div>
                                 Select a category to begin.
                             </div>
                         </t>
@@ -133,53 +168,83 @@
                                  t-esc="reasonMessage(state.left.reason)"/>
                         </t>
                         <t t-elif="state.left.records.length === 0">
-                            <div class="text-muted text-center mt-5 small">
+                            <div class="o_cat_empty">
+                                <div class="o_cat_empty_icon">&#10003;</div>
                                 No uncategorized items.
                             </div>
                         </t>
                         <t t-else="">
-                            <table class="table table-sm table-hover mb-0">
-                                <tbody>
-                                    <tr t-foreach="state.left.records" t-as="rec" t-key="rec.id">
-                                        <td class="text-truncate" t-esc="recordLabel(rec)"/>
-                                        <td class="text-end" style="width:60px;">
-                                            <button class="btn btn-sm btn-outline-success"
-                                                    t-on-click="() => this.addToCategory(rec)"
-                                                    title="Add to category">+</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <t t-foreach="state.left.records" t-as="rec" t-key="rec.id">
+                                <div class="o_cat_row"
+                                     t-att-class="{ 'o_cat_row_selected': isRowSelected('left', rec) }"
+                                     t-on-click="(ev) => this.toggleRow('left', rec, ev)">
+                                    <span class="o_cat_row_check"
+                                          t-att-class="{ 'o_cat_row_check_on': isRowSelected('left', rec) }">
+                                        &#10003;
+                                    </span>
+                                    <span class="o_cat_row_label" t-esc="recordLabel(rec)"/>
+                                    <button class="o_cat_row_action o_cat_row_add"
+                                            t-on-click="(ev) => { ev.stopPropagation(); this.addToCategory(rec); }"
+                                            title="Add to category">+</button>
+                                </div>
+                            </t>
                         </t>
                     </div>
-                    <div class="pane-footer d-flex justify-content-between p-1 border-top">
-                        <button class="btn btn-sm btn-light"
+
+                    <div class="o_cat_pager">
+                        <button class="btn btn-sm"
                                 t-on-click="prevLeft"
                                 t-att-disabled="state.left.page === 1">&#9664;</button>
-                        <span class="small text-muted align-self-center"
-                              t-esc="'Page ' + state.left.page + ' / ' + leftPages"/>
-                        <button class="btn btn-sm btn-light"
+                        <span t-esc="'Page ' + state.left.page + ' / ' + leftPages"/>
+                        <button class="btn btn-sm"
                                 t-on-click="nextLeft"
                                 t-att-disabled="state.left.page >= leftPages">&#9654;</button>
                     </div>
                 </div>
 
-                <!-- ================= PANE 3: In category ================= -->
-                <div class="pane-right d-flex flex-column" style="flex: 1;">
-                    <div class="pane-header bg-light border-bottom p-2 d-flex justify-content-between">
-                        <strong>
-                            In this category
-                            <span class="badge bg-primary ms-1" t-esc="state.right.total"/>
-                        </strong>
+                <!--                  Pane 3: In category  -->
+                <div class="o_cat_pane" style="flex: 1;">
+                    <div class="o_cat_pane_head">
+                        <span>In this category</span>
+                        <span class="badge" t-esc="state.right.total"/>
                     </div>
-                    <div class="p-2 border-bottom">
+
+                    <!-- Bulk toolbar -->
+                    <div class="o_cat_bulk_bar"
+                         t-if="selectedCount('right') > 0">
+                        <span class="o_cat_bulk_count"
+                              t-esc="selectedCount('right') + ' selected'"/>
+                        <span class="text-muted">|</span>
+                        <button class="btn btn-link btn-sm p-0"
+                                t-on-click="() => this.selectAllOnPage('right')">
+                            Select all on page
+                        </button>
+                        <button class="btn btn-link btn-sm p-0"
+                                t-on-click="() => this.invertSelection('right')">
+                            Inverse
+                        </button>
+                        <button class="btn btn-link btn-sm p-0"
+                                t-on-click="() => this.clearSelection('right')">
+                            Clear
+                        </button>
+                        <span class="flex-grow-1"/>
+                        <button class="btn btn-sm btn-danger"
+                                t-on-click="bulkRemoveSelected"
+                                style="border-radius: 6px;">
+                            &#8592; Remove <t t-esc="selectedCount('right')"/>
+                        </button>
+                    </div>
+
+                    <div class="o_cat_search">
                         <input type="text" class="form-control form-control-sm"
                                placeholder="Search&#8230;"
                                t-on-input="onSearchRight"/>
                     </div>
-                    <div class="flex-grow-1 overflow-auto">
+
+                    <div class="o_cat_list">
                         <t t-if="!state.selectedCategory">
-                            <div class="text-muted text-center mt-5">
+                            <div class="o_cat_empty">
+                                <div class="o_cat_empty_icon">&#9757;</div>
                                 Select a category to begin.
                             </div>
                         </t>
@@ -188,32 +253,35 @@
                                  t-esc="reasonMessage(state.right.reason)"/>
                         </t>
                         <t t-elif="state.right.records.length === 0">
-                            <div class="text-muted text-center mt-5 small">
+                            <div class="o_cat_empty">
+                                <div class="o_cat_empty_icon">&#128230;</div>
                                 Nothing in this category yet.
                             </div>
                         </t>
                         <t t-else="">
-                            <table class="table table-sm table-hover mb-0">
-                                <tbody>
-                                    <tr t-foreach="state.right.records" t-as="rec" t-key="rec.id">
-                                        <td class="text-truncate" t-esc="recordLabel(rec)"/>
-                                        <td class="text-end" style="width:60px;">
-                                            <button class="btn btn-sm btn-outline-danger"
-                                                    t-on-click="() => this.removeFromCategory(rec)"
-                                                    title="Remove">&#8722;</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <t t-foreach="state.right.records" t-as="rec" t-key="rec.id">
+                                <div class="o_cat_row"
+                                     t-att-class="{ 'o_cat_row_selected': isRowSelected('right', rec) }"
+                                     t-on-click="(ev) => this.toggleRow('right', rec, ev)">
+                                    <span class="o_cat_row_check"
+                                          t-att-class="{ 'o_cat_row_check_on': isRowSelected('right', rec) }">
+                                        &#10003;
+                                    </span>
+                                    <span class="o_cat_row_label" t-esc="recordLabel(rec)"/>
+                                    <button class="o_cat_row_action o_cat_row_remove"
+                                            t-on-click="(ev) => { ev.stopPropagation(); this.removeFromCategory(rec); }"
+                                            title="Remove from category">&#8722;</button>
+                                </div>
+                            </t>
                         </t>
                     </div>
-                    <div class="pane-footer d-flex justify-content-between p-1 border-top">
-                        <button class="btn btn-sm btn-light"
+
+                    <div class="o_cat_pager">
+                        <button class="btn btn-sm"
                                 t-on-click="prevRight"
                                 t-att-disabled="state.right.page === 1">&#9664;</button>
-                        <span class="small text-muted align-self-center"
-                              t-esc="'Page ' + state.right.page + ' / ' + rightPages"/>
-                        <button class="btn btn-sm btn-light"
+                        <span t-esc="'Page ' + state.right.page + ' / ' + rightPages"/>
+                        <button class="btn btn-sm"
                                 t-on-click="nextRight"
                                 t-att-disabled="state.right.page >= rightPages">&#9654;</button>
                     </div>
@@ -224,10 +292,10 @@
 
         <!-- ============ New-category modal ============ -->
         <t t-if="state.showNewCategory">
-            <div class="modal d-block" style="background:rgba(0,0,0,0.4);">
+            <div class="modal d-block" style="background:rgba(15,23,42,0.5);">
                 <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
+                    <div class="modal-content" style="border-radius: 10px;">
+                        <div class="modal-header" style="background: #f1f5f9;">
                             <h5 class="modal-title">
                                 <t t-if="state.newCategory.parent_id">New Sub-category</t>
                                 <t t-else="">New Root Category</t>
@@ -241,31 +309,28 @@
                                     <b t-esc="state.newCategory.parent_title"/>
                                 </div>
                             </t>
-                            <div class="mb-2">
-                                <label class="form-label">Title</label>
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">Title</label>
                                 <input type="text" class="form-control"
                                        t-model="state.newCategory.title"/>
                             </div>
-                            <div class="mb-2">
-                                <label class="form-label">Code</label>
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">Code</label>
                                 <input type="text" class="form-control"
                                        maxlength="10"
                                        t-model="state.newCategory.code"/>
                             </div>
-                            <div class="mb-2">
-                                <label class="form-label">Entity ID</label>
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">Entity ID</label>
                                 <input type="number" class="form-control"
                                        t-att-readonly="!!state.newCategory.parent_id"
                                        t-model.number="state.newCategory.entity_id"/>
                                 <small class="text-muted">
                                     <t t-if="state.newCategory.parent_id">
-                                        Locked to the tree root's entity — the legacy
-                                        trigger requires every node in a tree to share
-                                        one entity.
+                                        Locked to the tree root's entity.
                                     </t>
                                     <t t-else="">
                                         The DW entity this category belongs to.
-                                        Prefilled from the selected category.
                                     </t>
                                 </small>
                             </div>
