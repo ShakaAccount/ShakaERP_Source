@@ -261,9 +261,46 @@ class RaesMdCategoryMember(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
+            parent_id = vals.get('parent_id')
+
+            # Children inherit the parent's company; roots default to the
+            # user's active company. Same pattern as the entity_id
+            # inheritance already in place.
+            if parent_id:
+                parent = self.browse(parent_id)
+                if parent.exists() and parent.company_id:
+                    vals.setdefault('company_id', parent.company_id.id)
+
+            vals.setdefault('company_id', self.env.company.id)
             vals.setdefault('creator_user_id', self.env.uid)
             vals.setdefault('creation_date', fields.Datetime.now())
-        return super().create(vals_list)
+            vals.setdefault('is_user_defined', True)
+
+            if not vals.get('root_id'):
+                if parent_id:
+                    parent = self.browse(parent_id)
+                    if not vals.get('entity_id') and parent.entity_id:
+                        vals['entity_id'] = parent.entity_id.id
+                    vals['root_id'] = parent.root_id.id or parent.id
+
+            # Pre-validate entity consistency BEFORE the DB trigger fires.
+            entity_id = vals.get('entity_id')
+            if parent_id and entity_id:
+                parent = self.browse(parent_id)
+                if parent.exists():
+                    root = parent._get_tree_root() or parent
+                    if root.entity_id and root.entity_id.id != entity_id:
+                        raise ValidationError(_(
+                            'A sub-category must belong to the same entity '
+                            'as its tree root "%(root)s" (entity %(ent)s).',
+                            root=root.title,
+                            ent=root.entity_id.display_name,
+                        ))
+
+        records = super().create(vals_list)
+        for rec in records.filtered(lambda r: not r.root_id):
+            rec.sudo().write({'root_id': rec.id})
+        return records
 
     def write(self, vals):
         vals = dict(vals)

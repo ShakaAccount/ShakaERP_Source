@@ -1,10 +1,8 @@
 /** @odoo-module **/
 import {registry} from "@web/core/registry";
 import {useService} from "@web/core/utils/hooks";
-import {Component, useState, onWillStart} from "@odoo/owl";
+import {Component, useState, onWillStart, useRef, useExternalListener} from "@odoo/owl";
 import {ConfirmationDialog} from "@web/core/confirmation_dialog/confirmation_dialog";
-
-const PAGE_SIZE = 20;
 
 // ---------- Recursive tree node ----------
 export class CategoryNode extends Component {
@@ -49,15 +47,16 @@ CategoryNode.props = {
     children: {type: Array, optional: true},
     selectedId: {type: Number, optional: true},
     expandedIds: Object,
-    closingIds: Object,          // <-- new
+    closingIds: Object,
     onSelect: Function,
     onToggle: Function,
     onAddChild: Function,
-    onDelete: Function,          // <-- new
+    onDelete: Function,
     getChildren: Function,
     level: Number,
 };
 CategoryNode.components = {CategoryNode};
+
 
 // ---------- Main component ----------
 export class CategoryManager extends Component {
@@ -65,7 +64,19 @@ export class CategoryManager extends Component {
         this.orm = useService("orm");
         this.notification = useService("notification");
         this.dialog = useService("dialog");
-        this.pageSize = PAGE_SIZE;
+        this.bus = useService("bus_service");
+        this.bus.subscribe("COMPANY_CHANGED", () => this.onCompanyChanged());
+
+        this.labelPickerRef = useRef("labelPicker");
+
+        // Close the label-picker dropdown when clicking anywhere outside it.
+        useExternalListener(document, "click", (ev) => {
+            if (!this.state.showLabelPicker) return;
+            const el = this.labelPickerRef.el;
+            if (el && !el.contains(ev.target)) {
+                this.state.showLabelPicker = false;
+            }
+        });
 
         this.state = useState({
             tree: [],
@@ -80,10 +91,19 @@ export class CategoryManager extends Component {
             newCategory: {title: "", code: "", entity_id: null},
             saving: false,
             entityColumns: [],
-            labelColumn: "",
+            labelColumns: [],       // ordered list of selected column names
+            showLabelPicker: false,
+            pageSize: 20,
         });
 
-        // Bound once so they are stable references across re-renders.
+        try {
+            const saved = parseInt(
+                localStorage.getItem(this._pageSizeStorageKey()), 10);
+            if (saved > 0) {
+                this.state.pageSize = saved;
+            }
+        } catch (e) { /* ignore */ }
+
         this.getChildren = (cat) => this.state.treeByParent[cat.id] || [];
         this.onSelect = (cat) => this.selectCategory(cat);
         this.onToggle = (id) => this.toggleExpand(id);
@@ -102,9 +122,16 @@ export class CategoryManager extends Component {
             page: 1,
             search: "",
             reason: null,
-            selectedIds: {},   // {id: true}
-            anchorIndex: null, // for shift-click range
+            selectedIds: {},
+            anchorIndex: null,
         };
+    }
+
+    async onCompanyChanged() {
+        await this.reloadTree();
+        this.state.selectedCategory = null;
+        this.state.left = this._blankSide();
+        this.state.right = this._blankSide();
     }
 
     // ---------- Tree ----------
@@ -140,18 +167,16 @@ export class CategoryManager extends Component {
         const isOpen = !!this.state.expandedIds[id];
         const isClosing = !!this.state.closingIds[id];
         if (!isOpen) {
-            // Opening: show immediately, clear any stale closing flag.
             this.state.expandedIds[id] = true;
             if (this.state.closingIds[id]) {
                 delete this.state.closingIds[id];
             }
         } else if (!isClosing) {
-            // Closing: mark, wait for the animation, then unmount.
             this.state.closingIds[id] = true;
             setTimeout(() => {
                 delete this.state.expandedIds[id];
                 delete this.state.closingIds[id];
-            }, 200);
+            }, 220);
         }
     }
 
@@ -163,13 +188,10 @@ export class CategoryManager extends Component {
             this.state[side].selectedIds = {};
             this.state[side].anchorIndex = null;
         }
-        this.state.labelColumn = "";
+        this.state.showLabelPicker = false;
+        this.state.labelColumns = [];
         if (cat && cat.entity_id) {
-            try {
-                this.state.labelColumn =
-                    localStorage.getItem(this._labelStorageKey(cat.entity_id[0])) || "";
-            } catch (e) { /* ignore */
-            }
+            this.state.labelColumns = this._loadLabelColumns(cat.entity_id[0]);
         }
         await this.reloadPanes();
     }
@@ -178,9 +200,99 @@ export class CategoryManager extends Component {
         await Promise.all([this.loadLeft(), this.loadRight()]);
     }
 
-    // ---------- Label column picker ----------
+    // ---------- Label column picker (multi-select) ----------
     _labelStorageKey(entityId) {
         return `category_manager.label.${entityId}`;
+    }
+
+    _loadLabelColumns(entityId) {
+        let raw = null;
+        try {
+            raw = localStorage.getItem(this._labelStorageKey(entityId));
+        } catch (e) {
+            return [];
+        }
+        if (!raw) return [];
+
+        // Current format: JSON array of column names.
+        if (raw.startsWith("[")) {
+            try {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) {
+                    return parsed.filter(s => typeof s === "string" && s);
+                }
+            } catch (e) { /* fall through */ }
+            return [];
+        }
+
+        // Backward compat: single-column name stored as a plain string.
+        return [raw];
+    }
+
+    _persistLabelColumns() {
+        const cat = this.state.selectedCategory;
+        if (!cat || !cat.entity_id) return;
+        const entityId = cat.entity_id[0];
+        try {
+            const cols = this.state.labelColumns;
+            if (cols.length) {
+                localStorage.setItem(
+                    this._labelStorageKey(entityId), JSON.stringify(cols));
+            } else {
+                localStorage.removeItem(this._labelStorageKey(entityId));
+            }
+        } catch (e) { /* ignore */ }
+    }
+
+    toggleLabelPicker(ev) {
+        if (ev) ev.stopPropagation();
+        if (!this.state.selectedCategory || !this.state.entityColumns.length) {
+            return;
+        }
+        this.state.showLabelPicker = !this.state.showLabelPicker;
+    }
+
+    isLabelColSelected(name) {
+        return this.state.labelColumns.includes(name);
+    }
+
+    toggleLabelCol(name, ev) {
+        if (ev) ev.stopPropagation();
+        const next = new Set(this.state.labelColumns);
+        if (next.has(name)) {
+            next.delete(name);
+        } else {
+            next.add(name);
+        }
+        // Preserve the order in which columns appear in entityColumns.
+        const order = new Map(
+            this.state.entityColumns.map((c, i) => [c.name, i]));
+        this.state.labelColumns = Array.from(next)
+            .sort((a, b) => (order.get(a) ?? 0) - (order.get(b) ?? 0));
+        this._persistLabelColumns();
+        this._reapplyLabels();
+    }
+
+    clearLabelColumns(ev) {
+        if (ev) ev.stopPropagation();
+        this.state.labelColumns = [];
+        this._persistLabelColumns();
+        this._reapplyLabels();
+    }
+
+    _reapplyLabels() {
+        this.state.left.records =
+            this.state.left.records.map(r => this.applyLabel(r));
+        this.state.right.records =
+            this.state.right.records.map(r => this.applyLabel(r));
+    }
+
+    get labelPickerSummary() {
+        const n = this.state.labelColumns.length;
+        if (n === 0) return "Auto";
+        if (n === 1) return this.state.labelColumns[0];
+        if (n <= 3) return this.state.labelColumns.join(" · ");
+        return `${n} columns`;
     }
 
     refreshLabelOptions() {
@@ -195,39 +307,40 @@ export class CategoryManager extends Component {
             .map(k => ({name: k, title: k}));
     }
 
-    onLabelColumnChange(ev) {
-        const cat = this.state.selectedCategory;
-        if (!cat || !cat.entity_id) {
-            return;
-        }
-        const entityId = cat.entity_id[0];
-        const column = ev.target.value || "";
-        this.state.labelColumn = column;
-        try {
-            if (column) {
-                localStorage.setItem(this._labelStorageKey(entityId), column);
-            } else {
-                localStorage.removeItem(this._labelStorageKey(entityId));
-            }
-        } catch (e) { /* ignore */
-        }
-
-        this.state.left.records =
-            this.state.left.records.map(r => this.applyLabel(r));
-        this.state.right.records =
-            this.state.right.records.map(r => this.applyLabel(r));
-    }
-
     applyLabel(record) {
-        const col = this.state.labelColumn;
-        if (!col) {
+        const cols = this.state.labelColumns;
+        if (!cols.length) {
             return {...record, label: record._auto_label ?? record.label};
         }
-        const val = record[col];
-        if (val === undefined || val === null || val === "") {
-            return record;
+        const parts = [];
+        for (const c of cols) {
+            const val = record[c];
+            if (val !== undefined && val !== null && val !== "") {
+                parts.push(String(val));
+            }
         }
-        return {...record, label: String(val)};
+        if (!parts.length) {
+            return {...record, label: record._auto_label ?? record.label};
+        }
+        return {...record, label: parts.join(" · ")};
+    }
+
+    _pageSizeStorageKey() {
+        return "category_manager.page_size";
+    }
+
+    onPageSizeChange(ev) {
+        const size = parseInt(ev.target.value, 10) || 20;
+        this.state.pageSize = size;
+        try {
+            localStorage.setItem(this._pageSizeStorageKey(), String(size));
+        } catch (e) { /* ignore */ }
+        for (const side of ["left", "right"]) {
+            this.state[side].page = 1;
+            this.state[side].selectedIds = {};
+            this.state[side].anchorIndex = null;
+        }
+        this.reloadPanes();
     }
 
     // ---------- Fetch ----------
@@ -246,8 +359,8 @@ export class CategoryManager extends Component {
             const res = await this.orm.call("raes.md.entity", method, [
                 entityId,
                 cat.id,
-                (side.page - 1) * this.pageSize,
-                this.pageSize,
+                (side.page - 1) * this.state.pageSize,
+                this.state.pageSize,
                 side.search || "",
             ]);
             side.records = (res.records || []).map(r => {
@@ -368,8 +481,6 @@ export class CategoryManager extends Component {
         }));
         try {
             await this.orm.create("raes.md.category.member", vals);
-            // Those records have moved to the right side now: remove them
-            // from the left selection so the count reflects reality.
             const next = {};
             for (const [id, rec] of Object.entries(this.state.left.selectedIds)) {
                 if (!movedIds.has(id)) {
@@ -412,7 +523,6 @@ export class CategoryManager extends Component {
                 await this.orm.unlink(
                     "raes.md.category.member", members.map(m => m.id));
             }
-            // Remove the moved records from the right selection.
             const next = {};
             for (const [id, rec] of Object.entries(this.state.right.selectedIds)) {
                 if (!movedIds.has(id)) {
@@ -438,7 +548,7 @@ export class CategoryManager extends Component {
         if (!cat || !cat.entity_id) {
             return;
         }
-        if (record.id === undefined || record.id === null) {
+        if (record.id === undefined || record.id === null || record.id === "") {
             this.notification.add(
                 "This DW row has no primary key; cannot add it.",
                 {type: "warning"});
@@ -506,11 +616,11 @@ export class CategoryManager extends Component {
     }
 
     get leftPages() {
-        return Math.max(1, Math.ceil(this.state.left.total / this.pageSize));
+        return Math.max(1, Math.ceil(this.state.left.total / this.state.pageSize));
     }
 
     get rightPages() {
-        return Math.max(1, Math.ceil(this.state.right.total / this.pageSize));
+        return Math.max(1, Math.ceil(this.state.right.total / this.state.pageSize));
     }
 
     async nextLeft() {
@@ -579,10 +689,6 @@ export class CategoryManager extends Component {
     async _deleteCategory(cat) {
         try {
             await this.orm.unlink("raes.md.category", [cat.id]);
-
-            // If the selected category was part of the removed subtree,
-            // clear the panes.
-            const stillThere = new Set(this.state.tree.map(c => c.id));
             await this.reloadTree();
             const remaining = new Set(this.state.tree.map(c => c.id));
             if (
@@ -593,7 +699,6 @@ export class CategoryManager extends Component {
                 this.state.left = this._blankSide();
                 this.state.right = this._blankSide();
             }
-            // Clean up expansion state for removed nodes.
             for (const id of Object.keys(this.state.expandedIds)) {
                 if (!remaining.has(Number(id))) {
                     delete this.state.expandedIds[id];
@@ -676,7 +781,6 @@ export class CategoryManager extends Component {
         const table = sel && sel.entity_id ? sel.entity_id[1] : "this entity";
         switch (reason) {
             case "no-connection":
-                recordLabel
                 return `No SQL Server connection is configured for "${table}".`;
             case "no-table":
                 return `Entity "${table}" has no schema/table set.`;
@@ -690,6 +794,8 @@ export class CategoryManager extends Component {
                 return `Could not reach the SQL Server for "${table}".`;
             case "rpc-error":
                 return `The data-warehouse query failed — see the browser console.`;
+            case "company-mismatch":
+                return `This category belongs to a company you are not a member of.`;
             default:
                 return "";
         }

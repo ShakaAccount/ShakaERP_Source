@@ -5,7 +5,7 @@
     <t t-name="category.CategoryNode">
         <div class="o_cat_node"
              t-att-class="{ 'o_cat_node_selected': isSelected }"
-             t-att-style="'padding-left:' + (props.level * 14 + 8) + 'px'"
+             t-att-style="'padding-inline-start:' + (props.level * 14 + 8) + 'px'"
              t-att-title="props.category.title"
              t-on-click="onClick">
             <span class="o_cat_node_toggle"
@@ -16,12 +16,22 @@
                 <t t-else="">&#9679;</t>
             </span>
             <span class="o_cat_node_label" t-esc="props.category.title"/>
-            <button class="o_cat_node_add"
-                    t-on-click="onAddChild"
-                    title="Add a sub-category here">+</button>
-            <button class="o_cat_node_remove"
-                    t-on-click="onRemove"
-                    title="Delete this category and all its sub-categories">&#128465;</button>
+            <t t-if="props.category.company_id">
+                <span class="o_cat_node_company_btn"
+                      t-att-data-company="props.category.company_id[1]">
+                    <span class="o_cat_node_company_icon">i</span>
+                    <span class="o_cat_node_company_tip"
+                          t-esc="props.category.company_id[1]"/>
+                </span>
+            </t>
+            <div class="o_cat_node_actions">
+                <button class="o_cat_node_add"
+                        t-on-click="onAddChild"
+                        title="Add a sub-category here">+</button>
+                <button class="o_cat_node_remove"
+                        t-on-click="onRemove"
+                        title="Delete this category and all its sub-categories">&#128465;</button>
+            </div>
         </div>
 
         <t t-if="props.expandedIds[props.category.id]">
@@ -49,23 +59,49 @@
 
     <!-- ============ Main layout ============ -->
     <t t-name="category.CategoryManager">
-        <div class="o_category_manager d-flex flex-column h-100 w-100 bg-white">
+        <div class="o_category_manager d-flex flex-column h-100 w-100">
 
             <!-- ============ Picker bar ============ -->
-            <div class="o_cat_picker_bar d-flex align-items-center">
+            <div class="o_cat_picker_bar d-flex align-items-center flex-wrap">
                 <label class="mb-0 text-nowrap">Display name</label>
-                <select class="form-select form-select-sm"
-                        style="max-width: 260px;"
-                        t-att-disabled="!state.selectedCategory or !state.entityColumns.length"
-                        t-on-change="onLabelColumnChange">
-                    <option value="">&#8212; Auto &#8212;</option>
-                    <t t-foreach="state.entityColumns" t-as="col" t-key="col.name">
-                        <option t-att-value="col.name"
-                                t-att-selected="col.name === state.labelColumn">
-                            <t t-esc="col.title"/>
-                        </option>
-                    </t>
-                </select>
+                <div class="o_cat_label_picker" t-ref="labelPicker">
+                    <button type="button"
+                            class="o_cat_label_picker_btn"
+                            t-att-disabled="!state.selectedCategory or !state.entityColumns.length"
+                            t-on-click="toggleLabelPicker">
+                        <span class="o_cat_label_picker_summary"
+                              t-esc="labelPickerSummary"/>
+                        <span class="o_cat_label_picker_caret">&#9662;</span>
+                    </button>
+                    <div class="o_cat_label_picker_panel"
+                         t-if="state.showLabelPicker">
+                        <t t-if="!state.entityColumns.length">
+                            <div class="o_cat_label_picker_empty">
+                                No columns available
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <label class="o_cat_label_picker_item"
+                                   t-foreach="state.entityColumns"
+                                   t-as="col"
+                                   t-key="col.name">
+                                <input type="checkbox"
+                                       t-att-checked="isLabelColSelected(col.name)"
+                                       t-on-change="(ev) => this.toggleLabelCol(col.name, ev)"
+                                       t-on-click="(ev) => ev.stopPropagation()"/>
+                                <span t-esc="col.title"/>
+                            </label>
+                        </t>
+                        <div class="o_cat_label_picker_actions"
+                             t-if="state.labelColumns.length">
+                            <button type="button"
+                                    class="o_cat_label_picker_clear"
+                                    t-on-click="clearLabelColumns">
+                                Clear all
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <span class="ms-2 text-muted small"
                       t-if="state.selectedCategory and !state.entityColumns.length">
                     No columns available for this entity.
@@ -74,13 +110,25 @@
                       t-if="!state.selectedCategory">
                     Select a category to configure its display name.
                 </span>
-            </div>
 
+                <!-- Page size selector -->
+                <label class="mb-0 text-nowrap ms-auto">Per page</label>
+                <select class="form-select form-select-sm"
+                        style="max-width: 90px;"
+                        t-on-change="onPageSizeChange">
+                    <t t-foreach="[20, 50, 100, 200]" t-as="n" t-key="n">
+                        <option t-att-value="n"
+                                t-att-selected="n === state.pageSize">
+                            <t t-esc="n"/>
+                        </option>
+                    </t>
+                </select>
+            </div>
             <!-- ============ Three panes ============ -->
             <div class="d-flex flex-grow-1 overflow-hidden">
 
                 <!--  Pane 1: Tree  -->
-                <div class="o_cat_pane" style="width: 280px;">
+                <div class="o_cat_pane o_cat_pane_tree" style="width: 280px;">
                     <div class="o_cat_pane_head">
                         <button class="o_cat_pane_head_btn"
                                 t-on-click="openNewCategory"
@@ -130,7 +178,6 @@
                         <span class="badge" t-esc="state.left.total"/>
                     </div>
 
-                    <!-- Bulk toolbar -->
                     <!-- Bulk toolbar (floats over the pane head) -->
                     <div class="o_cat_bulk_bar"
                          t-att-class="{ 'o_cat_bulk_bar_visible': selectedCount('left') > 0 }">
@@ -215,7 +262,6 @@
                         <span class="badge" t-esc="state.right.total"/>
                     </div>
 
-                    <!-- Bulk toolbar -->
                     <!-- Bulk toolbar (floats over the pane head) -->
                     <div class="o_cat_bulk_bar"
                          t-att-class="{ 'o_cat_bulk_bar_visible': selectedCount('right') > 0 }">

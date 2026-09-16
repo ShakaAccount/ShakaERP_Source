@@ -15,6 +15,9 @@
   --cat-danger: #dc3545;
   --cat-success: #198754;
   --cat-radius: 8px;
+  --cat-bg-fade: rgba(255, 255, 255, 0);
+  --cat-scroll-shadow: rgba(0, 0, 0, 0.12);
+  --cat-gradient-dir: left;
 
   font-family: inherit;
   font-size: $font-size-sm;
@@ -36,6 +39,15 @@
     --cat-accent-soft: rgba(180, 140, 170, 0.18);
     --cat-hover: #2d2d2d;
     --cat-selected: rgba(180, 140, 170, 0.28);
+    --cat-bg-fade: rgba(30, 30, 30, 0);
+    --cat-scroll-shadow: rgba(0, 0, 0, 0.45);
+    --cat-gradient-dir: left;
+  }
+
+  // ---------- RTL override ----------
+  [dir="rtl"] &,
+  .o_rtl & {
+    --cat-gradient-dir: right;
   }
 
   // ---------- Picker bar ----------
@@ -51,6 +63,7 @@
       letter-spacing: 0.02em;
       text-transform: uppercase;
       font-size: 10px;
+      margin-bottom: 0;
     }
 
     select.form-select-sm {
@@ -67,23 +80,163 @@
     }
   }
 
+  // ---------- Label-column multi-picker ----------
+  .o_cat_label_picker {
+    position: relative;
+
+    .o_cat_label_picker_btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 180px;
+      max-width: 260px;
+      padding: 4px 10px;
+      background: var(--cat-bg);
+      color: var(--cat-text);
+      border: 1px solid var(--cat-border);
+      border-radius: var(--cat-radius);
+      font-size: 12px;
+      cursor: pointer;
+      transition: border-color 150ms, box-shadow 150ms;
+
+      &:hover:not(:disabled) {
+        border-color: var(--cat-accent);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: var(--cat-accent);
+        box-shadow: 0 0 0 3px var(--cat-accent-soft);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .o_cat_label_picker_summary {
+        flex: 1;
+        text-align: start;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .o_cat_label_picker_caret {
+        flex: 0 0 auto;
+        color: var(--cat-text-muted);
+        font-size: 10px;
+      }
+    }
+
+    .o_cat_label_picker_panel {
+      position: absolute;
+      top: calc(100% + 4px);
+      inset-inline-start: 0;
+      min-width: 220px;
+      max-width: 320px;
+      max-height: 320px;
+      overflow-y: auto;
+      background: var(--cat-bg);
+      border: 1px solid var(--cat-border);
+      border-radius: var(--cat-radius);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+      z-index: 50;
+      padding: 4px 0;
+      animation: o_cat_picker_in 120ms ease-out;
+
+      .o_cat_label_picker_item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        cursor: pointer;
+        font-size: 12px;
+        color: var(--cat-text);
+        user-select: none;
+        transition: background 100ms;
+
+        &:hover {
+          background: var(--cat-hover);
+        }
+
+        input[type="checkbox"] {
+          flex: 0 0 auto;
+          margin: 0;
+          cursor: pointer;
+        }
+
+        span {
+          flex: 1;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .o_cat_label_picker_empty {
+        padding: 8px 12px;
+        font-size: 11px;
+        color: var(--cat-text-muted);
+        font-style: italic;
+      }
+
+      .o_cat_label_picker_actions {
+        border-top: 1px solid var(--cat-border);
+        margin-top: 4px;
+        padding: 6px 12px 2px;
+        text-align: end;
+
+        .o_cat_label_picker_clear {
+          background: transparent;
+          border: 0;
+          color: var(--cat-accent);
+          font-size: 11px;
+          padding: 2px 6px;
+          border-radius: 4px;
+          cursor: pointer;
+
+          &:hover {
+            background: var(--cat-accent-soft);
+          }
+        }
+      }
+    }
+  }
+
+  @keyframes o_cat_picker_in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
   // ---------- Pane shell ----------
   .o_cat_pane {
-    position: relative; // <-- anchor for the floating bulk bar
+    position: relative;
     display: flex;
     flex-direction: column;
     background: var(--cat-bg);
+    min-width: 0;
 
     & + .o_cat_pane {
-      border-left: 1px solid var(--cat-border);
+      border-inline-start: 1px solid var(--cat-border);
     }
+  }
+
+  .o_cat_pane_tree {
+    flex: 0 0 auto;
+
   }
 
   .o_cat_pane_head {
     background: var(--cat-bg-head);
     border-bottom: 1px solid var(--cat-border);
     padding: 0 12px;
-    height: 44px; // taller, unified across all three
+    height: 44px;
     font-weight: 600;
     font-size: 11px;
     letter-spacing: 0.06em;
@@ -93,7 +246,6 @@
     align-items: center;
     gap: 10px;
 
-    // Order: [action button] [label] [spacer] [badge]
     > span:not(.badge):not(.o_cat_pane_head_btn) {
       flex: 1;
       text-align: center;
@@ -143,8 +295,7 @@
   .o_cat_bulk_bar {
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    inset-inline: 0;
     z-index: 20;
     display: flex;
     align-items: center;
@@ -156,7 +307,6 @@
     font-size: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
 
-    // Smooth hide state
     opacity: 0;
     transform: translateY(-100%);
     pointer-events: none;
@@ -173,7 +323,7 @@
   .o_cat_bulk_count {
     font-weight: 600;
     color: var(--cat-accent-text);
-    margin-right: 4px;
+    margin-inline-end: 4px;
   }
 
   .o_cat_bulk_bar button.btn-link {
@@ -225,12 +375,26 @@
     }
   }
 
-  // ---------- Rows ----------
+  // ---------- List with scroll-shadow ----------
   .o_cat_list {
     flex: 1;
-    overflow: auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: auto;
+    background-color: var(--cat-bg);
+    background-image: linear-gradient(var(--cat-bg) 30%, var(--cat-bg-fade)),
+    linear-gradient(var(--cat-bg-fade), var(--cat-bg) 70%),
+    radial-gradient(farthest-side at 50% 0,
+            var(--cat-scroll-shadow), var(--cat-bg-fade)),
+    radial-gradient(farthest-side at 50% 100%,
+            var(--cat-scroll-shadow), var(--cat-bg-fade));
+    background-position: top, bottom, top, bottom;
+    background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+    background-repeat: no-repeat;
+    background-attachment: local, local, scroll, scroll;
   }
 
+  // ---------- Rows ----------
   .o_cat_row {
     display: flex;
     align-items: center;
@@ -358,21 +522,82 @@
   }
 
   // ---------- Tree ----------
-  // ---------- Tree ----------
   .o_cat_tree {
     padding: 8px 6px;
 
     .o_cat_node {
+      position: relative;
       display: flex;
       align-items: center;
       gap: 6px;
-      min-height: 30px; // was 5px padding → ~22px
+      min-height: 30px;
       padding: 4px 8px;
+      padding-inline-end: 58px;
       border-radius: 6px;
       cursor: pointer;
       transition: background 120ms ease, color 120ms ease;
       user-select: none;
-      font-size: 13.5px; // was inherited 13
+      font-size: 13.5px;
+
+      .o_cat_node_company_btn {
+        position: relative;
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        cursor: help;
+        margin-inline-end: 2px;
+
+        .o_cat_node_company_icon {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background: var(--cat-border-soft);
+          color: var(--cat-text-muted);
+          font-family: Georgia, serif;
+          font-style: italic;
+          font-weight: 700;
+          font-size: 10px;
+          line-height: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 140ms ease, color 140ms ease, transform 140ms ease;
+        }
+
+        &:hover .o_cat_node_company_icon {
+          background: var(--cat-accent);
+          color: #fff;
+          transform: scale(1.08);
+        }
+
+        .o_cat_node_company_tip {
+          position: absolute;
+          inset-inline-end: calc(100% + 6px);
+          top: 50%;
+          transform: translateY(-50%);
+          max-width: 0;
+          padding: 0;
+          overflow: hidden;
+          white-space: nowrap;
+          background: var(--cat-text);
+          color: var(--cat-bg);
+          border-radius: 4px;
+          font-size: 11px;
+          font-weight: 500;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+          opacity: 0;
+          pointer-events: none;
+          transition: max-width 480ms steps(28, end),
+          padding 200ms ease,
+          opacity 120ms ease;
+        }
+
+        &:hover .o_cat_node_company_tip {
+          max-width: 40ch;
+          padding: 3px 8px;
+          opacity: 1;
+        }
+      }
 
       &:hover {
         background: var(--cat-hover);
@@ -386,13 +611,13 @@
 
       .o_cat_node_toggle {
         flex: 0 0 auto;
-        width: 22px; // was 14 → bigger hit area
+        width: 22px;
         height: 22px;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 4px;
-        font-size: 13px; // was 10 → readable
+        font-size: 13px;
         font-weight: 700;
         color: var(--cat-text-muted);
         transition: transform 200ms ease,
@@ -414,7 +639,6 @@
         transform: rotate(0deg);
       }
 
-      // Leaf nodes: bullet, non-interactive
       &:not(:has(.o_cat_node_toggle_open)):not(:has(.o_cat_node_toggle_closed))
       .o_cat_node_toggle {
         cursor: default;
@@ -429,6 +653,7 @@
 
       .o_cat_node_label {
         flex: 1;
+        min-width: 0;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -436,10 +661,35 @@
         line-height: 1.3;
       }
 
+      // Floating action buttons — absolutely positioned so they never
+      // push the label or get clipped. Hide by default, reveal on hover.
+      .o_cat_node_actions {
+        position: absolute;
+        inset-inline-end: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        gap: 2px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 140ms ease;
+        // Fade cover so long labels don't show through the buttons
+        background: linear-gradient(
+                to var(--cat-gradient-dir),
+                var(--cat-bg) 55%,
+                var(--cat-bg-fade));
+        padding-inline-start: 12px;
+      }
+
+      &:hover .o_cat_node_actions,
+      &.o_cat_node_selected .o_cat_node_actions {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
       .o_cat_node_add,
       .o_cat_node_remove {
         flex: 0 0 auto;
-        opacity: 0;
         width: 22px;
         height: 22px;
         border: 0;
@@ -449,7 +699,7 @@
         font-size: 14px;
         line-height: 1;
         cursor: pointer;
-        transition: opacity 120ms, background 120ms, color 120ms;
+        transition: background 120ms, color 120ms;
         padding: 0;
         display: flex;
         align-items: center;
@@ -469,34 +719,29 @@
           color: var(--cat-danger);
         }
       }
-
-      &:hover .o_cat_node_add,
-      &:hover .o_cat_node_remove {
-        opacity: 1;
-      }
     }
 
     .o_cat_tree_children {
       display: grid;
       grid-template-rows: 1fr;
       opacity: 1;
-      margin-left: 16px; // was 12 → clearer hierarchy
-      border-left: 1px solid var(--cat-border); // solid, not dashed
-      padding-left: 4px;
+      margin-inline-start: 16px;
+      border-inline-start: 1px solid var(--cat-border);
+      padding-inline-start: 4px;
       animation: o_cat_expand 220ms ease-out;
       transition: grid-template-rows 220ms ease-in,
       opacity 220ms ease-in,
-      margin-left 220ms ease-in,
-      border-left-width 220ms ease-in,
-      padding-left 220ms ease-in;
+      margin-inline-start 220ms ease-in,
+      border-inline-start-width 220ms ease-in,
+      padding-inline-start 220ms ease-in;
     }
 
     .o_cat_tree_children_closing {
       grid-template-rows: 0fr;
       opacity: 0;
-      margin-left: 0;
-      border-left-width: 0;
-      padding-left: 0;
+      margin-inline-start: 0;
+      border-inline-start-width: 0;
+      padding-inline-start: 0;
       animation: none;
     }
 

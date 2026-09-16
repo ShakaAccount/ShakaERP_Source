@@ -540,12 +540,30 @@ class RaesMdEntity(models.Model):
     # ------------------------------------------------------------------
     @api.model
     def get_category_tree(self):
-        """Return the full category tree as a flat list; the OWL side
-        assembles the hierarchy from parent_id."""
+        """Return the categories the current user can see, as a flat list.
+
+        Scoped to every company the user has currently selected in the
+        Odoo company switcher (``env.companies``), not just the active
+        one — so checking two companies shows both companies' trees.
+        Orphans (parent in an unselected company) are promoted to roots.
+        """
+        allowed_ids = self.env.companies.ids
+        if not allowed_ids:
+            return []
+
         cats = self.env['raes.md.category'].search_read(
-            [], ['id', 'title', 'parent_id', 'entity_id', 'code'],
+            [('company_id', 'in', allowed_ids)],
+            ['id', 'title', 'parent_id', 'entity_id', 'code', 'company_id'],
             order='title',
         )
+        if not cats:
+            return []
+
+        visible_ids = {c['id'] for c in cats}
+        for c in cats:
+            if c['parent_id'] and c['parent_id'][0] not in visible_ids:
+                c['parent_id'] = False
+                c['_orphan'] = True
         return cats
 
     # ------------------------------------------------------------------
@@ -617,7 +635,7 @@ class RaesMdEntity(models.Model):
             row = cr.fetchone()
             if row:
                 return conn, f'{schema}.{_quote_ident(row[0])}', \
-                       f'catalog:{schema}'
+                    f'catalog:{schema}'
 
         return conn, None, 'not-imported'
 
@@ -868,8 +886,15 @@ class RaesMdEntity(models.Model):
 
         Membership (IN / NOT IN) is resolved against the **local** Postgres
         ``md.category_member`` table; the row data itself comes from the
-        entity's MSSQL connection. Degrades to an empty page with a
-        ``reason`` instead of raising.
+        entity's MSSQL connection. Every row is scoped to a single company:
+
+        * If the category carries a ``company_id`` and that company is one
+          of the user's allowed companies, rows are filtered by it.
+        * If the category belongs to a company the user cannot see, the
+          pane degrades to empty with ``reason='company-mismatch'``.
+        * Otherwise the user's currently selected company
+          (``self.env.company``) is used — switching companies via the
+          Odoo company switcher changes what the user sees.
         """
         empty = {'records': [], 'total': 0, 'reason': None}
 
@@ -877,11 +902,28 @@ class RaesMdEntity(models.Model):
         if not entity.exists():
             return dict(empty, reason='no-entity')
 
+        category = self.env['raes.md.category'].browse(category_id)
+        if not category.exists():
+            return dict(empty, reason='no-entity')
+
         connection = self._dw_connection_for(entity)
         if not connection:
             return dict(empty, reason='no-connection')
         if not entity.schema_name or not entity.name:
             return dict(empty, reason='no-table')
+
+        # --- Company scope -------------------------------------------
+        allowed = set(self.env.companies.ids)
+        if category.company_id and category.company_id.id in allowed:
+            company_id = category.company_id.id
+        elif category.company_id:
+            # Category belongs to a company this user cannot see.
+            _logger.info(
+                "Category %s belongs to company %s which is not in %s",
+                category_id, category.company_id.id, allowed)
+            return dict(empty, reason='company-mismatch')
+        else:
+            company_id = self.env.company.id
 
         # 1. Members from the LOCAL postgres side -------------------------
         self.env.cr.execute(
@@ -908,9 +950,23 @@ class RaesMdEntity(models.Model):
                                        entity.schema_name, entity.name)
             pk_q = ddl_builder._q(pk)
 
+            # Resolve the MSSQL CompanyID column name from metadata.
+            # Falls back to the canonical 'CompanyID' spelling if the
+            # entity has no column whose name lowercases to 'companyid'.
+            company_col = next(
+                (c.name for c in entity.column_ids
+                 if c.name and c.name.lower() in ('companyid', 'company_id')),
+                None,
+            ) or 'CompanyID'
+            company_q = ddl_builder._q(company_col)
+
             # 3. Build the WHERE clause (pymssql: %s placeholders) --------
             where_parts = []
             params = []
+
+            # Company filter is always applied first.
+            where_parts.append(f'CAST({company_q} AS INT) = %s')
+            params.append(company_id)
 
             if search_term and search_cols:
                 likes = []
