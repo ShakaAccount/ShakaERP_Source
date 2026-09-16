@@ -67,18 +67,25 @@ export class CategoryManager extends Component {
         this.bus.subscribe("COMPANY_CHANGED", () => this.onCompanyChanged());
 
         this.labelPickerRef = useRef("labelPicker");
-        // Non-reactive drag bookkeeping: {type, colName?, startX, startY?,
-        // startWidth?, rtlSign?, moved?}
+        this.entityPickerRef = useRef("entityPicker");
+        // Non-reactive drag bookkeeping.
         this._drag = null;
-        // Filter result cache (recomputed on search/tree change).
+        this._entitiesLoaded = false;
         this._filterCacheKey = null;
         this._filterCacheValue = null;
 
         useExternalListener(document, "click", (ev) => {
-            if (!this.state.showLabelPicker) return;
-            const el = this.labelPickerRef.el;
-            if (el && !el.contains(ev.target)) {
-                this.state.showLabelPicker = false;
+            if (this.state.showLabelPicker) {
+                const el = this.labelPickerRef.el;
+                if (el && !el.contains(ev.target)) {
+                    this.state.showLabelPicker = false;
+                }
+            }
+            if (this.state.entityPickerOpen) {
+                const el = this.entityPickerRef.el;
+                if (el && !el.contains(ev.target)) {
+                    this.closeEntityPicker();
+                }
             }
         });
         useExternalListener(window, "mousemove", (ev) => this._handleMouseMove(ev));
@@ -91,7 +98,11 @@ export class CategoryManager extends Component {
             selectedCategory: null,
             expandedIds: {},
             closingIds: {},
-            treeSearch: "",                 // <-- search filter for the tree
+            treeSearch: "",
+            entities: [],
+            entityPickerOpen: false,
+            entitySearch: "",
+            entityHighlightIdx: 0,
             left: this._blankSide(),
             right: this._blankSide(),
             showNewCategory: false,
@@ -176,7 +187,7 @@ export class CategoryManager extends Component {
             }
             this.state.tree = flat;
             this.state.treeByParent = byParent;
-            this._filterCacheKey = null;    // invalidate filter
+            this._filterCacheKey = null;
         } catch (e) {
             console.error("get_category_tree failed", e);
             this.notification.add(
@@ -189,7 +200,7 @@ export class CategoryManager extends Component {
     // ---------- Tree search ----------
     onTreeSearch(ev) {
         this.state.treeSearch = ev.target.value;
-        this._filterCacheKey = null;        // invalidate filter
+        this._filterCacheKey = null;
     }
 
     clearTreeSearch(ev) {
@@ -198,15 +209,6 @@ export class CategoryManager extends Component {
         this._filterCacheKey = null;
     }
 
-    /**
-     * Compute the visible subtree for the current search term.
-     *
-     * Returns `null` when no search is active. Otherwise, returns:
-     *   - visible: Set of ids that match OR are ancestors of a match
-     *   - autoExpand: Set of ids that should be force-expanded while
-     *     the search is active (parents of matches, plus matches with
-     *     children so their branch is fully shown).
-     */
     get _filterResult() {
         const term = (this.state.treeSearch || "").trim().toLowerCase();
         if (!term) return null;
@@ -250,7 +252,6 @@ export class CategoryManager extends Component {
         return roots.filter(c => res.visible.has(c.id));
     }
 
-    /** Expansion map used at render time — merged with search auto-expand. */
     get effectiveExpandedIds() {
         const res = this._filterResult;
         if (!res || res.autoExpand.size === 0) return this.state.expandedIds;
@@ -415,7 +416,6 @@ export class CategoryManager extends Component {
         return `${n} columns`;
     }
 
-    /** Columns to render, ordered as the user arranged them. */
     get tableColumns() {
         const avail = new Map(this.state.entityColumns.map(c => [c.name, c]));
         const chosen = this.state.labelColumns.filter(n => avail.has(n));
@@ -448,10 +448,10 @@ export class CategoryManager extends Component {
         return String(v);
     }
 
-    // ---------- Column reorder (mousedown-based) ----------
+    // ---------- Column reorder ----------
     onColReorderStart(colName, ev) {
         if (!colName || this.state.labelColumns.length < 2) return;
-        if (ev.button !== 0) return;               // left-click only
+        if (ev.button !== 0) return;
         ev.preventDefault();
         this._drag = {
             type: "reorder",
@@ -499,9 +499,6 @@ export class CategoryManager extends Component {
 
     // ---------- RTL detection ----------
     _rtlSign(el) {
-        // +1 for LTR, -1 for RTL. Read the computed direction from the
-        // actual element so it matches the CSS `inset-inline-*` behaviour
-        // regardless of where Odoo put the `dir` attribute.
         const target = el || document.body;
         try {
             return getComputedStyle(target).direction === "rtl" ? -1 : 1;
@@ -520,12 +517,10 @@ export class CategoryManager extends Component {
             const delta = (ev.clientX - d.startX) * sign;
             const w = Math.max(COL_MIN, d.startWidth + delta);
             this.state.colWidths = {...this.state.colWidths, [d.colName]: w};
-
         } else if (d.type === "tree") {
             const delta = (ev.clientX - d.startX) * sign;
             const w = Math.max(TREE_MIN, Math.min(TREE_MAX, d.startWidth + delta));
             this.state.treeWidth = w;
-
         } else if (d.type === "reorder") {
             if (!d.moved) {
                 const dx = Math.abs(ev.clientX - d.startX);
@@ -554,14 +549,12 @@ export class CategoryManager extends Component {
         if (d.type === "col") {
             this.state.resizingCol = null;
             this._persistColWidths();
-
         } else if (d.type === "tree") {
             this.state.resizingTree = false;
             try {
                 localStorage.setItem(
                     TREE_WIDTH_KEY, String(this.state.treeWidth));
             } catch (e) { /* ignore */ }
-
         } else if (d.type === "reorder") {
             const target = this.state.dragOverCol;
             if (d.moved && target && target !== d.colName) {
@@ -885,7 +878,114 @@ export class CategoryManager extends Component {
     }
 
     // ---------- New category ----------
-    openNewCategory(parentCat) {
+    async loadEntities() {
+        if (this._entitiesLoaded) return;
+        try {
+            const rows = await this.orm.searchRead(
+                "raes.md.entity",
+                [["entity_type_lu", "=", "1"]],
+                ["id", "name", "title"],
+                {limit: 500, order: "name"});
+            this.state.entities = rows.map(e => ({
+                id: e.id,
+                name: e.name,
+                title: e.title || e.name,
+            }));
+            this._entitiesLoaded = true;
+        } catch (e) {
+            console.error("loadEntities failed", e);
+            this.notification.add(
+                "Could not load the entity list.", {type: "danger"});
+        }
+    }
+
+    // ---------- Entity picker (combobox) ----------
+    get selectedEntity() {
+        const id = this.state.newCategory.entity_id;
+        if (!id) return null;
+        const n = Number(id);
+        return this.state.entities.find(e => e.id === n) || null;
+    }
+
+    get filteredEntities() {
+        const term = (this.state.entitySearch || "").trim().toLowerCase();
+        const list = this.state.entities;
+        if (!term) return list;
+        return list.filter(e => {
+            const t = (e.title || "").toLowerCase();
+            const n = (e.name || "").toLowerCase();
+            return t.includes(term) || n.includes(term);
+        });
+    }
+
+    async toggleEntityPicker(ev) {
+        if (ev) ev.stopPropagation();
+        if (this.state.newCategory.parent_id) return;
+        if (this.state.entityPickerOpen) {
+            this.closeEntityPicker();
+        } else {
+            await this.openEntityPicker();
+        }
+    }
+
+    async openEntityPicker() {
+        if (this.state.newCategory.parent_id) return;
+        if (this.state.entityPickerOpen) return;
+        this.state.entityPickerOpen = true;
+        this.state.entitySearch = "";
+        this.state.entityHighlightIdx = 0;
+        // Wait for OWL to render the search input, then focus it.
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        const el = this.entityPickerRef.el;
+        const input = el && el.querySelector(".o_cat_entity_search");
+        if (input) input.focus();
+    }
+
+    closeEntityPicker() {
+        this.state.entityPickerOpen = false;
+        this.state.entitySearch = "";
+        this.state.entityHighlightIdx = 0;
+    }
+
+    onEntitySearchInput(ev) {
+        this.state.entitySearch = ev.target.value;
+        this.state.entityHighlightIdx = 0;
+    }
+
+    onEntityKeydown(ev) {
+        const list = this.filteredEntities;
+        if (ev.key === "Escape") {
+            this.closeEntityPicker();
+            ev.preventDefault();
+            ev.stopPropagation();
+        } else if (ev.key === "ArrowDown") {
+            ev.preventDefault();
+            this.state.entityHighlightIdx =
+                Math.min(this.state.entityHighlightIdx + 1, list.length - 1);
+        } else if (ev.key === "ArrowUp") {
+            ev.preventDefault();
+            this.state.entityHighlightIdx =
+                Math.max(this.state.entityHighlightIdx - 1, 0);
+        } else if (ev.key === "Enter") {
+            ev.preventDefault();
+            const sel = list[this.state.entityHighlightIdx];
+            if (sel) this.selectEntity(sel);
+        }
+    }
+
+    selectEntity(ent) {
+        this.state.newCategory.entity_id = ent.id;
+        this.closeEntityPicker();
+    }
+
+    clearEntity(ev) {
+        if (ev) ev.stopPropagation();
+        this.state.newCategory.entity_id = null;
+        this.state.entitySearch = "";
+    }
+
+    async openNewCategory(parentCat) {
+        await this.loadEntities();
         const parent = parentCat || this.state.selectedCategory;
         const nested = !!parentCat;
         this.state.newCategory = {
@@ -895,6 +995,7 @@ export class CategoryManager extends Component {
             parent_title: nested ? parent.title : null,
             entity_id: parent && parent.entity_id ? parent.entity_id[0] : null,
         };
+        this.closeEntityPicker();
         if (nested) {
             this.state.expandedIds[parentCat.id] = true;
         }
@@ -942,6 +1043,7 @@ export class CategoryManager extends Component {
     }
 
     cancelNewCategory() {
+        this.closeEntityPicker();
         this.state.showNewCategory = false;
     }
 
@@ -962,7 +1064,7 @@ export class CategoryManager extends Component {
             const vals = {
                 title: nc.title,
                 code: nc.code || false,
-                entity_id: nc.entity_id,
+                entity_id: nc.entity_id ? parseInt(nc.entity_id, 10) : false,
             };
             if (nc.parent_id) {
                 vals.parent_id = nc.parent_id;

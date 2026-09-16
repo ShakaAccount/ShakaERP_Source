@@ -1,5 +1,5 @@
 .o_category_manager {
-  // ---------- Light theme tokens (defaults) ----------
+  // ---------- Light theme tokens ----------
   --cat-border: #dee2e6;
   --cat-border-soft: rgba(0, 0, 0, 0.08);
   --cat-bg: #fff;
@@ -48,6 +48,15 @@
   [dir="rtl"] &,
   .o_rtl & {
     --cat-gradient-dir: right;
+  }
+
+  // ---------- Modal wrapper: unclip so the entity dropdown can escape ----------
+  &.modal {
+    .modal-dialog,
+    .modal-content,
+    .modal-body {
+      overflow: visible !important;
+    }
   }
 
   // ---------- Picker bar ----------
@@ -204,6 +213,180 @@
     }
   }
 
+  // ---------- Entity picker (combobox) ----------
+  .o_cat_entity_picker {
+    position: relative;
+    width: 100%;
+
+    .o_cat_entity_trigger {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+      padding: 6px 12px;
+      background: var(--cat-bg);
+      color: var(--cat-text);
+      border: 1px solid var(--cat-border);
+      border-radius: var(--cat-radius);
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 150ms, box-shadow 150ms;
+
+      &:hover {
+        border-color: var(--cat-accent);
+      }
+
+      &.o_cat_entity_trigger_open {
+        border-color: var(--cat-accent);
+        box-shadow: 0 0 0 3px var(--cat-accent-soft);
+      }
+
+      .o_cat_entity_trigger_label {
+        flex: 1;
+        min-width: 0;
+        font-size: 13px;
+        color: var(--cat-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &.o_cat_entity_trigger_placeholder {
+          color: var(--cat-text-muted);
+          font-style: italic;
+        }
+      }
+
+      .o_cat_entity_clear {
+        flex: 0 0 auto;
+        width: 22px;
+        height: 22px;
+        border: 0;
+        background: transparent;
+        border-radius: 4px;
+        color: var(--cat-text-muted);
+        font-size: 11px;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+
+        &:hover {
+          background: var(--cat-hover);
+          color: var(--cat-danger);
+        }
+      }
+
+      .o_cat_entity_caret {
+        flex: 0 0 auto;
+        color: var(--cat-text-muted);
+        font-size: 10px;
+        transition: transform 160ms ease;
+      }
+
+      &.o_cat_entity_trigger_open .o_cat_entity_caret {
+        transform: rotate(180deg);
+      }
+    }
+
+    .o_cat_entity_dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      z-index: 1050;
+      display: flex;
+      flex-direction: column;
+      max-height: 340px;
+      background: var(--cat-bg);
+      border: 1px solid var(--cat-border);
+      border-radius: var(--cat-radius);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+      overflow: hidden;
+      animation: o_cat_picker_in 120ms ease-out;
+
+      .o_cat_entity_search_wrap {
+        flex: 0 0 auto;
+        padding: 8px;
+        border-bottom: 1px solid var(--cat-border);
+
+        .o_cat_entity_search {
+          width: 100%;
+          padding: 6px 10px;
+          font-size: 12px;
+          border: 1px solid var(--cat-border);
+          border-radius: 6px;
+          background: var(--cat-bg);
+          color: var(--cat-text);
+          outline: none;
+          transition: border-color 120ms, box-shadow 120ms;
+
+          &:focus {
+            border-color: var(--cat-accent);
+            box-shadow: 0 0 0 2px var(--cat-accent-soft);
+          }
+
+          &::placeholder {
+            color: var(--cat-text-muted);
+          }
+        }
+      }
+
+      .o_cat_entity_list {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        padding: 4px 0;
+      }
+
+      .o_cat_entity_empty {
+        padding: 12px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--cat-text-muted);
+        font-style: italic;
+      }
+
+      .o_cat_entity_option {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        padding: 7px 12px;
+        cursor: pointer;
+        font-size: 13px;
+        color: var(--cat-text);
+        transition: background 100ms;
+        overflow: hidden;
+
+        &:hover,
+        &.o_cat_entity_option_active {
+          background: var(--cat-accent-soft);
+        }
+
+        &.o_cat_entity_option_active {
+          box-shadow: inset 3px 0 0 var(--cat-accent);
+        }
+
+        .o_cat_entity_option_title {
+          flex: 0 1 auto;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .o_cat_entity_option_name {
+          flex: 1;
+          min-width: 0;
+          color: var(--cat-text-muted);
+          font-size: 11px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+  }
+
   @keyframes o_cat_picker_in {
     from {
       opacity: 0;
@@ -287,7 +470,7 @@
     }
   }
 
-  // ---------- Bulk toolbar (floating overlay) ----------
+  // ---------- Bulk toolbar ----------
   .o_cat_bulk_bar {
     position: absolute;
     top: 0;
@@ -410,7 +593,6 @@
       padding: 8px 10px;
       text-align: start;
       border-bottom: 1px solid var(--cat-border);
-      // NOTE: display stays as table-cell (default). Do NOT set flex.
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -504,7 +686,7 @@
     }
   }
 
-  // ---------- Table header: drag & resize affordances ----------
+  // ---------- Table header: drag & resize ----------
   .o_cat_th_label {
     pointer-events: none;
   }
@@ -526,9 +708,6 @@
     background: var(--cat-accent-soft);
   }
 
-  // The <th> is `position: sticky`, which establishes a containing
-  // block — so this absolutely-positioned handle anchors to the
-  // header cell. In RTL, inset-inline-end resolves to the left edge.
   .o_cat_th_resize {
     position: absolute;
     top: 0;

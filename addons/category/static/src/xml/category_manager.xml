@@ -451,7 +451,7 @@
 
         <!-- ============ New-category modal ============ -->
         <t t-if="state.showNewCategory">
-            <div class="modal d-block" style="background:rgba(15,23,42,0.5);">
+            <div class="modal d-block o_category_manager" style="background:rgba(15,23,42,0.5);">
                 <div class="modal-dialog">
                     <div class="modal-content" style="border-radius: 10px;">
                         <div class="modal-header" style="background: #f1f5f9;">
@@ -480,18 +480,70 @@
                                        t-model="state.newCategory.code"/>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label small fw-semibold">Entity ID</label>
-                                <input type="number" class="form-control"
-                                       t-att-readonly="!!state.newCategory.parent_id"
-                                       t-model.number="state.newCategory.entity_id"/>
-                                <small class="text-muted">
-                                    <t t-if="state.newCategory.parent_id">
+                                <label class="form-label small fw-semibold">Entity</label>
+                                <t t-if="state.newCategory.parent_id">
+                                    <input type="text"
+                                           class="form-control"
+                                           disabled="disabled"
+                                           t-att-value="selectedEntity ? (selectedEntity.title || selectedEntity.name) : ''"/>
+                                    <small class="text-muted">
                                         Locked to the tree root's entity.
-                                    </t>
-                                    <t t-else="">
+                                    </small>
+                                </t>
+                                <t t-else="">
+                                    <div class="o_cat_entity_picker" t-ref="entityPicker">
+                                        <div class="o_cat_entity_trigger"
+                                             t-att-class="{ 'o_cat_entity_trigger_open': state.entityPickerOpen }"
+                                             t-on-click="toggleEntityPicker">
+                                            <span class="o_cat_entity_trigger_label"
+                                                  t-att-class="{ 'o_cat_entity_trigger_placeholder': !selectedEntity }"
+                                                  t-esc="selectedEntity ? (selectedEntity.title || selectedEntity.name) : 'Select an entity&#8230;'"/>
+                                            <button type="button"
+                                                    class="o_cat_entity_clear"
+                                                    t-if="state.newCategory.entity_id"
+                                                    t-on-click="clearEntity"
+                                                    title="Clear">&#10005;</button>
+                                            <span class="o_cat_entity_caret">&#9662;</span>
+                                        </div>
+                                        <div class="o_cat_entity_dropdown"
+                                             t-if="state.entityPickerOpen">
+                                            <div class="o_cat_entity_search_wrap">
+                                                <input type="text"
+                                                       class="o_cat_entity_search"
+                                                       placeholder="Search entities&#8230;"
+                                                       autocomplete="off"
+                                                       t-att-value="state.entitySearch"
+                                                       t-on-input="onEntitySearchInput"
+                                                       t-on-keydown="onEntityKeydown"/>
+                                            </div>
+                                            <div class="o_cat_entity_list">
+                                                <t t-if="filteredEntities.length === 0">
+                                                    <div class="o_cat_entity_empty">
+                                                        No matching entities
+                                                    </div>
+                                                </t>
+                                                <t t-else="">
+                                                    <t t-foreach="filteredEntities"
+                                                       t-as="ent"
+                                                       t-key="ent.id">
+                                                        <div class="o_cat_entity_option"
+                                                             t-att-class="{ 'o_cat_entity_option_active': state.entityHighlightIdx === ent_index }"
+                                                             t-on-click="() => this.selectEntity(ent)"
+                                                             t-on-mouseenter="() => { this.state.entityHighlightIdx = ent_index; }">
+                                                            <span class="o_cat_entity_option_title" t-esc="ent.title"/>
+                                                            <span class="o_cat_entity_option_name"
+                                                                  t-if="ent.title !== ent.name"
+                                                                  t-esc="ent.name"/>
+                                                        </div>
+                                                    </t>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">
                                         The DW entity this category belongs to.
-                                    </t>
-                                </small>
+                                    </small>
+                                </t>
                             </div>
                         </div>
                         <div class="modal-footer">
