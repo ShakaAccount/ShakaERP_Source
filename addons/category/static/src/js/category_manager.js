@@ -19,7 +19,44 @@ const SENTINEL_PRELOAD_PX = 800;
 // Cooldown between two auto-loads on the same node (ms). Prevents a cascade
 // when the sentinel stays in view after new children append.
 const SENTINEL_COOLDOWN_MS = 150;
+// Arabic → Persian normalization for tree search.
+// Same mapping as the backend, mirrored here because the tree is
+// filtered client-side — the RPC never sees the search term.
+const PERSIAN_NORMALIZE_MAP = {
+    // Letters
+    '\u064A': '\u06CC',   // ي Arabic Yeh   → ی Persian Yeh
+    '\u0649': '\u06CC',   // ى Alef Maksura → ی
+    '\u0643': '\u06A9',   // ك Arabic Kaf   → ک Persian Kef
+    '\u0629': '\u0647',   // ة Teh Marbuta  → ه Heh
+    '\u06C0': '\u0647',   // ۀ Heh + Yeh    → ه
+    // Diacritics — removed
+    '\u064B': '', '\u064C': '', '\u064D': '',
+    '\u064E': '', '\u064F': '', '\u0650': '',
+    '\u0651': '', '\u0652': '',
+    '\u0653': '', '\u0654': '', '\u0655': '',
+    '\u0670': '',
+    // Arabic-Indic digits → ASCII
+    '\u0660': '0', '\u0661': '1', '\u0662': '2', '\u0663': '3',
+    '\u0664': '4', '\u0665': '5', '\u0666': '6', '\u0667': '7',
+    '\u0668': '8', '\u0669': '9',
+    // Extended Arabic-Indic (Persian) digits → ASCII
+    '\u06F0': '0', '\u06F1': '1', '\u06F2': '2', '\u06F3': '3',
+    '\u06F4': '4', '\u06F5': '5', '\u06F6': '6', '\u06F7': '7',
+    '\u06F8': '8', '\u06F9': '9',
+    // Separators
+    '\u066B': '.', '\u066C': ',',
+};
 
+function persianNormalize(text) {
+    if (!text) return text;
+    let out = text;
+    for (const [src, dst] of Object.entries(PERSIAN_NORMALIZE_MAP)) {
+        if (out.includes(src)) {
+            out = out.split(src).join(dst);
+        }
+    }
+    return out;
+}
 
 // ---------- Recursive tree node ----------
 export class CategoryNode extends Component {
@@ -382,19 +419,22 @@ export class CategoryManager extends Component {
     }
 
     get _filterResult() {
-        const term = (this.state.treeSearch || "").trim().toLowerCase();
-        if (!term) return null;
+        const rawTerm = (this.state.treeSearch || "").trim();
+        if (!rawTerm) return null;
+        const term = persianNormalize(rawTerm).toLowerCase();
+
         const cacheKey = term + "|" + this.state.tree.length;
         if (this._filterCacheKey === cacheKey) {
             return this._filterCacheValue;
         }
+
         const visible = new Set();
         const autoExpand = new Set();
         const byId = new Map(this.state.tree.map(c => [c.id, c]));
         const hasChildren = (id) => (this.state.treeByParent[id] || []).length > 0;
 
         for (const cat of this.state.tree) {
-            const t = (cat.title || "").toLowerCase();
+            const t = persianNormalize(cat.title || "").toLowerCase();
             if (!t.includes(term)) continue;
             let node = cat;
             while (node && !visible.has(node.id)) {
