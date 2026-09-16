@@ -1011,6 +1011,13 @@
         justify-content: center;
       }
 
+      .o_cat_trash_icon {
+        width: 14px;
+        height: 14px;
+        display: block;
+        pointer-events: none;
+      }
+
       .o_cat_node_add:hover {
         background: var(--cat-accent-soft);
         color: var(--cat-accent);
