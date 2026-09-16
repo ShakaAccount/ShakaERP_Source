@@ -111,7 +111,6 @@
                     Select a category to configure its display name.
                 </span>
 
-                <!-- Page size selector -->
                 <label class="mb-0 text-nowrap ms-auto">Per page</label>
                 <select class="form-select form-select-sm"
                         style="max-width: 90px;"
@@ -129,13 +128,21 @@
             <div class="d-flex flex-grow-1 overflow-hidden">
 
                 <!--  Pane 1: Tree  -->
-                <div class="o_cat_pane o_cat_pane_tree" style="width: 280px;">
+                <div class="o_cat_pane o_cat_pane_tree"
+                     t-att-style="'width: ' + state.treeWidth + 'px;'">
                     <div class="o_cat_pane_head">
                         <button class="o_cat_pane_head_btn"
                                 t-on-click="openNewCategory"
                                 title="New root category">+</button>
-                        <span>Categories</span>
+                        <span>دسته بندی ها</span>
                         <span class="badge" t-esc="state.tree.length"/>
+                    </div>
+                    <div class="o_cat_search">
+                        <input type="text"
+                               class="form-control form-control-sm"
+                               placeholder="جستجو&#8230;"
+                               t-att-value="state.treeSearch"
+                               t-on-input="onTreeSearch"/>
                     </div>
                     <div class="o_cat_list">
                         <div class="o_cat_tree">
@@ -145,20 +152,32 @@
                                     Loading&#8230;
                                 </div>
                             </t>
-                            <t t-elif="rootNodes.length === 0">
+                            <t t-elif="state.tree.length === 0">
                                 <div class="o_cat_empty">
                                     <div class="o_cat_empty_icon">&#128193;</div>
                                     No categories yet.
                                     <div class="mt-1">Click <b>+</b> to add one.</div>
                                 </div>
                             </t>
+                            <t t-elif="state.treeSearch and filteredRootNodes.length === 0">
+                                <div class="o_cat_empty">
+                                    <div class="o_cat_empty_icon">&#128269;</div>
+                                    No matching categories.
+                                    <div class="mt-1">
+                                        <button class="btn btn-link btn-sm p-0"
+                                                t-on-click="clearTreeSearch">
+                                            Clear search
+                                        </button>
+                                    </div>
+                                </div>
+                            </t>
                             <t t-else="">
-                                <t t-foreach="rootNodes" t-as="root" t-key="root.id">
+                                <t t-foreach="filteredRootNodes" t-as="root" t-key="root.id">
                                     <CategoryNode
                                             category="root"
                                             children="getChildren(root)"
                                             selectedId="state.selectedCategory ? state.selectedCategory.id : -1"
-                                            expandedIds="state.expandedIds"
+                                            expandedIds="effectiveExpandedIds"
                                             closingIds="state.closingIds"
                                             onSelect="onSelect"
                                             onToggle="onToggle"
@@ -172,8 +191,14 @@
                     </div>
                 </div>
 
+                <!--  Tree pane resize handle  -->
+                <div class="o_cat_tree_resizer"
+                     t-att-class="{ 'o_cat_tree_resizer_active': state.resizingTree }"
+                     t-on-mousedown="onTreeResizeStart"
+                     title="Drag to resize"/>
+
                 <!--  Pane 2: Uncategorized  -->
-                <div class="o_cat_pane" style="flex: 1;">
+                <div class="o_cat_pane" style="flex: 1; min-width: 0;">
                     <div class="o_cat_pane_head">
                         <span>Uncategorized</span>
                         <span class="badge" t-esc="state.left.total"/>
@@ -228,6 +253,14 @@
                         </t>
                         <t t-else="">
                             <table class="o_cat_table">
+                                <colgroup>
+                                    <col style="width: 38px;"/>
+                                    <t t-foreach="tableColumns" t-as="col"
+                                       t-key="col.name || '__auto__'">
+                                        <col t-att-style="state.colWidths[col.name] ? ('width: ' + state.colWidths[col.name] + 'px;') : ''"/>
+                                    </t>
+                                    <col style="width: 48px;"/>
+                                </colgroup>
                                 <thead>
                                     <tr>
                                         <th class="o_cat_th_check">
@@ -237,7 +270,18 @@
                                         </th>
                                         <t t-foreach="tableColumns" t-as="col"
                                            t-key="col.name || '__auto__'">
-                                            <th t-esc="col.title"/>
+                                            <th t-att-class="{
+                                                    'o_cat_th_draggable': col.name and state.labelColumns.length > 1,
+                                                    'o_cat_th_dragging': state.dragCol === col.name,
+                                                    'o_cat_th_dragover': state.dragOverCol === col.name and state.dragCol !== col.name,
+                                                }"
+                                                t-att-data-col-name="col.name"
+                                                t-on-mousedown="(ev) => this.onColReorderStart(col.name, ev)">
+                                                <span class="o_cat_th_label" t-esc="col.title"/>
+                                                <span class="o_cat_th_resize"
+                                                      t-if="col.name"
+                                                      t-on-mousedown="(ev) => this.onColResizeStart(col.name, ev)"/>
+                                            </th>
                                         </t>
                                         <th class="o_cat_th_action"/>
                                     </tr>
@@ -279,7 +323,7 @@
                 </div>
 
                 <!--  Pane 3: In category  -->
-                <div class="o_cat_pane" style="flex: 1;">
+                <div class="o_cat_pane" style="flex: 1; min-width: 0;">
                     <div class="o_cat_pane_head">
                         <span>In this category</span>
                         <span class="badge" t-esc="state.right.total"/>
@@ -333,6 +377,14 @@
                         </t>
                         <t t-else="">
                             <table class="o_cat_table">
+                                <colgroup>
+                                    <col style="width: 38px;"/>
+                                    <t t-foreach="tableColumns" t-as="col"
+                                       t-key="col.name || '__auto__'">
+                                        <col t-att-style="state.colWidths[col.name] ? ('width: ' + state.colWidths[col.name] + 'px;') : ''"/>
+                                    </t>
+                                    <col style="width: 48px;"/>
+                                </colgroup>
                                 <thead>
                                     <tr>
                                         <th class="o_cat_th_check">
@@ -342,7 +394,18 @@
                                         </th>
                                         <t t-foreach="tableColumns" t-as="col"
                                            t-key="col.name || '__auto__'">
-                                            <th t-esc="col.title"/>
+                                            <th t-att-class="{
+                                                    'o_cat_th_draggable': col.name and state.labelColumns.length > 1,
+                                                    'o_cat_th_dragging': state.dragCol === col.name,
+                                                    'o_cat_th_dragover': state.dragOverCol === col.name and state.dragCol !== col.name,
+                                                }"
+                                                t-att-data-col-name="col.name"
+                                                t-on-mousedown="(ev) => this.onColReorderStart(col.name, ev)">
+                                                <span class="o_cat_th_label" t-esc="col.title"/>
+                                                <span class="o_cat_th_resize"
+                                                      t-if="col.name"
+                                                      t-on-mousedown="(ev) => this.onColResizeStart(col.name, ev)"/>
+                                            </th>
                                         </t>
                                         <th class="o_cat_th_action"/>
                                     </tr>

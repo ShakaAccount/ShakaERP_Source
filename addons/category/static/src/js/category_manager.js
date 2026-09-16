@@ -4,37 +4,36 @@ import {useService} from "@web/core/utils/hooks";
 import {Component, useState, onWillStart, useRef, useExternalListener} from "@odoo/owl";
 import {ConfirmationDialog} from "@web/core/confirmation_dialog/confirmation_dialog";
 
+const TREE_WIDTH_KEY = "category_manager.tree_width";
+const TREE_MIN = 180;
+const TREE_MAX = 700;
+const COL_MIN = 60;
+
 // ---------- Recursive tree node ----------
 export class CategoryNode extends Component {
     get hasChildren() {
         return !!(this.props.children && this.props.children.length);
     }
-
     get isSelected() {
         return this.props.selectedId === this.props.category.id;
     }
-
     get isOpen() {
         return !!this.props.expandedIds[this.props.category.id];
     }
-
     onClick(ev) {
         ev.stopPropagation();
         this.props.onSelect(this.props.category);
     }
-
     onToggle(ev) {
         ev.stopPropagation();
         if (this.hasChildren) {
             this.props.onToggle(this.props.category.id);
         }
     }
-
     onAddChild(ev) {
         ev.stopPropagation();
         this.props.onAddChild(this.props.category);
     }
-
     onRemove(ev) {
         ev.stopPropagation();
         this.props.onDelete(this.props.category);
@@ -68,6 +67,12 @@ export class CategoryManager extends Component {
         this.bus.subscribe("COMPANY_CHANGED", () => this.onCompanyChanged());
 
         this.labelPickerRef = useRef("labelPicker");
+        // Non-reactive drag bookkeeping: {type, colName?, startX, startY?,
+        // startWidth?, rtlSign?, moved?}
+        this._drag = null;
+        // Filter result cache (recomputed on search/tree change).
+        this._filterCacheKey = null;
+        this._filterCacheValue = null;
 
         useExternalListener(document, "click", (ev) => {
             if (!this.state.showLabelPicker) return;
@@ -76,6 +81,8 @@ export class CategoryManager extends Component {
                 this.state.showLabelPicker = false;
             }
         });
+        useExternalListener(window, "mousemove", (ev) => this._handleMouseMove(ev));
+        useExternalListener(window, "mouseup", () => this._handleMouseUp());
 
         this.state = useState({
             tree: [],
@@ -84,6 +91,7 @@ export class CategoryManager extends Component {
             selectedCategory: null,
             expandedIds: {},
             closingIds: {},
+            treeSearch: "",                 // <-- search filter for the tree
             left: this._blankSide(),
             right: this._blankSide(),
             showNewCategory: false,
@@ -91,9 +99,22 @@ export class CategoryManager extends Component {
             saving: false,
             entityColumns: [],
             labelColumns: [],
+            colWidths: {},
             showLabelPicker: false,
+            treeWidth: 280,
             pageSize: 20,
+            dragCol: null,
+            dragOverCol: null,
+            resizingCol: null,
+            resizingTree: false,
         });
+
+        try {
+            const saved = parseInt(localStorage.getItem(TREE_WIDTH_KEY), 10);
+            if (saved >= TREE_MIN && saved <= TREE_MAX) {
+                this.state.treeWidth = saved;
+            }
+        } catch (e) { /* ignore */ }
 
         try {
             const saved = parseInt(
@@ -101,10 +122,15 @@ export class CategoryManager extends Component {
             if (saved > 0) {
                 this.state.pageSize = saved;
             }
-        } catch (e) { /* ignore */
-        }
+        } catch (e) { /* ignore */ }
 
-        this.getChildren = (cat) => this.state.treeByParent[cat.id] || [];
+        // Filter-aware getChildren — recurses through the visible subset.
+        this.getChildren = (cat) => {
+            const all = this.state.treeByParent[cat.id] || [];
+            const res = this._filterResult;
+            if (!res) return all;
+            return all.filter(c => res.visible.has(c.id));
+        };
         this.onSelect = (cat) => this.selectCategory(cat);
         this.onToggle = (id) => this.toggleExpand(id);
         this.onAddChild = (cat) => this.openNewCategory(cat);
@@ -150,6 +176,7 @@ export class CategoryManager extends Component {
             }
             this.state.tree = flat;
             this.state.treeByParent = byParent;
+            this._filterCacheKey = null;    // invalidate filter
         } catch (e) {
             console.error("get_category_tree failed", e);
             this.notification.add(
@@ -157,6 +184,84 @@ export class CategoryManager extends Component {
         } finally {
             this.state.loading = false;
         }
+    }
+
+    // ---------- Tree search ----------
+    onTreeSearch(ev) {
+        this.state.treeSearch = ev.target.value;
+        this._filterCacheKey = null;        // invalidate filter
+    }
+
+    clearTreeSearch(ev) {
+        if (ev) ev.stopPropagation();
+        this.state.treeSearch = "";
+        this._filterCacheKey = null;
+    }
+
+    /**
+     * Compute the visible subtree for the current search term.
+     *
+     * Returns `null` when no search is active. Otherwise, returns:
+     *   - visible: Set of ids that match OR are ancestors of a match
+     *   - autoExpand: Set of ids that should be force-expanded while
+     *     the search is active (parents of matches, plus matches with
+     *     children so their branch is fully shown).
+     */
+    get _filterResult() {
+        const term = (this.state.treeSearch || "").trim().toLowerCase();
+        if (!term) return null;
+        const cacheKey = term + "|" + this.state.tree.length;
+        if (this._filterCacheKey === cacheKey) {
+            return this._filterCacheValue;
+        }
+        const visible = new Set();
+        const autoExpand = new Set();
+        const byId = new Map(this.state.tree.map(c => [c.id, c]));
+        const hasChildren = (id) =>
+            (this.state.treeByParent[id] || []).length > 0;
+
+        for (const cat of this.state.tree) {
+            const t = (cat.title || "").toLowerCase();
+            if (!t.includes(term)) continue;
+            let node = cat;
+            while (node && !visible.has(node.id)) {
+                visible.add(node.id);
+                if (node.parent_id) {
+                    autoExpand.add(node.parent_id[0]);
+                }
+                node = node.parent_id
+                    ? byId.get(node.parent_id[0])
+                    : null;
+            }
+            if (hasChildren(cat.id)) {
+                autoExpand.add(cat.id);
+            }
+        }
+        const value = {visible, autoExpand};
+        this._filterCacheKey = cacheKey;
+        this._filterCacheValue = value;
+        return value;
+    }
+
+    get filteredRootNodes() {
+        const roots = this.state.treeByParent[0] || [];
+        const res = this._filterResult;
+        if (!res) return roots;
+        return roots.filter(c => res.visible.has(c.id));
+    }
+
+    /** Expansion map used at render time — merged with search auto-expand. */
+    get effectiveExpandedIds() {
+        const res = this._filterResult;
+        if (!res || res.autoExpand.size === 0) return this.state.expandedIds;
+        const merged = {};
+        for (const k of Object.keys(this.state.expandedIds)) {
+            merged[k] = this.state.expandedIds[k];
+        }
+        for (const id of res.autoExpand) {
+            merged[id] = true;
+        }
+        return merged;
     }
 
     get rootNodes() {
@@ -190,8 +295,11 @@ export class CategoryManager extends Component {
         }
         this.state.showLabelPicker = false;
         this.state.labelColumns = [];
+        this.state.colWidths = {};
         if (cat && cat.entity_id) {
-            this.state.labelColumns = this._loadLabelColumns(cat.entity_id[0]);
+            const eid = cat.entity_id[0];
+            this.state.labelColumns = this._loadLabelColumns(eid);
+            this.state.colWidths = this._loadColWidths(eid);
         }
         await this.reloadPanes();
     }
@@ -200,11 +308,18 @@ export class CategoryManager extends Component {
         await Promise.all([this.loadLeft(), this.loadRight()]);
     }
 
-    // ---------- Label column picker (multi-select) ----------
+    // ---------- Persistence keys ----------
     _labelStorageKey(entityId) {
         return `category_manager.label.${entityId}`;
     }
+    _colWidthsStorageKey(entityId) {
+        return `category_manager.colwidths.${entityId}`;
+    }
+    _pageSizeStorageKey() {
+        return "category_manager.page_size";
+    }
 
+    // ---------- Label column picker ----------
     _loadLabelColumns(entityId) {
         let raw = null;
         try {
@@ -219,8 +334,7 @@ export class CategoryManager extends Component {
                 if (Array.isArray(parsed)) {
                     return parsed.filter(s => typeof s === "string" && s);
                 }
-            } catch (e) { /* fall through */
-            }
+            } catch (e) { /* fall through */ }
             return [];
         }
         return [raw];
@@ -238,8 +352,28 @@ export class CategoryManager extends Component {
             } else {
                 localStorage.removeItem(this._labelStorageKey(entityId));
             }
-        } catch (e) { /* ignore */
+        } catch (e) { /* ignore */ }
+    }
+
+    _loadColWidths(entityId) {
+        try {
+            const raw = localStorage.getItem(this._colWidthsStorageKey(entityId));
+            if (!raw) return {};
+            const parsed = JSON.parse(raw);
+            return parsed && typeof parsed === "object" ? parsed : {};
+        } catch (e) {
+            return {};
         }
+    }
+
+    _persistColWidths() {
+        const cat = this.state.selectedCategory;
+        if (!cat || !cat.entity_id) return;
+        try {
+            localStorage.setItem(
+                this._colWidthsStorageKey(cat.entity_id[0]),
+                JSON.stringify(this.state.colWidths));
+        } catch (e) { /* ignore */ }
     }
 
     toggleLabelPicker(ev) {
@@ -256,32 +390,21 @@ export class CategoryManager extends Component {
 
     toggleLabelCol(name, ev) {
         if (ev) ev.stopPropagation();
-        const next = new Set(this.state.labelColumns);
-        if (next.has(name)) {
-            next.delete(name);
+        const list = [...this.state.labelColumns];
+        const idx = list.indexOf(name);
+        if (idx !== -1) {
+            list.splice(idx, 1);
         } else {
-            next.add(name);
+            list.push(name);
         }
-        const order = new Map(
-            this.state.entityColumns.map((c, i) => [c.name, i]));
-        this.state.labelColumns = Array.from(next)
-            .sort((a, b) => (order.get(a) ?? 0) - (order.get(b) ?? 0));
+        this.state.labelColumns = list;
         this._persistLabelColumns();
-        this._reapplyLabels();
     }
 
     clearLabelColumns(ev) {
         if (ev) ev.stopPropagation();
         this.state.labelColumns = [];
         this._persistLabelColumns();
-        this._reapplyLabels();
-    }
-
-    _reapplyLabels() {
-        this.state.left.records =
-            this.state.left.records.map(r => this.applyLabel(r));
-        this.state.right.records =
-            this.state.right.records.map(r => this.applyLabel(r));
     }
 
     get labelPickerSummary() {
@@ -292,14 +415,13 @@ export class CategoryManager extends Component {
         return `${n} columns`;
     }
 
-    /** Columns to render in the item tables. */
+    /** Columns to render, ordered as the user arranged them. */
     get tableColumns() {
-        const avail = new Set(this.state.entityColumns.map(c => c.name));
+        const avail = new Map(this.state.entityColumns.map(c => [c.name, c]));
         const chosen = this.state.labelColumns.filter(n => avail.has(n));
         if (chosen.length) {
-            return this.state.entityColumns.filter(c => chosen.includes(c.name));
+            return chosen.map(n => avail.get(n));
         }
-        // Auto mode: a single column carrying the server's auto-label.
         return [{name: null, title: "Display name"}];
     }
 
@@ -315,25 +437,6 @@ export class CategoryManager extends Component {
             .map(k => ({name: k, title: k}));
     }
 
-    applyLabel(record) {
-        const cols = this.state.labelColumns;
-        if (!cols.length) {
-            return {...record, label: record._auto_label ?? record.label};
-        }
-        const parts = [];
-        for (const c of cols) {
-            const val = record[c];
-            if (val !== undefined && val !== null && val !== "") {
-                parts.push(String(val));
-            }
-        }
-        if (!parts.length) {
-            return {...record, label: record._auto_label ?? record.label};
-        }
-        return {...record, label: parts.join(" · ")};
-    }
-
-    /** Value to render in a table cell for `colName` (null = auto column). */
     cellValue(rec, colName) {
         if (colName === null || colName === undefined) {
             return this.recordLabel(rec);
@@ -345,17 +448,147 @@ export class CategoryManager extends Component {
         return String(v);
     }
 
-    _pageSizeStorageKey() {
-        return "category_manager.page_size";
+    // ---------- Column reorder (mousedown-based) ----------
+    onColReorderStart(colName, ev) {
+        if (!colName || this.state.labelColumns.length < 2) return;
+        if (ev.button !== 0) return;               // left-click only
+        ev.preventDefault();
+        this._drag = {
+            type: "reorder",
+            colName,
+            startX: ev.clientX,
+            startY: ev.clientY,
+            moved: false,
+        };
     }
 
+    // ---------- Column resize ----------
+    onColResizeStart(colName, ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const th = ev.target.closest("th");
+        const startWidth = th
+            ? Math.round(th.getBoundingClientRect().width)
+            : 120;
+        this._drag = {
+            type: "col",
+            colName,
+            startX: ev.clientX,
+            startWidth,
+            rtlSign: this._rtlSign(th),
+        };
+        this.state.resizingCol = colName;
+    }
+
+    // ---------- Tree pane resize ----------
+    onTreeResizeStart(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const container = ev.currentTarget.parentElement;
+        const treePane = container
+            ? container.querySelector(".o_cat_pane_tree")
+            : null;
+        this._drag = {
+            type: "tree",
+            startX: ev.clientX,
+            startWidth: this.state.treeWidth,
+            rtlSign: this._rtlSign(treePane || ev.currentTarget),
+        };
+        this.state.resizingTree = true;
+    }
+
+    // ---------- RTL detection ----------
+    _rtlSign(el) {
+        // +1 for LTR, -1 for RTL. Read the computed direction from the
+        // actual element so it matches the CSS `inset-inline-*` behaviour
+        // regardless of where Odoo put the `dir` attribute.
+        const target = el || document.body;
+        try {
+            return getComputedStyle(target).direction === "rtl" ? -1 : 1;
+        } catch (e) {
+            return 1;
+        }
+    }
+
+    // ---------- Global pointer handlers ----------
+    _handleMouseMove(ev) {
+        const d = this._drag;
+        if (!d) return;
+        const sign = d.rtlSign || 1;
+
+        if (d.type === "col") {
+            const delta = (ev.clientX - d.startX) * sign;
+            const w = Math.max(COL_MIN, d.startWidth + delta);
+            this.state.colWidths = {...this.state.colWidths, [d.colName]: w};
+
+        } else if (d.type === "tree") {
+            const delta = (ev.clientX - d.startX) * sign;
+            const w = Math.max(TREE_MIN, Math.min(TREE_MAX, d.startWidth + delta));
+            this.state.treeWidth = w;
+
+        } else if (d.type === "reorder") {
+            if (!d.moved) {
+                const dx = Math.abs(ev.clientX - d.startX);
+                const dy = Math.abs(ev.clientY - d.startY);
+                if (dx > 5 || dy > 5) {
+                    d.moved = true;
+                    this.state.dragCol = d.colName;
+                }
+            }
+            if (d.moved) {
+                const el = document.elementFromPoint(ev.clientX, ev.clientY);
+                const th = el && el.closest
+                    ? el.closest("th[data-col-name]")
+                    : null;
+                const over = th ? th.getAttribute("data-col-name") : null;
+                this.state.dragOverCol =
+                    (over && over !== d.colName) ? over : null;
+            }
+        }
+    }
+
+    _handleMouseUp() {
+        const d = this._drag;
+        if (!d) return;
+
+        if (d.type === "col") {
+            this.state.resizingCol = null;
+            this._persistColWidths();
+
+        } else if (d.type === "tree") {
+            this.state.resizingTree = false;
+            try {
+                localStorage.setItem(
+                    TREE_WIDTH_KEY, String(this.state.treeWidth));
+            } catch (e) { /* ignore */ }
+
+        } else if (d.type === "reorder") {
+            const target = this.state.dragOverCol;
+            if (d.moved && target && target !== d.colName) {
+                const list = [...this.state.labelColumns];
+                const from = list.indexOf(d.colName);
+                const to = list.indexOf(target);
+                if (from !== -1 && to !== -1) {
+                    list.splice(from, 1);
+                    list.splice(to, 0, d.colName);
+                    this.state.labelColumns = list;
+                    this._persistLabelColumns();
+                }
+            }
+            this.state.dragCol = null;
+            this.state.dragOverCol = null;
+        }
+
+        this._drag = null;
+    }
+
+    // ---------- Page size ----------
     onPageSizeChange(ev) {
         const size = parseInt(ev.target.value, 10) || 20;
         this.state.pageSize = size;
         try {
             localStorage.setItem(this._pageSizeStorageKey(), String(size));
-        } catch (e) { /* ignore */
-        }
+        } catch (e) { /* ignore */ }
         for (const side of ["left", "right"]) {
             this.state[side].page = 1;
             this.state[side].selectedIds = {};
@@ -384,10 +617,7 @@ export class CategoryManager extends Component {
                 this.state.pageSize,
                 side.search || "",
             ]);
-            side.records = (res.records || []).map(r => {
-                r._auto_label = r.label;
-                return this.applyLabel(r);
-            });
+            side.records = res.records || [];
             side.total = res.total || 0;
             side.reason = res.reason || null;
             this.refreshLabelOptions();
@@ -403,36 +633,30 @@ export class CategoryManager extends Component {
     loadLeft() {
         return this.fetchPane("left", "get_items_not_in_category");
     }
-
     loadRight() {
         return this.fetchPane("right", "get_items_in_category");
     }
 
-    // ---------- Selection helpers ----------
+    // ---------- Selection ----------
     isRowSelected(sideName, rec) {
         return !!this.state[sideName].selectedIds[rec.id];
     }
-
     selectedCount(sideName) {
         return Object.keys(this.state[sideName].selectedIds).length;
     }
-
     selectedRecords(sideName) {
         return Object.values(this.state[sideName].selectedIds);
     }
-
     clearSelection(sideName) {
         const side = this.state[sideName];
         side.selectedIds = {};
         side.anchorIndex = null;
     }
-
     allOnPageSelected(sideName) {
         const side = this.state[sideName];
         if (!side.records.length) return false;
         return side.records.every(r => !!side.selectedIds[r.id]);
     }
-
     toggleAllOnPage(sideName, ev) {
         if (ev) ev.stopPropagation();
         if (this.allOnPageSelected(sideName)) {
@@ -453,18 +677,13 @@ export class CategoryManager extends Component {
             const next = {...side.selectedIds};
             for (let i = a; i <= b; i++) {
                 const r = side.records[i];
-                if (r) {
-                    next[r.id] = r;
-                }
+                if (r) next[r.id] = r;
             }
             side.selectedIds = next;
         } else if (multi) {
             const next = {...side.selectedIds};
-            if (next[rec.id]) {
-                delete next[rec.id];
-            } else {
-                next[rec.id] = rec;
-            }
+            if (next[rec.id]) delete next[rec.id];
+            else next[rec.id] = rec;
             side.selectedIds = next;
             side.anchorIndex = idx;
         } else {
@@ -480,9 +699,7 @@ export class CategoryManager extends Component {
     selectAllOnPage(sideName) {
         const side = this.state[sideName];
         const next = {...side.selectedIds};
-        for (const r of side.records) {
-            next[r.id] = r;
-        }
+        for (const r of side.records) next[r.id] = r;
         side.selectedIds = next;
     }
 
@@ -490,11 +707,8 @@ export class CategoryManager extends Component {
         const side = this.state[sideName];
         const next = {...side.selectedIds};
         for (const r of side.records) {
-            if (next[r.id]) {
-                delete next[r.id];
-            } else {
-                next[r.id] = r;
-            }
+            if (next[r.id]) delete next[r.id];
+            else next[r.id] = r;
         }
         side.selectedIds = next;
     }
@@ -502,13 +716,9 @@ export class CategoryManager extends Component {
     // ---------- Bulk move ----------
     async bulkAddSelected() {
         const cat = this.state.selectedCategory;
-        if (!cat || !cat.entity_id) {
-            return;
-        }
+        if (!cat || !cat.entity_id) return;
         const recs = this.selectedRecords("left");
-        if (!recs.length) {
-            return;
-        }
+        if (!recs.length) return;
         const movedIds = new Set(recs.map(r => r.id));
         const vals = recs.map(r => ({
             category_id: cat.id,
@@ -519,9 +729,7 @@ export class CategoryManager extends Component {
             await this.orm.create("raes.md.category.member", vals);
             const next = {};
             for (const [id, rec] of Object.entries(this.state.left.selectedIds)) {
-                if (!movedIds.has(id)) {
-                    next[id] = rec;
-                }
+                if (!movedIds.has(id)) next[id] = rec;
             }
             this.state.left.selectedIds = next;
             this.state.left.anchorIndex = null;
@@ -539,13 +747,9 @@ export class CategoryManager extends Component {
 
     async bulkRemoveSelected() {
         const cat = this.state.selectedCategory;
-        if (!cat || !cat.entity_id) {
-            return;
-        }
+        if (!cat || !cat.entity_id) return;
         const recs = this.selectedRecords("right");
-        if (!recs.length) {
-            return;
-        }
+        if (!recs.length) return;
         const movedIds = new Set(recs.map(r => r.id));
         const memberIds = recs.map(r => r.id);
         try {
@@ -561,9 +765,7 @@ export class CategoryManager extends Component {
             }
             const next = {};
             for (const [id, rec] of Object.entries(this.state.right.selectedIds)) {
-                if (!movedIds.has(id)) {
-                    next[id] = rec;
-                }
+                if (!movedIds.has(id)) next[id] = rec;
             }
             this.state.right.selectedIds = next;
             this.state.right.anchorIndex = null;
@@ -581,9 +783,7 @@ export class CategoryManager extends Component {
     // ---------- Single actions ----------
     async addToCategory(record) {
         const cat = this.state.selectedCategory;
-        if (!cat || !cat.entity_id) {
-            return;
-        }
+        if (!cat || !cat.entity_id) return;
         if (record.id === undefined || record.id === null || record.id === "") {
             this.notification.add(
                 "This DW row has no primary key; cannot add it.",
@@ -607,9 +807,7 @@ export class CategoryManager extends Component {
 
     async removeFromCategory(record) {
         const cat = this.state.selectedCategory;
-        if (!cat || !cat.entity_id) {
-            return;
-        }
+        if (!cat || !cat.entity_id) return;
         try {
             const members = await this.orm.searchRead(
                 "raes.md.category.member",
@@ -642,7 +840,6 @@ export class CategoryManager extends Component {
         this.state.left.anchorIndex = null;
         this.loadLeft();
     }
-
     onSearchRight(ev) {
         this.state.right.search = ev.target.value;
         this.state.right.page = 1;
@@ -654,7 +851,6 @@ export class CategoryManager extends Component {
     get leftPages() {
         return Math.max(1, Math.ceil(this.state.left.total / this.state.pageSize));
     }
-
     get rightPages() {
         return Math.max(1, Math.ceil(this.state.right.total / this.state.pageSize));
     }
@@ -666,7 +862,6 @@ export class CategoryManager extends Component {
             await this.loadLeft();
         }
     }
-
     async prevLeft() {
         if (this.state.left.page > 1) {
             this.state.left.page--;
@@ -674,7 +869,6 @@ export class CategoryManager extends Component {
             await this.loadLeft();
         }
     }
-
     async nextRight() {
         if (this.state.right.page < this.rightPages) {
             this.state.right.page++;
@@ -682,7 +876,6 @@ export class CategoryManager extends Component {
             await this.loadRight();
         }
     }
-
     async prevRight() {
         if (this.state.right.page > 1) {
             this.state.right.page--;
@@ -717,8 +910,7 @@ export class CategoryManager extends Component {
                 `This action cannot be undone.`,
             confirmLabel: "Delete",
             confirm: () => this._deleteCategory(cat),
-            cancel: () => {
-            },
+            cancel: () => {},
         });
     }
 
@@ -727,10 +919,8 @@ export class CategoryManager extends Component {
             await this.orm.unlink("raes.md.category", [cat.id]);
             await this.reloadTree();
             const remaining = new Set(this.state.tree.map(c => c.id));
-            if (
-                this.state.selectedCategory &&
-                !remaining.has(this.state.selectedCategory.id)
-            ) {
+            if (this.state.selectedCategory &&
+                !remaining.has(this.state.selectedCategory.id)) {
                 this.state.selectedCategory = null;
                 this.state.left = this._blankSide();
                 this.state.right = this._blankSide();
@@ -740,7 +930,6 @@ export class CategoryManager extends Component {
                     delete this.state.expandedIds[id];
                 }
             }
-
             this.notification.add(
                 `Category "${cat.title}" and its sub-categories were deleted.`,
                 {type: "success"});
