@@ -18,6 +18,9 @@
             <button class="o_cat_node_add"
                     t-on-click="onAddChild"
                     title="Add a sub-category here">+</button>
+            <button class="o_cat_node_remove"
+                    t-on-click="onRemove"
+                    title="Delete this category and all its sub-categories">&#128465;</button>
         </div>
 
         <t t-if="props.expandedIds[props.category.id]">
@@ -34,12 +37,14 @@
                                 onSelect="props.onSelect"
                                 onToggle="props.onToggle"
                                 onAddChild="props.onAddChild"
+                                onDelete="props.onDelete"
                                 getChildren="props.getChildren"
                                 level="props.level + 1"/>
                     </t>
                 </div>
             </div>
-        </t>    </t>
+        </t>
+    </t>
 
     <!-- ============ Main layout ============ -->
     <t t-name="category.CategoryManager">
@@ -108,6 +113,7 @@
                                             onSelect="onSelect"
                                             onToggle="onToggle"
                                             onAddChild="onAddChild"
+                                            onDelete="onDelete"
                                             getChildren="getChildren"
                                             level="0"/>
                                 </t>
@@ -202,7 +208,7 @@
                     </div>
                 </div>
 
-                <!--                  Pane 3: In category  -->
+                <!--  Pane 3: In category  -->
                 <div class="o_cat_pane" style="flex: 1;">
                     <div class="o_cat_pane_head">
                         <span>In this category</span>

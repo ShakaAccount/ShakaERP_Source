@@ -2,6 +2,7 @@
 import {registry} from "@web/core/registry";
 import {useService} from "@web/core/utils/hooks";
 import {Component, useState, onWillStart} from "@odoo/owl";
+import {ConfirmationDialog} from "@web/core/confirmation_dialog/confirmation_dialog";
 
 const PAGE_SIZE = 20;
 
@@ -35,6 +36,11 @@ export class CategoryNode extends Component {
         ev.stopPropagation();
         this.props.onAddChild(this.props.category);
     }
+
+    onRemove(ev) {
+        ev.stopPropagation();
+        this.props.onDelete(this.props.category);
+    }
 }
 
 CategoryNode.template = "category.CategoryNode";
@@ -47,6 +53,7 @@ CategoryNode.props = {
     onSelect: Function,
     onToggle: Function,
     onAddChild: Function,
+    onDelete: Function,          // <-- new
     getChildren: Function,
     level: Number,
 };
@@ -57,6 +64,7 @@ export class CategoryManager extends Component {
     setup() {
         this.orm = useService("orm");
         this.notification = useService("notification");
+        this.dialog = useService("dialog");
         this.pageSize = PAGE_SIZE;
 
         this.state = useState({
@@ -65,7 +73,7 @@ export class CategoryManager extends Component {
             loading: true,
             selectedCategory: null,
             expandedIds: {},
-            closingIds: {},          // <-- new
+            closingIds: {},
             left: this._blankSide(),
             right: this._blankSide(),
             showNewCategory: false,
@@ -75,10 +83,12 @@ export class CategoryManager extends Component {
             labelColumn: "",
         });
 
+        // Bound once so they are stable references across re-renders.
         this.getChildren = (cat) => this.state.treeByParent[cat.id] || [];
         this.onSelect = (cat) => this.selectCategory(cat);
         this.onToggle = (id) => this.toggleExpand(id);
         this.onAddChild = (cat) => this.openNewCategory(cat);
+        this.onDelete = (cat) => this.confirmDeleteCategory(cat);
 
         onWillStart(async () => {
             await this.reloadTree();
@@ -525,6 +535,55 @@ export class CategoryManager extends Component {
             this.state.expandedIds[parentCat.id] = true;
         }
         this.state.showNewCategory = true;
+    }
+
+    confirmDeleteCategory(cat) {
+        this.dialog.add(ConfirmationDialog, {
+            title: "Delete category",
+            body:
+                `Delete "${cat.title}" and every sub-category under it?\n\n` +
+                `This also removes all item assignments to those categories. ` +
+                `This action cannot be undone.`,
+            confirmLabel: "Delete",
+            confirm: () => this._deleteCategory(cat),
+            cancel: () => {
+            },
+        });
+    }
+
+    async _deleteCategory(cat) {
+        try {
+            await this.orm.unlink("raes.md.category", [cat.id]);
+
+            // If the selected category was part of the removed subtree,
+            // clear the panes.
+            const stillThere = new Set(this.state.tree.map(c => c.id));
+            await this.reloadTree();
+            const remaining = new Set(this.state.tree.map(c => c.id));
+            if (
+                this.state.selectedCategory &&
+                !remaining.has(this.state.selectedCategory.id)
+            ) {
+                this.state.selectedCategory = null;
+                this.state.left = this._blankSide();
+                this.state.right = this._blankSide();
+            }
+            // Clean up expansion state for removed nodes.
+            for (const id of Object.keys(this.state.expandedIds)) {
+                if (!remaining.has(Number(id))) {
+                    delete this.state.expandedIds[id];
+                }
+            }
+
+            this.notification.add(
+                `Category "${cat.title}" and its sub-categories were deleted.`,
+                {type: "success"});
+        } catch (e) {
+            console.error("delete category failed", e);
+            this.notification.add(
+                "Could not delete the category. See the browser console for details.",
+                {type: "danger"});
+        }
     }
 
     cancelNewCategory() {
