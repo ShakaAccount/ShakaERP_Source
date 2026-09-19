@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Add Shaka UI Makeover settings section to General Settings -->
+        <!-- JSON-driven Shaka theme palette settings -->
         <record id="res_config_settings_view_form_shaka_ui" model="ir.ui.view">
             <field name="name">res.config.settings.view.form.inherit.shaka_ui_makeover</field>
             <field name="model">res.config.settings</field>
@@ -10,33 +10,18 @@
             <field name="arch" type="xml">
                 <xpath expr="//form" position="inside">
                     <field name="company_id" groups="base.group_multi_company" invisible="1"/>
-                    <app data-string="Shaka ERP" string="Shaka ERP" name="shaka_ui_makeover">
-                        <block title="UI Theme" name="shaka_ui_theme_settings">
-                            <setting string="Primary Button Color" company_dependent="1"
-                                help="Main button color used across the Shaka ERP Glass UI. Enter a hex color (e.g. #4E8DFF).">
+                    <app data-string="تنظیمات پوسته" string="تنظیمات پوسته" name="shaka_theme_palette">
+                        <block title="پالت رنگ تم" name="shaka_theme_palette_settings">
+                            <setting string="پالت رنگ روشن و تیره" help="رنگ‌های هر دو تم را در قالب JSON وارد کنید. هر رنگ باید HEX باشد؛ مثل #16A34A.">
                                 <div class="content-group">
-                                    <div class="row mt16">
-                                        <label for="shaka_primary_color" class="col-lg-3 o_light_label"/>
-                                        <field name="shaka_primary_color" widget="color_picker" placeholder="#4E8DFF"/>
-                                    </div>
+                                    <field name="shaka_theme_palette" widget="text" nolabel="1" class="o_shaka_theme_palette_json"/>
+                                    <p class="text-muted mt-2">کلیدهای مجاز: bg، surface، elevated، border، input، hover، text، muted، primary، primary_dark، on_primary، link، pill_bg، pill_text، success، warning، danger</p>
                                 </div>
                             </setting>
-                            <setting string="Button Text Color" company_dependent="1"
-                                help="Text color on primary buttons. Must contrast with the primary color (WCAG AA). Enter a hex color (e.g. #FFFFFF).">
+                            <setting string="اعمال تغییرات" help="پس از ذخیره، صفحه دوباره بارگذاری می‌شود و رنگ‌ها اعمال می‌شوند.">
                                 <div class="content-group">
-                                    <div class="row mt16">
-                                        <label for="shaka_button_text_color" class="col-lg-3 o_light_label"/>
-                                        <field name="shaka_button_text_color" widget="color_picker" placeholder="#FFFFFF"/>
-                                    </div>
-                                </div>
-                            </setting>
-                            <setting string="Live preview" company_dependent="1"
-                                help="The colors above are applied on the next page load. Click here to reload the form and see them.">
-                                <div class="content-group">
-                                    <div class="row mt16">
-                                        <div class="col-lg-3"/>
-                                        <button type="object" name="action_shaka_apply_theme_colors" string="Reload to apply" class="btn-secondary ps-2" icon="fa-refresh"/>
-                                    </div>
+                                    <button type="object" name="action_shaka_apply_theme_colors" string="ذخیره و بارگذاری مجدد" class="btn-primary" icon="fa-refresh"/>
+                                    <button type="object" name="action_shaka_reset_theme_palette" string="بازگردانی پالت پیش‌فرض" class="btn-secondary ms-2" icon="fa-undo"/>
                                 </div>
                             </setting>
                         </block>

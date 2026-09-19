@@ -1,23 +1,19 @@
 // ShakaERP Shaka Theme — Design Tokens
 // ============================================================================
-// Locked dark palette (overridable in :root via the gate html[data-theme='glass']).
+// Locked light/green palette used consistently across the backend.
 // Tokens are the single source of truth — every component file references
 // `var(--lg-*)` and never hardcodes hex. To recolor, edit this file only.
 //
 // Palette (chosen by the user, hard-locked — not user-configurable):
-//   bg-base        #0B0F19   page, body, navbar, control panel
-//   bg-surface     #141A29   cards, panels, sidebar, modal body
-//   bg-elevated    #1B2333   hover / active states
-//   border         #1E2536   1px hairline, used sparingly for separation
-//   accent         #5B7CFA   flat accent (active tab, focus, links)
-//   accent-start   #5B7CFA   gradient endpoint A (buttons ONLY)
-//   accent-end     #8B5CF6   gradient endpoint B (buttons ONLY)
-//   link           #6B8AFA   inline secondary links (no underline)
-//   text           #F2F4F8   primary text
-//   text-secondary #7B8494   timestamps, labels, muted body
-//   pill-bg        #232B3D   tag / pill background
-//   pill-text      #B8C0D0   tag / pill text
-//   danger         #F87171   destructive actions only
+//   bg-base        #F2F6F3   page, body, navbar, control panel
+//   bg-surface     #FFFFFF   cards, panels, sidebar, modal body
+//   bg-elevated    #EAF8EF   hover / active states
+//   border         #DCE8E0   borders and separators
+//   accent         #16A34A   active tabs, focus and links
+//   accent-start   #0B7A35   primary button gradient start
+//   accent-end     #22B956   primary button gradient end
+//   text           #1C2922   primary text
+//   text-secondary #718078   timestamps, labels, muted body
 // ============================================================================
 
 // Theme gate (declared once)
@@ -27,50 +23,49 @@ html[data-theme='shaka'] {
 }
 
 // ---- Surfaces ----
-$lg-bg-base:        #0B0F19 !default;
-$lg-bg-surface:     #141A29 !default;
-$lg-bg-elevated:    #1B2333 !default;
-$lg-border:         #1E2536 !default;
+$lg-bg-base:        #F5F8F6 !default;
+$lg-bg-surface:     #FFFFFF !default;
+$lg-bg-elevated:    #EEF6F0 !default;
+$lg-border:         #D7E4DA !default;
 
 // ---- Accent (flat) — used for non-button elements (active tab, focus, links) ----
-$lg-accent:         #5B7CFA !default;
-$lg-accent-strong:  #4A6BE0 !default;  // hover state of the flat accent
-$lg-link:           #6B8AFA !default;  // soft blue inline link color (per spec)
+$lg-accent:         #168A45 !default;
+$lg-accent-strong:  #0B6B35 !default;
+$lg-link:           #0B6B35 !default;
 
 // ---- Accent gradient endpoints — used ONLY for primary buttons ----
-$lg-accent-start:   #5B7CFA !default;  // gradient(90deg, ..., ...) — left
-$lg-accent-end:     #8B5CF6 !default;  // gradient(90deg, ..., ...) — right
+$lg-accent-start:   #0B6B35 !default;
+$lg-accent-end:     #20A653 !default;
 
 // ---- Text ----
-$lg-text:           #F2F4F8 !default;
-$lg-text-secondary: #7B8494 !default;
-$lg-text-muted:     #7B8494 !default;   // alias for code that referenced text-muted
+$lg-text:           #1B2A21 !default;
+$lg-text-secondary: #65736A !default;
+$lg-text-muted:     #65736A !default;
 $lg-text-on-accent: #FFFFFF !default;  // text on the gradient button
 
 // ---- Pills / tags ----
-$lg-pill-bg:        #232B3D !default;
-$lg-pill-text:      #B8C0D0 !default;
+$lg-pill-bg:        #E5F2E8 !default;
+$lg-pill-text:      #0B6B35 !default;
 
 // ---- Lines (1px hairlines; used sparingly — most surfaces separate by tone alone) ----
-$lg-line-hi:        rgba(255, 255, 255, 0.04);
-$lg-line-lo:        #1E2536;            // alias of --lg-border
+$lg-line-hi:        rgba(22, 163, 74, 0.08);
+$lg-line-lo:        #DCE8E0;
 
 // ---- Focus + state ----
-$lg-focus:          rgba(91, 124, 250, 0.32);   // accent at 32% for focus rings
+$lg-focus:          rgba(22, 138, 69, 0.18);
 $lg-danger:         #F87171 !default;
-$lg-success:        #34D399 !default;
-$lg-warning:        #FBBF24 !default;
+$lg-success:        #16A34A !default;
+$lg-warning:        #D99A16 !default;
 
 // ---- Shadows (very subtle on solid dark; cards rely on bg-tone, not shadows) ----
 $lg-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
 $lg-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.30);
 $lg-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.40);
-$lg-gloss: none;  // no inset highlight on solid dark surfaces
+$lg-gloss: none;
 
 // ---- Legacy "glass" surface tokens — repurposed as solid surface aliases so
 // the 558+ existing var(--lg-glass-*) references cascade through unchanged.
-// In this dark theme there is no transparency / blur; the alias just points
-// at the solid surface color so visual layering reads as a subtle elevation. ----
+// The aliases are kept for compatibility with existing component rules.
 $lg-glass-strong:  $lg-bg-surface  !default;   // modal / dialog body
 $lg-glass:         $lg-bg-surface  !default;   // cards
 $lg-glass-soft:    $lg-bg-base     !default;   // form sheet bg, subtle wells
