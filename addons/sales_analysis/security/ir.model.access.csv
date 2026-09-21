@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sales_analysis_user,sales.analysis.user,model_sales_analysis,base.group_user,1,1,1,1
+access_sales_analysis_allocation_user,sales.analysis.allocation.user,model_sales_analysis_allocation,base.group_user,1,1,1,1
+access_sales_analysis_receipt_user,sales.analysis.receipt.user,model_sales_analysis_receipt,base.group_user,1,0,0,0
+access_sales_analysis_customer_user,sales.analysis.customer.user,model_sales_analysis_customer,base.group_user,1,0,0,0
+access_sales_analysis_sale_user,sales.analysis.sale.user,model_sales_analysis_sale,base.group_user,1,0,0,0
+access_sales_analysis_receipt_link_user,sales.analysis.receipt.link.user,model_sales_analysis_receipt_link,base.group_user,1,1,1,1
+access_sales_analysis_receipt_wizard_user,sales.analysis.receipt.allocation.wizard.user,model_sales_analysis_receipt_allocation_wizard,base.group_user,1,1,1,1
+access_sales_analysis_receipt_wizard_line_user,sales.analysis.receipt.allocation.wizard.line.user,model_sales_analysis_receipt_allocation_wizard_line,base.group_user,1,1,1,1

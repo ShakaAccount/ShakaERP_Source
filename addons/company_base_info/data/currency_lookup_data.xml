@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="lookup_type_currency_conversion_type" model="lookup.type">
+            <field name="name">نوع تبدیل ارز</field>
+            <field name="code">currency_conversion_type</field>
+        </record>
+        <record id="lookup_value_currency_free" model="lookup.value">
+            <field name="type_id" ref="lookup_type_currency_conversion_type"/>
+            <field name="name">آزاد</field>
+            <field name="code">free</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="lookup_value_currency_nima" model="lookup.value">
+            <field name="type_id" ref="lookup_type_currency_conversion_type"/>
+            <field name="name">نیمایی</field>
+            <field name="code">nima</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="lookup_value_currency_government" model="lookup.value">
+            <field name="type_id" ref="lookup_type_currency_conversion_type"/>
+            <field name="name">دولتی</field>
+            <field name="code">government</field>
+            <field name="sequence">30</field>
+        </record>
+    </data>
+</odoo>

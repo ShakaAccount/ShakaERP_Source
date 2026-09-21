@@ -1,0 +1,81 @@
+<odoo>
+    <record id="view_daily_sales_tip_list" model="ir.ui.view">
+        <field name="name">daily.sales.tip.list</field>
+        <field name="model">daily.sales.tip</field>
+        <field name="arch" type="xml">
+            <list class="shaka-sales-list">
+                <field name="name" string="شماره سند"/>
+                <field name="date" string="تاریخ"/>
+                <field name="branch_id" string="شعبه"/>
+                <field name="created_by" string="ثبت‌کننده"/>
+                <field name="pos_tip_amount" string="انعام پوز (ریال)" sum="جمع انعام پوز"/>
+                <field name="cash_tip_amount" string="انعام نقد (ریال)" sum="جمع انعام نقد"/>
+                <field name="total_tip_amount" string="جمع کل (ریال)" sum="جمع کل انعام"/>
+                <field name="state" string="وضعیت" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_daily_sales_tip_form" model="ir.ui.view">
+        <field name="name">daily.sales.tip.form</field>
+        <field name="model">daily.sales.tip</field>
+        <field name="arch" type="xml">
+            <form string="انعام" class="shaka-sales-form shaka-tip-form">
+                <header>
+                    <button name="action_submit" type="object" string="ارسال برای تأیید" icon="fa-paper-plane" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="تأیید" icon="fa-check" class="btn-primary" invisible="state != 'submitted'"/>
+                    <button name="action_reject" type="object" string="رد" icon="fa-times" invisible="state != 'submitted'"/>
+                    <button name="action_reset_to_draft" type="object" string="بازگشت به پیش‌نویس" icon="fa-undo" invisible="state not in ('rejected', 'approved')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,rejected"/>
+                </header>
+                <sheet class="shaka-sales-sheet">
+                    <div class="shaka-form-hero">
+                        <div class="shaka-form-hero__content">
+                            <div><h1>انعام</h1></div>
+                            <div class="shaka-form-number"><span>شماره سند</span><strong><field name="name" readonly="1" nolabel="1"/></strong></div>
+                        </div>
+                    </div>
+                    <div class="shaka-info-panel">
+                        <group class="shaka-main-info">
+                            <group>
+                                <field name="date" string="تاریخ *"/>
+                                <field name="branch_id" string="شعبه *" readonly="id"/>
+                                <field name="created_by" string="ثبت‌کننده *" readonly="1"/>
+                            </group>
+                        </group>
+                    </div>
+                    <div class="shaka-kpi-grid">
+                        <div class="shaka-kpi-card shaka-kpi-card--green">
+                            <div class="shaka-kpi-icon"><i class="fa fa-credit-card" role="img" aria-label="انعام پوز"/></div>
+                            <div><span>انعام پوز</span><field name="pos_tip_amount" nolabel="1" class="oe_inline"/></div>
+                            <small>ریال</small>
+                        </div>
+                        <div class="shaka-kpi-card shaka-kpi-card--dark">
+                            <div class="shaka-kpi-icon"><i class="fa fa-money" role="img" aria-label="انعام نقد"/></div>
+                            <div><span>انعام نقد</span><field name="cash_tip_amount" nolabel="1" class="oe_inline"/></div>
+                            <small>ریال</small>
+                        </div>
+                    </div>
+                    <div class="shaka-kpi-grid shaka-kpi-grid--three">
+                        <div class="shaka-kpi-card shaka-kpi-card--white">
+                            <div class="shaka-kpi-icon"><i class="fa fa-calculator" role="img" aria-label="جمع کل انعام"/></div>
+                            <div><span>جمع کل انعام</span><field name="total_tip_amount" readonly="1" nolabel="1"/></div>
+                            <small>ریال</small>
+                        </div>
+                    </div>
+                    <field name="reject_reason" string="دلیل رد" placeholder="دلیل رد..." invisible="state != 'rejected'"/>
+                    <div class="shaka-form-hint">فیلدهای دارای * اجباری هستند. مبالغ در صورت نداشتن مقدار، صفر در نظر گرفته می‌شوند.</div>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_daily_sales_tip" model="ir.actions.act_window">
+        <field name="name">انعام‌ها</field>
+        <field name="res_model">daily.sales.tip</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_daily_sales_tip" name="انعام" parent="menu_daily_sales_root" action="action_daily_sales_tip" sequence="19"/>
+</odoo>

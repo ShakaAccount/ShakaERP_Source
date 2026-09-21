@@ -1,0 +1,128 @@
+<odoo>
+    <record id="view_sales_analysis_list" model="ir.ui.view">
+        <field name="name">sales.analysis.list</field>
+        <field name="model">sales.analysis</field>
+        <field name="arch" type="xml">
+            <list string="آنالیز فروش" class="shaka-sales-list">
+                <field name="number" string="شماره آنالیز"/>
+                <field name="customer_id" string="مشتری"/>
+                <field name="date_from" string="از تاریخ"/>
+                <field name="date_to" string="تا تاریخ"/>
+                <field name="total_receipts" string="جمع رسیدها"/>
+                <field name="total_allocated" string="جمع تخصیص"/>
+                <field name="total_unallocated" string="مانده تخصیص"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sales_analysis_form" model="ir.ui.view">
+        <field name="name">sales.analysis.form</field>
+        <field name="model">sales.analysis</field>
+        <field name="arch" type="xml">
+            <form string="آنالیز فروش" class="shaka-sales-form shaka-analysis-form">
+                <sheet>
+                    <div class="shaka-form-hero">
+                        <div class="shaka-form-hero__content">
+                            <div><h1>آنالیز فروش</h1><p>تخصیص رسیدهای دریافت به فاکتورهای فروش</p></div>
+                            <div class="shaka-form-number"><span>شماره آنالیز</span><strong><field name="number" readonly="1" nolabel="1"/></strong></div>
+                        </div>
+                    </div>
+                    <div class="shaka-info-panel">
+                        <group class="shaka-main-info">
+                            <group>
+                                <field name="customer_id" string="مشتری *"/>
+                                <field name="date_from" string="از تاریخ *"/>
+                                <field name="date_to" string="تا تاریخ *"/>
+                            </group>
+                            <group><field name="description" string="توضیحات" placeholder="توضیحات آنالیز فروش..."/></group>
+                        </group>
+                    </div>
+                    <div class="shaka-kpi-grid shaka-kpi-grid--three">
+                        <div class="shaka-kpi-card shaka-kpi-card--green"><div class="shaka-kpi-icon"><i class="fa fa-money"/></div><div><span>جمع رسیدها</span><field name="total_receipts" readonly="1" nolabel="1"/></div><small>ریال</small></div>
+                        <div class="shaka-kpi-card shaka-kpi-card--dark"><div class="shaka-kpi-icon"><i class="fa fa-link"/></div><div><span>جمع تخصیص</span><field name="total_allocated" readonly="1" nolabel="1"/></div><small>ریال</small></div>
+                        <div class="shaka-kpi-card shaka-kpi-card--amber"><div class="shaka-kpi-icon"><i class="fa fa-balance-scale"/></div><div><span>مانده تخصیص</span><field name="total_unallocated" readonly="1" nolabel="1"/></div><small>ریال</small></div>
+                    </div>
+                    <notebook>
+                        <page string="رسیدهای دریافت">
+                            <div class="shaka-data-panel"><div class="shaka-section-heading"><div class="shaka-section-icon"><i class="fa fa-money"/></div><div><h3>رسیدهای دریافت</h3><p>رسیدهای مشتری را انتخاب و به فاکتورها تخصیص دهید.</p></div></div>
+                            <field name="receipt_link_ids">
+                                <list editable="bottom">
+                                    <field name="customer_id" column_invisible="1"/>
+                                    <field name="receipt_id" string="شماره رسید دریافت" domain="[('customer_id', '=', customer_id)]" options="{'no_create': True}"/>
+                                    <field name="receipt_preview" string="پیش‌نمایش رسید" readonly="1"/>
+                                    <field name="receipt_amount" string="مبلغ رسید" readonly="1"/>
+                                    <field name="receipt_description" string="توضیحات رسید" readonly="1" optional="hide"/>
+                                    <field name="allocated_amount" string="تخصیص‌یافته" readonly="1"/>
+                                    <field name="remaining_amount" string="مانده" readonly="1"/>
+                                    <button name="action_open_allocation" type="object" string="تخصیص به فاکتورها" icon="fa-link" class="btn-primary"/>
+                                </list>
+                            </field>
+                            <p class="text-muted">رسید را انتخاب کنید و سپس برای اتصال آن به چند فاکتور، روی «تخصیص به فاکتورها» بزنید.</p></div>
+                        </page>
+                        <page string="تخصیص‌های ثبت‌شده">
+                            <div class="shaka-data-panel"><div class="shaka-section-heading"><div class="shaka-section-icon"><i class="fa fa-link"/></div><div><h3>تخصیص‌های ثبت‌شده</h3><p>ارتباط بین رسیدهای دریافت و فاکتورهای فروش.</p></div></div>
+                            <field name="allocation_ids" readonly="1">
+                                <list>
+                                    <field name="receipt_preview" string="رسید دریافت"/>
+                                    <field name="receipt_amount" string="مبلغ رسید"/>
+                                    <field name="invoice_preview" string="فاکتور"/>
+                                    <field name="invoice_amount" string="مبلغ فاکتور"/>
+                                    <field name="allocated_amount" string="مبلغ تخصیص"/>
+                                </list>
+                            </field></div>
+                        </page>
+                    </notebook>
+                    <div class="shaka-form-hint">فیلدهای دارای * اجباری هستند.</div>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sales_analysis_receipt_allocation_wizard_form" model="ir.ui.view">
+        <field name="name">sales.analysis.receipt.allocation.wizard.form</field>
+        <field name="model">sales.analysis.receipt.allocation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="تخصیص رسید دریافت به فاکتورها">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="customer_id" column_invisible="1"/>
+                            <field name="receipt_id" string="شماره رسید دریافت"/>
+                            <field name="receipt_preview" string="پیش‌نمایش" readonly="1"/>
+                            <field name="receipt_amount" string="مبلغ رسید"/>
+                            <field name="receipt_description" string="توضیحات" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="allocated_amount" string="جمع تخصیص"/>
+                            <field name="remaining_amount" string="مانده رسید"/>
+                        </group>
+                    </group>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="customer_id" column_invisible="1"/>
+                            <field name="sale_id" string="شماره فاکتور" domain="[('customer_id', '=', customer_id)]" options="{'no_create': True}"/>
+                            <field name="invoice_preview" string="پیش‌نمایش فاکتور" readonly="1"/>
+                            <field name="invoice_amount" string="مبلغ فاکتور" readonly="1"/>
+                            <field name="invoice_remaining" string="مانده فاکتور" readonly="1"/>
+                            <field name="allocated_amount" string="مبلغ تخصیص"/>
+                        </list>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_save" type="object" string="ذخیره تخصیص‌ها" class="btn-primary"/>
+                    <button special="cancel" string="انصراف" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sales_analysis" model="ir.actions.act_window">
+        <field name="name">آنالیز فروش</field>
+        <field name="res_model">sales.analysis</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_sales_analysis_root" name="آنالیز فروش" sequence="150"
+              web_icon="sales_analysis,static/description/icons8-receipt-100 (1).png"/>
+    <menuitem id="menu_sales_analysis" name="آنالیز فروش" parent="menu_sales_analysis_root" action="action_sales_analysis" sequence="10"/>
+</odoo>

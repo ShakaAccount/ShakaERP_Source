@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="lookup_type_budget_measurement_unit" model="lookup.type">
+        <field name="name">واحدهای اندازه‌گیری برنامه و بودجه</field>
+        <field name="code">budget_measurement_unit</field>
+    </record>
+    <record id="lookup_value_budget_unit_quantity" model="lookup.value">
+        <field name="type_id" ref="lookup_type_budget_measurement_unit"/>
+        <field name="name">تعداد</field><field name="code">quantity</field><field name="sequence">10</field>
+    </record>
+    <record id="lookup_value_budget_unit_percent" model="lookup.value">
+        <field name="type_id" ref="lookup_type_budget_measurement_unit"/>
+        <field name="name">درصد</field><field name="code">percent</field><field name="sequence">20</field>
+    </record>
+    <record id="lookup_value_budget_unit_amount" model="lookup.value">
+        <field name="type_id" ref="lookup_type_budget_measurement_unit"/>
+        <field name="name">مبلغ</field><field name="code">amount</field><field name="sequence">30</field>
+    </record>
+
+    <record id="lookup_type_budget_activity_status" model="lookup.type">
+        <field name="name">وضعیت فعالیت برنامه و بودجه</field>
+        <field name="code">budget_activity_status</field>
+    </record>
+    <record id="lookup_value_budget_status_planned" model="lookup.value">
+        <field name="type_id" ref="lookup_type_budget_activity_status"/>
+        <field name="name">برنامه‌ریزی‌شده</field><field name="code">planned</field><field name="sequence">10</field>
+    </record>
+    <record id="lookup_value_budget_status_running" model="lookup.value">
+        <field name="type_id" ref="lookup_type_budget_activity_status"/>
+        <field name="name">در حال انجام</field><field name="code">running</field><field name="sequence">20</field>
+    </record>
+    <record id="lookup_value_budget_status_done" model="lookup.value">
+        <field name="type_id" ref="lookup_type_budget_activity_status"/>
+        <field name="name">تکمیل‌شده</field><field name="code">done</field><field name="sequence">30</field>
+    </record>
+</odoo>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_holding_budget_assumption_list" model="ir.ui.view">
+        <field name="name">holding.budget.assumption.list</field>
+        <field name="model">holding.budget.assumption</field>
+        <field name="arch" type="xml">
+            <list string="مفروضات بودجه">
+                <field name="company_id"/>
+                <field name="fiscal_year_id"/>
+                <field name="scenario_line_id" string="سناریوی بودجه"/>
+                <field name="registration_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_holding_budget_assumption_form" model="ir.ui.view">
+        <field name="name">holding.budget.assumption.form</field>
+        <field name="model">holding.budget.assumption</field>
+        <field name="arch" type="xml">
+            <form string="مفروضات بودجه">
+                <sheet>
+                    <field name="name" invisible="1"/>
+                    <group>
+                        <field name="company_id"/>
+                        <field name="fiscal_year_id"/>
+                        <field name="scenario_line_id" string="سناریوی بودجه"/>
+                        <field name="registration_date"/>
+                    </group>
+                    <separator string="جزئیات مفروضات بودجه"/>
+                    <field name="line_ids" nolabel="1">
+                        <list editable="bottom" default_order="sequence,id">
+                            <field name="sequence" widget="handle" optional="hide"/>
+                            <field name="assumption_group_id" string="گروه مفروضات" options="{'no_create_edit': False}" width="190px"/>
+                            <field name="title" string="عنوان" width="280px"/>
+                            <field name="impact_percent" string="درصد اثرگذاری" width="160px"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_holding_budget_assumption" model="ir.actions.act_window">
+        <field name="name">مفروضات بودجه</field>
+        <field name="res_model">holding.budget.assumption</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_holding_budget_assumption"
+              name="مفروضات بودجه"
+              parent="menu_holding_budget_root"
+              action="action_holding_budget_assumption"
+              sequence="20"/>
+</odoo>

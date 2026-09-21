@@ -19,7 +19,7 @@ class IrUiMenu(models.Model):
         forms = self.env['shaka.access.form'].sudo().search([
             ('active', '=', True),
             ('model_name', '!=', False),
-        ])
+        ]).filtered(lambda form: form.model_name in self.env)
         if not forms:
             return frozenset(visible_ids)
 

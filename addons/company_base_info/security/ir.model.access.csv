@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_company_fiscal_year_user,company.fiscal.year user,model_company_fiscal_year,base.group_user,1,0,0,0
+access_company_fiscal_year_admin,company.fiscal.year administrator,model_company_fiscal_year,base.group_system,1,1,1,1
+access_company_board_role_admin,company.board.role administrator,model_company_board_role,base.group_system,1,1,1,1
+access_company_board_member_admin,company.board.member administrator,model_company_board_member,base.group_system,1,1,1,1
+access_company_ownership_admin,company.ownership administrator,model_company_ownership,base.group_system,1,1,1,1
+access_company_ownership_line_admin,company.ownership.line administrator,model_company_ownership_line,base.group_system,1,1,1,1
+access_company_currency_admin,company.currency administrator,model_company_currency,base.group_system,1,1,1,1
+access_company_currency_introduction_admin,company.currency.introduction administrator,model_company_currency_introduction,base.group_system,1,1,1,1
+access_company_currency_introduction_line_admin,company.currency.introduction.line administrator,model_company_currency_introduction_line,base.group_system,1,1,1,1

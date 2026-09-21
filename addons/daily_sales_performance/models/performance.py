@@ -112,10 +112,10 @@ class DailySalesPerformance(models.Model):
                     raise UserError(_('برای کاربر شما هیچ شعبه‌ای تعریف نشده است.'))
                 vals['branch_id'] = branch.id
             branch = self.env['daily.sales.branch'].browse(vals['branch_id'])
-            allowed_branches = self.env.user.shaka_branch_access_ids.mapped('branch_id')
+            allowed_branch_ids = self.env.user.shaka_branch_access_ids.mapped('branch_id').ids
             if not self.env.user.has_group('base.group_system') \
-                    and allowed_branches \
-                    and branch not in allowed_branches:
+                    and allowed_branch_ids \
+                    and branch.id not in allowed_branch_ids:
                 raise AccessError(_('شما اجازه ثبت عملکرد برای این شعبه را ندارید.'))
             date = fields.Date.to_date(vals.get('date')) or fields.Date.context_today(self)
             jalali_year = _gregorian_to_jalali(date.year, date.month, date.day)[0]
@@ -225,11 +225,11 @@ class DailySalesPerformance(models.Model):
     @api.constrains('date', 'branch_id')
     def _check_date_branch(self):
         for record in self:
-            allowed_branches = self.env.user.shaka_branch_access_ids.mapped('branch_id')
+            allowed_branch_ids = self.env.user.shaka_branch_access_ids.mapped('branch_id').ids
             if record.date and record.branch_id and record.created_by \
                     and not self.env.user.has_group('base.group_system') \
-                    and allowed_branches \
-                    and record.branch_id not in allowed_branches:
+                    and allowed_branch_ids \
+                    and record.branch_id.id not in allowed_branch_ids:
                 raise ValidationError(_('شعبه انتخاب‌شده به کاربر شما تخصیص داده نشده است.'))
 
 

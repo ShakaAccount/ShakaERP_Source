@@ -28,6 +28,16 @@ html[data-theme='glass'] {
   --lg-pill-bg: #e5f2e8;
   --lg-pill-text: #0b6b35;
   --lg-focus: rgba(22, 138, 69, .18);
+
+  // Boolean toggle palette
+  --shaka-toggle-track: #dbe7df;
+  --shaka-toggle-track-hover: #cbdcd1;
+  --shaka-toggle-border: #bfd2c5;
+  --shaka-toggle-thumb: #ffffff;
+  --shaka-toggle-thumb-shadow: 0 2px 5px rgba(27, 42, 33, .22);
+  --shaka-toggle-on-start: #0b7a35;
+  --shaka-toggle-on-end: #22b956;
+  --shaka-toggle-on-shadow: rgba(22, 163, 74, .26);
 }
 
 html[data-theme='glass'].shaka-dark-mode {
@@ -56,6 +66,16 @@ html[data-theme='glass'].shaka-dark-mode {
   --lg-pill-bg: #1d3b28;
   --lg-pill-text: #bce9c9;
   --lg-focus: rgba(57, 185, 107, .24);
+
+  // Boolean toggle palette
+  --shaka-toggle-track: #263b2d;
+  --shaka-toggle-track-hover: #304a39;
+  --shaka-toggle-border: #476750;
+  --shaka-toggle-thumb: #eaf7ee;
+  --shaka-toggle-thumb-shadow: 0 2px 7px rgba(0, 0, 0, .48);
+  --shaka-toggle-on-start: #168a45;
+  --shaka-toggle-on-end: #48c878;
+  --shaka-toggle-on-shadow: rgba(57, 185, 107, .32);
 }
 
 // All global backend overrides must be scoped to the active Shaka theme.
@@ -1163,6 +1183,142 @@ html[data-theme='glass'].shaka-dark-mode body.o_web_client {
     font-weight: inherit !important;
     line-height: inherit !important;
     vertical-align: baseline !important;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Boolean toggles
+// ---------------------------------------------------------------------------
+// Odoo renders boolean_toggle as .o_field_boolean > .o-checkbox. Keep the
+// native input available for keyboard/accessibility, but use the wrapper as
+// the visual track so the control stays crisp in both themes and in RTL.
+html[data-theme='glass'] body.o_web_client {
+  .o_field_boolean {
+    .o-checkbox {
+      position: relative;
+      display: inline-flex !important;
+      flex: 0 0 auto;
+      width: 3.15rem;
+      height: 1.72rem;
+      min-width: 3.15rem;
+      padding: 0 !important;
+      margin: 0;
+      overflow: visible;
+      vertical-align: middle;
+      border: 1px solid var(--shaka-toggle-border);
+      border-radius: 999px;
+      background: linear-gradient(180deg, color-mix(in srgb, var(--shaka-toggle-track) 86%, #fff 14%), var(--shaka-toggle-track));
+      box-shadow: inset 0 1px 2px rgba(15, 31, 21, .16), 0 1px 1px rgba(255, 255, 255, .45);
+      transition: background 180ms ease, border-color 180ms ease,
+        box-shadow 180ms ease, transform 180ms ease;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset-inline-end: .48rem;
+        top: 50%;
+        width: .25rem;
+        height: .25rem;
+        border-radius: 50%;
+        background: color-mix(in srgb, var(--shaka-toggle-border) 55%, var(--lg-text-secondary));
+        opacity: .82;
+        transform: translateY(-50%);
+        transition: opacity 180ms ease, background-color 180ms ease;
+      }
+
+      .form-check-input[type='checkbox'] {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 0;
+        margin: 0 !important;
+        appearance: none;
+        cursor: pointer;
+        opacity: 0;
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+
+        &:focus-visible {
+          outline: none;
+        }
+      }
+
+      .form-check-label {
+        position: absolute;
+        top: 50%;
+        inset-inline-start: 3px;
+        z-index: 1;
+        display: grid;
+        place-items: center;
+        width: 1.28rem;
+        height: 1.28rem;
+        margin: 0 !important;
+        border-radius: 50%;
+        background: var(--shaka-toggle-thumb);
+        box-shadow: var(--shaka-toggle-thumb-shadow);
+        pointer-events: none;
+        transform: translateY(-50%);
+        transition: inset-inline-start 160ms ease, background-color 160ms ease,
+          box-shadow 160ms ease;
+
+        &::after {
+          content: '';
+          width: .42rem;
+          height: .24rem;
+          border-inline-start: 2px solid transparent;
+          border-bottom: 2px solid transparent;
+          transform: rotate(-45deg) translate(-1px, -1px);
+          transition: border-color 160ms ease;
+        }
+      }
+
+      &:hover {
+        border-color: var(--lg-accent);
+        background: var(--shaka-toggle-track-hover);
+        transform: translateY(-1px);
+      }
+
+      &:has(.form-check-input:focus-visible) {
+        border-color: var(--lg-accent);
+        box-shadow: 0 0 0 3px var(--lg-focus),
+          inset 0 1px 1px rgba(0, 0, 0, .08);
+      }
+
+      &:has(.form-check-input:checked) {
+        border-color: var(--shaka-toggle-on-start);
+        background: linear-gradient(135deg, var(--shaka-toggle-on-start), var(--shaka-toggle-on-end));
+        box-shadow: 0 4px 10px var(--shaka-toggle-on-shadow), inset 0 1px 1px rgba(255, 255, 255, .26);
+
+        &::before {
+          inset-inline-end: auto;
+          inset-inline-start: .48rem;
+          background: rgba(255, 255, 255, .72);
+          opacity: .95;
+        }
+
+        .form-check-label {
+          inset-inline-start: calc(100% - 1.28rem - 3px);
+          background: var(--lg-text-on-accent);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, .22);
+
+          &::after {
+            border-color: var(--shaka-toggle-on-start);
+          }
+        }
+      }
+
+      &:has(.form-check-input:disabled) {
+        cursor: not-allowed;
+        opacity: .58;
+
+        .form-check-input {
+          cursor: not-allowed;
+        }
+      }
+    }
   }
 }
 

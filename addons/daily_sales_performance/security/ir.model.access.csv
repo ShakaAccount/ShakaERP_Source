@@ -22,3 +22,5 @@ access_daily_sales_return_user,daily.sales.return.user,model_daily_sales_return,
 access_daily_sales_return_admin,daily.sales.return.admin,model_daily_sales_return,base.group_system,1,1,1,1
 access_daily_sales_return_line_user,daily.sales.return.line.user,model_daily_sales_return_line,base.group_user,1,1,1,1
 access_daily_sales_return_line_admin,daily.sales.return.line.admin,model_daily_sales_return_line,base.group_system,1,1,1,1
+access_shaka_user_branch_access_admin,shaka.user.branch.access.admin,model_shaka_user_branch_access,base.group_system,1,1,1,1
+access_daily_sales_branch_user,daily.sales.branch.user,model_daily_sales_branch,base.group_user,1,0,0,0

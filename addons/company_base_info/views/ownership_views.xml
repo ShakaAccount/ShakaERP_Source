@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_company_ownership_list" model="ir.ui.view">
+        <field name="name">company.ownership.list</field>
+        <field name="model">company.ownership</field>
+        <field name="arch" type="xml">
+            <list string="درصد مالکیت سهام">
+                <field name="owner_company_id"/>
+                <field name="effective_date"/>
+                <field name="fiscal_year_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_company_ownership_form" model="ir.ui.view">
+        <field name="name">company.ownership.form</field>
+        <field name="model">company.ownership</field>
+        <field name="arch" type="xml">
+            <form string="درصد مالکیت سهام">
+                <sheet>
+                    <field name="name" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="owner_company_id"/>
+                            <field name="effective_date"/>
+                        </group>
+                        <group>
+                            <field name="fiscal_year_id"/>
+                            <field name="note" placeholder="توضیحات فرم مالکیت..."/>
+                        </group>
+                    </group>
+                    <separator string="شرکت‌های زیرمجموعه"/>
+                    <field name="line_ids" nolabel="1">
+                        <list editable="bottom" default_order="sequence,id">
+                            <field name="sequence" widget="handle" optional="hide"/>
+                            <field name="subsidiary_company_id" string="شرکت زیرمجموعه" width="220px"/>
+                            <field name="shares_count" string="تعداد سهام" width="130px"/>
+                            <field name="ownership_percent" string="درصد مالکیت مستقیم" width="150px"/>
+                            <field name="note" optional="hide"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_company_ownership" model="ir.actions.act_window">
+        <field name="name">درصد مالکیت سهام</field>
+        <field name="res_model">company.ownership</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_company_base_info_root"
+              name="اطلاعات پایه شرکت"
+              sequence="37"
+              web_icon="company_base_info,static/description/icon.svg"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_company_ownership"
+              name="درصد مالکیت سهام"
+              parent="menu_company_base_info_root"
+              action="action_company_ownership"
+              groups="base.group_system"
+              sequence="10"/>
+</odoo>

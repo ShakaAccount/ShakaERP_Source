@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_company_form_board" model="ir.ui.view">
+        <field name="name">res.company.form.board</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="هیئت‌مدیره" groups="base.group_system">
+                    <field name="board_member_ids" nolabel="1">
+                        <list editable="bottom" default_order="sequence,id">
+                            <field name="sequence" widget="handle" width="30px"/>
+                            <field name="partner_id" string="نام عضو حقیقی یا حقوقی هیئت‌مدیره" width="240px" options="{'no_create_edit': False}"/>
+                            <field name="member_identifier" optional="hide" width="150px"/>
+                            <field name="company_type_id" optional="hide" width="140px"/>
+                            <field name="membership_type_id" optional="hide" width="130px"/>
+                            <field name="legal_representative_name" optional="hide" width="180px"/>
+                            <field name="legal_representative_national_id" optional="hide" width="160px"/>
+                            <field name="role_id" width="150px" options="{'no_create_edit': False}"/>
+                            <field name="executive_status_id" optional="hide" width="130px"/>
+                            <field name="education_level_id" optional="hide" width="140px"/>
+                            <field name="field_of_study" optional="hide" width="140px"/>
+                            <field name="active" widget="boolean_toggle" optional="hide" width="70px"/>
+                            <field name="note" optional="hide" width="180px"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_company_board_role_list" model="ir.ui.view">
+        <field name="name">company.board.role.list</field>
+        <field name="model">company.board.role</field>
+        <field name="arch" type="xml">
+            <list string="نقش‌های هیئت‌مدیره">
+                <field name="name"/>
+                <field name="active" widget="boolean_toggle"/>
+                <field name="description"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_company_board_role_form" model="ir.ui.view">
+        <field name="name">company.board.role.form</field>
+        <field name="model">company.board.role</field>
+        <field name="arch" type="xml">
+            <form string="نقش هیئت‌مدیره">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" string="نقش در شرکت"/>
+                        <h1><field name="name" placeholder="مثلاً رئیس هیئت‌مدیره"/></h1>
+                    </div>
+                    <group>
+                        <field name="active" widget="boolean_toggle"/>
+                        <field name="description" placeholder="توضیحات نقش..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_company_board_role" model="ir.actions.act_window">
+        <field name="name">نقش‌های هیئت‌مدیره</field>
+        <field name="res_model">company.board.role</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_company_board_role"
+              name="نقش‌های هیئت‌مدیره"
+              parent="base.menu_users"
+              action="action_company_board_role"
+              groups="base.group_system"
+              sequence="36"/>
+</odoo>

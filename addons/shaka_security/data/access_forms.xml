@@ -87,4 +87,26 @@
         <field name="form_id" ref="access_form_daily_sales_return"/>
         <field name="name">ردشده</field><field name="code">rejected</field><field name="sequence">40</field>
     </record>
+    <record id="access_form_sales_analysis" model="shaka.access.form">
+        <field name="name">Sales Analysis</field>
+        <field name="model_name">sales.analysis</field>
+        <field name="sequence">50</field>
+        <field name="has_workflow">1</field>
+    </record>
+    <record id="access_stage_sales_analysis_draft" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_sales_analysis"/>
+        <field name="name">Draft</field><field name="code">draft</field><field name="sequence">10</field>
+    </record>
+    <record id="access_stage_sales_analysis_submitted" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_sales_analysis"/>
+        <field name="name">Submitted</field><field name="code">submitted</field><field name="sequence">20</field>
+    </record>
+    <record id="access_stage_sales_analysis_approved" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_sales_analysis"/>
+        <field name="name">Approved</field><field name="code">approved</field><field name="sequence">30</field>
+    </record>
+    <record id="access_stage_sales_analysis_rejected" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_sales_analysis"/>
+        <field name="name">Rejected</field><field name="code">rejected</field><field name="sequence">40</field>
+    </record>
 </odoo>

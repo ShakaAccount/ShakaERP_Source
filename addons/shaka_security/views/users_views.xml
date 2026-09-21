@@ -39,10 +39,6 @@
                         </sheet></form>
                     </field>
                 </page>
-                <page string="دسترسی شعب" groups="base.group_system">
-                    <div class="alert alert-warning" role="alert">اگر هیچ شعبه‌ای انتخاب نشود، کاربر به همه شعب دسترسی دارد.</div>
-                    <field name="shaka_branch_access_ids" nolabel="1"><list editable="bottom"><field name="branch_id" string="شعبه"/></list></field>
-                </page>
             </xpath>
         </field>
     </record>
