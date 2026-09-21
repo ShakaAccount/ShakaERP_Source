@@ -8,18 +8,34 @@
             <form>
                 <header>
                     <button name="action_test_connection" type="object"
-                            string="Test SQL Connection" class="btn-secondary"/>
+                            string="Test SQL Connection" class="btn-secondary"
+                            invisible="use_api"/>
+                    <button name="action_test_api_connection" type="object"
+                            string="Test FastAPI Connection" class="btn-secondary"
+                            invisible="not use_api"/>
                     <button name="action_discover_now" type="object"
                             string="Discover &amp; Sync Now" class="btn-primary"/>
                     <button name="action_test_soap_connection" type="object"
-                            string="Test SOAP Connection" class="btn-secondary"/>
+                            string="Test SOAP Connection" class="btn-secondary"
+                            invisible="use_api"/>
                 </header>
                 <sheet>
-                    <group string="Discovery (read-only, pulls FROM PBIRS)">
+                    <group string="Connection">
                         <field name="name"/>
+                        <field name="use_api"/>
+                    </group>
+                    <group string="FastAPI (replace SQL/SOAP - recommended for AD/SSO)"
+                           invisible="not use_api">
+                        <field name="api_base_url" placeholder="http://192.168.2.12:8443"/>
+                        <field name="api_key"/>
+                        <field name="portal_base_url"/>
+                        <field name="active"/>
+                    </group>
+                    <group string="Direct SQL Discovery (legacy, when FastAPI is off)"
+                           invisible="use_api">
                         <field name="sql_server"/>
                         <field name="sql_database"/>
-                        <field name="odbc_driver" placeholder="e.g. SQL Server, or ODBC Driver 17 for SQL Server"/>
+                        <field name="odbc_driver" placeholder="e.g. SQL Server, or ODBC Driver 18 for SQL Server"/>
                         <field name="auth_mode"/>
                         <field name="sql_username" invisible="auth_mode == 'windows'"/>
                         <field name="sql_password" password="True" invisible="auth_mode == 'windows'"/>
@@ -27,7 +43,7 @@
                         <field name="portal_base_url"/>
                         <field name="active"/>
                     </group>
-                    <group string="Access Push (writes TO PBIRS)">
+                    <group string="Access Push (writes TO PBIRS)" invisible="use_api">
                         <field name="soap_url" placeholder="https://pbirs.company.local/ReportServer/ReportService2010.asmx"/>
                         <field name="soap_auth_mode"/>
                         <field name="soap_domain" invisible="soap_auth_mode == 'windows_current'"/>

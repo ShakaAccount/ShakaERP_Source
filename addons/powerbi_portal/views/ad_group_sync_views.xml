@@ -9,19 +9,27 @@
             <form>
                 <header>
                     <button name="action_import_from_odoo_ldap" type="object"
-                            string="Import from Odoo LDAP Config" class="btn-secondary"/>
+                            string="Import from Odoo LDAP Config" class="btn-secondary"
+                            invisible="use_odoo_ldap"/>
                     <button name="action_test_connection" type="object"
                             string="Test Connection" class="btn-secondary"/>
                 </header>
                 <sheet>
+                    <div class="alert alert-info" role="alert" invisible="not use_odoo_ldap">
+                        This AD connection reads its server/port/TLS/base/bind
+                        settings live from Odoo's own LDAP Authentication config
+                        (Settings &gt; Technical &gt; LDAP Configuration). Change
+                        it once there - no need to repeat it here.
+                    </div>
                     <group>
                         <field name="name"/>
-                        <field name="server"/>
-                        <field name="port"/>
-                        <field name="use_tls"/>
-                        <field name="base_dn"/>
-                        <field name="binddn"/>
-                        <field name="bind_password" password="True"/>
+                        <field name="use_odoo_ldap"/>
+                        <field name="server" invisible="use_odoo_ldap"/>
+                        <field name="port" invisible="use_odoo_ldap"/>
+                        <field name="use_tls" invisible="use_odoo_ldap"/>
+                        <field name="base_dn" invisible="use_odoo_ldap"/>
+                        <field name="binddn" invisible="use_odoo_ldap"/>
+                        <field name="bind_password" password="True" invisible="use_odoo_ldap"/>
                         <field name="netbios_domain" placeholder="e.g. SHAKA (auto-derived from Base DN if left blank)"/>
                         <field name="active"/>
                     </group>

@@ -259,7 +259,7 @@ class PowerBIReport(models.Model):
         principals = deduped_principals
 
         try:
-            client = config._get_soap_client()
+            client = config._get_push_client()
             client.set_policies(self.catalog_path, [(p, PBIRS_ROLE) for p in principals])
         except Exception as e:
             summary = "ERROR pushing to PBIRS: %s" % e
