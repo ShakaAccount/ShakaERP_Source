@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="win_access.PbirsTree">
+        <div class="border rounded p-2" style="max-height: 320px; overflow: auto;">
+            <div t-if="!rows.length" class="text-muted">
+                No PBIRS items loaded. Check the API settings.
+            </div>
+            <div t-foreach="rows" t-as="row" t-key="row.id" class="d-flex align-items-center"
+                 t-attf-style="padding-left: #{row.depth * 1.5}rem;">
+                <span t-if="row.hasChildren" class="fa fa-fw me-1" style="cursor: pointer;"
+                      t-att-class="isOpen(row) ? 'fa-caret-down' : 'fa-caret-right'"
+                      t-on-click="() => this.toggle(row)"/>
+                <span t-else="" class="fa fa-fw me-1"/>
+                <input type="checkbox" class="me-2" t-att-checked="selected.includes(row.id)"
+                       t-att-disabled="props.readonly"
+                       t-on-change="(ev) => this.onCheck(row, ev.target.checked)"/>
+                <i t-attf-class="fa {{ row.icon }} me-1"/>
+                <span t-out="row.label"/>
+                <small class="text-muted ms-2" t-out="row.type"/>
+            </div>
+        </div>
+    </t>
+</templates>
