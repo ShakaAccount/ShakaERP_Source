@@ -175,36 +175,3 @@ class ShakaUserWorkflowAccess(models.Model):
         self.env.registry.clear_cache()
         return result
 
-
-class ShakaUserBranchAccess(models.Model):
-    _name = 'shaka.user.branch.access'
-    _description = 'Shaka User Branch Access'
-    _order = 'branch_id, id'
-
-    user_id = fields.Many2one('res.users', required=True, ondelete='cascade')
-    branch_id = fields.Many2one('daily.sales.branch', required=True, ondelete='cascade')
-
-    _user_branch_unique = models.Constraint('unique(user_id, branch_id)', 'A branch cannot be assigned twice to one user.')
-
-    def _sync_legacy_branch_field(self, users):
-        for user in users:
-            branches = self.search([('user_id', '=', user.id)]).mapped('branch_id')
-            user.sudo().write({'daily_sales_branch_id': branches.id if len(branches) == 1 else False})
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        records = super().create(vals_list)
-        self._sync_legacy_branch_field(records.mapped('user_id'))
-        return records
-
-    def write(self, vals):
-        users = self.mapped('user_id')
-        result = super().write(vals)
-        self._sync_legacy_branch_field(users | self.mapped('user_id'))
-        return result
-
-    def unlink(self):
-        users = self.mapped('user_id')
-        result = super().unlink()
-        self._sync_legacy_branch_field(users)
-        return result

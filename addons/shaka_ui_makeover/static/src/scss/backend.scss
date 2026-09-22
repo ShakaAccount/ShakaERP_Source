@@ -29,17 +29,6 @@ html[data-theme='glass'] .o_web_client {
   background: transparent;
 }
 
-// Dark: deeper world behind dark glass
-@media (prefers-color-scheme: dark) {
-  html[data-theme='glass'] {
-    --lg-bg-deep: #{$lg-bg-dark-deep};
-    --lg-bg-mid: #{lighten($lg-bg-dark-deep, 5%)};
-    --lg-bg-blob-a: rgba(64, 96, 170, 0.35);
-    --lg-bg-blob-b: rgba(120, 80, 170, 0.3);
-    --lg-bg-blob-c: rgba(40, 120, 120, 0.28);
-  }
-}
-
 html[data-theme='glass'] .o_web_client {
   color: var(--lg-text);
   @include lg-font-stack;
@@ -56,6 +45,28 @@ html[data-theme='glass'] .o_main_navbar {
 html[data-theme='glass'] .o_menu_systray,
 html[data-theme='glass'] .o_main_navbar a {
   color: var(--lg-text);
+}
+
+// Navbar controls must sit directly on the navbar surface. Do not give the
+// app switcher, menu toggle, user menu, or systray buttons a separate tile.
+html[data-theme='glass'] .o_main_navbar .o_menu_toggle,
+html[data-theme='glass'] .o_main_navbar .o_navbar_apps_menu > button,
+html[data-theme='glass'] .o_main_navbar .o_menu_systray > li > button,
+html[data-theme='glass'] .o_main_navbar .o_menu_systray .dropdown-toggle,
+html[data-theme='glass'] .o_main_navbar .o_user_menu .dropdown-toggle,
+html[data-theme='glass'] .o_main_navbar .o_user_menu button {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--lg-text) !important;
+}
+
+html[data-theme='glass'] .o_main_navbar .o_menu_toggle:hover,
+html[data-theme='glass'] .o_main_navbar .o_navbar_apps_menu > button:hover,
+html[data-theme='glass'] .o_main_navbar .o_menu_systray .dropdown-toggle:hover,
+html[data-theme='glass'] .o_main_navbar .o_user_menu .dropdown-toggle:hover {
+  background: var(--lg-bg-elevated) !important;
+  border-radius: var(--lg-r-sm);
 }
 
 // ---- Control panel — same base, bottom border, no rounded "ribbon" ----
@@ -289,6 +300,14 @@ html[data-theme='glass'] .o_home_menu {
   background: var(--lg-bg-base);
   .o_home_menu_scrollable {
     padding: var(--lg-r-lg);
+    gap: 5px;
+
+    // Odoo 19 renders the application tiles inside different wrapper names
+    // depending on the home-menu layout. Keep the spacing consistent in both.
+    .o_home_menu_apps,
+    .o_apps {
+      gap: 5px;
+    }
   }
   .o_app {
     background: var(--lg-bg-surface);

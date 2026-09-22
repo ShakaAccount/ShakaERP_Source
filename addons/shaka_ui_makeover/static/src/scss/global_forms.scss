@@ -1,0 +1,283 @@
+// ShakaERP Global Form Language
+// Shared visual language for all backend modules.
+
+$shaka-green: #16a34a;
+$shaka-green-dark: #0b7a35;
+$shaka-green-soft: #eaf8ef;
+$shaka-black: #101513;
+$shaka-ink: #1c2922;
+$shaka-muted: #718078;
+$shaka-border: #dce8e0;
+
+html[data-theme='glass'] {
+  // Keep the existing global shell, but give all business forms the same
+  // light card-based language used by Daily Sales Performance.
+  .o_action_manager,
+  .o_content,
+  .o_form_view,
+  .o_list_view {
+    background: #f2f6f3;
+  }
+
+  .o_form_sheet_bg {
+    background: linear-gradient(135deg, #edf4ef 0%, #f8faf9 55%, #edf7f0 100%) !important;
+    padding-block: 18px;
+  }
+
+  .o_form_sheet {
+    max-width: 1500px !important;
+    border: 1px solid $shaka-border !important;
+    border-radius: 22px !important;
+    background: #ffffff !important;
+    box-shadow: 0 18px 48px rgba(16, 43, 27, .10) !important;
+  }
+
+  .o_form_view .oe_title h1,
+  .o_form_view .oe_title h2,
+  .o_form_view .oe_title h3 {
+    color: $shaka-ink !important;
+    font-weight: 900 !important;
+  }
+
+  .o_form_view .o_form_label,
+  .o_form_view label.o_form_label {
+    color: $shaka-muted !important;
+    font-weight: 700 !important;
+  }
+
+  .o_form_view .o_input,
+  .o_form_view .form-control,
+  .o_form_view .form-select,
+  .o_form_view textarea {
+    min-height: 38px;
+    background: #ffffff !important;
+    border: 1px solid #d7e4db !important;
+    border-radius: 9px !important;
+    color: $shaka-ink !important;
+    box-shadow: none !important;
+    &:focus {
+      border-color: $shaka-green !important;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, .10) !important;
+    }
+  }
+
+  .o_form_view .o_field_widget.o_field_many2many_tags .badge,
+  .o_form_view .o_tag {
+    border-radius: 999px;
+    background: $shaka-green-soft;
+    color: $shaka-green-dark;
+    border: 1px solid #b9dfc3;
+  }
+
+  .o_form_view .o_notebook {
+    margin-top: 18px;
+    .nav-tabs {
+      border-bottom: 1px solid $shaka-border;
+    }
+    .nav-link {
+      color: $shaka-muted;
+      border-radius: 10px 10px 0 0;
+      font-weight: 700;
+      &.active {
+        color: $shaka-green-dark;
+        background: #ffffff;
+        border-color: $shaka-border $shaka-border #ffffff;
+        box-shadow: inset 0 -3px 0 $shaka-green;
+      }
+    }
+  }
+
+  .o_form_view .o_group,
+  .o_form_view .o_inner_group {
+    background: transparent;
+  }
+
+  .o_form_view .o_form_statusbar {
+    border-color: $shaka-border !important;
+    background: #ffffff !important;
+    border-radius: 12px;
+    padding: 7px 10px !important;
+  }
+
+  .o_form_view .btn-primary,
+  .o_control_panel .btn-primary,
+  .o_form_button_save {
+    background: linear-gradient(135deg, $shaka-green-dark, #22b956) !important;
+    border-color: $shaka-green-dark !important;
+    color: #ffffff !important;
+    border-radius: 9px !important;
+    font-weight: 800;
+    box-shadow: 0 5px 12px rgba(22, 163, 74, .18);
+  }
+
+  .o_form_view .btn-secondary,
+  .o_form_view .btn-light {
+    border-radius: 9px !important;
+    border-color: $shaka-border !important;
+    color: $shaka-ink !important;
+    background: #ffffff !important;
+  }
+
+  .o_list_view .o_list_renderer,
+  .o_form_view .o_list_renderer {
+    border: 1px solid $shaka-border;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  .o_list_view .o_list_table,
+  .o_form_view .o_list_table {
+    background: #ffffff;
+    thead,
+    thead tr,
+    thead th {
+      background: $shaka-green-soft !important;
+      color: $shaka-ink !important;
+      border-color: $shaka-border !important;
+      font-weight: 800;
+    }
+    tbody tr {
+      background: #ffffff;
+      &:hover { background: $shaka-green-soft !important; }
+    }
+    tbody td {
+      border-color: #e7eee9 !important;
+      padding-block: 9px;
+    }
+  }
+
+  // Odoo 19 also paints list rows through renderer-level selectors. Keep
+  // those selectors explicit so module-specific/default dark rules cannot
+  // leak into the light theme.
+  .o_list_renderer table.o_list_table,
+  table.o_list_table {
+    background: #ffffff !important;
+
+    thead,
+    thead tr,
+    thead th {
+      background: $shaka-green-soft !important;
+      color: $shaka-ink !important;
+    }
+
+    tbody,
+    tbody tr.o_data_row,
+    tbody tr.o_data_row.o_selected_row,
+    tbody tr.o_data_row.o_row_draggable {
+      background: #ffffff !important;
+      color: $shaka-ink !important;
+    }
+
+    tbody tr.o_data_row:hover {
+      background: $shaka-green-soft !important;
+    }
+
+    .o_data_cell,
+    .o_field_widget,
+    .o_list_record_selector,
+    .o_handle_cell {
+      color: $shaka-ink !important;
+    }
+
+    .o_tag,
+    .badge,
+    .o_field_many2many_tags .badge {
+      background: $shaka-green-soft !important;
+      color: $shaka-green-dark !important;
+      border-color: #b9dfc3 !important;
+    }
+  }
+
+  // Navigation/action pills were still inheriting the old navy theme.
+  .o_menu_sections .o_nav_entry,
+  .o_control_panel .btn-secondary,
+  .o_control_panel .btn-outline-secondary,
+  .o_control_panel .btn-light {
+    background: #ffffff !important;
+    color: $shaka-ink !important;
+    border-color: $shaka-border !important;
+  }
+
+  .o_menu_sections .o_nav_entry.active,
+  .o_menu_sections .o_nav_entry[aria-current='page'] {
+    background: $shaka-green-soft !important;
+    color: $shaka-green-dark !important;
+    border-color: #b9dfc3 !important;
+  }
+
+  .o_form_view .o_field_x2many_list_row_add a,
+  .o_list_view .o_list_button_add {
+    color: $shaka-green-dark !important;
+    font-weight: 800;
+  }
+
+  // Keep notebook tabs and the lower form tab rail in the same light/green
+  // language. These rules intentionally outrank Odoo's dark default tabs.
+  .o_form_view .o_notebook,
+  .o_notebook {
+    .o_notebook_headers,
+    .nav-tabs {
+      background: transparent !important;
+      border-bottom: 1px solid $shaka-border !important;
+    }
+
+    .nav-link,
+    .o_notebook_header {
+      background: #ffffff !important;
+      color: $shaka-muted !important;
+      border: 1px solid $shaka-border !important;
+      border-bottom-color: $shaka-border !important;
+      box-shadow: none !important;
+      font-weight: 700;
+
+      &:hover {
+        background: $shaka-green-soft !important;
+        color: $shaka-green-dark !important;
+      }
+
+      &.active,
+      &[aria-selected='true'] {
+        background: #ffffff !important;
+        color: $shaka-green-dark !important;
+        border-color: $shaka-border !important;
+        border-bottom-color: #ffffff !important;
+        box-shadow: inset 0 -3px 0 $shaka-green !important;
+      }
+    }
+  }
+
+  // Secondary/control-panel buttons must not fall back to the old navy pills.
+  .o_control_panel .btn-secondary,
+  .o_control_panel .btn-light,
+  .o_form_view .btn-secondary,
+  .o_form_view .btn-light {
+    background: #ffffff !important;
+    color: $shaka-ink !important;
+    border-color: $shaka-border !important;
+  }
+
+  .o_kanban_view .o_kanban_record,
+  .o_kanban_view .o_kanban_quick_create {
+    border: 1px solid $shaka-border !important;
+    border-radius: 16px !important;
+    background: #ffffff !important;
+    box-shadow: 0 6px 18px rgba(26, 60, 38, .06);
+    &:hover { box-shadow: 0 11px 28px rgba(26, 60, 38, .11); }
+  }
+
+  .o_form_view .oe_chatter,
+  .o_form_view .o_Chatter {
+    margin-top: 18px;
+    border: 1px solid $shaka-border;
+    border-radius: 16px;
+    background: #ffffff;
+  }
+}
+
+@media (max-width: 900px) {
+  html[data-theme='glass'] .o_form_sheet {
+    margin-inline: 8px;
+    border-radius: 16px !important;
+  }
+}

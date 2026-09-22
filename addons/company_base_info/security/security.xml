@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_company_fiscal_year_company" model="ir.rule">
+        <field name="name">سال مالی: شرکت کاربر</field>
+        <field name="model_id" ref="model_company_fiscal_year"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    <record id="rule_company_fiscal_year_admin" model="ir.rule">
+        <field name="name">سال مالی: مدیر سیستم</field>
+        <field name="model_id" ref="model_company_fiscal_year"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+</odoo>

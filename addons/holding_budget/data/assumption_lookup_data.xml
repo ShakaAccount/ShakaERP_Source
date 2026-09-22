@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="lookup_type_budget_assumption_group" model="lookup.type">
+        <field name="name">گروه مفروضات بودجه</field>
+        <field name="code">budget_assumption_group</field>
+    </record>
+</odoo>

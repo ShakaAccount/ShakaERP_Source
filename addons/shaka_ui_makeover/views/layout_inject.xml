@@ -6,14 +6,14 @@
             A one-line inline script that sets `data-theme="glass"` before paint,
             so the SCSS gates (html[data-theme='glass'] …) always fire.
 
-            The visual palette is hard-locked in design_tokens.scss.  Per-Company
-            color overrides are no longer emitted; the previous `<style>` block
-            reading res.company.shaka_*_color fields was removed when the theme
-            switched from the user-configurable glass palette to the locked
-            dark palette (#0F1420 / #171D2E / #5B8DEF).
+            The visual palette is stored as JSON on the active company and is
+            emitted as CSS custom properties by _shaka_runtime_css(). The
+            settings form is the only place where administrators edit it.
         -->
         <template id="shaka_layout_assets" name="Shaka Theme Layout" inherit_id="web.layout">
             <xpath expr="//head" position="inside">
+                <t t-set="shaka_company" t-value="request.env.company"/>
+                <t t-out="shaka_company._shaka_runtime_css()"/>
                 <script type="text/javascript">
                     // Set the theme attribute before paint so the gated SCSS
                     // rules always win.  Single theme — no toggle.

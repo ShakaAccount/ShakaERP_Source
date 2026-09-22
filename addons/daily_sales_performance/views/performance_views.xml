@@ -149,10 +149,10 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_daily_sales_root" name="عملکرد روزانه فروش" sequence="145"/>
+    <menuitem id="menu_daily_sales_root" name="عملکرد روزانه فروش" sequence="145"
+              web_icon="daily_sales_performance,static/description/icon.png"/>
     <menuitem id="menu_daily_sales_performance" name="عملکردهای روزانه"
               parent="menu_daily_sales_root" action="action_daily_sales_performance" sequence="10"/>
     <menuitem id="menu_daily_sales_branch" name="شعبات"
-              parent="menu_daily_sales_root" action="shaka_security.action_daily_sales_branch"
-              groups="base.group_system" sequence="20"/>
+              parent="menu_daily_sales_root" groups="base.group_no_one" sequence="20"/>
 </odoo>

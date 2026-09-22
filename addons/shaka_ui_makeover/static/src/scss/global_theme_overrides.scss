@@ -1,0 +1,1659 @@
+// Final global layer for every backend module.
+// This file intentionally comes last in shaka_ui_makeover assets so module
+// specific legacy colors cannot split the application into multiple themes.
+
+html[data-theme='glass'] {
+  --shaka-bg: #f2f6f3;
+  --shaka-surface: #ffffff;
+  --shaka-soft: #eaf8ef;
+  --shaka-border: #dce8e0;
+  --shaka-text: #1c2922;
+  --shaka-muted: #718078;
+  --shaka-green: #16a34a;
+  --shaka-green-dark: #0b7a35;
+
+  --lg-bg-base: #f5f8f6;
+  --lg-bg-surface: #ffffff;
+  --lg-bg-elevated: #eef6f0;
+  --lg-border: #d7e4da;
+  --lg-accent: #168a45;
+  --lg-accent-strong: #0b6b35;
+  --lg-link: #0b6b35;
+  --lg-accent-start: #0b6b35;
+  --lg-accent-end: #20a653;
+  --lg-text: #1b2a21;
+  --lg-text-secondary: #65736a;
+  --lg-text-muted: #65736a;
+  --lg-text-on-accent: #ffffff;
+  --lg-pill-bg: #e5f2e8;
+  --lg-pill-text: #0b6b35;
+  --lg-focus: rgba(22, 138, 69, .18);
+
+  // Boolean toggle palette
+  --shaka-toggle-track: #dbe7df;
+  --shaka-toggle-track-hover: #cbdcd1;
+  --shaka-toggle-border: #bfd2c5;
+  --shaka-toggle-thumb: #ffffff;
+  --shaka-toggle-thumb-shadow: 0 2px 5px rgba(27, 42, 33, .22);
+  --shaka-toggle-on-start: #0b7a35;
+  --shaka-toggle-on-end: #22b956;
+  --shaka-toggle-on-shadow: rgba(22, 163, 74, .26);
+}
+
+html[data-theme='glass'].shaka-dark-mode {
+  --shaka-bg: #0b120e;
+  --shaka-surface: #111b15;
+  --shaka-soft: #17271d;
+  --shaka-border: #2a4433;
+  --shaka-text: #e9f7ee;
+  --shaka-muted: #a9bcaf;
+  --shaka-green: #39b96b;
+  --shaka-green-dark: #27a85b;
+
+  --lg-bg-base: #0b120e;
+  --lg-bg-surface: #111b15;
+  --lg-bg-elevated: #17271d;
+  --lg-border: #2a4433;
+  --lg-accent: #39b96b;
+  --lg-accent-strong: #27a85b;
+  --lg-link: #65d08b;
+  --lg-accent-start: #198b49;
+  --lg-accent-end: #39b96b;
+  --lg-text: #e9f7ee;
+  --lg-text-secondary: #a9bcaf;
+  --lg-text-muted: #a9bcaf;
+  --lg-text-on-accent: #ffffff;
+  --lg-pill-bg: #1d3b28;
+  --lg-pill-text: #bce9c9;
+  --lg-focus: rgba(57, 185, 107, .24);
+
+  // Boolean toggle palette
+  --shaka-toggle-track: #263b2d;
+  --shaka-toggle-track-hover: #304a39;
+  --shaka-toggle-border: #476750;
+  --shaka-toggle-thumb: #eaf7ee;
+  --shaka-toggle-thumb-shadow: 0 2px 7px rgba(0, 0, 0, .48);
+  --shaka-toggle-on-start: #168a45;
+  --shaka-toggle-on-end: #48c878;
+  --shaka-toggle-on-shadow: rgba(57, 185, 107, .32);
+}
+
+// All global backend overrides must be scoped to the active Shaka theme.
+html[data-theme='glass'] {
+  .o_web_client,
+  .o_action_manager,
+  .o_content,
+  .o_control_panel,
+  .o_form_view,
+  .o_list_view,
+  .o_kanban_view,
+  .o_activity_view,
+  .o_calendar_view,
+  .o_graph_view,
+  .o_pivot {
+    background: var(--shaka-bg) !important;
+    color: var(--shaka-text) !important;
+  }
+
+  .o_main_navbar,
+  .o_searchview,
+  .o_search_panel,
+  .o_cp_bottom_left,
+  .o_cp_bottom_right {
+    background: var(--shaka-bg) !important;
+    color: var(--shaka-text) !important;
+    border-color: var(--shaka-border) !important;
+  }
+
+  .o_control_panel {
+    background: var(--shaka-bg) !important;
+    color: var(--shaka-text) !important;
+    border-color: var(--shaka-border) !important;
+  }
+
+  // Keep the home screen, navbar and app tiles on one continuous surface.
+  // The icon artwork itself keeps its original brand colors; only the tile
+  // behind it is normalized with the page background.
+  .o_main_navbar,
+  .o_home_menu,
+  .o_home_menu .o_app,
+  .o_home_menu .o_app .o_app_icon {
+    background: var(--shaka-bg) !important;
+  }
+
+  .o_home_menu .o_app {
+    border: 1px solid var(--shaka-border) !important;
+    box-shadow: none !important;
+  }
+
+  .o_home_menu .o_app .o_app_icon {
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .o_form_sheet,
+  .o_form_sheet_bg,
+  .o_kanban_record,
+  .o_kanban_quick_create,
+  .o_list_renderer,
+  .o_activity_record,
+  .o_calendar_renderer,
+  .o_graph_renderer,
+  .o_pivot table,
+  .modal-content,
+  .o_dialog .modal-content,
+  .dropdown-menu,
+  .o_popover {
+    background: var(--shaka-surface) !important;
+    color: var(--shaka-text) !important;
+    border-color: var(--shaka-border) !important;
+  }
+
+  .o_list_renderer table.o_list_table,
+  .o_list_renderer table.o_list_table tbody,
+  .o_list_renderer table.o_list_table tbody tr,
+  .o_list_renderer table.o_list_table tbody tr.o_data_row,
+  .o_list_renderer table.o_list_table tbody tr.o_selected_row {
+    background: var(--shaka-surface) !important;
+    color: var(--shaka-text) !important;
+  }
+
+  .o_list_renderer table.o_list_table thead,
+  .o_list_renderer table.o_list_table thead tr,
+  .o_list_renderer table.o_list_table thead th {
+    background: var(--shaka-soft) !important;
+    color: var(--shaka-text) !important;
+    border-color: var(--shaka-border) !important;
+  }
+
+  .o_list_renderer table.o_list_table tbody tr:hover,
+  .o_kanban_record:hover,
+  .dropdown-item:hover,
+  .o_menu_sections .o_nav_entry:hover {
+    background: var(--shaka-soft) !important;
+    color: var(--shaka-green-dark) !important;
+  }
+
+  .o_form_label,
+  .o_list_renderer .o_data_cell,
+  .o_kanban_record,
+  .o_menu_brand,
+  .o_main_navbar a,
+  .o_main_navbar button,
+  .o_searchview input,
+  .o_input,
+  .form-control,
+  label {
+    color: var(--shaka-text) !important;
+  }
+
+  .o_input,
+  .form-control,
+  .form-select,
+  textarea,
+  .o_searchview_input {
+    background: var(--shaka-surface) !important;
+    color: var(--shaka-text) !important;
+    border-color: var(--shaka-border) !important;
+  }
+
+  .o_input:focus,
+  .form-control:focus,
+  .form-select:focus,
+  .o_searchview_input:focus {
+    border-color: var(--shaka-green) !important;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, .12) !important;
+  }
+
+  .nav-tabs,
+  .o_notebook_headers {
+    background: transparent !important;
+    border-color: var(--shaka-border) !important;
+  }
+
+  .nav-tabs .nav-link,
+  .o_notebook_header,
+  .o_notebook .nav-link {
+    background: var(--shaka-surface) !important;
+    color: var(--shaka-muted) !important;
+    border-color: var(--shaka-border) !important;
+  }
+
+  .nav-tabs .nav-link.active,
+  .o_notebook_header.active,
+  .o_notebook .nav-link.active {
+    background: var(--shaka-surface) !important;
+    color: var(--shaka-green-dark) !important;
+    box-shadow: inset 0 -3px 0 var(--shaka-green) !important;
+  }
+
+  .o_tag,
+  .badge,
+  .o_field_many2many_tags .badge,
+  .o_field_many2one .badge {
+    background: var(--shaka-soft) !important;
+    color: var(--shaka-green-dark) !important;
+    border-color: #b9dfc3 !important;
+  }
+
+  .btn-secondary,
+  .btn-light,
+  .btn-outline-secondary,
+  .o_control_panel .btn:not(.btn-primary) {
+    background: var(--shaka-surface) !important;
+    color: var(--shaka-text) !important;
+    border-color: var(--shaka-border) !important;
+  }
+
+  .btn-primary,
+  .o_form_button_save,
+  .o_control_panel .btn-primary {
+    background: linear-gradient(135deg, var(--shaka-green-dark), #22b956) !important;
+    color: #ffffff !important;
+    border-color: var(--shaka-green-dark) !important;
+  }
+
+  .o_menu_sections .o_nav_entry {
+    background: var(--shaka-surface) !important;
+    color: var(--shaka-text) !important;
+    border-color: var(--shaka-border) !important;
+  }
+
+  .o_menu_sections .o_nav_entry.active,
+  .o_menu_sections .o_nav_entry[aria-current='page'] {
+    background: var(--shaka-soft) !important;
+    color: var(--shaka-green-dark) !important;
+  }
+
+  .o_Chatter,
+  .oe_chatter,
+  .o_Chatter_topbar,
+  .o_Chatter_scroll {
+    background: var(--shaka-surface) !important;
+    color: var(--shaka-text) !important;
+    border-color: var(--shaka-border) !important;
+  }
+}
+
+@mixin shaka-dark-palette {
+    --shaka-bg: #0b120e;
+    --shaka-surface: #111b15;
+    --shaka-soft: #17271d;
+    --shaka-border: #2a4433;
+    --shaka-text: #e9f7ee;
+    --shaka-muted: #a9bcaf;
+    --shaka-green: #39b96b;
+    --shaka-green-dark: #27a85b;
+
+    --lg-bg-base: #0b120e;
+    --lg-bg-surface: #111b15;
+    --lg-bg-elevated: #17271d;
+    --lg-border: #2a4433;
+    --lg-accent: #39b96b;
+    --lg-accent-strong: #27a85b;
+    --lg-link: #65d08b;
+    --lg-accent-start: #198b49;
+    --lg-accent-end: #39b96b;
+    --lg-text: #e9f7ee;
+    --lg-text-secondary: #a9bcaf;
+    --lg-text-muted: #a9bcaf;
+    --lg-pill-bg: #1d3b28;
+    --lg-pill-text: #bce9c9;
+    --lg-focus: rgba(57, 185, 107, .24);
+
+    color-scheme: dark;
+
+    body,
+    .o_web_client,
+    .o_action_manager,
+    .o_content,
+    .o_control_panel,
+    .o_form_view,
+    .o_list_view,
+    .o_kanban_view,
+    .o_activity_view,
+    .o_calendar_view,
+    .o_graph_view,
+    .o_pivot {
+      background: var(--shaka-bg) !important;
+      color: var(--shaka-text) !important;
+    }
+
+    .o_main_navbar,
+    .o_control_panel,
+    .o_searchview,
+    .o_search_panel,
+    .o_cp_bottom_left,
+    .o_cp_bottom_right,
+    .o_form_sheet,
+    .o_form_sheet_bg,
+    .o_kanban_record,
+    .o_kanban_quick_create,
+    .o_list_renderer,
+    .o_activity_record,
+    .o_calendar_renderer,
+    .o_graph_renderer,
+    .o_pivot table,
+    .modal-content,
+    .o_dialog .modal-content,
+    .dropdown-menu,
+    .o_popover,
+    .o_Chatter,
+    .oe_chatter,
+    .o_Chatter_topbar,
+    .o_Chatter_scroll {
+      background: var(--shaka-surface) !important;
+      color: var(--shaka-text) !important;
+      border-color: var(--shaka-border) !important;
+    }
+
+    .o_list_renderer table.o_list_table,
+    .o_list_renderer table.o_list_table tbody,
+    .o_list_renderer table.o_list_table tbody tr,
+    .o_list_renderer table.o_list_table tbody tr.o_data_row,
+    .o_list_renderer table.o_list_table tbody tr.o_selected_row {
+      background: var(--shaka-surface) !important;
+      color: var(--shaka-text) !important;
+    }
+
+    .o_list_renderer table.o_list_table thead,
+    .o_list_renderer table.o_list_table thead tr,
+    .o_list_renderer table.o_list_table thead th {
+      background: var(--shaka-soft) !important;
+      color: var(--shaka-text) !important;
+      border-color: var(--shaka-border) !important;
+    }
+
+    .o_list_renderer table.o_list_table tbody tr:hover,
+    .o_kanban_record:hover,
+    .dropdown-item:hover,
+    .o_menu_sections .o_nav_entry:hover {
+      background: #1d3a26 !important;
+      color: #ffffff !important;
+    }
+
+    .o_form_label,
+    .o_list_renderer .o_data_cell,
+    .o_kanban_record,
+    .o_menu_brand,
+    .o_main_navbar a,
+    .o_main_navbar button,
+    .o_searchview input,
+    .o_input,
+    .form-control,
+    label,
+    .o_field_widget {
+      color: var(--shaka-text) !important;
+    }
+
+    .o_input,
+    .form-control,
+    .form-select,
+    textarea,
+    .o_searchview_input {
+      background: #0d120f !important;
+      color: var(--shaka-text) !important;
+      border-color: var(--shaka-border) !important;
+    }
+
+    .nav-tabs,
+    .o_notebook_headers {
+      background: transparent !important;
+      border-color: var(--shaka-border) !important;
+    }
+
+    .nav-tabs .nav-link,
+    .o_notebook_header,
+    .o_notebook .nav-link,
+    .o_menu_sections .o_nav_entry,
+    .btn-secondary,
+    .btn-light,
+    .btn-outline-secondary,
+    .o_control_panel .btn:not(.btn-primary) {
+      background: var(--shaka-surface) !important;
+      color: var(--shaka-text) !important;
+      border-color: var(--shaka-border) !important;
+    }
+
+    .nav-tabs .nav-link.active,
+    .o_notebook_header.active,
+    .o_notebook .nav-link.active,
+    .o_menu_sections .o_nav_entry.active,
+    .o_menu_sections .o_nav_entry[aria-current='page'] {
+      background: var(--shaka-soft) !important;
+      color: #ffffff !important;
+      box-shadow: inset 0 -3px 0 var(--shaka-green) !important;
+    }
+
+    .o_tag,
+    .badge,
+    .o_field_many2many_tags .badge,
+    .o_field_many2one .badge {
+      background: #234d30 !important;
+      color: #d9ffe4 !important;
+      border-color: #3b8050 !important;
+    }
+
+    .btn-primary,
+    .o_form_button_save,
+    .o_control_panel .btn-primary {
+      background: linear-gradient(135deg, #15803d, #22c55e) !important;
+      color: #ffffff !important;
+      border-color: #16a34a !important;
+    }
+
+    // Odoo 19 and custom modules add light backgrounds to active navigation
+    // tabs, toolbar buttons and status badges. Normalize those controls in
+    // dark mode so active text never disappears on a pale surface.
+    .o_main_navbar .active,
+    .o_main_navbar button.active,
+    .o_main_navbar a.active,
+    .o_menu_sections .o_nav_entry.active,
+    .o_menu_sections .o_nav_entry[aria-current='page'],
+    .o_control_panel .btn,
+    .o_cp_buttons .btn,
+    .o_list_view .btn,
+    .o_form_view .btn,
+    .o_form_statusbar .btn-secondary,
+    .o_form_statusbar .btn-light,
+    .o_form_statusbar .btn-outline-secondary {
+      background: #101812 !important;
+      color: #f3fff6 !important;
+      border-color: #2b4935 !important;
+    }
+
+    .o_main_navbar .active,
+    .o_main_navbar button.active,
+    .o_main_navbar a.active,
+    .o_menu_sections .o_nav_entry.active,
+    .o_menu_sections .o_nav_entry[aria-current='page'] {
+      background: #173522 !important;
+      color: #ffffff !important;
+      box-shadow: inset 0 -3px 0 #22c55e !important;
+    }
+
+    .o_control_panel .btn-primary,
+    .o_cp_buttons .btn-primary,
+    .o_list_view .btn-primary,
+    .o_form_view .btn-primary,
+    .o_form_statusbar .btn-primary {
+      background: linear-gradient(135deg, #15803d, #22c55e) !important;
+      color: #ffffff !important;
+      border-color: #16a34a !important;
+    }
+
+    .o_field_badge,
+    .o_field_widget.o_field_badge,
+    .o_list_renderer .o_field_badge,
+    .o_list_renderer .badge,
+    .o_form_view .badge,
+    .o_status,
+    .o_field_statusbar .o_arrow_button {
+      background: #234d30 !important;
+      color: #f3fff6 !important;
+      border-color: #3b8050 !important;
+    }
+
+    .o_pager,
+    .o_pager .btn,
+    .o_pager button,
+    .o_pager .o_pager_counter,
+    .o_pager .o_pager_value,
+    .o_cp_pager .o_pager_value,
+    .o_cp_pager .o_pager_limit,
+    .o_cp_pager .o_pager_previous,
+    .o_cp_pager .o_pager_next {
+      background: #101812 !important;
+      color: #f3fff6 !important;
+      border-color: #2b4935 !important;
+    }
+
+    // High-contrast navbar and control-panel chrome.
+    body.o_web_client .o_main_navbar,
+    body.o_web_client .o_main_navbar .o_menu_brand,
+    body.o_web_client .o_main_navbar .o_menu_toggle,
+    body.o_web_client .o_main_navbar .o_navbar_apps_menu,
+    body.o_web_client .o_main_navbar .o_menu_sections,
+    body.o_web_client .o_main_navbar .o_menu_sections > *,
+    body.o_web_client .o_main_navbar .o_systray,
+    body.o_web_client .o_main_navbar .o_user_menu,
+    body.o_web_client .o_main_navbar a,
+    body.o_web_client .o_main_navbar button,
+    body.o_web_client .o_main_navbar i,
+    body.o_web_client .o_main_navbar span {
+      color: #f3fff6 !important;
+    }
+
+    body.o_web_client .o_main_navbar .o_menu_brand,
+    body.o_web_client .o_main_navbar .o_menu_toggle,
+    body.o_web_client .o_main_navbar .o_navbar_apps_menu,
+    body.o_web_client .o_main_navbar .o_menu_sections,
+    body.o_web_client .o_main_navbar .o_systray {
+      background: #0b110d !important;
+      border-color: #2b4935 !important;
+    }
+
+    body.o_web_client .o_control_panel,
+    body.o_web_client .o_control_panel .o_breadcrumb,
+    body.o_web_client .o_control_panel .o_breadcrumb * ,
+    body.o_web_client .o_control_panel .o_cp_action_menus,
+    body.o_web_client .o_control_panel .o_cp_buttons,
+    body.o_web_client .o_control_panel .o_cp_pager,
+    body.o_web_client .o_control_panel .o_pager,
+    body.o_web_client .o_control_panel .o_pager * {
+      color: #f3fff6 !important;
+    }
+
+    body.o_web_client .o_control_panel .o_breadcrumb .breadcrumb-item.active,
+    body.o_web_client .o_control_panel .o_cp_action_menus > *,
+    body.o_web_client .o_control_panel .o_cp_buttons > *,
+    body.o_web_client .o_control_panel .o_pager .o_pager_counter,
+    body.o_web_client .o_control_panel .o_pager .o_pager_limit,
+    body.o_web_client .o_control_panel .o_pager .o_pager_value,
+    body.o_web_client .o_control_panel .o_cp_pager .o_pager_value {
+      background: #101812 !important;
+      color: #f3fff6 !important;
+      border-color: #2b4935 !important;
+    }
+
+    // Avoid a tall empty dark band when Odoo renders a two-row control panel
+    // with only one row of actual controls.
+    body.o_web_client .o_control_panel,
+    body.o_web_client .o_control_panel .o_control_panel_main,
+    body.o_web_client .o_control_panel .o_cp_top,
+    body.o_web_client .o_control_panel .o_cp_bottom,
+    body.o_web_client .o_control_panel .o_cp_bottom_left,
+    body.o_web_client .o_control_panel .o_cp_bottom_right {
+      min-height: 0 !important;
+    }
+
+    body.o_web_client .o_control_panel .o_control_panel_main,
+    body.o_web_client .o_control_panel .o_cp_top,
+    body.o_web_client .o_control_panel .o_cp_bottom {
+      padding-block: 3px !important;
+    }
+
+    body.o_web_client .o_control_panel .o_cp_bottom:empty,
+    body.o_web_client .o_control_panel .o_cp_bottom_left:empty,
+    body.o_web_client .o_control_panel .o_cp_bottom_right:empty {
+      display: none !important;
+    }
+
+    body.o_web_client .o_control_panel .o_cp_action_menus .btn:hover,
+    body.o_web_client .o_control_panel .o_cp_buttons .btn:hover,
+    body.o_web_client .o_control_panel .o_pager .btn:hover {
+      background: #173522 !important;
+      color: #ffffff !important;
+    }
+
+    // Status badges must remain readable on dark list rows.
+    body.o_web_client .o_list_renderer .o_field_badge,
+    body.o_web_client .o_list_renderer .o_field_widget.o_field_badge,
+    body.o_web_client .o_list_renderer .o_field_badge .badge,
+    body.o_web_client .o_list_renderer .o_status,
+    body.o_web_client .o_list_renderer .badge {
+      background: #234d30 !important;
+      color: #f3fff6 !important;
+      border: 1px solid #3b8050 !important;
+      text-shadow: none !important;
+    }
+
+    // Notebook tabs (for example: Values) must not retain the light/magenta
+    // active-tab treatment from Odoo's default stylesheet.
+    body.o_web_client .o_notebook .nav-tabs,
+    body.o_web_client .o_notebook .o_notebook_headers,
+    body.o_web_client .o_notebook .nav-link,
+    body.o_web_client .o_notebook .o_notebook_header {
+      background: #101812 !important;
+      color: #b9cdbf !important;
+      border-color: #2b4935 !important;
+    }
+
+    body.o_web_client .o_notebook .nav-link.active,
+    body.o_web_client .o_notebook .o_notebook_header.active,
+    body.o_web_client .o_notebook .nav-link[aria-selected='true'] {
+      background: #173522 !important;
+      color: #ffffff !important;
+      border-color: #2b4935 !important;
+      border-top-color: #22c55e !important;
+      border-bottom-color: #22c55e !important;
+      box-shadow: inset 0 -3px 0 #22c55e !important;
+    }
+
+    // Small control-panel action buttons (close/upload/settings) should use
+    // the same dark surface instead of white pill backgrounds.
+    body.o_web_client .o_control_panel .o_cp_action_menus .btn,
+    body.o_web_client .o_control_panel .o_cp_action_menus button,
+    body.o_web_client .o_control_panel .o_cp_buttons .btn,
+    body.o_web_client .o_control_panel .o_cp_buttons button {
+      background: #101812 !important;
+      color: #f3fff6 !important;
+      border-color: #2b4935 !important;
+    }
+
+    // Odoo's dark asset bundle paints several list layers independently.
+    // Override every layer so no white canvas or black-on-dark text remains.
+    body.o_web_client,
+    body.o_web_client .o_web_client,
+    body.o_web_client .o_action_manager,
+    body.o_web_client .o_action,
+    body.o_web_client .o_content,
+    body.o_web_client .o_list_view,
+    body.o_web_client .o_list_renderer,
+    body.o_web_client .o_list_renderer .o_list_table,
+    body.o_web_client .o_list_renderer .o_list_table tbody,
+    body.o_web_client .o_list_renderer .o_list_table tfoot {
+      background-color: var(--shaka-bg) !important;
+      background-image: none !important;
+      color: var(--shaka-text) !important;
+    }
+
+    body.o_web_client .o_list_renderer .o_list_table thead,
+    body.o_web_client .o_list_renderer .o_list_table thead tr,
+    body.o_web_client .o_list_renderer .o_list_table thead th {
+      background-color: var(--shaka-soft) !important;
+      color: var(--shaka-text) !important;
+      text-shadow: none !important;
+    }
+
+    body.o_web_client .o_list_renderer .o_list_table tbody tr,
+    body.o_web_client .o_list_renderer .o_list_table tbody tr.o_data_row,
+    body.o_web_client .o_list_renderer .o_list_table tbody tr.o_selected_row,
+    body.o_web_client .o_list_renderer .o_list_table tbody td,
+    body.o_web_client .o_list_renderer .o_list_table tbody th {
+      background-color: var(--shaka-surface) !important;
+      color: var(--shaka-text) !important;
+      border-color: var(--shaka-border) !important;
+    }
+
+    body.o_web_client .o_list_renderer .o_list_table tbody tr:hover,
+    body.o_web_client .o_list_renderer .o_list_table tbody tr:hover td {
+      background-color: #1d3a26 !important;
+      color: #ffffff !important;
+    }
+
+    body.o_web_client .o_list_renderer .o_list_table .o_data_cell,
+    body.o_web_client .o_list_renderer .o_list_table .o_field_widget,
+    body.o_web_client .o_list_renderer .o_list_table .o_field_widget * {
+      color: var(--shaka-text) !important;
+    }
+
+    body.o_web_client .o_list_renderer .o_list_table .o_list_record_selector,
+    body.o_web_client .o_list_renderer .o_list_table .o_list_record_selector * {
+      color: var(--shaka-green) !important;
+    }
+
+    // Form/list wrappers used by Odoo 19 and custom modules.
+    body.o_web_client .o_form_view,
+    body.o_web_client .o_form_sheet_bg,
+    body.o_web_client .o_form_sheet,
+    body.o_web_client .o_kanban_view,
+    body.o_web_client .o_kanban_renderer,
+    body.o_web_client .o_kanban_renderer .o_kanban_record,
+    body.o_web_client .o_search_view,
+    body.o_web_client .o_control_panel {
+      background-color: var(--shaka-bg) !important;
+      color: var(--shaka-text) !important;
+    }
+
+    body.o_web_client .o_form_sheet,
+    body.o_web_client .o_kanban_renderer .o_kanban_record {
+      background-color: var(--shaka-surface) !important;
+    }
+
+    body.o_web_client .o_form_label,
+    body.o_web_client label,
+    body.o_web_client .o_field_widget,
+    body.o_web_client .o_field_widget span,
+    body.o_web_client .o_field_widget div,
+    body.o_web_client .o_kanban_record,
+    body.o_web_client .o_kanban_record span,
+    body.o_web_client .o_kanban_record div {
+      color: var(--shaka-text) !important;
+    }
+}
+
+// Real dark mode: black/charcoal surfaces, white text and green accents.
+// Light mode remains the default when the OS/browser is in light mode.
+@media (prefers-color-scheme: dark) {
+  html[data-theme='glass'].shaka-dark-mode {
+    @include shaka-dark-palette;
+  }
+}
+
+// Odoo's own Dark Mode selector (cookie: color_scheme=dark).
+html[data-theme='glass'].shaka-dark-mode {
+  @include shaka-dark-palette;
+}
+
+// Odoo 19 component classes. These selectors complement the legacy Odoo 16/17
+// selectors above and deliberately use the shared light/dark design tokens.
+html[data-theme='glass'] body.o_web_client {
+  // Form statusbar and its arrow/dropdown buttons.
+  .o_form_statusbar {
+    background: var(--lg-bg-surface) !important;
+    color: var(--lg-text) !important;
+    border-color: var(--lg-border) !important;
+
+    .o_statusbar_status {
+      background: transparent !important;
+
+      > .btn,
+      > .o_arrow_button,
+      > .dropdown-toggle {
+        background: var(--lg-bg-elevated) !important;
+        border-color: var(--lg-border) !important;
+        color: var(--lg-text-secondary) !important;
+        text-shadow: none !important;
+        box-shadow: none !important;
+
+        &:hover,
+        &:focus {
+          background: var(--lg-pill-bg) !important;
+          border-color: var(--lg-accent) !important;
+          color: var(--lg-text) !important;
+        }
+
+        &:disabled,
+        &.disabled {
+          background: var(--lg-bg-elevated) !important;
+          border-color: var(--lg-border) !important;
+          color: var(--lg-text-muted) !important;
+          opacity: 1 !important;
+        }
+      }
+
+      > .o_arrow_button_current,
+      > .o_statusbar_status_selected,
+      > .o_last.dropdown-toggle:not(.o-dropdown) {
+        background: var(--lg-accent) !important;
+        border-color: var(--lg-accent) !important;
+        color: var(--lg-text-on-accent) !important;
+      }
+    }
+
+    .o_statusbar_buttons .btn-primary {
+      background: linear-gradient(135deg, var(--lg-accent-start), var(--lg-accent-end)) !important;
+      border-color: var(--lg-accent) !important;
+      color: var(--lg-text-on-accent) !important;
+    }
+  }
+
+  // Odoo 19 mail/chatter classes.
+  .o-mail-ChatterContainer,
+  .o-mail-Chatter,
+  .o-mail-Chatter-content,
+  .o-mail-Thread,
+  .o-mail-Message,
+  .o-mail-Message-core,
+  .o-mail-Message-sidebar,
+  .o-mail-Message-avatarContainer {
+    background: var(--lg-bg-surface) !important;
+    color: var(--lg-text) !important;
+  }
+
+  .o-mail-Chatter-top,
+  .o-mail-Chatter-topbar {
+    background: var(--lg-bg-surface) !important;
+    border-color: var(--lg-border) !important;
+  }
+
+  .o-mail-Chatter-topbar {
+    .btn-primary,
+    .o-mail-Chatter-sendMessage {
+      background: linear-gradient(135deg, var(--lg-accent-start), var(--lg-accent-end)) !important;
+      border-color: var(--lg-accent) !important;
+      color: var(--lg-text-on-accent) !important;
+    }
+
+    .btn-secondary,
+    .o-mail-Chatter-logNote,
+    .o-mail-Chatter-activity {
+      background: var(--lg-bg-elevated) !important;
+      border-color: var(--lg-border) !important;
+      color: var(--lg-text) !important;
+    }
+
+    .btn-link,
+    .text-action,
+    .o-mail-Followers-button {
+      background: transparent !important;
+      border-color: transparent !important;
+      color: var(--lg-link) !important;
+
+      &:hover,
+      &:focus {
+        background: var(--lg-bg-elevated) !important;
+        color: var(--lg-text) !important;
+      }
+    }
+  }
+
+  .o-mail-DateSection {
+    color: var(--lg-text-muted) !important;
+
+    .o-discuss-separator,
+    hr {
+      border-color: var(--lg-border) !important;
+      opacity: 1 !important;
+    }
+  }
+
+  .o-mail-Message {
+    .o-mail-Message-header,
+    .o-mail-Message-author,
+    .o-mail-Message-date,
+    .o-mail-Message-body,
+    .o-mail-Message-textContent,
+    .o-fw-600 {
+      color: var(--lg-text) !important;
+    }
+
+    .o-mail-Message-date,
+    .o-mail-Message-body.o-note {
+      color: var(--lg-text-secondary) !important;
+    }
+  }
+
+  // The manager itself is only a positioning layer; visible toasts get the
+  // surface, border and accent colors below.
+  .o_notification_manager,
+  .editor_notification_manager,
+  .o_upload_progress_toast {
+    background: transparent !important;
+    color: var(--lg-text) !important;
+  }
+
+  .o_notification_manager .o_notification,
+  .editor_notification_manager .o_notification,
+  .o_upload_progress_toast .o_notification {
+    background: var(--lg-bg-surface) !important;
+    border: 1px solid var(--lg-border) !important;
+    border-inline-start: 4px solid var(--lg-accent) !important;
+    color: var(--lg-text) !important;
+    box-shadow: var(--lg-shadow-md) !important;
+  }
+}
+
+html[data-theme='glass'] {
+  color-scheme: light;
+}
+
+html[data-theme='glass'].shaka-dark-mode {
+  color-scheme: dark;
+}
+
+// Shared Shaka form cards. These classes are used by several modules; keep
+// their colors driven by the active JSON palette instead of module-local hex
+// values so light and dark mode remain consistent everywhere.
+html[data-theme='glass'] body.o_web_client {
+  .shaka-form-hero {
+    color: var(--lg-text-on-accent) !important;
+    background: linear-gradient(135deg, var(--lg-accent-strong), var(--lg-accent)) !important;
+    border-color: var(--lg-accent) !important;
+    box-shadow: var(--lg-shadow-md) !important;
+
+    h1,
+    h2,
+    h3,
+    p,
+    .shaka-form-hero__content,
+    .o_field_widget,
+    .o_field_widget span {
+      color: var(--lg-text-on-accent) !important;
+    }
+
+    .shaka-form-number {
+      background: color-mix(in srgb, var(--lg-text-on-accent) 12%, transparent) !important;
+      border-color: color-mix(in srgb, var(--lg-text-on-accent) 24%, transparent) !important;
+    }
+
+    .shaka-form-number span {
+      color: color-mix(in srgb, var(--lg-text-on-accent) 78%, transparent) !important;
+    }
+  }
+
+  .shaka-info-panel,
+  .shaka-data-panel,
+  .shaka-workflow-panel {
+    background: var(--lg-bg-surface) !important;
+    color: var(--lg-text) !important;
+    border-color: var(--lg-border) !important;
+    box-shadow: var(--lg-shadow-sm) !important;
+
+    .o_form_label,
+    label,
+    .o_field_widget,
+    .o_field_widget span,
+    .o_form_uri {
+      color: var(--lg-text) !important;
+    }
+
+    .o_input,
+    input,
+    textarea,
+    select,
+    button.o_input,
+    .o-autocomplete--input {
+      background: var(--lg-input) !important;
+      color: var(--lg-text) !important;
+      border-color: var(--lg-border) !important;
+    }
+
+    .o_input:focus,
+    input:focus,
+    textarea:focus,
+    select:focus,
+    .o-autocomplete--input:focus {
+      border-color: var(--lg-accent) !important;
+      box-shadow: 0 0 0 3px var(--lg-focus) !important;
+    }
+  }
+
+  .shaka-kpi-card {
+    border-color: var(--lg-border) !important;
+    box-shadow: var(--lg-shadow-md) !important;
+
+    .shaka-kpi-icon {
+      background: color-mix(in srgb, var(--lg-text-on-accent) 14%, transparent) !important;
+    }
+
+    .o_field_widget,
+    .o_field_widget span,
+    > div > span,
+    small {
+      color: inherit !important;
+    }
+  }
+
+  .shaka-kpi-card--green {
+    background: linear-gradient(135deg, var(--lg-accent-strong), var(--lg-accent)) !important;
+    color: var(--lg-text-on-accent) !important;
+  }
+
+  .shaka-kpi-card--dark {
+    background: linear-gradient(135deg, var(--lg-bg-base), var(--lg-bg-elevated)) !important;
+    color: var(--lg-text) !important;
+
+    .shaka-kpi-icon {
+      background: var(--lg-pill-bg) !important;
+      color: var(--lg-pill-text) !important;
+    }
+  }
+
+  .shaka-kpi-card--white {
+    background: var(--lg-bg-surface) !important;
+    color: var(--lg-text) !important;
+
+    .shaka-kpi-icon {
+      background: var(--lg-pill-bg) !important;
+      color: var(--lg-pill-text) !important;
+    }
+  }
+
+  .shaka-kpi-card--amber {
+    background: linear-gradient(135deg, var(--lg-warning), var(--lg-accent)) !important;
+    color: var(--lg-text-on-accent) !important;
+  }
+}
+
+// Odoo 19 list-column labels render inside helper spans such as
+// `.o_list_number_th`. Apply the theme color to the complete header subtree so
+// numeric, text and relational columns remain readable in both modes.
+html[data-theme='glass'] body.o_web_client {
+  .o_list_renderer .o_list_table thead,
+  .o_list_renderer .o_list_table thead tr,
+  .o_list_renderer .o_list_table thead th,
+  .o_list_renderer .o_list_table thead th > *,
+  .o_list_renderer .o_list_table thead th .o_list_number_th,
+  .o_list_renderer .o_list_table thead th .o_list_name_th,
+  .o_list_renderer .o_list_table thead th .o_column_title,
+  .o_list_renderer .o_list_table thead th .o_sortable {
+    background: var(--lg-bg-elevated) !important;
+    color: var(--lg-text) !important;
+    border-color: var(--lg-border) !important;
+    text-shadow: none !important;
+  }
+
+  .o_list_renderer .o_list_table thead th:hover,
+  .o_list_renderer .o_list_table thead th:hover > *,
+  .o_list_renderer .o_list_table thead th[aria-sort]:hover,
+  .o_list_renderer .o_list_table thead th[aria-sort]:hover > * {
+    background: var(--lg-pill-bg) !important;
+    color: var(--lg-text) !important;
+  }
+
+  .o_list_renderer .o_list_table thead th i,
+  .o_list_renderer .o_list_table thead th .oi,
+  .o_list_renderer .o_list_table thead th .fa,
+  .o_list_renderer .o_list_table thead th .o_sort_icon {
+    color: var(--lg-text-secondary) !important;
+  }
+
+  .o_list_renderer .o_list_table tbody,
+  .o_list_renderer .o_list_table tbody tr,
+  .o_list_renderer .o_list_table tbody td,
+  .o_list_renderer .o_list_table tbody td > *,
+  .o_list_renderer .o_list_table tbody td .o_field_widget,
+  .o_list_renderer .o_list_table tbody td .o_field_widget * {
+    color: var(--lg-text) !important;
+    border-color: var(--lg-border) !important;
+  }
+}
+
+// Module styles for the Shaka cards use `.o_form_view:has(...)` and hard-coded
+// `!important` colors. Match that selector here so the JSON palette remains
+// the source of truth in every module that uses these shared card classes.
+html[data-theme='glass'] body.o_web_client .o_form_view:has(.shaka-form-hero),
+html[data-theme='glass'].shaka-dark-mode body.o_web_client .o_form_view:has(.shaka-form-hero) {
+  .shaka-info-panel,
+  .shaka-data-panel,
+  .shaka-workflow-panel {
+    background: var(--lg-bg-surface) !important;
+    background-color: var(--lg-bg-surface) !important;
+    color: var(--lg-text) !important;
+    border-color: var(--lg-border) !important;
+    box-shadow: var(--lg-shadow-sm) !important;
+  }
+
+  .shaka-info-panel *,
+  .shaka-data-panel *,
+  .shaka-workflow-panel * {
+    border-color: var(--lg-border) !important;
+  }
+
+  .shaka-info-panel .o_form_label,
+  .shaka-info-panel label,
+  .shaka-data-panel .o_form_label,
+  .shaka-data-panel label {
+    color: var(--lg-text-secondary) !important;
+  }
+
+  .shaka-info-panel .o_field_widget,
+  .shaka-info-panel .o_field_widget span,
+  .shaka-info-panel .o_form_uri,
+  .shaka-data-panel .o_field_widget,
+  .shaka-data-panel .o_field_widget span,
+  .shaka-data-panel .o_form_uri,
+  .shaka-data-panel .shaka-section-heading h3,
+  .shaka-data-panel .shaka-section-heading p {
+    color: var(--lg-text) !important;
+  }
+
+  .shaka-data-panel .shaka-section-heading p {
+    color: var(--lg-text-secondary) !important;
+  }
+
+  .shaka-info-panel .o_input,
+  .shaka-info-panel input,
+  .shaka-info-panel textarea,
+  .shaka-info-panel select,
+  .shaka-info-panel button.o_input,
+  .shaka-info-panel .o-autocomplete--input,
+  .shaka-data-panel .o_input,
+  .shaka-data-panel input,
+  .shaka-data-panel textarea,
+  .shaka-data-panel select {
+    background: var(--lg-input) !important;
+    background-color: var(--lg-input) !important;
+    color: var(--lg-text) !important;
+    border-color: var(--lg-border) !important;
+  }
+
+  .shaka-info-panel .o_external_button,
+  .shaka-info-panel .o_dropdown_button,
+  .shaka-info-panel .btn-link,
+  .shaka-data-panel .o_field_x2many_list_row_add a {
+    background: transparent !important;
+    color: var(--lg-link) !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .shaka-data-panel .o_list_renderer,
+  .shaka-data-panel .o_list_table,
+  .shaka-data-panel .o_list_table tbody,
+  .shaka-data-panel .o_list_table tbody tr,
+  .shaka-data-panel .o_list_table tbody td,
+  .shaka-data-panel .o_list_table tfoot {
+    background: var(--lg-bg-surface) !important;
+    color: var(--lg-text) !important;
+    border-color: var(--lg-border) !important;
+  }
+
+  .shaka-data-panel .o_list_table thead,
+  .shaka-data-panel .o_list_table thead tr,
+  .shaka-data-panel .o_list_table thead th,
+  .shaka-data-panel .o_list_table thead th * {
+    background: var(--lg-bg-elevated) !important;
+    color: var(--lg-text) !important;
+    border-color: var(--lg-border) !important;
+  }
+}
+
+// Dark-mode fixes for Odoo 19 dropdown menu entries and badge fields.
+html[data-theme='glass'].shaka-dark-mode body.o_web_client {
+  .o_main_navbar .o_menu_sections,
+  .o_main_navbar .o_menu_sections .o_nav_entry,
+  .o_main_navbar .o_menu_sections a.o_nav_entry,
+  .o_main_navbar .o_menu_sections .dropdown-item {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    color: var(--lg-text) !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .o_main_navbar .o_menu_sections a.o_nav_entry:hover,
+  .o_main_navbar .o_menu_sections a.o_nav_entry:focus,
+  .o_main_navbar .o_menu_sections a.o_nav_entry.active,
+  .o_main_navbar .o_menu_sections .dropdown-item:hover,
+  .o_main_navbar .o_menu_sections .dropdown-item:focus {
+    background: var(--lg-bg-elevated) !important;
+    background-color: var(--lg-bg-elevated) !important;
+    color: var(--lg-text) !important;
+  }
+
+  .o_field_badge .badge.text-bg-300,
+  .o_field_widget.o_field_badge .badge,
+  .badge.text-bg-300 {
+    background: var(--lg-pill-bg) !important;
+    background-color: var(--lg-pill-bg) !important;
+    color: var(--lg-pill-text) !important;
+    border: 1px solid var(--lg-border) !important;
+    box-shadow: none !important;
+  }
+}
+
+// Workflow/status badges should not have a colored pill background.
+html[data-theme='glass'] body.o_web_client,
+html[data-theme='glass'].shaka-dark-mode body.o_web_client {
+  .o_field_widget.o_field_badge .badge.text-bg-300,
+  .o_field_badge .badge.text-bg-300,
+  .o_field_badge .badge {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    color: var(--lg-pill-text) !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+    vertical-align: baseline !important;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Boolean toggles
+// ---------------------------------------------------------------------------
+// Odoo renders boolean_toggle as .o_field_boolean > .o-checkbox. Keep the
+// native input available for keyboard/accessibility, but use the wrapper as
+// the visual track so the control stays crisp in both themes and in RTL.
+html[data-theme='glass'] body.o_web_client {
+  .o_field_boolean {
+    .o-checkbox {
+      position: relative;
+      display: inline-flex !important;
+      flex: 0 0 auto;
+      width: 3.15rem;
+      height: 1.72rem;
+      min-width: 3.15rem;
+      padding: 0 !important;
+      margin: 0;
+      overflow: visible;
+      vertical-align: middle;
+      border: 1px solid var(--shaka-toggle-border);
+      border-radius: 999px;
+      background: linear-gradient(180deg, color-mix(in srgb, var(--shaka-toggle-track) 86%, #fff 14%), var(--shaka-toggle-track));
+      box-shadow: inset 0 1px 2px rgba(15, 31, 21, .16), 0 1px 1px rgba(255, 255, 255, .45);
+      transition: background 180ms ease, border-color 180ms ease,
+        box-shadow 180ms ease, transform 180ms ease;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset-inline-end: .48rem;
+        top: 50%;
+        width: .25rem;
+        height: .25rem;
+        border-radius: 50%;
+        background: color-mix(in srgb, var(--shaka-toggle-border) 55%, var(--lg-text-secondary));
+        opacity: .82;
+        transform: translateY(-50%);
+        transition: opacity 180ms ease, background-color 180ms ease;
+      }
+
+      .form-check-input[type='checkbox'] {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 0;
+        margin: 0 !important;
+        appearance: none;
+        cursor: pointer;
+        opacity: 0;
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+
+        &:focus-visible {
+          outline: none;
+        }
+      }
+
+      .form-check-label {
+        position: absolute;
+        top: 50%;
+        inset-inline-start: 3px;
+        z-index: 1;
+        display: grid;
+        place-items: center;
+        width: 1.28rem;
+        height: 1.28rem;
+        margin: 0 !important;
+        border-radius: 50%;
+        background: var(--shaka-toggle-thumb);
+        box-shadow: var(--shaka-toggle-thumb-shadow);
+        pointer-events: none;
+        transform: translateY(-50%);
+        transition: inset-inline-start 160ms ease, background-color 160ms ease,
+          box-shadow 160ms ease;
+
+        &::after {
+          content: '';
+          width: .42rem;
+          height: .24rem;
+          border-inline-start: 2px solid transparent;
+          border-bottom: 2px solid transparent;
+          transform: rotate(-45deg) translate(-1px, -1px);
+          transition: border-color 160ms ease;
+        }
+      }
+
+      &:hover {
+        border-color: var(--lg-accent);
+        background: var(--shaka-toggle-track-hover);
+        transform: translateY(-1px);
+      }
+
+      &:has(.form-check-input:focus-visible) {
+        border-color: var(--lg-accent);
+        box-shadow: 0 0 0 3px var(--lg-focus),
+          inset 0 1px 1px rgba(0, 0, 0, .08);
+      }
+
+      &:has(.form-check-input:checked) {
+        border-color: var(--shaka-toggle-on-start);
+        background: linear-gradient(135deg, var(--shaka-toggle-on-start), var(--shaka-toggle-on-end));
+        box-shadow: 0 4px 10px var(--shaka-toggle-on-shadow), inset 0 1px 1px rgba(255, 255, 255, .26);
+
+        &::before {
+          inset-inline-end: auto;
+          inset-inline-start: .48rem;
+          background: rgba(255, 255, 255, .72);
+          opacity: .95;
+        }
+
+        .form-check-label {
+          inset-inline-start: calc(100% - 1.28rem - 3px);
+          background: var(--lg-text-on-accent);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, .22);
+
+          &::after {
+            border-color: var(--shaka-toggle-on-start);
+          }
+        }
+      }
+
+      &:has(.form-check-input:disabled) {
+        cursor: not-allowed;
+        opacity: .58;
+
+        .form-check-input {
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}
+
+// This explicitly overrides the legacy dark list-badge rule above, whose
+// selector has a higher specificity than the generic badge cleanup.
+html[data-theme='glass'].shaka-dark-mode body.o_web_client {
+  .o_list_renderer .o_field_badge,
+  .o_list_renderer .o_field_widget.o_field_badge,
+  .o_list_renderer .o_field_badge .badge,
+  .o_list_renderer .o_status,
+  .o_list_renderer .badge {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    color: var(--lg-pill-text) !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    padding: 0 !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+  }
+}
+
+// Final dark-mode normalization for the active app entry and list badges.
+// Older compatibility rules color the parent badge widget and add an inset
+// green line to active navigation; only the actual badge should be colored.
+html[data-theme='glass'].shaka-dark-mode body.o_web_client {
+  .o_main_navbar .o_menu_sections .o_nav_entry.active,
+  .o_main_navbar .o_menu_sections .o_nav_entry[aria-current='page'],
+  .o_main_navbar .o_menu_sections a.o_nav_entry.active,
+  .o_main_navbar .o_menu_sections a.o_nav_entry[aria-current='page'] {
+    background: var(--lg-bg-elevated) !important;
+    background-color: var(--lg-bg-elevated) !important;
+    color: var(--lg-text) !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .o_main_navbar .o_menu_brand,
+  .o_main_navbar .o_menu_brand:hover,
+  .o_main_navbar .o_menu_brand:focus {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    color: var(--lg-text) !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .o_field_widget.o_field_badge,
+  .o_field_badge,
+  .o_list_renderer .o_field_badge {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: var(--lg-text) !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .o_list_renderer .o_list_table tbody td:has(.o_field_widget.o_field_badge),
+  .o_list_renderer .o_list_table tbody td:has(.o_field_badge),
+  .o_list_renderer .o_list_table tbody td:has(.badge) {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+
+  .o_field_widget.o_field_badge > .badge,
+  .o_field_badge > .badge,
+  .o_list_renderer .o_field_badge > .badge,
+  .o_list_renderer .o_field_widget.o_field_badge .badge {
+    background: var(--lg-pill-bg) !important;
+    background-color: var(--lg-pill-bg) !important;
+    color: var(--lg-pill-text) !important;
+    border-color: var(--lg-border) !important;
+    box-shadow: none !important;
+  }
+}
+
+// Statusbar container: keep the workflow buttons, but remove the colored
+// strip/background behind the whole statusbar.
+html[data-theme='glass'] body.o_web_client {
+  .o_form_statusbar,
+  .o_form_statusbar::before,
+  .o_form_statusbar::after,
+  .o_form_statusbar > .o_statusbar_buttons,
+  .o_form_statusbar > .o_field_statusbar,
+  .o_form_statusbar .o_statusbar_status {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .o_form_statusbar .o_statusbar_status > .btn,
+  .o_form_statusbar .o_statusbar_buttons > .btn {
+    box-shadow: none !important;
+  }
+}
+
+// Shared helper shown below Odoo forms (required-field explanation, etc.).
+// Keep it readable in both themes even when a module has legacy hard-coded
+// colors in its own stylesheet.
+html[data-theme='glass'] body.o_web_client .shaka-form-hint {
+  background: var(--lg-pill-bg) !important;
+  border-inline-start: 4px solid var(--lg-accent) !important;
+  color: var(--lg-text-secondary) !important;
+}
+
+// Odoo 19 breadcrumb/back links (for example: «آنالیز فروش»).
+html[data-theme='glass'] body.o_web_client {
+  .o_control_panel .o_breadcrumb a.fw-bold.text-truncate,
+  .o_control_panel .o_breadcrumb a.text-truncate {
+    color: var(--lg-link) !important;
+    text-decoration-color: transparent !important;
+
+    &:hover,
+    &:focus {
+      color: var(--lg-accent-strong) !important;
+      text-decoration-color: currentColor !important;
+    }
+  }
+}
+
+html[data-theme='glass'] body.o_web_client {
+  // The notification manager is only a positioning wrapper; while it holds no
+  // toast it must not occupy space or paint anything.
+  .o_notification_manager:empty,
+  .editor_notification_manager:empty,
+  .o_upload_progress_toast:empty {
+    display: none !important;
+  }
+
+  // Odoo 19 draws an accent indicator above the selected notebook tab. Remove
+  // it so the tab rail keeps the theme colors only.
+  .o_notebook .nav-link,
+  .o_notebook .nav-link.active,
+  .o_notebook .nav-link[aria-selected='true'],
+  .o_notebook .o_notebook_header.active {
+    border-top-color: transparent !important;
+    box-shadow: none !important;
+
+    &::before,
+    &::after {
+      content: none !important;
+      display: none !important;
+      background: transparent !important;
+      border: 0 !important;
+    }
+  }
+}
+
+// Breadcrumbs never paint their own surface; the control panel behind them
+// already carries the theme background. The dark palette above sets a surface
+// color on the active breadcrumb item, so these selectors repeat the dark-mode
+// class to reach the same specificity and win by source order.
+html[data-theme='glass'] body.o_web_client,
+html[data-theme='glass'].shaka-dark-mode body.o_web_client {
+  .o_control_panel .o_breadcrumb,
+  .o_control_panel .o_breadcrumb a,
+  .o_control_panel .o_breadcrumb a:hover,
+  .o_control_panel .o_breadcrumb a:focus,
+  .o_control_panel .o_breadcrumb .breadcrumb-item,
+  .o_control_panel .o_breadcrumb .breadcrumb-item.active,
+  .o_control_panel .o_breadcrumb .o_last_breadcrumb_item,
+  .o_control_panel .o_breadcrumb .o_last_breadcrumb_item.active,
+  .o_control_panel_breadcrumbs .o_breadcrumb a,
+  .o_control_panel_breadcrumbs .o_breadcrumb .breadcrumb-item.active {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Bootstrap color utilities that Odoo 19 uses directly in templates. They
+// resolve against Bootstrap's own palette, which is unaware of the theme, so
+// they are re-pointed at the shared tokens for both light and dark mode.
+// ---------------------------------------------------------------------------
+html[data-theme='glass'] body.o_web_client,
+html[data-theme='glass'].shaka-dark-mode body.o_web_client {
+  // Badge widgets such as the "مدیر" role pill.
+  .o_field_badge .badge,
+  .badge.text-bg-300,
+  .badge.text-bg-secondary,
+  .badge.text-bg-light {
+    background-color: var(--lg-pill-bg) !important;
+    color: var(--lg-pill-text) !important;
+    border-color: transparent !important;
+  }
+
+  // Outlined pill links, for example the pending-invitation chips in Settings.
+  .badge.text-primary,
+  .badge.border-primary,
+  a.o_web_settings_user.badge {
+    background-color: var(--lg-pill-bg) !important;
+    color: var(--lg-pill-text) !important;
+    border-color: var(--lg-accent) !important;
+  }
+
+  // Hover overlay drawn on top of clickable cards and kanban records.
+  .bg-view {
+    background-color: var(--lg-bg-surface) !important;
+  }
+
+  .position-absolute.bg-view.opacity-0 {
+    border-color: var(--lg-border) !important;
+    box-shadow: var(--lg-shadow-sm) !important;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Navbar menu sections. In Odoo 19 the top-level entries of an application
+// (for example «کاربران و شرکتها» in Settings) are plain buttons and dropdown
+// toggles, so they keep Bootstrap's button colors unless mapped explicitly.
+// ---------------------------------------------------------------------------
+html[data-theme='glass'] body.o_web_client,
+html[data-theme='glass'].shaka-dark-mode body.o_web_client {
+  .o_main_navbar .o_menu_sections {
+    > button,
+    > .dropdown > button,
+    .dropdown-toggle,
+    .o_nav_entry {
+      background: transparent !important;
+      background-color: transparent !important;
+      background-image: none !important;
+      border-color: transparent !important;
+      box-shadow: none !important;
+      color: var(--lg-text) !important;
+
+      span,
+      i {
+        color: inherit !important;
+      }
+
+      &:hover,
+      &:focus,
+      &.show,
+      &[aria-expanded='true'] {
+        background: var(--lg-bg-elevated) !important;
+        color: var(--lg-text) !important;
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Settings page: section titles, the left application rail and the widgets
+// Odoo renders inline inside setting boxes.
+// ---------------------------------------------------------------------------
+html[data-theme='glass'] body.o_web_client,
+html[data-theme='glass'].shaka-dark-mode body.o_web_client {
+  .o_settings h2,
+  .o_settings h2 span,
+  .app_settings_block h2,
+  .app_settings_block h2 span,
+  .o_setting_box .o_form_label,
+  .o_setting_right_pane .o_form_label,
+  .o_setting_right_pane .o_field_widget,
+  .o_setting_right_pane .o_field_widget span {
+    color: var(--lg-text) !important;
+  }
+
+  .settings_tab {
+    background: var(--lg-bg-base) !important;
+    border-color: var(--lg-border) !important;
+
+    a.tab {
+      background: transparent !important;
+      color: var(--lg-text-secondary) !important;
+
+      .app_name {
+        color: inherit !important;
+      }
+
+      &:hover {
+        background: var(--lg-bg-elevated) !important;
+        color: var(--lg-text) !important;
+      }
+
+      &.selected {
+        background: var(--lg-bg-elevated) !important;
+        color: var(--lg-text) !important;
+      }
+    }
+  }
+
+  // Text input of the invite-users widget and the documentation links.
+  .o_widget_res_config_invite_users .o_user_emails.o_input {
+    background: var(--lg-bg-surface) !important;
+    border: 1px solid var(--lg-border) !important;
+    color: var(--lg-text) !important;
+  }
+
+  .o_doc_link,
+  .o_doc_link i,
+  .o_web_settings_access_rights,
+  .o_web_settings_access_rights .o_button_icon {
+    color: var(--lg-link) !important;
+  }
+}
+
+// Bootstrap checkbox inputs are used directly by access-rights tabs and do
+// not inherit Odoo field-boolean styles. Cover every state from the palette.
+html[data-theme='glass'] body.o_web_client,
+html[data-theme='glass'].shaka-dark-mode body.o_web_client {
+  .form-check-input[type='checkbox'] {
+    background-color: var(--lg-bg-surface) !important;
+    border-color: var(--lg-border) !important;
+    box-shadow: none !important;
+  }
+
+  .form-check-input[type='checkbox']:hover {
+    border-color: var(--lg-accent) !important;
+  }
+
+  .form-check-input[type='checkbox']:focus {
+    border-color: var(--lg-accent) !important;
+    box-shadow: 0 0 0 3px var(--lg-focus) !important;
+  }
+
+  .form-check-input[type='checkbox']:checked,
+  .form-check-input[type='checkbox']:indeterminate {
+    background-color: var(--lg-accent) !important;
+    border-color: var(--lg-accent) !important;
+    box-shadow: none !important;
+  }
+
+  .form-check-input[type='checkbox']:disabled {
+    background-color: var(--lg-bg-elevated) !important;
+    border-color: var(--lg-border) !important;
+    opacity: .65 !important;
+  }
+}

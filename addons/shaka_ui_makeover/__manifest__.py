@@ -34,6 +34,8 @@ after this theme has been validated.
         # NOTE: Odoo concatenates assets in list order (no local @import), so
         # design tokens -> mixins -> themed files must appear in that order.
         'web.assets_backend': [
+            'shaka_ui_makeover/static/src/js/theme_mode.js',
+            'shaka_ui_makeover/static/src/scss/fonts.scss',
             # design tokens & mixins first
             'shaka_ui_makeover/static/src/scss/design_tokens.scss',
             'shaka_ui_makeover/static/src/scss/mixins.scss',
@@ -43,19 +45,24 @@ after this theme has been validated.
             'shaka_ui_makeover/static/src/scss/views.scss',
             'shaka_ui_makeover/static/src/scss/settings.scss',
             'shaka_ui_makeover/static/src/scss/login.scss',
+            'shaka_ui_makeover/static/src/scss/global_forms.scss',
+            'shaka_ui_makeover/static/src/scss/global_theme_overrides.scss',
         ],
         'web.assets_frontend': [
+            'shaka_ui_makeover/static/src/scss/fonts.scss',
             'shaka_ui_makeover/static/src/scss/design_tokens.scss',
             'shaka_ui_makeover/static/src/scss/mixins.scss',
             'shaka_ui_makeover/static/src/scss/login.scss',
         ],
         'point_of_sale.assets_pos': [
+            'shaka_ui_makeover/static/src/scss/fonts.scss',
             'shaka_ui_makeover/static/src/scss/design_tokens.scss',
             'shaka_ui_makeover/static/src/scss/mixins.scss',
             'shaka_ui_makeover/static/src/scss/pos.scss',
         ],
         # POS UI actually loads from base_app/_assets_pos; add pos skin there too
         'point_of_sale.base_app': [
+            'shaka_ui_makeover/static/src/scss/fonts.scss',
             'shaka_ui_makeover/static/src/scss/design_tokens.scss',
             'shaka_ui_makeover/static/src/scss/mixins.scss',
             'shaka_ui_makeover/static/src/scss/pos.scss',

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="access_form_budget_plan" model="shaka.access.form">
+        <field name="name">برنامه و بودجه</field>
+        <field name="model_name">budget.plan</field>
+        <field name="sequence">82</field>
+        <field name="has_workflow">True</field>
+        <field name="active">True</field>
+    </record>
+    <record id="access_stage_budget_plan_draft" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_budget_plan"/>
+        <field name="name">پیش‌نویس</field>
+        <field name="code">draft</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="access_stage_budget_plan_submitted" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_budget_plan"/>
+        <field name="name">ارسال‌شده</field>
+        <field name="code">submitted</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="access_stage_budget_plan_approved" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_budget_plan"/>
+        <field name="name">تأییدشده</field>
+        <field name="code">approved</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="access_stage_budget_plan_rejected" model="shaka.access.form.stage">
+        <field name="form_id" ref="access_form_budget_plan"/>
+        <field name="name">ردشده</field>
+        <field name="code">rejected</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="access_form_budget_dashboard" model="shaka.access.form">
+        <field name="name">داشبورد برنامه و بودجه</field>
+        <field name="model_name">budget.plan.dashboard</field>
+        <field name="sequence">83</field>
+        <field name="has_workflow">False</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

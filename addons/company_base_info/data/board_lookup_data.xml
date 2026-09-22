@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="lookup_type_board_company_type" model="lookup.type">
+            <field name="name">نوع شرکت عضو هیئت‌مدیره</field>
+            <field name="code">board_company_type</field>
+        </record>
+        <record id="lookup_value_board_company_natural" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_company_type"/>
+            <field name="name">حقیقی</field><field name="code">natural</field><field name="sequence">10</field>
+        </record>
+        <record id="lookup_value_board_company_public" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_company_type"/>
+            <field name="name">سهامی عام</field><field name="code">public_joint_stock</field><field name="sequence">20</field>
+        </record>
+        <record id="lookup_value_board_company_private" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_company_type"/>
+            <field name="name">سهامی خاص</field><field name="code">private_joint_stock</field><field name="sequence">30</field>
+        </record>
+        <record id="lookup_value_board_company_limited" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_company_type"/>
+            <field name="name">با مسئولیت محدود</field><field name="code">limited</field><field name="sequence">40</field>
+        </record>
+        <record id="lookup_value_board_company_cooperative" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_company_type"/>
+            <field name="name">تعاونی</field><field name="code">cooperative</field><field name="sequence">50</field>
+        </record>
+        <record id="lookup_value_board_company_non_commercial" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_company_type"/>
+            <field name="name">مؤسسه غیرتجاری</field><field name="code">non_commercial</field><field name="sequence">60</field>
+        </record>
+        <record id="lookup_value_board_company_other" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_company_type"/>
+            <field name="name">سایر</field><field name="code">other</field><field name="sequence">70</field>
+        </record>
+
+        <record id="lookup_type_board_membership_type" model="lookup.type">
+            <field name="name">نوع عضویت هیئت‌مدیره</field>
+            <field name="code">board_membership_type</field>
+        </record>
+        <record id="lookup_value_board_membership_primary" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_membership_type"/>
+            <field name="name">اصلی</field><field name="code">primary</field><field name="sequence">10</field>
+        </record>
+        <record id="lookup_value_board_membership_alternate" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_membership_type"/>
+            <field name="name">علی‌البدل</field><field name="code">alternate</field><field name="sequence">20</field>
+        </record>
+        <record id="lookup_value_board_membership_representative" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_membership_type"/>
+            <field name="name">نماینده عضو حقوقی</field><field name="code">representative</field><field name="sequence">30</field>
+        </record>
+
+        <record id="lookup_type_board_executive_status" model="lookup.type">
+            <field name="name">وضعیت موظف بودن عضو</field>
+            <field name="code">board_executive_status</field>
+        </record>
+        <record id="lookup_value_board_executive" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_executive_status"/>
+            <field name="name">موظف</field><field name="code">executive</field><field name="sequence">10</field>
+        </record>
+        <record id="lookup_value_board_non_executive" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_executive_status"/>
+            <field name="name">غیر موظف</field><field name="code">non_executive</field><field name="sequence">20</field>
+        </record>
+
+        <record id="lookup_type_board_education_level" model="lookup.type">
+            <field name="name">مقطع تحصیلی عضو هیئت‌مدیره</field>
+            <field name="code">board_education_level</field>
+        </record>
+        <record id="lookup_value_board_education_diploma" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_education_level"/>
+            <field name="name">دیپلم</field><field name="code">diploma</field><field name="sequence">10</field>
+        </record>
+        <record id="lookup_value_board_education_associate" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_education_level"/>
+            <field name="name">کاردانی</field><field name="code">associate</field><field name="sequence">20</field>
+        </record>
+        <record id="lookup_value_board_education_bachelor" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_education_level"/>
+            <field name="name">کارشناسی</field><field name="code">bachelor</field><field name="sequence">30</field>
+        </record>
+        <record id="lookup_value_board_education_master" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_education_level"/>
+            <field name="name">کارشناسی ارشد</field><field name="code">master</field><field name="sequence">40</field>
+        </record>
+        <record id="lookup_value_board_education_doctorate" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_education_level"/>
+            <field name="name">دکتری</field><field name="code">doctorate</field><field name="sequence">50</field>
+        </record>
+        <record id="lookup_value_board_education_other" model="lookup.value">
+            <field name="type_id" ref="lookup_type_board_education_level"/>
+            <field name="name">سایر</field><field name="code">other</field><field name="sequence">60</field>
+        </record>
+    </data>
+</odoo>

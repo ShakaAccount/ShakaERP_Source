@@ -65,5 +65,5 @@
 
 // Persian font safety (defined once, used across themes)
 @mixin lg-font-stack($role: ui) {
-  font-family: "Shaka Persian", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: "Vazirmatn", Tahoma, Arial, sans-serif;
 }

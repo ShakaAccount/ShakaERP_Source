@@ -5,6 +5,7 @@
     'category': 'Sales',
     'author': 'ShakaERP',
     'license': 'LGPL-3',
+    'icon': '/daily_sales_performance/static/description/icon.svg',
     'depends': ['base', 'mail', 'jalali_date', 'shaka_security'],
     'data': [
         'security/security.xml',
@@ -18,6 +19,7 @@
         'views/reject_wizard_views.xml',
         'views/corrective_invoice_views.xml',
         'views/return_views.xml',
+        'views/users_branch_access_views.xml',
     ],
     'assets': {
         'web.assets_backend': [

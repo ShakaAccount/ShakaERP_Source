@@ -169,13 +169,15 @@ html[data-theme='glass'] .o_cp_buttons {
 // ---- Control-panel search view (no border, per spec) ----
 html[data-theme='glass'] .o_searchview {
   background: var(--lg-bg-elevated);
-  border: none;
-  border-radius: var(--lg-r-pill);
+  border: 1px solid var(--lg-border);
+  border-radius: var(--lg-r-md);
   color: var(--lg-text);
-  padding: 4px 12px;
-  transition: box-shadow var(--lg-t-fast);
+  padding: 3px 10px;
+  transition: border-color var(--lg-t-fast), box-shadow var(--lg-t-fast), background var(--lg-t-fast);
   &:focus-within {
-    box-shadow: 0 0 0 2px var(--lg-accent);
+    border-color: var(--lg-accent);
+    box-shadow: 0 0 0 2px var(--lg-focus);
+    background: var(--lg-bg-surface);
   }
   .o_searchview_input,
   .o_searchview_facet {
@@ -198,6 +200,15 @@ html[data-theme='glass'] .o_searchview {
     border-radius: var(--lg-r-md);
     box-shadow: var(--lg-shadow-md);
   }
+}
+
+// Keep the search control from inheriting Odoo's green focus outline and
+// button background. The search icon is part of the same quiet control.
+html[data-theme='glass'] .o_searchview .o_searchview_input_container,
+html[data-theme='glass'] .o_searchview .o_searchview_input {
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
 }
 
 // ---- Full pager (prev / value / next) ----

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_company_currency_list" model="ir.ui.view">
+        <field name="name">company.currency.list</field>
+        <field name="model">company.currency</field>
+        <field name="arch" type="xml">
+            <list string="عناوین ارز">
+                <field name="name"/>
+                <field name="code" optional="hide"/>
+                <field name="active" widget="boolean_toggle"/>
+                <field name="note" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_company_currency_form" model="ir.ui.view">
+        <field name="name">company.currency.form</field>
+        <field name="model">company.currency</field>
+        <field name="arch" type="xml">
+            <form string="عنوان ارز">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" string="عنوان ارز"/>
+                        <h1><field name="name" placeholder="مثلاً دلار آمریکا"/></h1>
+                    </div>
+                    <group>
+                        <field name="code" placeholder="مثلاً USD"/>
+                        <field name="active" widget="boolean_toggle"/>
+                        <field name="note" placeholder="توضیحات ارز..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_company_currency" model="ir.actions.act_window">
+        <field name="name">عناوین ارز</field>
+        <field name="res_model">company.currency</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_company_currency_introduction_list" model="ir.ui.view">
+        <field name="name">company.currency.introduction.list</field>
+        <field name="model">company.currency.introduction</field>
+        <field name="arch" type="xml">
+            <list string="معرفی ارز">
+                <field name="company_id"/>
+                <field name="fiscal_year_id"/>
+                <field name="registration_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_company_currency_introduction_form" model="ir.ui.view">
+        <field name="name">company.currency.introduction.form</field>
+        <field name="model">company.currency.introduction</field>
+        <field name="arch" type="xml">
+            <form string="معرفی ارز">
+                <sheet>
+                    <group>
+                        <field name="company_id"/>
+                        <field name="fiscal_year_id"/>
+                        <field name="registration_date"/>
+                    </group>
+                    <separator string="جزئیات ارز"/>
+                    <field name="line_ids" nolabel="1">
+                        <list editable="bottom" default_order="sequence,id">
+                            <field name="sequence" widget="handle" optional="hide"/>
+                            <field name="currency_id" string="عنوان ارز" options="{'no_create_edit': False}" width="180px"/>
+                            <field name="conversion_type_id" string="نوع تبدیل ارز" options="{'no_create_edit': False}" width="150px"/>
+                            <field name="rial_value_per_unit" string="ارزش ریالی هر واحد ارز" width="180px"/>
+                        </list>
+                    </field>
+                    <field name="note" placeholder="توضیحات معرفی ارز..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_company_currency_introduction" model="ir.actions.act_window">
+        <field name="name">معرفی ارز</field>
+        <field name="res_model">company.currency.introduction</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_company_currency"
+              name="عناوین ارز"
+              parent="menu_company_base_info_root"
+              action="action_company_currency"
+              groups="base.group_system"
+              sequence="20"/>
+    <menuitem id="menu_company_currency_introduction"
+              name="معرفی ارز"
+              parent="menu_company_base_info_root"
+              action="action_company_currency_introduction"
+              groups="base.group_system"
+              sequence="30"/>
+</odoo>

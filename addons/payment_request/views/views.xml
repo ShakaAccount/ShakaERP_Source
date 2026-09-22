@@ -169,7 +169,8 @@
     </record>
 
     <menuitem id="menu_payment_request_root" name="درخواست پرداخت"
-              sequence="140" action="action_payment_request_all"/>
+              sequence="140" action="action_payment_request_all"
+              web_icon="payment_request,static/description/icon.png"/>
     <menuitem id="menu_payment_request_mine" name="درخواست‌های من"
               action="action_payment_request_mine"
               parent="menu_payment_request_root"/>
