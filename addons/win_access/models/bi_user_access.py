@@ -92,11 +92,13 @@ def resolve_dw_member(env, ssas_table_name, column_name, member_id):
         conn.close()
 
 
-def generate_table_dax(env, ssas_table_name):
-    """Static DAX filter_expression for one SSAS table, covering every bi.user.access record that
-    targets it (any user) -- the same shared expression serves everyone since it looks USERNAME()
-    up in vwUserAccess at query time. Returns None if nothing is configured for this table."""
-    recs = env["bi.user.access"].search([("ssas_table", "=", ssas_table_name)])
+def generate_table_dax(env, ssas_table_name, group):
+    """Static DAX filter_expression for one SSAS table, scoped to the access records that picked
+    `group` among their SSAS roles -- a user in several roles can grant different roles different
+    subsets, since SSAS unions a user's roles and a role with no filter on this table would grant
+    unrestricted access regardless of what any other role says. Returns None if nothing to push."""
+    recs = env["bi.user.access"].search(
+        [("ssas_table", "=", ssas_table_name), ("group_ids", "in", group.id)])
     if not recs:
         return None
     clauses = ['1 IN SELECTCOLUMNS(CALCULATETABLE(vwUserAccess, vwUserAccess[UserName] = USERNAME()), '
@@ -118,8 +120,8 @@ def push_rls_filter(env, group, ssas_table_name):
     """PUT the generated DAX for one table onto `group`'s SSAS role (group is a win.access.group;
     its .name is the role name, .ssas_database_id the database it was created on)."""
     if not group or not group.ssas_database_id:
-        raise ApiError("No SSAS role selected.", "Pick 'SSAS role' on the user's BI Access tab.")
-    dax = generate_table_dax(env, ssas_table_name)
+        raise ApiError("No SSAS role selected.", "Pick at least one SSAS role on the access record.")
+    dax = generate_table_dax(env, ssas_table_name, group)
     if not dax:
         return "Nothing to push"
     db, inst = group.ssas_database_id, group.ssas_database_id.parent_id
@@ -171,6 +173,14 @@ class BiUserAccess(models.Model):
     is_all_reader = fields.Boolean("Sees everything", help="IsAllReader: unrestricted on every entity.")
     is_all_member = fields.Boolean("All members of this entity", help="IsAllMember for this entity.")
     line_ids = fields.One2many("bi.user.access.line", "access_id", string="Column values")
+    available_group_ids = fields.Many2many(
+        "win.access.group", compute="_compute_available_groups",
+        help="win_access groups (= SSAS roles) user_id's Windows account is a member of.")
+    group_ids = fields.Many2many(
+        "win.access.group", string="SSAS roles",
+        help="Which of the user's roles this grant's RLS filter is pushed to on sync. A user in "
+             "several roles needs it on each one they view this data through -- SSAS unions a "
+             "user's roles, so a role left out here grants unrestricted access on this table instead.")
     state = fields.Selection([("draft", "Not synced"), ("synced", "Synced"), ("error", "Errors")],
                              default="draft", readonly=True)
     sync_result = fields.Json(readonly=True)
@@ -178,6 +188,11 @@ class BiUserAccess(models.Model):
 
     _user_entity_uniq = models.Constraint(
         "UNIQUE (user_id, entity_id)", "This user already has an access record for that entity.")
+
+    @api.depends("user_id.bi_ssas_group_ids")
+    def _compute_available_groups(self):
+        for r in self:
+            r.available_group_ids = r.user_id.bi_ssas_group_ids
 
     @api.onchange("module_id")
     def _onchange_module(self):
@@ -235,8 +250,9 @@ class BiUserAccess(models.Model):
             run = Runner()
             run.step("Windows account", rec._check_user, "user")
             run.step("Replace access rows of %s" % rec.entity_id.name, rec._write_rows, "dw", ("user",))
-            run.step("Push RLS filter to SSAS role", lambda r=rec: push_rls_filter(
-                self.env, r.user_id.bi_ssas_group_id, r.ssas_table), "ssas", ("dw",))
+            for grp in rec.group_ids:
+                run.step("Push RLS filter to role %s" % grp.name, lambda r=rec, g=grp: push_rls_filter(
+                    self.env, g, r.ssas_table), "ssas:%s" % grp.id, ("dw",))
             rec.write({"state": "error" if run.failed else "synced", "sync_result": run.data(),
                        "synced_at": fields.Datetime.now()})
 

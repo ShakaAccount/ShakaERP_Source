@@ -15,6 +15,11 @@ class BiUserAccessWizard(models.TransientModel):
     entity_id = fields.Many2one("raes.md.entity", required=True)
     available_table_ids = fields.Many2many("win.access.option", compute="_compute_available_tables")
     table_id = fields.Many2one("win.access.option", "SSAS table", required=True)
+    available_group_ids = fields.Many2many("win.access.group", related="user_id.bi_ssas_group_ids")
+    group_ids = fields.Many2many(
+        "win.access.group", string="SSAS roles",
+        help="Which of the user's roles this grant's filter is pushed to. Pick more than one if the "
+             "user needs the same access under several roles.")
 
     @api.model
     def default_get(self, fields_list):
@@ -50,7 +55,8 @@ class BiUserAccessWizard(models.TransientModel):
             raise UserError("Pick one of the SSAS tables that match the entity.")
         Access = self.env["bi.user.access"]
         rec = Access.search([("user_id", "=", self.user_id.id), ("entity_id", "=", self.entity_id.id)], limit=1)
-        vals = {"module_id": self.module_id.id, "ssas_table": self.table_id.name}
+        vals = {"module_id": self.module_id.id, "ssas_table": self.table_id.name,
+               "group_ids": [(6, 0, self.group_ids.ids)]}
         if rec:
             rec.write(vals)
         else:
