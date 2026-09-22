@@ -32,18 +32,21 @@
                             <field name="pbirs_path_ids" widget="win_access_tree" nolabel="1"/>
                         </page>
                         <page string="Members">
-                            <field name="member_ids">
-                                <list editable="bottom">
+                            <field name="member_ids" widget="win_access_members" nolabel="1">
+                                <list>
                                     <field name="kind"/>
-                                    <field name="user_option_id" invisible="kind != 'ad'" required="kind == 'ad'" options="{'no_create_edit': True}" context="{'default_kind': 'user'}"/>
-                                    <field name="name" invisible="kind == 'ad'" required="kind != 'ad'"/>
+                                    <field name="user_option_id"/>
+                                    <field name="name"/>
                                     <field name="full_name"/>
-                                    <field name="password" password="True"/>
-                                    <field name="state"/><field name="log"/>
+                                    <field name="password"/>
+                                    <field name="state"/>
+                                    <field name="log"/>
                                 </list>
                             </field>
                         </page>
-                        <page string="Sync result"><field name="log"/></page>
+                        <page string="Sync result">
+                            <field name="sync_result" widget="win_access_sync" nolabel="1"/>
+                        </page>
                     </notebook>
                 </sheet>
             </form>
@@ -75,7 +78,7 @@
                         <setting string="API Key" help="Sent in the X-API-Key header.">
                             <field name="win_access_key" password="True"/>
                         </setting>
-                        <setting string="AD Domain" help="Optional. Prefixed to AD usernames when adding them to the local group (DOMAIN\user).">
+                        <setting string="AD Domain (override)" help="Optional. Normally detected from the Active Directory itself. Only set this to force the NetBIOS name used in DOMAIN\\user.">
                             <field name="win_access_domain" placeholder="SHAKA"/>
                         </setting>
                     </block>

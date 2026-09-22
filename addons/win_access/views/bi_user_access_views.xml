@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- popup 1: module -> entity -> SSAS table -->
+    <record id="view_bi_user_access_wizard_form" model="ir.ui.view">
+        <field name="name">bi.user.access.wizard.form</field>
+        <field name="model">bi.user.access.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="user_id"/>
+                    <field name="module_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="entity_id" options="{'no_create': True, 'no_open': True}"
+                           domain="[('module_id', '=', module_id)]" invisible="not module_id"/>
+                    <field name="available_table_ids" invisible="1"/>
+                    <field name="table_id" options="{'no_create': True, 'no_open': True}"
+                           domain="[('id', 'in', available_table_ids)]" invisible="not entity_id"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object" string="Next" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- popup 2: column + value of the record just created -->
+    <record id="view_bi_user_access_line_wizard_form" model="ir.ui.view">
+        <field name="name">bi.user.access.line.wizard.form</field>
+        <field name="model">bi.user.access.line.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="access_id"/>
+                    <field name="table_id"/>
+                    <field name="column_id" options="{'no_create': True, 'no_open': True}"
+                           domain="[('kind', '=', 'ssas_column'), ('parent_id', '=', table_id)]"/>
+                    <field name="member_id" placeholder="e.g. 17000000000000023"/>
+                </group>
+                <footer>
+                    <button name="action_save" type="object" string="Save" class="btn-primary" data-hotkey="q"/>
+                    <button name="action_save_more" type="object" string="Save &amp; add another"/>
+                    <button string="Cancel" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- the access record itself (opened from the user's list) -->
+    <record id="view_bi_user_access_form" model="ir.ui.view">
+        <field name="name">bi.user.access.form</field>
+        <field name="model">bi.user.access</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="user_id" readonly="1"/>
+                            <field name="module_id" options="{'no_create': True}"/>
+                            <field name="entity_id" options="{'no_create': True}"/>
+                            <field name="ssas_table"/>
+                        </group>
+                        <group>
+                            <field name="is_all_reader"/>
+                            <field name="is_all_member"/>
+                        </group>
+                    </group>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="column_name"/>
+                            <field name="member_id"/>
+                        </list>
+                    </field>
+                    <field name="sync_result" widget="win_access_sync" nolabel="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- BI Access page on the user form -->
+    <record id="view_users_form_bi_access" model="ir.ui.view">
+        <field name="name">res.users.form.bi.access</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="BI Access" name="bi_access" groups="base.group_system">
+                    <group>
+                        <field name="bi_username" placeholder="e.g. RAEES\\name"/>
+                    </group>
+                    <div class="mb-2" invisible="not id">
+                        <button name="action_bi_add" type="object" string="Add access" class="btn-primary me-1"/>
+                        <button name="action_bi_import" type="object" string="Import from warehouse" class="me-1"/>
+                        <button name="action_bi_sync_all" type="object" string="Sync all"/>
+                    </div>
+                    <field name="bi_access_ids" nolabel="1">
+                        <list open_form_view="1" create="0">
+                            <field name="module_id"/>
+                            <field name="entity_id"/>
+                            <field name="ssas_table"/>
+                            <field name="state" widget="badge"/>
+                            <field name="synced_at"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

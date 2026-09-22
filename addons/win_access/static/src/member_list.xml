@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="win_access.MemberList">
+        <div class="o_win_access_members">
+            <datalist t-foreach="['ad', 'local']" t-as="k" t-key="k" t-attf-id="wa_users_{{ k }}">
+                <option t-foreach="choices(k)" t-as="u" t-key="u.id" t-att-value="u.name" t-out="label(u)"/>
+            </datalist>
+            <div t-if="!list.records.length" class="text-muted mb-2">No members yet.</div>
+            <div t-foreach="list.records" t-as="rec" t-key="rec.id" class="o_wa_member border rounded p-2 mb-2">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" t-att-disabled="props.readonly"
+                                t-attf-class="btn {{ rec.data.kind === 'ad' ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                t-on-click="() => this.setKind(rec, 'ad')">AD user</button>
+                        <button type="button" t-att-disabled="props.readonly"
+                                t-attf-class="btn {{ rec.data.kind === 'local' ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                t-on-click="() => this.setKind(rec, 'local')">Local user</button>
+                    </div>
+                    <input class="form-control form-control-sm w-auto flex-grow-1"
+                           t-attf-list="wa_users_{{ rec.data.kind }}" t-att-value="rec.data.name || ''"
+                           t-att-disabled="props.readonly"
+                           t-att-placeholder="rec.data.kind === 'ad' ? 'Pick an AD user…' : 'Pick or type a local username…'"
+                           t-on-change="(ev) => this.setName(rec, ev.target.value)"/>
+                    <span t-if="rec.data.state === 'added'" class="badge text-bg-success">Member</span>
+                    <span t-elif="rec.data.state === 'error'" class="badge text-bg-danger">Error</span>
+                    <span t-else="" class="badge text-bg-secondary">Pending</span>
+                    <button type="button" class="btn btn-sm btn-link text-danger" title="Remove"
+                            t-att-disabled="props.readonly" t-on-click="() => this.remove(rec)">
+                        <i class="fa fa-trash-o"/>
+                    </button>
+                </div>
+                <div t-if="isUnknownAd(rec)" class="text-danger small mt-1">
+                    Not in the AD list. Pick an existing user — this addon never creates AD accounts.
+                </div>
+                <div t-if="isNewLocal(rec)" class="d-flex gap-2 mt-2">
+                    <input class="form-control form-control-sm" placeholder="Full name (optional)"
+                           t-att-value="rec.data.full_name || ''"
+                           t-on-change="(ev) => rec.update({ full_name: ev.target.value })"/>
+                    <input type="password" class="form-control form-control-sm" autocomplete="new-password"
+                           placeholder="Password for the new local account"
+                           t-att-value="rec.data.password || ''"
+                           t-on-change="(ev) => rec.update({ password: ev.target.value })"/>
+                </div>
+                <div t-if="rec.data.log" class="text-danger small mt-1" t-out="rec.data.log"/>
+            </div>
+            <button type="button" class="btn btn-sm btn-secondary" t-att-disabled="props.readonly" t-on-click="add">
+                <i class="fa fa-plus me-1"/>Add member
+            </button>
+        </div>
+    </t>
+</templates>
