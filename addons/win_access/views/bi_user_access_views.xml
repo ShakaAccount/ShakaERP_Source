@@ -17,6 +17,7 @@
                     <field name="available_group_ids" invisible="1"/>
                     <field name="group_ids" widget="many2many_tags" options="{'no_create': True}"
                           domain="[('id', 'in', available_group_ids)]" invisible="not table_id"/>
+                    <field name="ols" widget="radio" invisible="not table_id"/>
                 </group>
                 <footer>
                     <button name="action_confirm" type="object" string="Next" class="btn-primary" data-hotkey="q"/>
@@ -35,7 +36,7 @@
                 <group>
                     <field name="access_id"/>
                     <field name="table_id"/>
-                    <field name="column_id" options="{'no_create': True, 'no_open': True}"
+                    <field name="column_id" widget="win_access_m2o_loading" options="{'no_create': True, 'no_open': True}"
                            domain="[('kind', '=', 'ssas_column'), ('parent_id', '=', table_id)]"/>
                     <field name="member_option_id" options="{'no_create': True, 'no_open': True}"
                           domain="[('kind', '=', 'dw_member'), ('parent_id', '=', column_id)]"
@@ -64,19 +65,25 @@
                             <field name="module_id" options="{'no_create': True}"/>
                             <field name="entity_id" options="{'no_create': True}"/>
                             <field name="ssas_table"/>
+                            <field name="ols"/>
                         </group>
                         <group>
-                            <field name="is_all_reader"/>
-                            <field name="is_all_member"/>
+                            <field name="is_all_reader" invisible="ols == 'none'"/>
+                            <field name="is_all_member" invisible="ols == 'none'"/>
                             <field name="available_group_ids" invisible="1"/>
                             <field name="group_ids" widget="many2many_tags" options="{'no_create': True}"
                                   domain="[('id', 'in', available_group_ids)]"/>
                         </group>
                     </group>
-                    <field name="line_ids">
+                    <div class="alert alert-info" role="alert" invisible="ols != 'none'">
+                        OLS is set to None: this table is hidden entirely for the selected role(s), so
+                        no row filter applies and none is declared here.
+                    </div>
+                    <field name="line_ids" invisible="ols == 'none'">
                         <list editable="bottom">
                             <field name="table_option_id" invisible="1"/>
-                            <field name="column_id" string="SSAS column" options="{'no_create': True, 'no_open': True}"
+                            <field name="column_id" string="SSAS column" widget="win_access_m2o_loading"
+                                  options="{'no_create': True, 'no_open': True}"
                                   domain="[('kind', '=', 'ssas_column'), ('parent_id', '=', table_option_id)]"/>
                             <field name="column_name" invisible="1"/>
                             <field name="member_option_id" string="Value" options="{'no_create': True, 'no_open': True}"
@@ -113,6 +120,7 @@
                             <field name="module_id"/>
                             <field name="entity_id"/>
                             <field name="ssas_table"/>
+                            <field name="ols" widget="badge"/>
                             <field name="group_ids" widget="many2many_tags"/>
                             <field name="state" widget="badge"/>
                             <field name="synced_at"/>

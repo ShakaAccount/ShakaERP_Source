@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="win_access.LoadingMany2One">
+        <div class="win_access_loading_wrap">
+            <Many2One t-props="m2oProps"/>
+            <i t-if="loadingState.busy" class="fa fa-circle-o-notch fa-spin win_access_loading_spinner"
+               role="img" aria-label="Loading" title="Loading..."/>
+        </div>
+    </t>
+</templates>

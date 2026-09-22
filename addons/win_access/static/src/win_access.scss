@@ -38,3 +38,16 @@
         .o_wa_flip { transform: scaleX(-1); }
     }
 }
+
+.win_access_loading_wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+
+    .win_access_loading_spinner {
+        margin-inline-start: 6px;
+        color: var(--wa-skip, #6c757d);
+        flex: none;
+    }
+}

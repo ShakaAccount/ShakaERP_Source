@@ -116,18 +116,34 @@ def generate_table_dax(env, ssas_table_name, group):
     return "\n|| ".join(clauses)
 
 
+_OLS_LABEL = {"default": "Default", "none": "None", "read": "Read"}
+
+
 def push_rls_filter(env, group, ssas_table_name):
-    """PUT the generated DAX for one table onto `group`'s SSAS role (group is a win.access.group;
-    its .name is the role name, .ssas_database_id the database it was created on)."""
+    """PUT the OLS (table visibility) and, unless OLS hides the table outright, the generated
+    RLS DAX for one table onto `group`'s SSAS role (group is a win.access.group; its .name is
+    the role name, .ssas_database_id the database it was created on).
+
+    OLS is 'None' hides the table's data *and metadata* from the role -- nobody in that role can
+    see it exists, so a row filter on top of that would be meaningless. OLS is a property of the
+    (table, role) pair, so it's read off any one access record that targets this table+role; if
+    they disagree, that's a modelling mistake elsewhere, not something to silently reconcile here."""
     if not group or not group.ssas_database_id:
         raise ApiError("No SSAS role selected.", "Pick at least one SSAS role on the access record.")
-    dax = generate_table_dax(env, ssas_table_name, group)
-    if not dax:
+    recs = env["bi.user.access"].search(
+        [("ssas_table", "=", ssas_table_name), ("group_ids", "in", group.id)])
+    if not recs:
         return "Nothing to push"
+    ols = recs[0].ols
+    body = {"metadata_permission": _OLS_LABEL[ols]}
+    if ols != "none":
+        dax = generate_table_dax(env, ssas_table_name, group)
+        if dax:
+            body["filter_expression"] = dax
     db, inst = group.ssas_database_id, group.ssas_database_id.parent_id
     _call(env, "PUT", "/ssas/%s/databases/%s/roles/%s/tables/%s" % (
-        _q(inst.name), _q(db.name), _q(group.name), _q(ssas_table_name)), {"filter_expression": dax})
-    return "Pushed to role %s" % group.name
+        _q(inst.name), _q(db.name), _q(group.name), _q(ssas_table_name)), body)
+    return "Pushed (OLS=%s) to role %s" % (_OLS_LABEL[ols], group.name)
 
 
 def match_ssas_tables(entity_name, table_names):
@@ -170,6 +186,12 @@ class BiUserAccess(models.Model):
     entity_id = fields.Many2one("raes.md.entity", required=True, domain="[('module_id', '=', module_id)]",
                                 help="The id of this entity is the EntityID written to the warehouse.")
     ssas_table = fields.Char("SSAS table", required=True)
+    ols = fields.Selection(
+        [("default", "Default"), ("none", "None"), ("read", "Read")], default="default", required=True,
+        string="OLS (table visibility)",
+        help="Object-level security on the SSAS table itself, for this table+role. 'None' hides the "
+             "table's data and metadata from the role entirely -- nobody in it can see the table "
+             "exists, so the row filter below becomes irrelevant and isn't declared or pushed.")
     is_all_reader = fields.Boolean("Sees everything", help="IsAllReader: unrestricted on every entity.")
     is_all_member = fields.Boolean("All members of this entity", help="IsAllMember for this entity.")
     line_ids = fields.One2many("bi.user.access.line", "access_id", string="Column values")
@@ -198,6 +220,11 @@ class BiUserAccess(models.Model):
     def _onchange_module(self):
         if self.entity_id.module_id != self.module_id:
             self.entity_id = False
+
+    @api.onchange("ols")
+    def _onchange_ols(self):
+        if self.ols == "none":
+            self.line_ids = [(5, 0, 0)]  # no row filter is meaningful once the table is hidden
 
     def _dw_rows(self):
         """MD.UserAccess rows for this user+entity: (member, column, reader, all_member)."""

@@ -20,6 +20,8 @@
             "win_access/static/src/sync_panel.xml",
             "win_access/static/src/member_list.js",
             "win_access/static/src/member_list.xml",
+            "win_access/static/src/loading_field.js",
+            "win_access/static/src/loading_field.xml",
         ],
     },
     "application": True,

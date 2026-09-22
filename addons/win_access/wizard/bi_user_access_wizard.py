@@ -20,6 +20,11 @@ class BiUserAccessWizard(models.TransientModel):
         "win.access.group", string="SSAS roles",
         help="Which of the user's roles this grant's filter is pushed to. Pick more than one if the "
              "user needs the same access under several roles.")
+    ols = fields.Selection(
+        [("default", "Default"), ("none", "None"), ("read", "Read")], default="default", required=True,
+        string="OLS (table visibility)",
+        help="'None' hides this table entirely for the role -- no row filter is meaningful on top of "
+             "that, so picking it skips the column/value step.")
 
     @api.model
     def default_get(self, fields_list):
@@ -55,12 +60,15 @@ class BiUserAccessWizard(models.TransientModel):
             raise UserError("Pick one of the SSAS tables that match the entity.")
         Access = self.env["bi.user.access"]
         rec = Access.search([("user_id", "=", self.user_id.id), ("entity_id", "=", self.entity_id.id)], limit=1)
-        vals = {"module_id": self.module_id.id, "ssas_table": self.table_id.name,
+        vals = {"module_id": self.module_id.id, "ssas_table": self.table_id.name, "ols": self.ols,
                "group_ids": [(6, 0, self.group_ids.ids)]}
         if rec:
             rec.write(vals)
         else:
             rec = Access.create({**vals, "user_id": self.user_id.id, "entity_id": self.entity_id.id})
+        if self.ols == "none":
+            rec.line_ids.unlink()  # no row filter is meaningful once the table itself is hidden
+            return {"type": "ir.actions.act_window_close"}
         return rec._action_add_line()
 
 
