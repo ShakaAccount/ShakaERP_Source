@@ -34,6 +34,9 @@
                     <field name="table_id"/>
                     <field name="column_id" options="{'no_create': True, 'no_open': True}"
                            domain="[('kind', '=', 'ssas_column'), ('parent_id', '=', table_id)]"/>
+                    <field name="member_option_id" options="{'no_create': True, 'no_open': True}"
+                          domain="[('kind', '=', 'dw_member'), ('parent_id', '=', column_id)]"
+                          invisible="not column_id"/>
                     <field name="member_id" placeholder="e.g. 17000000000000023"/>
                 </group>
                 <footer>
@@ -66,8 +69,13 @@
                     </group>
                     <field name="line_ids">
                         <list editable="bottom">
-                            <field name="column_name"/>
-                            <field name="member_id"/>
+                            <field name="table_option_id" invisible="1"/>
+                            <field name="column_id" string="SSAS column" options="{'no_create': True, 'no_open': True}"
+                                  domain="[('kind', '=', 'ssas_column'), ('parent_id', '=', table_option_id)]"/>
+                            <field name="column_name" invisible="1"/>
+                            <field name="member_option_id" string="Value" options="{'no_create': True, 'no_open': True}"
+                                  domain="[('kind', '=', 'dw_member'), ('parent_id', '=', column_id)]"/>
+                            <field name="member_id" string="Value (raw id, if not in the list above)"/>
                         </list>
                     </field>
                     <field name="sync_result" widget="win_access_sync" nolabel="1"/>
@@ -86,6 +94,9 @@
                 <page string="BI Access" name="bi_access" groups="base.group_system">
                     <group>
                         <field name="bi_username" placeholder="e.g. RAEES\\name"/>
+                        <field name="bi_ssas_group_ids" invisible="1"/>
+                        <field name="bi_ssas_group_id" options="{'no_create': True, 'no_open': True}"
+                              domain="[('id', 'in', bi_ssas_group_ids)]"/>
                     </group>
                     <div class="mb-2" invisible="not id">
                         <button name="action_bi_add" type="object" string="Add access" class="btn-primary me-1"/>

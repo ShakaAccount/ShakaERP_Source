@@ -1,7 +1,7 @@
 from odoo import api, fields, models
 from odoo.exceptions import UserError
 
-from ..models.bi_user_access import match_ssas_tables
+from ..models.bi_user_access import match_ssas_tables, search_dw_members
 from ..models.group import ApiError
 
 
@@ -67,6 +67,11 @@ class BiUserAccessLineWizard(models.TransientModel):
     table_id = fields.Many2one("win.access.option", readonly=True)
     column_id = fields.Many2one("win.access.option", "SSAS column", required=True,
                                 domain="[('kind', '=', 'ssas_column'), ('parent_id', '=', table_id)]")
+    member_option_id = fields.Many2one(
+        "win.access.option", "Value",
+        domain="[('kind', '=', 'dw_member'), ('parent_id', '=', column_id)]",
+        help="Auto-loaded from the warehouse when the column is that dimension's own id (e.g. WarehouseID, "
+             "BranchID). Type to filter. If the row you want isn't listed, type its numeric id below instead.")
     member_id = fields.Char("Value (MemberID)", required=True)
 
     @api.model
@@ -84,6 +89,31 @@ class BiUserAccessLineWizard(models.TransientModel):
                     raise UserError("Could not load the columns of %s: %s %s" % (table.name, e.msg, e.hint))
                 res["table_id"] = table.id
         return res
+
+    def _search_members(self):
+        self.ensure_one()
+        if not self.column_id:
+            return
+        rows = search_dw_members(self.env, self.table_id.name, self.column_id.name, "")
+        Option = self.env["win.access.option"]
+        for value, title in rows:
+            opt = Option.search([("kind", "=", "dw_member"), ("parent_id", "=", self.column_id.id),
+                                 ("path", "=", str(value))], limit=1)
+            if opt:
+                opt.name = title
+            else:
+                Option.create({"kind": "dw_member", "parent_id": self.column_id.id, "name": title, "path": str(value)})
+
+    @api.onchange("column_id")
+    def _onchange_column(self):
+        self.member_option_id = False
+        if self.column_id:
+            self._search_members()
+
+    @api.onchange("member_option_id")
+    def _onchange_member_option(self):
+        if self.member_option_id:
+            self.member_id = self.member_option_id.path
 
     def _save(self):
         self.env["bi.user.access.line"].create({

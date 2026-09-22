@@ -3,7 +3,129 @@ import re
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
-from .group import ApiError, Runner
+from .group import ApiError, Runner, _call, _q
+from odoo.addons.entity.models.md_entity import _persian_normalize, _sql_persian_normalize
+
+
+_SUFFIX_RX = re.compile(r"\s*\d+$")
+
+
+def _dw_lookup_cols(cur, ssas_table_name, column_name):
+    """(schema, table, id_col, title_col) for the dimension behind an SSAS *ID column, or None.
+
+    Only resolves when `column_name` is the table's OWN business key ('DimBranch' -> 'BranchID'):
+    that's the only column whose value identifies *this* row -- a foreign key into another dimension
+    (DataSourceID, CompanyID, ...) or the title itself would pair meaninglessly with this row's own
+    title, or (picking the title column) crash SQL Server with an ambiguous ORDER BY."""
+    # role-playing SSAS tables carry a numeric suffix ('DimParty 1'); the physical table doesn't.
+    for t in dict.fromkeys([ssas_table_name, _SUFFIX_RX.sub("", ssas_table_name).strip()]):
+        cur.execute("SELECT TABLE_SCHEMA, COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = %s", (t,))
+        cols = cur.fetchall()
+        if cols:
+            schema, table = cols[0][0], t
+            break
+    else:
+        return None
+    by_lower = {c.lower(): c for _, c in cols}
+    own_id = re.sub(r"^Dim", "", table, flags=re.I).lower() + "id"
+    if column_name.lower() != own_id or own_id not in by_lower:
+        return None
+    id_col = by_lower[own_id]
+    # exact match first ('Title'), then any column whose name *contains* title/name ('BankName',
+    # 'CodeTitle'), skipping the English variant when a localized one also exists.
+    title_col = next((by_lower[c] for c in ("title", "name", "label", "codetitle")
+                      if c in by_lower and c != own_id), None)
+    if not title_col:
+        title_col = next((v for k, v in by_lower.items()
+                          if ("title" in k or "name" in k) and "english" not in k and k != own_id), None)
+    return (schema, table, id_col, title_col) if title_col else None
+
+
+def search_dw_members(env, ssas_table_name, column_name, term):
+    """Every row of the DW dimension table behind an SSAS *ID column, matching `term` on their title.
+    Returns [(numeric_id, title), ...], or [] if the column isn't lookup-able (see _dw_lookup_cols)."""
+    conn = _dw_connect(env)
+    try:
+        cur = conn.cursor()
+        resolved = _dw_lookup_cols(cur, ssas_table_name, column_name)
+        if not resolved:
+            return []
+        schema, table, id_col, title_col = resolved
+        sql = "SELECT [%s], [%s] FROM [%s].[%s] WHERE [%s] IS NOT NULL AND [%s] <> ''" % (
+            id_col, title_col, schema, table, title_col, title_col)
+        params = ()
+        if term:
+            # Arabic/Persian codepoints (ي/ی, ك/ک, ...) vary by data source, so normalize both sides.
+            normalized = _persian_normalize(term)
+            col_expr = _sql_persian_normalize("[%s]" % title_col, term=normalized, dialect="mssql")
+            sql += " AND %s LIKE %%s" % col_expr
+            params = ("%" + normalized + "%",)
+        cur.execute(sql + " ORDER BY [%s]" % title_col, params)
+        return cur.fetchall()
+    except ApiError:
+        raise
+    except Exception as e:
+        raise ApiError("Warehouse read failed: %s" % e, _dw_hint(e))
+    finally:
+        conn.close()
+
+
+def resolve_dw_member(env, ssas_table_name, column_name, member_id):
+    """The title of one specific row, by its id -- a targeted single-row lookup, cheaper than
+    fetching the whole dimension via search_dw_members just to display one saved value."""
+    if not member_id:
+        return None
+    conn = _dw_connect(env)
+    try:
+        cur = conn.cursor()
+        resolved = _dw_lookup_cols(cur, ssas_table_name, column_name)
+        if not resolved:
+            return None
+        schema, table, id_col, title_col = resolved
+        cur.execute("SELECT [%s] FROM [%s].[%s] WHERE [%s] = %%s" % (title_col, schema, table, id_col),
+                   (member_id,))
+        row = cur.fetchone()
+        return row[0] if row and row[0] else None
+    except Exception:
+        return None  # display falls back to the raw id; this is a nice-to-have, not critical
+    finally:
+        conn.close()
+
+
+def generate_table_dax(env, ssas_table_name):
+    """Static DAX filter_expression for one SSAS table, covering every bi.user.access record that
+    targets it (any user) -- the same shared expression serves everyone since it looks USERNAME()
+    up in vwUserAccess at query time. Returns None if nothing is configured for this table."""
+    recs = env["bi.user.access"].search([("ssas_table", "=", ssas_table_name)])
+    if not recs:
+        return None
+    clauses = ['1 IN SELECTCOLUMNS(CALCULATETABLE(vwUserAccess, vwUserAccess[UserName] = USERNAME()), '
+              '"IsAllReader", vwUserAccess[IsAllReader])']
+    for eid in sorted(set(recs.filtered("is_all_member").mapped("entity_id.id"))):
+        clauses.append(
+            '1 IN SELECTCOLUMNS(CALCULATETABLE(vwUserAccess, vwUserAccess[UserName] = USERNAME(), '
+            'vwUserAccess[EntityID] = %d), "IsAllMember", vwUserAccess[IsAllMember])' % eid)
+    pairs = sorted({(r.entity_id.id, l.column_name) for r in recs for l in r.line_ids})
+    for eid, col in pairs:
+        clauses.append(
+            '%s[%s] IN SELECTCOLUMNS(CALCULATETABLE(vwUserAccess, vwUserAccess[UserName] = USERNAME(), '
+            'vwUserAccess[EntityID] = %d, vwUserAccess[EntityColumnName] = "%s"), "MemberID", '
+            'vwUserAccess[MemberID])' % (ssas_table_name, col, eid, col))
+    return "\n|| ".join(clauses)
+
+
+def push_rls_filter(env, group, ssas_table_name):
+    """PUT the generated DAX for one table onto `group`'s SSAS role (group is a win.access.group;
+    its .name is the role name, .ssas_database_id the database it was created on)."""
+    if not group or not group.ssas_database_id:
+        raise ApiError("No SSAS role selected.", "Pick 'SSAS role' on the user's BI Access tab.")
+    dax = generate_table_dax(env, ssas_table_name)
+    if not dax:
+        return "Nothing to push"
+    db, inst = group.ssas_database_id, group.ssas_database_id.parent_id
+    _call(env, "PUT", "/ssas/%s/databases/%s/roles/%s/tables/%s" % (
+        _q(inst.name), _q(db.name), _q(group.name), _q(ssas_table_name)), {"filter_expression": dax})
+    return "Pushed to role %s" % group.name
 
 
 def match_ssas_tables(entity_name, table_names):
@@ -113,6 +235,8 @@ class BiUserAccess(models.Model):
             run = Runner()
             run.step("Windows account", rec._check_user, "user")
             run.step("Replace access rows of %s" % rec.entity_id.name, rec._write_rows, "dw", ("user",))
+            run.step("Push RLS filter to SSAS role", lambda r=rec: push_rls_filter(
+                self.env, r.user_id.bi_ssas_group_id, r.ssas_table), "ssas", ("dw",))
             rec.write({"state": "error" if run.failed else "synced", "sync_result": run.data(),
                        "synced_at": fields.Datetime.now()})
 
@@ -182,6 +306,79 @@ class BiUserAccessLine(models.Model):
     access_id = fields.Many2one("bi.user.access", required=True, ondelete="cascade")
     column_name = fields.Char("SSAS column", required=True)
     member_id = fields.Char("Value (MemberID)", required=True)
+    table_option_id = fields.Many2one("win.access.option", compute="_compute_table_option", store=True,
+                                      help="The cached SSAS table this line's column belongs to.")
+    column_id = fields.Many2one(
+        "win.access.option", "SSAS column", compute="_compute_column_id", store=True, readonly=False,
+        help="Auto-matched from column_name; pick a different one to change it.")
+    member_option_id = fields.Many2one(
+        "win.access.option", "Value", compute="_compute_member_option", store=True, readonly=False,
+        help="Auto-resolved from the warehouse so you edit by title, not the raw id. Only possible when "
+             "the column is the table's own key; otherwise edit 'Value (MemberID)' directly.")
+
+    @api.depends("access_id.ssas_table")
+    def _compute_table_option(self):
+        Option = self.env["win.access.option"]
+        for l in self:
+            table = Option
+            if l.access_id.ssas_table:
+                table = Option.search([("kind", "=", "ssas_table"), ("name", "=", l.access_id.ssas_table)], limit=1)
+                if table:
+                    try:
+                        table.load_columns()  # so the column_id dropdown has options
+                    except ApiError:
+                        pass
+            l.table_option_id = table
+
+    @api.depends("table_option_id", "column_name")
+    def _compute_column_id(self):
+        Option = self.env["win.access.option"]
+        for l in self:
+            opt = Option
+            if l.table_option_id and l.column_name:
+                opt = Option.search([("kind", "=", "ssas_column"), ("parent_id", "=", l.table_option_id.id),
+                                     ("name", "=", l.column_name)], limit=1)
+            l.column_id = opt
+
+    @api.onchange("column_id")
+    def _onchange_column_id(self):
+        if self.column_id:
+            self.column_name = self.column_id.name
+
+    @api.depends("column_id", "member_id")
+    def _compute_member_option(self):
+        Option = self.env["win.access.option"]
+        preloaded = set()  # columns already given a first page this batch
+        for l in self:
+            opt = Option
+            if l.column_id and l.member_id:
+                if l.column_id.id not in preloaded:
+                    preloaded.add(l.column_id.id)
+                    try:
+                        for value, title in search_dw_members(self.env, l.access_id.ssas_table, l.column_id.name, ""):
+                            o = Option.search([("kind", "=", "dw_member"), ("parent_id", "=", l.column_id.id),
+                                               ("path", "=", str(value))], limit=1)
+                            (o.write if o else Option.create)(
+                                {"name": title} if o else {"kind": "dw_member", "parent_id": l.column_id.id,
+                                                           "name": title, "path": str(value)})
+                    except ApiError:
+                        pass  # BI host unreachable; fall back to the plain numeric field
+                opt = Option.search([("kind", "=", "dw_member"), ("parent_id", "=", l.column_id.id),
+                                     ("path", "=", str(l.member_id))], limit=1)
+                if not opt:
+                    try:
+                        title = resolve_dw_member(self.env, l.access_id.ssas_table, l.column_id.name, l.member_id)
+                    except ApiError:
+                        title = None
+                    if title:
+                        opt = Option.create({"kind": "dw_member", "parent_id": l.column_id.id,
+                                             "name": title, "path": str(l.member_id)})
+            l.member_option_id = opt
+
+    @api.onchange("member_option_id")
+    def _onchange_member_option(self):
+        if self.member_option_id:
+            self.member_id = self.member_option_id.path
 
     @api.constrains("member_id")
     def _check_member(self):

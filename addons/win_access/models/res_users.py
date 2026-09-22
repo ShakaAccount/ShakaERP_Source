@@ -9,6 +9,13 @@ class ResUsers(models.Model):
         help="The name SSAS sees as USERNAME(), e.g. RAEES\\jane. Defaulted from the AD domain and the login; "
              "correct it if the domain differs.")
     bi_access_ids = fields.One2many("bi.user.access", "user_id", string="BI Access")
+    bi_ssas_group_ids = fields.Many2many(
+        "win.access.group", compute="_compute_bi_ssas_groups",
+        help="win_access groups (= SSAS roles) this Windows account is a member of.")
+    bi_ssas_group_id = fields.Many2one(
+        "win.access.group", "SSAS role", compute="_compute_bi_ssas_group_id", store=True, readonly=False,
+        help="The RLS filter is pushed to this role's tables on sync. Auto-picked when you're in only "
+             "one win_access group; pick one yourself if you're in several.")
 
     @api.depends("login")
     def _compute_bi_username(self):
@@ -17,6 +24,20 @@ class ResUsers(models.Model):
         for u in self:
             if not u.bi_username and u.login and domain:
                 u.bi_username = "%s\\%s" % (domain, u.login)
+
+    @api.depends("bi_username")
+    def _compute_bi_ssas_groups(self):
+        groups = self.env["win.access.group"].search([("ssas_database_id", "!=", False)])
+        for u in self:
+            name = (u.bi_username or "").strip().lower()
+            u.bi_ssas_group_ids = groups.filtered(
+                lambda g: name and any((m.principal or "").strip().lower() == name for m in g.member_ids))
+
+    @api.depends("bi_ssas_group_ids")
+    def _compute_bi_ssas_group_id(self):
+        for u in self:
+            if not u.bi_ssas_group_id or u.bi_ssas_group_id not in u.bi_ssas_group_ids:
+                u.bi_ssas_group_id = u.bi_ssas_group_ids[:1]
 
     def action_bi_add(self):
         self.ensure_one()

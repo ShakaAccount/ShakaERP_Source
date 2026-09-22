@@ -262,7 +262,8 @@ class WinAccessOption(models.Model):
 
     kind = fields.Selection([("ssas_instance", "SSAS instance"), ("ssas_db", "SSAS database"),
                              ("pbirs", "PBIRS item"), ("user", "User"),
-                             ("ssas_table", "SSAS table"), ("ssas_column", "SSAS column")], required=True)
+                             ("ssas_table", "SSAS table"), ("ssas_column", "SSAS column"),
+                             ("dw_member", "Warehouse row")], required=True)
     name = fields.Char(required=True)
     path = fields.Char()
     item_type = fields.Char()

@@ -1,8 +1,10 @@
 /*
-  Repairs Shaka_DW.MD.UserAccess / vwUserAccess so Odoo can own the per-user BI row access.
-  Run ONCE, by hand, as a DBA against database Shaka_DW. Safe to re-run.
+  Creates (if missing) and repairs Shaka_DW.MD.UserAccess / vwUserAccess so Odoo can own the
+  per-user BI row access. Run ONCE, by hand, as a DBA against database Shaka_DW. Safe to re-run.
 
   Why:
+    - MD.UserAccess (and even schema MD) may not exist yet on a fresh Shaka_DW -- step 0 creates
+      both with the correct shape if so, and does nothing if they already exist.
     - Shaka_DW.MD.vwUserAccess currently reads [ShakasystemDB].MD.vwUserAccess, a database that does not exist.
     - The DAX RLS filter needs UserName, EntityID (Odoo/system-DB ids, e.g. DimWarehouse = 1000171),
       EntityColumnName, MemberID, IsAllMember, IsAllReader.
@@ -12,7 +14,26 @@
   Everything that touches the new columns goes through EXEC() so the batch compiles before they exist.
 */
 SET XACT_ABORT ON;
+-- Explicit, so this never silently runs against whatever database happens to be the connection's
+-- current default (that ambiguity is exactly what let an earlier test run land in the wrong DB).
+USE Shaka_DW;
 BEGIN TRAN;
+
+-- 0. schema and table, in case this is a fresh database that never had either
+IF SCHEMA_ID('MD') IS NULL EXEC('CREATE SCHEMA MD');
+IF OBJECT_ID('MD.UserAccess', 'U') IS NULL
+    EXEC('CREATE TABLE MD.UserAccess (
+        ID                int IDENTITY(1,1) PRIMARY KEY,
+        UserID            uniqueidentifier NULL,
+        ModuleID          int              NULL,
+        EntityID          int              NOT NULL,
+        MemberID          bigint           NULL,
+        IsAllReader       int              NOT NULL DEFAULT 0,
+        IsAllMember       int              NOT NULL DEFAULT 0,
+        UserName          varchar(100)     NULL,
+        EntityName        varchar(50)      NULL,
+        EntityColumnName  varchar(50)      NULL
+    )');
 
 -- 1. new columns (Odoo writes the user name and entity name directly, no SCR.User GUID needed)
 IF COL_LENGTH('MD.UserAccess', 'UserName')         IS NULL ALTER TABLE MD.UserAccess ADD UserName         varchar(100) NULL;
