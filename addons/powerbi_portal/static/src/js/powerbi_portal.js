@@ -3,70 +3,50 @@
 import { registry } from "@web/core/registry";
 import { Component, useState, onWillStart } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
-
-/**
- * One level of the report tree. Recurses into itself as a real OWL
- * component (not a t-call template) so each level gets its own isolated
- * rendering scope - avoids a classic QWeb bug where a shared "node"
- * variable set via t-set leaks between recursion levels when using t-call
- * recursion instead of real component instances.
- */
-class PowerBITreeNode extends Component {
-    toggleFolder(fullPath) {
-        this.props.toggleFolder(fullPath);
-    }
-    isExpanded(fullPath) {
-        return this.props.expanded.has(fullPath);
-    }
-    selectReport(report) {
-        this.props.selectReport(report);
-    }
-    isSelected(report) {
-        return this.props.selectedReport && this.props.selectedReport.id === report.id;
-    }
-}
-PowerBITreeNode.template = "powerbi_portal.TreeNode";
-PowerBITreeNode.props = ["node", "expanded", "selectedReport", "toggleFolder", "selectReport"];
-PowerBITreeNode.components = { TreeNode: PowerBITreeNode };
+import { _t } from "@web/core/l10n/translation";
+import { TreeNode } from "@shaka_ui_kit/js/tree_node";
 
 export class PowerBIPortal extends Component {
+    static template = "powerbi_portal.Portal";
+    static components = { TreeNode };
+    static props = ["*"];
+
     setup() {
         this.orm = useService("orm");
         this.state = useState({
-            tree: null,          // { name, fullPath, folders: [...], reports: [...] }
-            expanded: new Set(), // set of folder fullPaths currently expanded
+            roots: [],           // tree nodes: folders { id: fullPath, label, children } and reports { id, label, report }
+            open: {},            // folder id -> true while expanded
+            closing: {},         // folder id -> true while its collapse animation runs
             selectedReport: null,
             pendingReport: null, // report selected but iframe held back during auth warm-up
             loading: true,
             error: null,
         });
-
-        this.toggleFolder = this.toggleFolder.bind(this);
-        this.selectReport = this.selectReport.bind(this);
+        this.closeTimers = {};
 
         onWillStart(async () => {
             try {
                 const reports = await this.orm.call("powerbi.report", "get_sidebar_reports", []);
-                this.state.tree = this._buildTree(reports);
-                // Expand top-level folders by default so the tree isn't fully collapsed on first load.
-                for (const folder of this.state.tree.folders) {
-                    this.state.expanded.add(folder.fullPath);
+                this.state.roots = this._buildTree(reports);
+                // Top-level folders start open so the tree isn't fully collapsed on first load.
+                for (const node of this.state.roots) {
+                    if (node.children) {
+                        this.state.open[node.id] = true;
+                    }
+                }
+                const warmed = new Set();
+                for (const r of reports) {
+                    const o = r.url && this._reportOrigin(r.url);
+                    if (o && !warmed.has(o)) {
+                        warmed.add(o);
+                        this.warmReportOrigin(r.url);
+                    }
                 }
                 if (reports.length) {
-                    const warmed = new Set();
-                    for (const r of reports) {
-                        if (r.url) {
-                            const o = this._reportOrigin(r.url);
-                            if (o && !warmed.has(o)) {
-                                warmed.add(o);
-                                this.warmReportOrigin(r.url);
-                            }
-                        }
-                    }
                     this.selectReport(reports[0]);
                 }
-            } catch (e) {
-                this.state.error = "Could not load the report list. Please contact your administrator.";
+            } catch {
+                this.state.error = _t("Could not load the report list. Please contact your administrator.");
             } finally {
                 this.state.loading = false;
             }
@@ -74,50 +54,56 @@ export class PowerBIPortal extends Component {
     }
 
     _buildTree(reports) {
-        const root = { name: "", fullPath: "", children: new Map(), reports: [] };
+        const root = { children: [] };
+        const folders = { "": root };
         for (const report of reports) {
-            const segments = report.path.split("/").filter(Boolean);
-            const folderSegments = segments.slice(0, -1); // everything except the report itself
-            let node = root;
-            let pathSoFar = "";
-            for (const seg of folderSegments) {
-                pathSoFar += "/" + seg;
-                if (!node.children.has(seg)) {
-                    node.children.set(seg, {
-                        name: seg,
-                        fullPath: pathSoFar,
-                        children: new Map(),
-                        reports: [],
-                    });
+            const segments = report.path.split("/").filter(Boolean).slice(0, -1);
+            let parent = root;
+            let path = "";
+            for (const seg of segments) {
+                path += "/" + seg;
+                if (!folders[path]) {
+                    folders[path] = { id: path, label: seg, children: [] };
+                    parent.children.push(folders[path]);
                 }
-                node = node.children.get(seg);
+                parent = folders[path];
             }
-            node.reports.push(report);
+            parent.children.push({ id: report.id, label: report.name, report });
         }
-        return this._finalize(root);
+        return root.children;
     }
 
-    _finalize(node) {
-        return {
-            name: node.name,
-            fullPath: node.fullPath,
-            folders: Array.from(node.children.values()).map((c) => this._finalize(c)),
-            reports: node.reports,
-        };
-    }
+    // Bound arrows: passed as bare props to TreeNode, which calls them detached from `this`.
+    getChildren = (node) => node.children || [];
 
-    toggleFolder(fullPath) {
-        if (this.state.expanded.has(fullPath)) {
-            this.state.expanded.delete(fullPath);
+    onSelect = (node) => {
+        if (node.children) {
+            this.toggleFolder(node.id);
         } else {
-            this.state.expanded.add(fullPath);
+            this.selectReport(node.report);
         }
-    }
+    };
+
+    toggleFolder = (id) => {
+        if (this.state.closing[id]) {
+            // Reopened mid-collapse: cancel the unmount, the CSS reverses.
+            clearTimeout(this.closeTimers[id]);
+            delete this.state.closing[id];
+        } else if (!this.state.open[id]) {
+            this.state.open[id] = true;
+        } else {
+            this.state.closing[id] = true;
+            this.closeTimers[id] = setTimeout(() => {
+                delete this.state.open[id];
+                delete this.state.closing[id];
+            }, parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--acc-collapse")) || 250);
+        }
+    };
 
     _reportOrigin(reportUrl) {
         try {
             return new URL(reportUrl, window.location.href).origin;
-        } catch (e) {
+        } catch {
             return null;
         }
     }
@@ -145,33 +131,32 @@ export class PowerBIPortal extends Component {
      * attempts the report regardless.
      */
     warmReportOrigin(reportUrl) {
-        try {
-            const origin = this._reportOrigin(reportUrl);
-            if (!origin) {
-                return;
-            }
+        const origin = this._reportOrigin(reportUrl);
+        if (origin) {
             // Any path on the origin works for the handshake; the root is the
             // most reliable target (every IIS site responds to it).
-            const img = new Image();
-            img.src = origin + "/?rs:auth=warmup";
-            // If the handshake 2xx'd, the browser has cached the auth; if it
-            // 401s, the image just won't load - either way nothing to handle.
-        } catch (e) {
-            // ignore malformed URLs / blocked requests
+            new Image().src = origin + "/?rs:auth=warmup";
         }
     }
 
     selectReport(report) {
+        // Open the folders above the report so the selection is visible.
+        const segments = report.path.split("/").filter(Boolean).slice(0, -1);
+        let path = "";
+        for (const seg of segments) {
+            path += "/" + seg;
+            this.state.open[path] = true;
+        }
         // Warm the PBIRS origin first (let the browser run the Windows-auth
         // handshake at top level and persist the session cookie), THEN reveal
         // the iframe a beat later so its own navigate reuses that cookie
         // instead of re-challenging. Keeps the previous report (or placeholder)
         // visible during the brief warm-up.
-        if (report && report.url) {
+        if (report.url) {
             this.warmReportOrigin(report.url);
             this.state.pendingReport = report;
             setTimeout(() => {
-                if (this.state.pendingReport && this.state.pendingReport.id === report.id) {
+                if (this.state.pendingReport?.id === report.id) {
                     this.state.selectedReport = report;
                     this.state.pendingReport = null;
                 }
@@ -180,9 +165,10 @@ export class PowerBIPortal extends Component {
             this.state.selectedReport = report;
         }
     }
-}
 
-PowerBIPortal.template = "powerbi_portal.Portal";
-PowerBIPortal.components = { TreeNode: PowerBITreeNode };
+    get selectedId() {
+        return (this.state.pendingReport || this.state.selectedReport)?.id;
+    }
+}
 
 registry.category("actions").add("powerbi_portal.portal", PowerBIPortal);

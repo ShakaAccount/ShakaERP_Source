@@ -733,8 +733,8 @@ msgstr ""
 #. module: powerbi_portal
 #. odoo-javascript
 #: code:addons/powerbi_portal/static/src/xml/powerbi_portal.xml:0
-msgid "Select a report from the list on the left."
-msgstr "یک گزارش را از فهرست سمت چپ انتخاب کنید."
+msgid "Select a report from the list."
+msgstr "یک گزارش را از فهرست انتخاب کنید."
 
 #. module: powerbi_portal
 #: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__sequence
@@ -973,3 +973,9 @@ msgstr "https://pbirs.company.local/ReportServer/ReportService2010.asmx"
 #: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
 msgid "https://pbirs.company.local/reports/powerbi/..."
 msgstr "https://pbirs.company.local/reports/powerbi/..."
+
+#. module: powerbi_portal
+#. odoo-javascript
+#: code:addons/powerbi_portal/static/src/js/powerbi_portal.js:0
+msgid "Could not load the report list. Please contact your administrator."
+msgstr "بارگذاری فهرست گزارش‌ها ممکن نشد. لطفاً با مدیر سیستم تماس بگیرید."
