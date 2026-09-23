@@ -11,8 +11,10 @@ it up and Odoo Enterprise's dark mode (User preferences) just works.
 Design source of truth: ``design-system/shaka-erp/MASTER.md``.
 Addon SCSS should use the ``var(--shaka-*)`` tokens, never dark-mode selectors.
 """,
-    'author': 'RAES',
-    'category': 'Themes',
+    'author': 'ShakaERP',
+    'maintainer': 'ShakaERP',
+    'website': 'https://shakasystem.com',
+    'category': 'Themes/Backend',
     'version': '19.0.1.0.0',
     'license': 'LGPL-3',
     'icon': '/shaka_theme/static/description/icon.svg',
@@ -32,7 +34,9 @@ Addon SCSS should use the ``var(--shaka-*)`` tokens, never dark-mode selectors.
             'shaka_theme/static/src/scss/fonts.scss',
             'shaka_theme/static/src/scss/tokens.scss',
             'shaka_theme/static/src/scss/backend.scss',
+            'shaka_theme/static/src/scss/navigation.scss',
             'shaka_theme/static/src/transitions/*',
+            'shaka_theme/static/src/components/*',
         ],
         'web.assets_frontend': [
             'shaka_theme/static/src/scss/fonts.scss',
@@ -42,4 +46,5 @@ Addon SCSS should use the ``var(--shaka-*)`` tokens, never dark-mode selectors.
     },
     'installable': True,
     'application': False,
+    'auto_install': False,
 }

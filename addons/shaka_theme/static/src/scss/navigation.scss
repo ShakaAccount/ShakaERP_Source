@@ -1,0 +1,249 @@
+// Tabs (notebook) and the form stage bar (statusbar field), per MASTER.md
+// §Components. Colours are --shaka-* tokens, so light and dark need no branches
+// beyond the one pill tweak below.
+
+// ---------------------------------------------------------------------------
+// Tabs: a segmented pill bar. The sliding pill behind the active tab comes from
+// transitions/tabs_sliding.* (--tabs-* tokens). Odoo reads the Notebook
+// variables on .nav-link; declaring them on the headers (closer than
+// .o_notebook) wins over web_enterprise's light and dark values.
+.o_notebook .o_notebook_headers {
+    --Notebook__link-border-color: transparent;
+    --Notebook__link-border-color--hover: transparent;
+    --Notebook__link-border-color--active: transparent;
+    --Notebook__link-border-top-color--active: transparent;
+    --Notebook__link-background-color: transparent;
+    --Notebook__link-background-color--hover: transparent;
+    --Notebook__link-color--active: var(--tabs-text-active);
+}
+
+.o_notebook .nav-tabs {
+    position: relative; // the pill's containing block
+    display: inline-flex;
+    width: max-content;
+    gap: 3px;
+    padding: 3px;
+    border: 0;
+    border-radius: 999px;
+    background-color: var(--tabs-bar-bg);
+
+    @if $o-webclient-color-scheme == dark {
+        // A surface-coloured pill would read darker than the bar in dark mode.
+        --tabs-pill-bg: color-mix(in srgb, var(--shaka-muted) 35%, var(--shaka-muted-bg));
+    }
+
+    .nav-item {
+        margin: 0;
+    }
+
+    .nav-link {
+        position: relative;
+        z-index: 1; // labels above the pill
+        display: flex;
+        align-items: center;
+        height: 30px;
+        margin: 0;
+        padding: 4px 14px;
+        border: 0;
+        border-radius: 999px;
+        font-weight: 500;
+        transition: color var(--tabs-dur) var(--tabs-ease);
+
+        &:not(.active) {
+            color: var(--tabs-text-muted);
+            background-color: transparent;
+
+            &:hover {
+                color: var(--tabs-text-active);
+            }
+        }
+
+        &.active {
+            color: var(--tabs-text-active);
+            background-color: transparent;
+
+            &::after {
+                content: none; // Enterprise's top bar; the pill marks the tab
+            }
+        }
+    }
+}
+
+.o_notebook.horizontal .o_notebook_headers {
+    padding-block: 2px 8px;
+}
+
+// Vertical notebooks: a rounded column, not a pill.
+.o_notebook.vertical {
+    .nav-tabs {
+        border-radius: var(--shaka-radius-card);
+    }
+    .nav-link {
+        height: auto;
+    }
+    .t-tabs-pill {
+        border-radius: var(--shaka-radius);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Stage bar: a numbered stepper in a card (reference: shaka_theme/stepper.png).
+// Passed stages show a check, the current one an outlined number, upcoming ones
+// a muted number; a solid connector follows passed stages, a dashed one the rest.
+// statusbar_stepper.xml adds the dot/label markup and .t-step-done.
+//
+// Odoo renders stages in reverse DOM order (flex row-reverse): `.o_first` is the
+// visually last item. Its folding logic compares the row height with the first
+// item's height, so every item keeps one fixed height and the row no padding.
+// The doubled class matches the specificity of Odoo's .o_first/.o_last rules.
+.o_form_statusbar .o_field_statusbar {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-inline-start: 16px;
+    padding: 6px 14px;
+    border: 1px solid var(--shaka-border);
+    border-radius: var(--shaka-radius-card);
+    background-color: var(--shaka-surface);
+}
+
+.o_field_statusbar > .o_statusbar_status {
+    --step-h: 28px; // every item, toggles included (see folding note above)
+    --step-dot: 28px;
+    flex: 1 1 auto;
+    align-items: center;
+    align-self: center;
+
+    > .o_arrow_button.o_arrow_button:not(.d-none) {
+        display: flex;
+        flex: 1 1 auto;
+        align-items: center;
+        gap: 8px;
+        height: var(--step-h);
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: var(--shaka-radius);
+        clip-path: none;
+        background-color: transparent;
+        color: var(--shaka-muted);
+        font-weight: 500;
+        white-space: nowrap;
+
+        &::before {
+            content: none; // Odoo's chevron outline
+        }
+
+        // Connector to the next stage.
+        &::after {
+            content: "";
+            flex: 1 1 auto;
+            min-width: 24px;
+            margin-inline: 4px 12px;
+            border-top: 1.5px dashed var(--shaka-border);
+        }
+
+        &.o_first {
+            flex: none;
+
+            &::after {
+                content: none;
+            }
+        }
+
+        &:hover, &:focus, &:active {
+            background-color: transparent;
+        }
+        &:not(:disabled):hover .t-step-label {
+            color: var(--shaka-text);
+        }
+        &:not(:disabled):hover .t-step-dot {
+            border-color: var(--shaka-primary);
+        }
+    }
+
+    .t-step-dot {
+        display: grid;
+        flex: none;
+        place-items: center;
+        width: var(--step-dot);
+        height: var(--step-dot);
+        border: 1px solid var(--shaka-border);
+        border-radius: 50%;
+        background-color: var(--shaka-muted-bg);
+        color: var(--shaka-muted);
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+        transition: border-color var(--shaka-ease), background-color var(--shaka-ease);
+    }
+
+    .t-step-label {
+        transition: color var(--shaka-ease);
+    }
+
+    // Passed: filled primary dot with a check, solid primary connector.
+    > .o_arrow_button.o_arrow_button.t-step-done:not(.d-none) {
+        color: var(--shaka-text);
+
+        &::after {
+            border-top-style: solid;
+            border-top-color: var(--shaka-primary);
+        }
+        .t-step-dot {
+            border-color: var(--shaka-primary);
+            background-color: var(--shaka-primary);
+            color: var(--shaka-surface);
+        }
+    }
+
+    // Current: outlined primary number. Matches Odoo's `.o_arrow_button_current:disabled`.
+    > .o_arrow_button.o_arrow_button_current:not(.d-none):disabled {
+        z-index: auto;
+        background-color: transparent;
+        color: var(--shaka-text);
+
+        .t-step-dot {
+            border: 1.5px solid var(--shaka-primary);
+            background-color: var(--shaka-surface);
+            color: var(--shaka-primary);
+            font-weight: 600;
+        }
+    }
+
+    // "…" folded-stage toggles: a dashed dot in the stepper's rhythm.
+    > .o_arrow_button.t-step-more:not(.d-none) {
+        flex: none;
+        justify-content: center;
+        width: var(--step-dot);
+        height: var(--step-h);
+        margin-inline-end: 12px;
+        border: 1px dashed var(--shaka-border);
+        border-radius: 50%;
+        color: var(--shaka-muted);
+        line-height: 1;
+
+        &::after {
+            content: none;
+        }
+        &:not(:disabled):hover {
+            border-color: var(--shaka-primary);
+            color: var(--shaka-text);
+        }
+        &.t-step-done {
+            border-style: solid;
+            border-color: var(--shaka-primary);
+            color: var(--shaka-primary);
+        }
+    }
+
+    // Small screens: the single "current stage" dropdown, as a plain button.
+    > .o_arrow_button.dropdown-toggle:not(.t-step-more):not(.d-none) {
+        flex: none;
+        padding-inline: 12px;
+        border: 1px solid var(--shaka-border);
+        color: var(--shaka-text);
+
+        &::after {
+            content: none;
+        }
+    }
+}

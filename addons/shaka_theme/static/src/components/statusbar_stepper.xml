@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Stage bar as a numbered stepper (styles: scss/navigation.scss). -->
+    <t t-inherit="web.StatusBarField" t-inherit-mode="extension">
+        <xpath expr="//t[@t-foreach='items.inline']/button" position="attributes">
+            <attribute name="t-esc"/>
+            <attribute name="t-attf-class">{{ shakaStep(item).done ? 't-step-done' : '' }}</attribute>
+        </xpath>
+        <xpath expr="//t[@t-foreach='items.inline']/button" position="inside">
+            <t t-set="step" t-value="shakaStep(item)"/>
+            <span class="t-step-dot" aria-hidden="true">
+                <i t-if="step.done" class="fa fa-check"/>
+                <t t-else="" t-esc="step.number"/>
+            </span>
+            <span class="t-step-label" t-esc="item.label"/>
+        </xpath>
+        <!-- Folded earlier stages are all passed; folded later ones are not. -->
+        <xpath expr="//button[@t-ref='before']" position="attributes">
+            <attribute name="class" add="t-step-more t-step-done" separator=" "/>
+        </xpath>
+        <xpath expr="//button[@t-ref='after']" position="attributes">
+            <attribute name="class" add="t-step-more" separator=" "/>
+        </xpath>
+    </t>
+
+</templates>

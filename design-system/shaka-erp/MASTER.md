@@ -58,7 +58,7 @@ spacing above 32px inside a view.
 
 ## Shape and elevation
 
-- Radius: 6px for controls, 8px for cards, sheets and dialogs. Pills (`999px`) are for badges and the loading indicator only.
+- Radius: 6px for controls, 8px for cards, sheets and dialogs. Pills (`999px`) are for badges, the loading indicator and the tab bar only.
 - Shadows: `0 1px 2px rgb(15 23 42 / .06)` on cards, `0 8px 24px rgb(15 23 42 / .12)` on
   dropdowns and dialogs. There is nothing in between.
 - The modal backdrop is a plain dim, with no blur.
@@ -78,19 +78,37 @@ spacing above 32px inside a view.
   the 150–200ms default on purpose:
   - **Dropdown menu morph**: Odoo dropdown menus grow out of their toggler. A `clip-path` grows from a box the size of
     the toggler to the full menu over 350ms with an overshoot, and shrinks back over 250ms. The content fades and slides in.
-    The tokens are `--morph-*` in `dropdown_menu_morph.css`, driven by `popover.js`.
+    It also applies to AutoComplete menus (many2one and other search-as-you-type fields), which grow out of their input.
+    The tokens are `--morph-*` in `dropdown_menu_morph.css`. The mechanics are in `morph.js`, driven by `popover.js` and
+    `autocomplete.js`.
+  - **Modal open/close**: every dialog's card scales up from 0.96 and fades in over 250ms, and its dim layer fades with
+    it. On close it scales back down over 150ms, accelerating out; this plays on an inert clone because Odoo removes
+    dialogs at once. Closing mid-open starts from the scale on screen (`--modal-*`, `modal.css/.js`).
   - **Tooltip open/close**: Odoo tooltips scale up from 0.98 and fade in over 150ms, after an 80ms delay, and fade out
     over 50ms (`--tt-*`, `tooltip.css`).
   - **Checkbox check**: the check draws in over 350ms and retracts over 150ms, and the box colour fades over 150ms
     (`--check-box/draw/uncheck`, `checkbox_check.scss`).
-  - **Toggle**: the switch thumb travels with an overshoot over 350ms (`--toggle-*`, `toggle.css`).
+  - **Toggle**: the switch thumb travels over 350ms with an overshoot built into the easing, as a transition
+    (`--toggle-*`, `toggle.css`).
   - **Success check**: success notifications show a check that fades, rotates, bobs and draws in over 500ms
     (`--check-*`, `success_check.css`).
   - **Error state shake**: invalid fields and the login error shake over 280ms (`--shake-*`, `error_shake.css`).
+  - **Tabs sliding**: the active-tab pill slides and resizes to the clicked tab over 250ms on
+    `cubic-bezier(0.22, 1, 0.36, 1)`, and snaps without animation on first paint and on resize (`--tabs-*`,
+    `tabs_sliding.css/.js/.xml`).
   - **Loading indicator**: Odoo's bottom-corner "Loading" box becomes a pill centred under the navbar with a TwinOrbit
     spinner (two dots orbiting a centre dot, 1s loop, `--t-orbit-dur`). It still appears after Odoo's 250ms delay and fades
     and slides in over 200ms (`loading_indicator.xml` / `.scss`).
   - The small blur some of these use lasts only for the motion itself. It is not the decorative blur banned below.
+- **Every animation is interruptible.** Toggling a component mid-motion continues from the value on screen; it never
+  jumps to an end state and restarts. State changes use CSS transitions, with `@starting-style` for enter, instead of
+  keyframes. Dropdown, autocomplete, tooltip and dialog exits hand their current values between the live menu and its exit
+  ghost (`morph.js`). The dialog resize is a Web Animations tween that retargets when the content changes mid-tween
+  (`dialog_card_resize.js`). Delayed unmounts (accordion, tree) cancel their timer when reopened. Only one-shot feedback
+  (success check, error shake, the loading orbit) uses keyframes.
+- **Exits accelerate** (`cubic-bezier(0.4, 0, 1, 1)`, about 65% of the enter duration): menus, tooltips and accordions
+  close on `--morph-exit-ease`, `--tt-out-ease` and `--acc-exit-ease`. A decelerating curve on an exit does almost all
+  of its motion in the first frames, so the close reads as a snap.
 - Everything is turned off under `prefers-reduced-motion: reduce`.
 - No scroll-reveal or GSAP; they belong on marketing pages, not in an ERP.
 
@@ -104,8 +122,27 @@ spacing above 32px inside a view.
   Errors appear next to the field (Odoo default).
 - **Kanban:** each card is a surface with a border and the card shadow. On hover only the border
   colour changes; the card doesn't lift.
+- **Tabs (notebook):** a segmented pill bar (reference `addons/shaka_theme/tab.png`). The bar is a muted surface with
+  3px padding. Tabs are muted text, and the active one sits on a surface pill with the card shadow; in dark mode the pill
+  is lifted toward the muted text colour so it reads above the bar. Vertical notebooks use the card radius instead of a
+  pill (`shaka_theme/static/src/scss/navigation.scss`).
+- **Stage bar (statusbar):** a numbered stepper in a surface card (reference `addons/shaka_theme/stepper.png`). Passed
+  stages have a filled primary dot with a check, the current stage an outlined primary dot with its number, and
+  upcoming stages a muted dot with their number. A solid primary connector follows a passed stage, a dashed border
+  connector the others, and the connectors stretch to fill the row. Folded stages sit behind dashed `…` dots. Markup
+  from `components/statusbar_stepper.xml`, styles in `navigation.scss`. Every item keeps one height: Odoo's folding
+  logic compares the row height with the first item's.
 - **Focus:** `outline: 2px solid var(--shaka-primary); outline-offset: 2px` on `:focus-visible`,
   never removed.
+
+## Module icons
+
+One recipe for every `static/description/icon.svg` (reference: `addons/category/static/description/icon.svg`):
+
+- Glyph from [Lucide](https://lucide.dev) (ISC licence), pasted as-is: 24px grid, white stroke, width `1.6`.
+- 256×256 tile, `rx="48"`, 2-stop diagonal gradient Tailwind `-700` → `-400` of one hue, drop shadow in the `-900`.
+- One hue per module family; set `'icon': '/<module>/static/description/icon.svg'` in the manifest
+  (Odoo never auto-discovers SVG icons) and `-u` the module to refresh it.
 
 ## RTL
 
