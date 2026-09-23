@@ -32,14 +32,12 @@ Addon SCSS should use the ``var(--shaka-*)`` tokens, never dark-mode selectors.
             'shaka_theme/static/src/scss/fonts.scss',
             'shaka_theme/static/src/scss/tokens.scss',
             'shaka_theme/static/src/scss/backend.scss',
-            'shaka_theme/static/src/transitions/card_resize.css',
-            'shaka_theme/static/src/transitions/dialog_card_resize.js',
-            'shaka_theme/static/src/transitions/menu_dropdown.css',
-            'shaka_theme/static/src/transitions/dropdown_menu.js',
+            'shaka_theme/static/src/transitions/*',
         ],
         'web.assets_frontend': [
             'shaka_theme/static/src/scss/fonts.scss',
             'shaka_theme/static/src/scss/tokens.scss',
+            'shaka_theme/static/src/transitions/error_shake.css',  # login error
         ],
     },
     'installable': True,

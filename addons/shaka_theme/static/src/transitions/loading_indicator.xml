@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- TwinOrbit loader in Odoo's loading indicator (styles: loading_indicator.scss). -->
+    <t t-inherit="web.LoadingIndicator" t-inherit-mode="extension">
+        <xpath expr="//span[hasclass('o_loading_indicator')]" position="attributes">
+            <attribute name="role">status</attribute>
+            <attribute name="aria-live">polite</attribute>
+        </xpath>
+        <xpath expr="//span[hasclass('o_loading_indicator')]" position="inside">
+            <span class="t-orbit" aria-hidden="true"><span/><span/></span>
+        </xpath>
+    </t>
+
+</templates>

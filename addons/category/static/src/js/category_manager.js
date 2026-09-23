@@ -397,7 +397,7 @@ export class CategoryManager extends Component {
                 delete this.state.closingIds[id];
                 // Free the paginated children of this whole subtree.
                 this._resetLoadedCounts([id]);
-            }, 220);
+            }, parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--acc-collapse")) || 250);
         }
     }
 

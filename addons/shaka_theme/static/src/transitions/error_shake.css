@@ -1,0 +1,40 @@
+/* Transitions.dev — Error state shake (https://transitions.dev/detail.html?t=error-state-shake)
+   Vendored shake + border tween; tune the motion tokens below. Odoo owns the
+   error state (.o_field_invalid, cleared once the value is fixed), so the
+   snippet's message reveal and auto-revert (--revert-*) have nothing to drive.
+   Shakes when a field turns invalid and on the login error; error_shake.js
+   replays it on every failed save. */
+
+:root {
+  --shake-distance: 6px;
+  --shake-overshoot: 4px;
+  --shake-dur-a: 80ms;
+  --shake-dur-b: 60ms;
+  --shake-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Border-color tween between default / focused / invalid. */
+.o_input {
+  transition: border-color 150ms ease-out;
+}
+
+/* %-stops are cumulative leg durations (80, 60, 80, 60 = 280ms). Recompute
+   if any segment duration changes. */
+.o_field_widget.o_field_invalid,
+.oe_login_form .alert-danger {
+  animation: t-input-shake calc(
+      var(--shake-dur-a) * 2 + var(--shake-dur-b) * 2
+    ) linear;
+}
+@keyframes t-input-shake {
+  0%      { transform: translateX(0);                                 animation-timing-function: var(--shake-ease); }
+  28.57%  { transform: translateX(var(--shake-distance));             animation-timing-function: var(--shake-ease); }
+  57.14%  { transform: translateX(calc(var(--shake-distance) * -1)); animation-timing-function: var(--shake-ease); }
+  78.57%  { transform: translateX(var(--shake-overshoot));            animation-timing-function: var(--shake-ease); }
+  100%    { transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .o_field_widget.o_field_invalid,
+  .oe_login_form .alert-danger { animation: none !important; transform: none !important; }
+}

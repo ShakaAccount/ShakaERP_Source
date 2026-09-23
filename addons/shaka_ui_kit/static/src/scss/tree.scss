@@ -75,7 +75,7 @@
     font-size: 13px;
     font-weight: 700;
     color: var(--tree-text-muted);
-    transition: transform 200ms ease,
+    transition: transform var(--acc-chevron) var(--acc-ease),
     background 120ms ease,
     color 120ms ease;
     cursor: pointer;
@@ -160,17 +160,20 @@
   margin-inline-start: 16px;
   border-inline-start: 1px solid var(--tree-border);
   padding-inline-start: 4px;
-  animation: o_tree_expand 220ms ease-out;
-  transition: grid-template-rows 220ms ease-in,
-  opacity 220ms ease-in,
-  margin-inline-start 220ms ease-in,
-  border-inline-start-width 220ms ease-in,
-  padding-inline-start 220ms ease-in;
+  // Accordion tokens (shaka_theme/static/src/transitions/accordion.scss).
+  animation: o_tree_expand var(--acc-expand) var(--acc-ease);
+  transition: grid-template-rows var(--acc-collapse) var(--acc-ease),
+  opacity var(--acc-collapse) var(--acc-ease),
+  filter var(--acc-collapse) var(--acc-ease),
+  margin-inline-start var(--acc-collapse) var(--acc-ease),
+  border-inline-start-width var(--acc-collapse) var(--acc-ease),
+  padding-inline-start var(--acc-collapse) var(--acc-ease);
 }
 
 .o_tree_children_closing {
   grid-template-rows: 0fr;
   opacity: 0;
+  filter: blur(2px);
   margin-inline-start: 0;
   border-inline-start-width: 0;
   padding-inline-start: 0;
@@ -187,6 +190,7 @@
   from {
     grid-template-rows: 0fr;
     opacity: 0;
+    filter: blur(2px);
   }
   to {
     grid-template-rows: 1fr;

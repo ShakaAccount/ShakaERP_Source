@@ -1,0 +1,70 @@
+// Loading indicator: TwinOrbit pill centred under the navbar instead of Odoo's
+// bottom-corner box. Odoo's LoadingIndicator logic (250ms show delay, o-fade
+// Transition) is untouched; this only restyles it.
+
+:root {
+  --t-orbit-dur: 1s;
+}
+
+.o_loading_indicator {
+  top: calc(#{$o-navbar-height} + 8px);
+  bottom: auto;
+  left: 0;
+  right: 0;
+  width: max-content;
+  margin-inline: auto;
+  pointer-events: none;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 20px 10px 16px;
+  border-radius: 999px;
+  background-color: var(--shaka-surface);
+  color: var(--shaka-text);
+  border: 1px solid var(--shaka-border);
+  box-shadow: var(--shaka-shadow-pop);
+  font-size: 15px;
+  font-weight: 500;
+
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+  &.o-fade-enter, &.o-fade-leave {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.96);
+  }
+}
+
+// Ported from TwinOrbit: a centre dot with two dots orbiting half a turn apart.
+.t-orbit {
+  order: -1; // appended after the text by the template; show it first
+  position: relative;
+  flex: none;
+  width: 9px;
+  aspect-ratio: 1;
+  margin-inline: 14px; // room for the 155% orbit
+  border-radius: 50%;
+  color: var(--shaka-primary);
+  background: currentColor;
+
+  > span {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: currentColor;
+    transform: rotate(0deg) translate(155%);
+    animation: t-twin-orbit var(--t-orbit-dur) ease infinite;
+    &:last-child {
+      animation-delay: calc(var(--t-orbit-dur) / 2);
+    }
+  }
+}
+
+@keyframes t-twin-orbit {
+  to { transform: rotate(360deg) translate(155%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .o_loading_indicator.o-fade-enter, .o_loading_indicator.o-fade-leave { transform: none; }
+  .t-orbit > span { animation: none; }
+  .t-orbit > span:last-child { transform: rotate(180deg) translate(155%); }
+}

@@ -1,0 +1,38 @@
+/* Transitions.dev — Tooltip open/close (https://transitions.dev/detail.html?t=tooltip-open-close)
+   Vendored as-is; tune the motion tokens below. Applied to every Odoo tooltip by
+   popover.js (.t-tt, .is-open; the exit plays on a clone). Only the appear/leave
+   lanes: Odoo places one tooltip per target, so the snippet's shared-bubble
+   travel (--tt-x, width, --tt-move-*) has nothing to drive, and the theme owns
+   the colours (--tt-bg/--tt-fg). */
+
+:root {
+  --tt-in-dur: 150ms;
+  --tt-out-dur: 50ms;
+  --tt-scale: 0.98;
+  --tt-delay: 80ms;
+  --tt-in-ease: ease-out;
+  --tt-out-ease: ease-out;
+}
+
+/* Default rule controls the LEAVE state: no delay, so hiding plays immediately. */
+.t-tt {
+  scale: var(--tt-scale);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--tt-out-dur) var(--tt-out-ease),
+    scale   var(--tt-out-dur) var(--tt-out-ease);
+}
+/* The appear delay belongs ONLY to the show rule. */
+.t-tt.is-open {
+  opacity: 1;
+  scale: 1;
+  pointer-events: auto;
+  transition:
+    opacity var(--tt-in-dur) var(--tt-in-ease) var(--tt-delay),
+    scale   var(--tt-in-dur) var(--tt-in-ease) var(--tt-delay);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-tt { transition: none !important; }
+}

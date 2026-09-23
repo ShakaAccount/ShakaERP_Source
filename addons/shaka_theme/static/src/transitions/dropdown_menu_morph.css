@@ -1,0 +1,66 @@
+/* Transitions.dev — Dropdown menu morph (https://transitions.dev/detail.html?t=dropdown-menu-morph)
+   Vendored tokens; tune below. The snippet grows one element (button → panel)
+   by tweening width/height. Odoo's menu is a separate popover, so popover.js
+   starts it clipped to a toggler-sized box on the edge nearest the toggler
+   (--morph-from) and the clip grows into the full surface: no layout animation.
+   Radii are Shaka's (the site's 40px/20px fit its round + button); there is no
+   plus icon, so --morph-rotate is dropped. */
+
+:root {
+  --morph-open-dur: 350ms;
+  --morph-close-dur: 250ms;
+  --morph-ease: cubic-bezier(0.34, 1.25, 0.64, 1);
+  --morph-close-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --morph-r-closed: var(--shaka-radius);
+  --morph-r-open: var(--shaka-radius);
+  --morph-fade-dur: 200ms;
+  --morph-slide: 40px;
+  --morph-scale: 0.97;
+  --morph-blur: 2px;
+}
+
+/* Closed: clipped to the toggler box. Open: the whole menu, plus room for its
+   shadow; .is-settled drops the clip once open so nothing overflowing is cut. */
+.t-morph {
+  clip-path: var(--morph-from);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    clip-path var(--morph-close-dur) var(--morph-close-ease),
+    opacity   var(--morph-close-dur) var(--morph-close-ease);
+}
+.t-morph.is-open {
+  clip-path: inset(-32px round var(--morph-r-open));
+  opacity: 1;
+  pointer-events: auto;
+  transition:
+    clip-path var(--morph-open-dur) var(--morph-ease),
+    opacity   var(--morph-fade-dur) var(--morph-close-ease);
+}
+.t-morph.is-settled {
+  clip-path: none;
+}
+
+/* Content starts slid toward the toggler + scaled + blurred; reveals on open. */
+.t-morph > * {
+  opacity: 0;
+  translate: 0 calc(var(--morph-dir) * var(--morph-slide));
+  scale: var(--morph-scale);
+  filter: blur(var(--morph-blur));
+  transition:
+    opacity   var(--morph-fade-dur) var(--morph-close-ease),
+    translate var(--morph-open-dur) var(--morph-close-ease),
+    scale     var(--morph-open-dur) var(--morph-close-ease),
+    filter    var(--morph-fade-dur) var(--morph-close-ease);
+}
+.t-morph.is-open > * {
+  opacity: 1;
+  translate: 0 0;
+  scale: 1;
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-morph, .t-morph > * { transition: none !important; }
+  .t-morph.is-open { clip-path: none; } /* no transitionend to settle it */
+}

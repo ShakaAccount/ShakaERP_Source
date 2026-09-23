@@ -58,7 +58,7 @@ spacing above 32px inside a view.
 
 ## Shape and elevation
 
-- Radius: 6px for controls, 8px for cards, sheets and dialogs. Pills (`999px`) are for badges only.
+- Radius: 6px for controls, 8px for cards, sheets and dialogs. Pills (`999px`) are for badges and the loading indicator only.
 - Shadows: `0 1px 2px rgb(15 23 42 / .06)` on cards, `0 8px 24px rgb(15 23 42 / .12)` on
   dropdowns and dialogs. There is nothing in between.
 - The modal backdrop is a plain dim, with no blur.
@@ -70,9 +70,27 @@ spacing above 32px inside a view.
   - **Exception: Card resize** (transitions.dev): dialogs tween their height when the content
     changes size. It uses 300ms and `cubic-bezier(0.22, 1, 0.36, 1)`, exposed as `--resize-dur` and `--resize-ease`
     in `shaka_theme/static/src/transitions/card_resize.css`. Use `.t-resize` for this and nothing else.
-  - **Menu dropdown** (transitions.dev): Odoo dropdown menus scale in from 0.97 and fade in over 250ms,
-    and fade out over 150ms. The tokens are `--dropdown-*` in `transitions/menu_dropdown.css`. This animates transform and opacity
-    only, so it doesn't break the no-layout rule. Its durations are longer than the 150–200ms default, and that is on purpose.
+  - **Exception: Accordion** (transitions.dev): accordion panels tween `grid-template-rows` 0fr ↔ 1fr, with the content
+    fading in from a 2px blur, over 250ms. The tokens are `--acc-*` in `transitions/accordion.scss`. It drives Odoo's
+    search-menu accordions and the `shaka_ui_kit` tree. The tree's JS close delay reads `--acc-collapse`.
+- Other transitions.dev snippets live in `shaka_theme/static/src/transitions/`, one file per transition. Each file keeps
+  the site's tokens and its own reduced-motion guard. None of them animates layout, and their durations are longer than
+  the 150–200ms default on purpose:
+  - **Dropdown menu morph**: Odoo dropdown menus grow out of their toggler. A `clip-path` grows from a box the size of
+    the toggler to the full menu over 350ms with an overshoot, and shrinks back over 250ms. The content fades and slides in.
+    The tokens are `--morph-*` in `dropdown_menu_morph.css`, driven by `popover.js`.
+  - **Tooltip open/close**: Odoo tooltips scale up from 0.98 and fade in over 150ms, after an 80ms delay, and fade out
+    over 50ms (`--tt-*`, `tooltip.css`).
+  - **Checkbox check**: the check draws in over 350ms and retracts over 150ms, and the box colour fades over 150ms
+    (`--check-box/draw/uncheck`, `checkbox_check.scss`).
+  - **Toggle**: the switch thumb travels with an overshoot over 350ms (`--toggle-*`, `toggle.css`).
+  - **Success check**: success notifications show a check that fades, rotates, bobs and draws in over 500ms
+    (`--check-*`, `success_check.css`).
+  - **Error state shake**: invalid fields and the login error shake over 280ms (`--shake-*`, `error_shake.css`).
+  - **Loading indicator**: Odoo's bottom-corner "Loading" box becomes a pill centred under the navbar with a TwinOrbit
+    spinner (two dots orbiting a centre dot, 1s loop, `--t-orbit-dur`). It still appears after Odoo's 250ms delay and fades
+    and slides in over 200ms (`loading_indicator.xml` / `.scss`).
+  - The small blur some of these use lasts only for the motion itself. It is not the decorative blur banned below.
 - Everything is turned off under `prefers-reduced-motion: reduce`.
 - No scroll-reveal or GSAP; they belong on marketing pages, not in an ERP.
 

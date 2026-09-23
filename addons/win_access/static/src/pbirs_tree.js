@@ -140,7 +140,7 @@ export class PbirsTreeField extends Component {
             setTimeout(() => {
                 delete this.state.open[id];
                 delete this.state.closing[id];
-            }, 220);
+            }, parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--acc-collapse")) || 250);
         }
     }
 
