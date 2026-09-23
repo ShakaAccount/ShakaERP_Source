@@ -6,10 +6,7 @@
     --wa-fail: #dc3545;
     --wa-skip: #6c757d;
 
-    html[data-bs-theme="dark"] &,
-    html.o_dark_color_scheme &,
-    body.o_dark_color_scheme &,
-    .o_dark_color_scheme & {
+    html[data-theme='glass'].shaka-dark-mode & {
         --wa-border: #3a3a3a;
     }
 
@@ -20,17 +17,7 @@
         overflow: auto;
     }
 
-    .o_wa_row {
-        min-height: 2.5rem;
-        padding-block: 0.375rem;
-        border-radius: 0.25rem;
-    }
-
-    .o_wa_row:hover {
-        background: rgba(0, 0, 0, 0.04);
-    }
-
-    .o_wa_check {
+    .o_tree_node_check {
         width: 1.1em;
         height: 1.1em;
     }
@@ -40,7 +27,6 @@
         font-size: 1.05em;
     }
 
-    .o_wa_caret,
     .o_wa_section_head {
         cursor: pointer;
     }
@@ -49,12 +35,6 @@
     .o_wa_fail .fa-times { color: var(--wa-fail); }
     .o_wa_fail .o_wa_msg { color: var(--wa-fail); word-break: break-word; }
     .o_wa_skip { color: var(--wa-skip); }
-
-    // collapsed caret points to the reading direction
-    [dir="rtl"] &,
-    .o_rtl & {
-        .o_wa_flip { transform: scaleX(-1); }
-    }
 }
 
 .win_access_loading_wrap {

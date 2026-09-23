@@ -5,7 +5,7 @@
     "summary": "Manage groups + members across AD, local Windows, SSAS and PBIRS via the Windows Access Management API",
     "category": "Extra Tools",
     "license": "LGPL-3",
-    "depends": ["base", "web", "entity"],
+    "depends": ["base", "web", "entity", "shaka_ui_kit"],
     "external_dependencies": {"python": ["requests", "pymssql"]},
     "data": [
         "security/ir.model.access.csv",

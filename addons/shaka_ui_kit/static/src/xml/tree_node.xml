@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="shaka_ui_kit.TreeNode">
+        <div class="o_tree_node"
+             t-att-class="{ 'o_tree_node_selected': isSelected, 'o_tree_node_disabled': props.disabled, 'o_tree_node_has_actions': props.slots and props.slots.actions }"
+             t-att-style="staggerStyle"
+             t-att-title="props.node.label"
+             t-on-click="onClick">
+            <span class="o_tree_node_toggle"
+                  t-att-class="isOpen ? 'o_tree_node_toggle_open' : 'o_tree_node_toggle_closed'"
+                  t-on-click="onToggle"
+                  t-att-title="hasChildren ? (isOpen ? 'Collapse' : 'Expand') : ''">
+                <t t-if="hasChildren">&#10095;</t>
+                <t t-else="">&#9679;</t>
+            </span>
+            <input t-if="props.showCheckbox" type="checkbox"
+                   class="o_tree_node_check"
+                   t-ref="checkbox"
+                   t-att-checked="checkState === 'checked'"
+                   t-att-disabled="props.disabled"
+                   t-on-click="(ev) => ev.stopPropagation()"
+                   t-on-change="onCheckChange"/>
+            <t t-slot="icon" node="props.node"/>
+            <span class="o_tree_node_label" t-esc="props.node.label"/>
+            <t t-slot="extra" node="props.node"/>
+            <div class="o_tree_node_actions" t-if="props.slots and props.slots.actions">
+                <t t-slot="actions" node="props.node"/>
+            </div>
+        </div>
+
+        <t t-if="props.expandedIds[props.node.id]">
+            <div class="o_tree_children"
+                 t-att-class="{ 'o_tree_children_closing': props.closingIds[props.node.id] }">
+                <div class="o_tree_children_inner">
+                    <t t-foreach="props.children" t-as="child" t-key="child.id">
+                        <TreeNode
+                                node="child"
+                                children="props.getChildren ? props.getChildren(child) : []"
+                                selectedId="props.selectedId"
+                                expandedIds="props.expandedIds"
+                                closingIds="props.closingIds"
+                                onToggle="props.onToggle"
+                                onSelect="props.onSelect"
+                                disabled="props.disabled"
+                                showCheckbox="props.showCheckbox"
+                                checkState="props.checkState"
+                                onCheck="props.onCheck"
+                                getChildren="props.getChildren"
+                                childTotal="props.childTotal"
+                                childShown="props.childShown"
+                                childHasMore="props.childHasMore"
+                                registerSentinel="props.registerSentinel"
+                                unregisterSentinel="props.unregisterSentinel"
+                                level="props.level + 1"
+                                index="child_index"
+                                slots="props.slots"/>
+                    </t>
+                    <t t-if="hasMoreChildren">
+                        <div class="o_tree_node_sentinel" t-ref="sentinel"/>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </t>
+
+</templates>

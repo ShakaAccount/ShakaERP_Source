@@ -2,17 +2,16 @@
 import {registry} from "@web/core/registry";
 import {useService} from "@web/core/utils/hooks";
 import {
-    Component, useState, onWillStart, onMounted, onPatched, onWillUnmount,
+    Component, useState, onWillStart, onWillUnmount,
     useRef, useExternalListener,
 } from "@odoo/owl";
 import {ConfirmationDialog} from "@web/core/confirmation_dialog/confirmation_dialog";
+import {TreeNode} from "@shaka_ui_kit/js/tree_node";
 
 const TREE_WIDTH_KEY = "category_manager.tree_width";
 const TREE_MIN = 180;
 const TREE_MAX = 700;
 const COL_MIN = 60;
-const STAGGER_CAP_NODES = 25;
-const STAGGER_CAP_ROWS = 30;
 // How far below the visible area (in px) the sentinel must be before it
 // triggers a load. Bigger = smoother, smaller = tighter memory.
 const SENTINEL_PRELOAD_PX = 800;
@@ -57,102 +56,6 @@ function persianNormalize(text) {
     }
     return out;
 }
-
-// ---------- Recursive tree node ----------
-export class CategoryNode extends Component {
-    setup() {
-        this.sentinelRef = useRef("sentinel");
-        this._sentinelEl = null;
-
-        this._syncSentinel = () => {
-            const el = this.sentinelRef.el;
-            if (el === this._sentinelEl) return;
-            if (this._sentinelEl) {
-                this.props.unregisterSentinel(this._sentinelEl);
-            }
-            this._sentinelEl = el || null;
-            if (el) {
-                this.props.registerSentinel(el, this.props.category);
-            }
-        };
-
-        onMounted(this._syncSentinel);
-        onPatched(this._syncSentinel);
-        onWillUnmount(() => {
-            if (this._sentinelEl) {
-                this.props.unregisterSentinel(this._sentinelEl);
-                this._sentinelEl = null;
-            }
-        });
-    }
-
-    get hasChildren() {
-        return !!(this.props.children && this.props.children.length);
-    }
-
-    get isSelected() {
-        return this.props.selectedId === this.props.category.id;
-    }
-
-    get isOpen() {
-        return !!this.props.expandedIds[this.props.category.id];
-    }
-
-    get hasMoreChildren() {
-        return this.props.childHasMore(this.props.category);
-    }
-
-    get staggerStyle() {
-        const idx = this.props.index || 0;
-        const delay = idx >= STAGGER_CAP_NODES ? 0 : Math.min(idx * 22, 260);
-        return `--stagger: ${delay}ms; padding-inline-start: ${this.props.level * 14 + 8}px`;
-    }
-
-    onClick(ev) {
-        ev.stopPropagation();
-        this.props.onSelect(this.props.category);
-    }
-
-    onToggle(ev) {
-        ev.stopPropagation();
-        if (this.hasChildren) {
-            this.props.onToggle(this.props.category.id);
-        }
-    }
-
-    onAddChild(ev) {
-        ev.stopPropagation();
-        this.props.onAddChild(this.props.category);
-    }
-
-    onRemove(ev) {
-        ev.stopPropagation();
-        this.props.onDelete(this.props.category);
-    }
-}
-
-CategoryNode.template = "category.CategoryNode";
-CategoryNode.props = {
-    category: Object,
-    children: {type: Array, optional: true},
-    selectedId: {type: Number, optional: true},
-    expandedIds: Object,
-    closingIds: Object,
-    onSelect: Function,
-    onToggle: Function,
-    onAddChild: Function,
-    onDelete: Function,
-    getChildren: Function,
-    childTotal: Function,
-    childShown: Function,
-    childHasMore: Function,
-    registerSentinel: Function,
-    unregisterSentinel: Function,
-    level: Number,
-    index: {type: Number, optional: true},
-};
-CategoryNode.components = {CategoryNode};
-
 
 // ---------- Main component ----------
 export class CategoryManager extends Component {
@@ -353,6 +256,7 @@ export class CategoryManager extends Component {
             const flat = await this.orm.call("raes.md.entity", "get_category_tree", []);
             const byParent = {};
             for (const c of flat) {
+                c.label = c.title;
                 const key = c.parent_id ? c.parent_id[0] : 0;
                 (byParent[key] = byParent[key] || []).push(c);
             }
@@ -1293,7 +1197,7 @@ export class CategoryManager extends Component {
 }
 
 CategoryManager.template = "category.CategoryManager";
-CategoryManager.components = {CategoryNode};
+CategoryManager.components = {TreeNode};
 CategoryManager.props = {
     "*": true,
 };

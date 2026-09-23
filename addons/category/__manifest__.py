@@ -22,7 +22,7 @@ addresses them through writable public mirror views
     'license': 'LGPL-3',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'web', 'entity'],
+    'depends': ['base', 'web', 'entity', 'shaka_ui_kit'],
 
     # always loaded
     'data': [
