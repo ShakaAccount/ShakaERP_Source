@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_financial_statement_list" model="ir.ui.view">
+        <field name="name">budget.financial.statement.list</field>
+        <field name="model">budget.financial.statement</field>
+        <field name="arch" type="xml">
+            <list string="بودجه ترازنامه و سود و زیان">
+                <field name="number" string="شماره"/>
+                <field name="company_id"/>
+                <field name="fiscal_year_id"/>
+                <field name="scenario_id"/>
+                <field name="description" optional="hide"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_financial_statement_form" model="ir.ui.view">
+        <field name="name">budget.financial.statement.form</field>
+        <field name="model">budget.financial.statement</field>
+        <field name="arch" type="xml">
+            <form string="بودجه ترازنامه و سود و زیان" class="bp-financial-form">
+                <sheet>
+                    <field name="entry_mode" invisible="1"/>
+                    <div class="bp-top">
+                        <div class="bp-title"><div><h1>بودجه ترازنامه و سود و زیان</h1><p>ورود اطلاعات ترازنامه و سود و زیان</p></div></div>
+                    </div>
+                    <section class="bp-card bp-header">
+                        <div class="bp-header-grid">
+                            <div class="bp-field bp-number-field" invisible="number == 0"><label for="number">شماره</label><field name="number" string="شماره" readonly="1"/></div>
+                            <div class="bp-field"><label for="company_id"/><field name="company_id" required="1"/></div>
+                            <div class="bp-field"><label for="fiscal_year_id"/><field name="fiscal_year_id" required="1" options="{'no_create': True}"/></div>
+                            <div class="bp-field"><label for="scenario_id"/><field name="scenario_id" required="1" options="{'no_create': True}"/></div>
+                            <div class="bp-field"><label for="description"/><field name="description"/></div>
+                        </div>
+                    </section>
+                    <notebook>
+                        <page string="ترازنامه">
+                            <field name="balance_line_ids" widget="financial_statement_lines" nolabel="1" context="{'default_section': 'balance', 'default_row_type': 'member'}">
+                                <list editable="bottom" default_order="sequence,id">
+                                    <field name="sequence" column_invisible="True"/>
+                                    <field name="row_type" column_invisible="True"/>
+                                    <field name="section" column_invisible="True"/>
+                                    <field name="depth" column_invisible="True"/>
+                                    <field name="company_id" column_invisible="True"/>
+                                    <field name="category_id" column_invisible="True" force_save="1"/>
+                                    <field name="member_id" column_invisible="True" force_save="1"/>
+                                    <field name="title" string="عنوان حساب" widget="financial_account_tree" required="1" optional="show" readonly="row_type == 'category'"/>
+                                    <field name="input_mode" column_invisible="True" force_save="1"/>
+                                    <field name="month_1" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_2" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_3" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_4" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_5" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_6" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_7" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_8" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_9" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_10" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_11" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_12" optional="show" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="annual_amount" string="جمع کل" optional="show" readonly="row_type == 'category' or parent.entry_mode == 'monthly'" sum="جمع کل"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="سود و زیان">
+                            <field name="income_line_ids" widget="financial_statement_lines" nolabel="1" context="{'default_section': 'income', 'default_row_type': 'member'}">
+                                <list editable="bottom" default_order="sequence,id">
+                                    <field name="sequence" column_invisible="True"/>
+                                    <field name="row_type" column_invisible="True"/>
+                                    <field name="section" column_invisible="True"/>
+                                    <field name="depth" column_invisible="True"/>
+                                    <field name="company_id" column_invisible="True"/>
+                                    <field name="category_id" column_invisible="True" force_save="1"/>
+                                    <field name="member_id" column_invisible="True" force_save="1"/>
+                                    <field name="title" string="عنوان حساب" widget="financial_account_tree" required="1" optional="show" readonly="row_type == 'category'"/>
+                                    <field name="input_mode" column_invisible="True" force_save="1"/>
+                                    <field name="month_1" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_2" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_3" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_4" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_5" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_6" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_7" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_8" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_9" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_10" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_11" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="month_12" optional="show" readonly="row_type == 'category' or parent.entry_mode == 'annual'"/>
+                                    <field name="annual_amount" string="جمع کل" optional="show" readonly="row_type == 'category' or parent.entry_mode == 'monthly'" sum="جمع کل"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_financial_statement" model="ir.actions.act_window">
+        <field name="name">بودجه ترازنامه و سود و زیان</field>
+        <field name="res_model">budget.financial.statement</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_financial_statement" name="بودجه ترازنامه و سود و زیان"
+              parent="menu_budget_planning_root" action="action_financial_statement" sequence="30"/>
+</odoo>

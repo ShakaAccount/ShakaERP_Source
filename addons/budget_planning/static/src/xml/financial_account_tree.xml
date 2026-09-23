@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="budget_planning.FinancialAccountTree">
+        <div class="bp-account-picker" t-ref="root">
+            <button type="button" class="bp-account-trigger" t-on-click="toggleDropdown">
+                <span t-esc="props.record.data.title || 'انتخاب حساب معین...'"/>
+                <span aria-hidden="true">▾</span>
+            </button>
+            <div t-if="state.open" class="bp-account-dropdown o_category_manager" t-att-style="state.style">
+              <div class="o_cat_tree">
+                <input class="bp-account-search" type="search" placeholder="جست‌وجوی عنوان حساب یا کد..."
+                       t-att-value="state.search" t-on-input="onSearch" t-on-click="(ev) => ev.stopPropagation()"/>
+                <div t-if="state.loading">در حال بارگذاری...</div>
+                <div t-if="!state.loading and !state.nodes.length">گروه‌بندی حساب معین یافت نشد.</div>
+                <t t-foreach="roots" t-as="node" t-key="node.id">
+                    <t t-call="budget_planning.FinancialAccountNode"/>
+                </t>
+              </div>
+            </div>
+        </div>
+    </t>
+    <t t-name="budget_planning.FinancialAccountNode">
+        <div class="o_cat_node" t-on-click="() => this.toggleNode(node)"
+             t-att-aria-expanded="!!state.expanded[node.id]">
+            <span class="o_cat_node_toggle" t-att-class="state.expanded[node.id] ? 'o_cat_node_toggle_open' : 'o_cat_node_toggle_closed'">&#10095;</span>
+            <span class="o_cat_node_label" t-esc="node.title"/>
+        </div>
+            <div t-if="state.expanded[node.id]" class="o_cat_tree_children">
+              <div class="o_cat_tree_children_inner">
+                <t t-foreach="children(node.id)" t-as="node" t-key="node.id">
+                    <t t-call="budget_planning.FinancialAccountNode"/>
+                </t>
+                <t t-foreach="members(node.id)" t-as="member" t-key="member.id">
+                    <div class="o_cat_node bp-account-member" t-on-click="() => this.selectMember(node, member)">
+                        <span class="o_cat_node_toggle">&#9679;</span>
+                        <span class="o_cat_node_label"><t t-esc="member.code"/> — <t t-esc="member.title"/></span>
+                    </div>
+                </t>
+              </div>
+            </div>
+    </t>
+</templates>
