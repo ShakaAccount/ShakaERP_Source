@@ -1,0 +1,483 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* raes_dw_connector
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:30+0000\n"
+"PO-Revision-Date: 2026-09-23 08:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: raes_dw_connector
+#: model:ir.model.constraint,message:raes_dw_connector.constraint_raes_dw_catalog_catalog_uniq
+msgid "A table is catalogued once per connection."
+msgstr "هر جدول یک‌بار به ازای هر اتصال در فهرست ثبت می‌شود."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_needaction
+msgid "Action Needed"
+msgstr "نیاز به اقدام"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__active
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__active
+msgid "Active"
+msgstr "فعال"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_attachment_count
+msgid "Attachment Count"
+msgstr "تعداد پیوست‌ها"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_catalog__table_type
+msgid "BASE TABLE or VIEW, as reported by INFORMATION_SCHEMA.TABLES."
+msgstr "نوع BASE TABLE یا VIEW، همان‌طور که INFORMATION_SCHEMA.TABLES گزارش می‌دهد."
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_connection.py:0
+msgid ""
+"Bootstrap done. Imported: %(ok)s. Already existed: %(skip)s. Views "
+"refreshed: %(views)s"
+msgstr ""
+"راه‌اندازی اولیه انجام شد. وارد شده: %(ok)s. از قبل موجود بود: %(skip)s. "
+"ویوهای به‌روزرسانی‌شده: %(views)s"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
+msgid "Build Catalog"
+msgstr "ساخت فهرست جداول"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_connection.py:0
+msgid "Catalog — %s (%s tables)"
+msgstr "فهرست — %s (%s جدول)"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__catalog_count
+msgid "Catalogued Tables"
+msgstr "جداول فهرست‌شده"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__column_count
+msgid "Column Count"
+msgstr "تعداد ستون‌ها"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__tables_to_import
+msgid "Comma-separated MSSQL table names imported as foreign tables."
+msgstr "نام جداول MSSQL جدا شده با کاما که به عنوان جدول خارجی وارد می‌شوند."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__connection_id
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__connection_id
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_table_map__connection_id
+msgid "Connection"
+msgstr "اتصال"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_connection.py:0
+msgid ""
+"Could not connect to MSSQL %(h)s:%(p)s/%(d)s:\n"
+"%(e)s"
+msgstr ""
+"اتصال به MSSQL %(h)s:%(p)s/%(d)s برقرار نشد:\n"
+"%(e)s"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__create_uid
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__create_uid
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__create_uid
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_table_map__create_uid
+msgid "Created by"
+msgstr "ایجاد شده توسط"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__create_date
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__create_date
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__create_date
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_table_map__create_date
+msgid "Created on"
+msgstr "ایجاد شده در تاریخ"
+
+#. module: raes_dw_connector
+#: model:ir.actions.act_window,name:raes_dw_connector.action_raes_dw_connection
+msgid "DW Connections"
+msgstr "اتصالات انبار داده"
+
+#. module: raes_dw_connector
+#: model:ir.model,name:raes_dw_connector.model_raes_dw_table_map
+msgid "DW Foreign Table -> Odoo Public View Mapping"
+msgstr "نگاشت جدول خارجی انبار داده به ویوی عمومی اودو"
+
+#. module: raes_dw_connector
+#: model:ir.model,name:raes_dw_connector.model_raes_dw_catalog
+msgid "DW Independent Database Catalog"
+msgstr "فهرست مستقل پایگاه داده انبار داده"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__catalog_ids
+msgid "Database Catalog"
+msgstr "فهرست پایگاه داده"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
+msgid "DimCompany, DimParty, DimCostCenter"
+msgstr "DimCompany، DimParty، DimCostCenter"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__display_name
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__display_name
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__display_name
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_table_map__display_name
+msgid "Display Name"
+msgstr "نام نمایشی"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_connection.py:0
+msgid "FAIL — %s"
+msgstr "ناموفق — %s"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_follower_ids
+msgid "Followers"
+msgstr "دنبال‌کنندگان"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "دنبال‌کنندگان (طرف‌های حساب)"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__has_message
+msgid "Has Message"
+msgstr "دارای پیام"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__host
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__host
+msgid "Host"
+msgstr "میزبان"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__id
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__id
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__id
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_table_map__id
+msgid "ID"
+msgstr "شناسه"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "در صورت انتخاب، پیام‌های جدید نیاز به توجه شما دارند."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "در صورت انتخاب، برخی پیام‌ها خطای ارسال دارند."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_is_follower
+msgid "Is Follower"
+msgstr "دنبال‌کننده است"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__last_bootstrap
+msgid "Last Bootstrap"
+msgstr "آخرین راه‌اندازی اولیه"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__last_test
+msgid "Last Test"
+msgstr "آخرین آزمایش"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__last_test_result
+msgid "Last Test Result"
+msgstr "نتیجه آخرین آزمایش"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__write_uid
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__write_uid
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__write_uid
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_table_map__write_uid
+msgid "Last Updated by"
+msgstr "آخرین به‌روزرسانی توسط"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__write_date
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__write_date
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__write_date
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_table_map__write_date
+msgid "Last Updated on"
+msgstr "آخرین به‌روزرسانی در تاریخ"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_table_map__local_view_name
+msgid "Local View"
+msgstr "ویوی محلی"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__database
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__database
+msgid "MSSQL Database"
+msgstr "پایگاه داده MSSQL"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__mssql_password
+msgid "MSSQL Password"
+msgstr "رمز عبور MSSQL"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__mssql_user
+msgid "MSSQL User"
+msgstr "کاربر MSSQL"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_connection.py:0
+msgid "MSSQL password is not set on connection '%s'."
+msgstr "رمز عبور MSSQL برای اتصال '%s' تنظیم نشده است."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__remote_schema
+msgid "MSSQL schema holding the Dim tables."
+msgstr "اسکیمای MSSQL که جداول Dim را در خود دارد."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__mapped_view
+msgid "Mapped View"
+msgstr "ویوی نگاشت‌شده"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__line_ids
+msgid ""
+"Maps each imported foreign table to the public view the dim models read "
+"from."
+msgstr ""
+"هر جدول خارجی وارد شده را به ویوی عمومی‌ای که مدل‌های dim از آن می‌خوانند "
+"نگاشت می‌دهد."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_has_error
+msgid "Message Delivery error"
+msgstr "خطای ارسال پیام"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_ids
+msgid "Messages"
+msgstr "پیام‌ها"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__name
+msgid "Name"
+msgstr "نام"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_needaction_counter
+msgid "Number of Actions"
+msgstr "تعداد اقدامات"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_has_error_counter
+msgid "Number of errors"
+msgstr "تعداد خطاها"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "تعداد پیام‌های نیازمند اقدام"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "تعداد پیام‌های دارای خطای ارسال"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_connection.py:0
+msgid "OK — '%s' reachable, %s rows"
+msgstr "موفق — '%s' در دسترس است، %s سطر"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__line_ids
+msgid "Odoo View Mapping"
+msgstr "نگاشت ویوی اودو"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_catalog__row_count
+msgid "Only filled when the sync is asked to count rows (slow)."
+msgstr "فقط زمانی پر می‌شود که از همگام‌سازی درخواست شمارش سطرها شود (کند)."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__port
+msgid "Port"
+msgstr "پورت"
+
+#. module: raes_dw_connector
+#: model:ir.model,name:raes_dw_connector.model_raes_dw_remote_table
+msgid "Remote DW Table (explorer row)"
+msgstr "جدول انبار داده راه دور (سطر مرورگر)"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__remote_schema
+msgid "Remote Schema"
+msgstr "اسکیمای راه دور"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_table_map__remote_table
+msgid "Remote Table"
+msgstr "جدول راه دور"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__tables_to_import
+msgid "Remote Tables"
+msgstr "جداول راه دور"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__row_count
+msgid "Row Count"
+msgstr "تعداد سطرها"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__row_count
+msgid "Rows"
+msgstr "سطرها"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__remote_schema
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_remote_table_search
+msgid "Schema"
+msgstr "اسکیما"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__schema_name
+msgid "Schema Name"
+msgstr "نام اسکیما"
+
+#. module: raes_dw_connector
+#: model:ir.model,name:raes_dw_connector.model_raes_dw_connection
+msgid "Shaka_DW Foreign Data Connection (tds_fdw)"
+msgstr "اتصال داده خارجی Shaka_DW (tds_fdw)"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__synced_on
+msgid "Synced On"
+msgstr "همگام‌سازی شده در تاریخ"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__remote_table
+msgid "Table"
+msgstr "جدول"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__table_name
+msgid "Table Name"
+msgstr "نام جدول"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__table_type
+msgid "Table Type"
+msgstr "نوع جدول"
+
+#. module: raes_dw_connector
+#: model:ir.model.constraint,message:raes_dw_connector.constraint_raes_dw_remote_table_remote_table_uniq
+msgid "Table listed once per connection"
+msgstr "هر جدول یک‌بار به ازای هر اتصال فهرست می‌شود"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_connection.py:0
+msgid ""
+"The Python package 'pymssql' is required to build the catalog. Install it on the Odoo server:\n"
+"\n"
+"    pip install pymssql"
+msgstr ""
+"برای ساخت فهرست جداول، بسته پایتون 'pymssql' لازم است. آن را روی سرور "
+"اودو نصب کنید:\n"
+"\n"
+"    pip install pymssql"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_connection.py:0
+msgid ""
+"اتصال برقرار نشد:\n"
+"%s"
+msgstr ""
+"اتصال برقرار نشد:\n"
+"%s"
+
+#. module: raes_dw_connector
+#: model:ir.ui.menu,name:raes_dw_connector.menu_raes_dw_connection
+msgid "اتصال به انبار داده (DW)"
+msgstr "اتصال به انبار داده (DW)"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__selected
+msgid "انتخاب"
+msgstr "انتخاب"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
+msgid "تست اتصال"
+msgstr "تست اتصال"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_connection.py:0
+msgid "جداول %(db)s"
+msgstr "جداول %(db)s"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_connection.py:0
+msgid "جدول %(t)s در اسکیمای %(s)s پیدا نشد: %(e)s"
+msgstr "جدول %(t)s در اسکیمای %(s)s پیدا نشد: %(e)s"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
+msgid "جدول‌های MSSQL"
+msgstr "جدول‌های MSSQL"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
+msgid "ساخت جدول‌های خارجی"
+msgstr "ساخت جدول‌های خارجی"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
+msgid ""
+"مدل‌های dim با <code>_auto=False</code> از این\n"
+"                                view ها تغذیه می‌شوند (raes_dim_*_view)."
+msgstr ""
+"مدل‌های dim با <code>_auto=False</code> از این\n"
+"                                view ها تغذیه می‌شوند (raes_dim_*_view)."
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
+msgid "مرور جدول‌ها"
+msgstr "مرور جدول‌ها"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
+msgid "نگاشت به View اودو"
+msgstr "نگاشت به View اودو"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
+msgid "وضعیت"
+msgstr "وضعیت"

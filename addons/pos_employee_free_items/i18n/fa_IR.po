@@ -1,0 +1,266 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_employee_free_items
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:00+0000\n"
+"PO-Revision-Date: 2026-09-23 08:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: pos_employee_free_items
+#: model:ir.model.constraint,message:pos_employee_free_items.constraint_pos_free_item_catalog_product_id_company_id_uniq
+msgid "A product can appear only once in the free-item catalogue per company."
+msgstr "هر محصول تنها یک‌بار می‌تواند در فهرست اقلام رایگان هر شرکت ظاهر شود."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/models/pos_config_extension.py:0
+msgid "Daily Free Item Limit"
+msgstr "سقف روزانه اقلام رایگان"
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/models/pos_config_extension.py:0
+msgid "Default Daily Free Item Limit"
+msgstr "سقف روزانه پیش‌فرض اقلام رایگان"
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/models/pos_config_extension.py:0
+msgid ""
+"Default maximum number of free items an employee can claim per day "
+"at this POS. 0 means use global default of 2. "
+"Employee-specific limit takes precedence."
+msgstr ""
+"حداکثر تعداد پیش‌فرض اقلام رایگانی که یک کارمند می‌تواند روزانه در این "
+"صندوق دریافت کند. مقدار ۰ به معنای استفاده از پیش‌فرض سراسری یعنی ۲ است. "
+"سقف اختصاصی کارمند اولویت دارد."
+
+#. module: pos_employee_free_items
+#: model:ir.model,name:pos_employee_free_items.model_employee_free_allowance
+msgid "Employee Daily Free-Item Allowance"
+msgstr "سهمیه روزانه اقلام رایگان کارمند"
+
+#. module: pos_employee_free_items
+#: model:ir.actions.act_window,name:pos_employee_free_items.action_employee_free_allowance
+#: model:ir.ui.menu,name:pos_employee_free_items.menu_employee_free_allowance
+#: model_terms:ir.ui.view,arch_db:pos_employee_free_items.view_employee_free_allowance_tree
+msgid "Employee Free Allowances"
+msgstr "سهمیه‌های رایگان کارمندان"
+
+#. module: pos_employee_free_items
+#: model_terms:ir.ui.view,arch_db:pos_employee_free_items.view_pos_config_form_inherit_free_limit
+msgid "Employee Free Items"
+msgstr "اقلام رایگان کارمند"
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Employee mode is required"
+msgstr "حالت کارمند الزامی است"
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Enable Employees in this POS configuration before using employee free items."
+msgstr "قبل از استفاده از اقلام رایگان کارمند، گزینه کارمندان را در تنظیمات این صندوق فعال کنید."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Enter the 6-digit authenticator code."
+msgstr "کد ۶ رقمی احراز هویت را وارد کنید."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "Free item could not be claimed"
+msgstr "قلم رایگان قابل دریافت نبود"
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Free item was not added"
+msgstr "قلم رایگان افزوده نشد"
+
+#. module: pos_employee_free_items
+#: model:ir.model.fields,field_description:pos_employee_free_items.field_pos_order_line__is_free_item
+msgid "Free Item"
+msgstr "قلم رایگان"
+
+#. module: pos_employee_free_items
+#: model:ir.model.fields,field_description:pos_employee_free_items.field_pos_order_line__free_item_allowance_id
+msgid "Free-Item Allowance"
+msgstr "سهمیه اقلام رایگان"
+
+#. module: pos_employee_free_items
+#: model:ir.actions.act_window,name:pos_employee_free_items.action_pos_free_item_catalog
+#: model:ir.ui.menu,name:pos_employee_free_items.menu_pos_free_item_catalog
+#: model_terms:ir.ui.view,arch_db:pos_employee_free_items.view_pos_free_item_catalog_tree
+msgid "Free-Item Catalogue"
+msgstr "فهرست اقلام رایگان"
+
+#. module: pos_employee_free_items
+#: model:ir.rule,name:pos_employee_free_items.rule_free_item_catalog_manager
+msgid "Free Item Catalog – manager only"
+msgstr "فهرست اقلام رایگان — فقط مدیر"
+
+#. module: pos_employee_free_items
+#: model:ir.rule,name:pos_employee_free_items.rule_free_item_catalog_read
+msgid "Free Item Catalog – read for POS users"
+msgstr "فهرست اقلام رایگان — خواندن برای کاربران صندوق"
+
+#. module: pos_employee_free_items
+#: model:ir.model.fields,field_description:pos_employee_free_items.field_pos_order__free_item_line_ids
+msgid "Free-Item Lines"
+msgstr "سطرهای اقلام رایگان"
+
+#. module: pos_employee_free_items
+#: model_terms:ir.ui.view,arch_db:pos_employee_free_items.view_pos_order_form_inherit_free
+msgid "Free Items"
+msgstr "اقلام رایگان"
+
+#. module: pos_employee_free_items
+#: model:res.groups,name:pos_employee_free_items.group_pos_free_item_manager
+msgid "POS Free Item Manager"
+msgstr "مدیر اقلام رایگان صندوق"
+
+#. module: pos_employee_free_items
+#: model:res.groups,name:pos_employee_free_items.group_pos_free_item_user
+msgid "POS Free Item User"
+msgstr "کاربر اقلام رایگان صندوق"
+
+#. module: pos_employee_free_items
+#: model:res.groups.privilege,name:pos_employee_free_items.res_groups_privilege_pos_free_items
+#: model_terms:ir.ui.view,arch_db:pos_employee_free_items.view_employee_form_inherit_free_limit
+msgid "POS Free Items"
+msgstr "اقلام رایگان صندوق"
+
+#. module: pos_employee_free_items
+#: model:ir.model,name:pos_employee_free_items.model_pos_free_item_catalog
+msgid "POS Free-Item Catalogue (admin-defined)"
+msgstr "فهرست اقلام رایگان صندوق (تعریف‌شده توسط مدیر)"
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid ""
+"Please check the cashier, product catalogue, and authenticator code, then "
+"try again."
+msgstr ""
+"لطفاً صندوق‌دار، فهرست محصولات، و کد احراز هویت را بررسی کنید، سپس دوباره "
+"تلاش کنید."
+
+#. module: pos_employee_free_items
+#: model:ir.model.fields,field_description:pos_employee_free_items.field_pos_free_item_catalog__product_id
+msgid "Product"
+msgstr "محصول"
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Product unavailable"
+msgstr "محصول در دسترس نیست"
+
+#. module: pos_employee_free_items
+#: model:ir.model.fields,help:pos_employee_free_items.field_pos_free_item_catalog__product_id
+msgid "Product that may be given for free."
+msgstr "محصولی که ممکن است به‌صورت رایگان داده شود."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "Quantity must be greater than zero."
+msgstr "تعداد باید بیشتر از صفر باشد."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Select a cashier"
+msgstr "یک صندوق‌دار انتخاب کنید"
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Select an employee cashier before claiming a free item."
+msgstr "قبل از دریافت قلم رایگان، یک صندوق‌دار کارمند انتخاب کنید."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "The allowance was approved, but Odoo could not add the item to this order."
+msgstr "سهمیه تأیید شد، اما اودو نتوانست قلم را به این سفارش اضافه کند."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "The cashier must be linked to an Odoo user with two-factor authentication enabled."
+msgstr "صندوق‌دار باید به یک کاربر اودو با احراز هویت دو مرحله‌ای فعال متصل باشد."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "The POS configuration could not be found."
+msgstr "تنظیمات صندوق پیدا نشد."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "The POS configuration is not available for this company."
+msgstr "تنظیمات صندوق برای این شرکت در دسترس نیست."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "The selected cashier could not be found."
+msgstr "صندوق‌دار انتخاب‌شده پیدا نشد."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "This catalogue product is not loaded in the current POS. Check that it is available in POS."
+msgstr "این محصول فهرست در صندوق فعلی بارگذاری نشده است. بررسی کنید که در صندوق در دسترس باشد."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "This cashier is not allowed to use this POS configuration."
+msgstr "این صندوق‌دار مجاز به استفاده از این تنظیمات صندوق نیست."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "This product is not available as a free item."
+msgstr "این محصول به عنوان قلم رایگان در دسترس نیست."
+
+#. module: pos_employee_free_items
+#: model:ir.model.fields,help:pos_employee_free_items.field_hr_employee__free_item_daily_limit
+msgid ""
+"Maximum number of free items this employee can claim per day. "
+"0 means use the POS configuration default (or global default of 2)."
+msgstr ""
+"حداکثر تعداد اقلام رایگانی که این کارمند می‌تواند روزانه دریافت کند. "
+"مقدار ۰ به معنای استفاده از پیش‌فرض تنظیمات صندوق (یا پیش‌فرض سراسری ۲) است."
+
+#. module: pos_employee_free_items
+#: model_terms:ir.ui.view,arch_db:pos_employee_free_items.view_pos_config_form_inherit_free_limit
+msgid "Maximum number of free items an employee can claim per day (default 2)."
+msgstr "حداکثر تعداد اقلام رایگانی که یک کارمند می‌تواند روزانه دریافت کند (پیش‌فرض ۲)."
+
+#. module: pos_employee_free_items
+#: model:ir.model.constraint,message:pos_employee_free_items.constraint_employee_free_allowance_employee_id_date_company_id_uniq
+msgid "Only one allowance record per employee per day per company."
+msgstr "فقط یک رکورد سهمیه به ازای هر کارمند در هر روز برای هر شرکت."
+
+#. module: pos_employee_free_items
+#: model:ir.model.fields,help:pos_employee_free_items.field_employee_free_allowance__used_qty
+msgid "Number of free items already claimed today"
+msgstr "تعداد اقلام رایگانی که امروز قبلاً دریافت شده است"
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/models/employee_free_allowance.py:0
+msgid "You have already claimed your %s free items for today (limit: %s)."
+msgstr "شما قبلاً %s قلم رایگان خود را برای امروز دریافت کرده‌اید (سقف: %s)."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "Two-factor authentication is not enabled for this cashier."
+msgstr "احراز هویت دو مرحله‌ای برای این صندوق‌دار فعال نیست."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "Verification failed. Enter the current 6-digit authenticator code."
+msgstr "تأیید ناموفق بود. کد ۶ رقمی فعلی احراز هویت را وارد کنید."
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Confirm free item"
+msgstr "تأیید قلم رایگان"

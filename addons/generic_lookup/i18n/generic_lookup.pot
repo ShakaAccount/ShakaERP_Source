@@ -1,0 +1,134 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* generic_lookup
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:23+0000\n"
+"PO-Revision-Date: 2026-09-23 08:23+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: generic_lookup
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_type__active
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_value__active
+msgid "Active"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_type__code
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_value__code
+msgid "Code"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_type__create_uid
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_value__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_type__create_date
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_value__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_type__display_name
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_value__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_type__id
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_value__id
+msgid "ID"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_value__name
+msgid "Label"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_type__write_uid
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_value__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_type__write_date
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_value__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.ui.menu,name:generic_lookup.menu_lookup_root
+msgid "Lookup Data"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model,name:generic_lookup.model_lookup_type
+msgid "Lookup Type"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.actions.act_window,name:generic_lookup.action_lookup_type
+#: model:ir.ui.menu,name:generic_lookup.menu_lookup_type
+msgid "Lookup Types"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model,name:generic_lookup.model_lookup_value
+msgid "Lookup Value"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.actions.act_window,name:generic_lookup.action_lookup_value
+#: model:ir.ui.menu,name:generic_lookup.menu_lookup_value
+msgid "Lookup Values"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_type__name
+msgid "Name"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_value__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,help:generic_lookup.field_lookup_value__code
+msgid "Technical key for this value (e.g. \"bank_transfer\")."
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,help:generic_lookup.field_lookup_type__code
+msgid ""
+"Technical key used by other modules to reference this lookup type (e.g. "
+"\"payment_method\")."
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_value__type_id
+msgid "Type"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_type__value_count
+msgid "Value Count"
+msgstr ""
+
+#. module: generic_lookup
+#: model:ir.model.fields,field_description:generic_lookup.field_lookup_type__value_ids
+#: model_terms:ir.ui.view,arch_db:generic_lookup.view_lookup_type_form
+msgid "Values"
+msgstr ""

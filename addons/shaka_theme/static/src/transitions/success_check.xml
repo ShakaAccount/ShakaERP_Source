@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Success check (transitions.dev) on every success notification. -->
+    <t t-inherit="web.NotificationWowl" t-inherit-mode="extension">
+        <xpath expr="//span[hasclass('o_notification_content')]" position="before">
+            <span t-if="props.type === 'success'" class="t-success-check text-success me-2" data-state="in" aria-hidden="true">
+                <svg viewBox="0 0 20 20" width="20" height="20" fill="none">
+                    <path d="m6 10 3 3 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+        </xpath>
+    </t>
+
+</templates>

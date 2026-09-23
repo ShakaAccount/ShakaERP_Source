@@ -1,0 +1,465 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* company_base_info
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-09-23 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: company_base_info
+#: model:ir.model,name:company_base_info.model_res_company
+msgid "Companies"
+msgstr "شرکت‌ها"
+
+#. module: company_base_info
+#: model:ir.model,name:company_base_info.model_company_board_member
+msgid "Company Board Member"
+msgstr "عضو هیئت‌مدیره شرکت"
+
+#. module: company_base_info
+#: model:ir.model,name:company_base_info.model_company_board_role
+msgid "Company Board Role"
+msgstr "نقش هیئت‌مدیره شرکت"
+
+#. module: company_base_info
+#: model:ir.model,name:company_base_info.model_company_currency
+msgid "Company Currency"
+msgstr "ارز شرکت"
+
+#. module: company_base_info
+#: model:ir.model,name:company_base_info.model_company_currency_introduction
+msgid "Company Currency Introduction"
+msgstr "معرفی ارز شرکت"
+
+#. module: company_base_info
+#: model:ir.model,name:company_base_info.model_company_currency_introduction_line
+msgid "Company Currency Introduction Line"
+msgstr "ردیف معرفی ارز شرکت"
+
+#. module: company_base_info
+#: model:ir.model,name:company_base_info.model_company_fiscal_year
+msgid "Company Fiscal Year"
+msgstr "سال مالی شرکت"
+
+#. module: company_base_info
+#: model:ir.model,name:company_base_info.model_company_ownership_line
+msgid "Company Ownership Line"
+msgstr "ردیف مالکیت شرکت"
+
+#. module: company_base_info
+#: model:ir.model,name:company_base_info.model_company_ownership
+msgid "Company Ownership Structure"
+msgstr "ساختار مالکیت شرکت"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__create_uid
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_role__create_uid
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency__create_uid
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction__create_uid
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction_line__create_uid
+#: model:ir.model.fields,field_description:company_base_info.field_company_fiscal_year__create_uid
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership__create_uid
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership_line__create_uid
+msgid "Created by"
+msgstr "ایجاد شده توسط"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__create_date
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_role__create_date
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency__create_date
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction__create_date
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction_line__create_date
+#: model:ir.model.fields,field_description:company_base_info.field_company_fiscal_year__create_date
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership__create_date
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership_line__create_date
+msgid "Created on"
+msgstr "تاریخ ایجاد"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__display_name
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_role__display_name
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency__display_name
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction__display_name
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction_line__display_name
+#: model:ir.model.fields,field_description:company_base_info.field_company_fiscal_year__display_name
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership__display_name
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership_line__display_name
+#: model:ir.model.fields,field_description:company_base_info.field_res_company__display_name
+msgid "Display Name"
+msgstr "نام نمایشی"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__id
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_role__id
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency__id
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction__id
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction_line__id
+#: model:ir.model.fields,field_description:company_base_info.field_company_fiscal_year__id
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership__id
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership_line__id
+#: model:ir.model.fields,field_description:company_base_info.field_res_company__id
+msgid "ID"
+msgstr "شناسه"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__write_uid
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_role__write_uid
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency__write_uid
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction__write_uid
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction_line__write_uid
+#: model:ir.model.fields,field_description:company_base_info.field_company_fiscal_year__write_uid
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership__write_uid
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership_line__write_uid
+msgid "Last Updated by"
+msgstr "آخرین بروزرسانی توسط"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__write_date
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_role__write_date
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency__write_date
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction__write_date
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction_line__write_date
+#: model:ir.model.fields,field_description:company_base_info.field_company_fiscal_year__write_date
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership__write_date
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership_line__write_date
+msgid "Last Updated on"
+msgstr "تاریخ آخرین بروزرسانی"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction_line__rial_value_per_unit
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_currency_introduction_form
+msgid "ارزش ریالی هر واحد ارز"
+msgstr "ارزش ریالی هر واحد ارز"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction__line_ids
+msgid "ارزها"
+msgstr "ارزها"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_fiscal_year__date_start
+msgid "از تاریخ"
+msgstr "از تاریخ"
+
+#. module: company_base_info
+#: model:ir.ui.menu,name:company_base_info.menu_company_base_info_root
+msgid "اطلاعات پایه شرکت"
+msgstr "اطلاعات پایه شرکت"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_res_company__board_member_ids
+msgid "اعضای هیئت‌مدیره"
+msgstr "اعضای هیئت‌مدیره"
+
+#. module: company_base_info
+#: model:ir.model.constraint,message:company_base_info.constraint_company_currency_introduction_line_currency_line_unique
+msgid "این ارز با همین نوع تبدیل قبلاً در این فرم ثبت شده است."
+msgstr "این ارز با همین نوع تبدیل قبلاً در این فرم ثبت شده است."
+
+#. module: company_base_info
+#: model:ir.model.constraint,message:company_base_info.constraint_company_ownership_line_ownership_line_unique
+msgid "این شرکت قبلاً در همین فرم ثبت شده است."
+msgstr "این شرکت قبلاً در همین فرم ثبت شده است."
+
+#. module: company_base_info
+#: model:ir.model.constraint,message:company_base_info.constraint_company_board_member_member_role_unique
+msgid "این عضو با همین نقش قبلاً برای شرکت ثبت شده است."
+msgstr "این عضو با همین نقش قبلاً برای شرکت ثبت شده است."
+
+#. module: company_base_info
+#: model:ir.model.constraint,message:company_base_info.constraint_company_currency_currency_name_unique
+msgid "این عنوان ارز قبلاً ثبت شده است."
+msgstr "این عنوان ارز قبلاً ثبت شده است."
+
+#. module: company_base_info
+#: model:ir.model.constraint,message:company_base_info.constraint_company_board_role_role_name_unique
+msgid "این نقش قبلاً ثبت شده است."
+msgstr "این نقش قبلاً ثبت شده است."
+
+#. module: company_base_info
+#: model:ir.model.fields,help:company_base_info.field_company_board_member__member_identifier
+msgid "برای عضو حقیقی کد ملی و برای عضو حقوقی شماره ثبت را وارد کنید."
+msgstr "برای عضو حقیقی کد ملی و برای عضو حقوقی شماره ثبت را وارد کنید."
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_fiscal_year__date_end
+msgid "تا تاریخ"
+msgstr "تا تاریخ"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership__effective_date
+msgid "تاریخ اثرگذاری"
+msgstr "تاریخ اثرگذاری"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction__registration_date
+msgid "تاریخ ثبت"
+msgstr "تاریخ ثبت"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__sequence
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction_line__sequence
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership_line__sequence
+msgid "ترتیب"
+msgstr "ترتیب"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership_line__shares_count
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_ownership_form
+msgid "تعداد سهام"
+msgstr "تعداد سهام"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__note
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_role__description
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency__note
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction__note
+#: model:ir.model.fields,field_description:company_base_info.field_company_fiscal_year__note
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership__note
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership_line__note
+msgid "توضیحات"
+msgstr "توضیحات"
+
+#. module: company_base_info
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_currency_form
+msgid "توضیحات ارز..."
+msgstr "توضیحات ارز..."
+
+#. module: company_base_info
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_fiscal_year_form
+msgid "توضیحات سال مالی..."
+msgstr "توضیحات سال مالی..."
+
+#. module: company_base_info
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_ownership_form
+msgid "توضیحات فرم مالکیت..."
+msgstr "توضیحات فرم مالکیت..."
+
+#. module: company_base_info
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_currency_introduction_form
+msgid "توضیحات معرفی ارز..."
+msgstr "توضیحات معرفی ارز..."
+
+#. module: company_base_info
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_board_role_form
+msgid "توضیحات نقش..."
+msgstr "توضیحات نقش..."
+
+#. module: company_base_info
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_currency_introduction_form
+msgid "جزئیات ارز"
+msgstr "جزئیات ارز"
+
+#. module: company_base_info
+#: model:ir.actions.act_window,name:company_base_info.action_company_ownership
+#: model:ir.ui.menu,name:company_base_info.menu_company_ownership
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_ownership_form
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_ownership_list
+msgid "درصد مالکیت سهام"
+msgstr "درصد مالکیت سهام"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership_line__ownership_percent
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_ownership_form
+msgid "درصد مالکیت مستقیم"
+msgstr "درصد مالکیت مستقیم"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__field_of_study
+msgid "رشته تحصیلی"
+msgstr "رشته تحصیلی"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction__fiscal_year_id
+#: model:ir.model.fields,field_description:company_base_info.field_company_fiscal_year__name
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership__fiscal_year_id
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_fiscal_year_form
+msgid "سال مالی"
+msgstr "سال مالی"
+
+#. module: company_base_info
+#: model:ir.actions.act_window,name:company_base_info.action_company_fiscal_year
+#: model:ir.ui.menu,name:company_base_info.menu_company_fiscal_year
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_fiscal_year_list
+msgid "سال‌های مالی"
+msgstr "سال‌های مالی"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__company_id
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction__company_id
+#: model:ir.model.fields,field_description:company_base_info.field_company_fiscal_year__company_id
+msgid "شرکت"
+msgstr "شرکت"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership_line__subsidiary_company_id
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_ownership_form
+msgid "شرکت زیرمجموعه"
+msgstr "شرکت زیرمجموعه"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership_line__owner_company_id
+msgid "شرکت مالک"
+msgstr "شرکت مالک"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership__owner_company_id
+msgid "شرکت مالک/هلدینگ"
+msgstr "شرکت مالک/هلدینگ"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership__line_ids
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_ownership_form
+msgid "شرکت‌های زیرمجموعه"
+msgstr "شرکت‌های زیرمجموعه"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__member_identifier
+msgid "شماره ثبت عضو حقوقی/کد ملی"
+msgstr "شماره ثبت عضو حقوقی/کد ملی"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__partner_id
+msgid "عضو هیئت‌مدیره"
+msgstr "عضو هیئت‌مدیره"
+
+#. module: company_base_info
+#: model:ir.actions.act_window,name:company_base_info.action_company_currency
+#: model:ir.ui.menu,name:company_base_info.menu_company_currency
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_currency_list
+msgid "عناوین ارز"
+msgstr "عناوین ارز"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency__name
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction_line__currency_id
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_currency_form
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_currency_introduction_form
+msgid "عنوان ارز"
+msgstr "عنوان ارز"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership__name
+msgid "عنوان فرم"
+msgstr "عنوان فرم"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_ownership_line__ownership_id
+msgid "فرم مالکیت"
+msgstr "فرم مالکیت"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__active
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_role__active
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency__active
+#: model:ir.model.fields,field_description:company_base_info.field_company_fiscal_year__active
+msgid "فعال"
+msgstr "فعال"
+
+#. module: company_base_info
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_currency_form
+msgid "مثلاً USD"
+msgstr "مثلاً USD"
+
+#. module: company_base_info
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_currency_form
+msgid "مثلاً دلار آمریکا"
+msgstr "مثلاً دلار آمریکا"
+
+#. module: company_base_info
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_board_role_form
+msgid "مثلاً رئیس هیئت‌مدیره"
+msgstr "مثلاً رئیس هیئت‌مدیره"
+
+#. module: company_base_info
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_fiscal_year_form
+msgid "مثلاً ۱۴۰۴"
+msgstr "مثلاً ۱۴۰۴"
+
+#. module: company_base_info
+#: model:ir.actions.act_window,name:company_base_info.action_company_currency_introduction
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction_line__introduction_id
+#: model:ir.ui.menu,name:company_base_info.menu_company_currency_introduction
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_currency_introduction_form
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_currency_introduction_list
+msgid "معرفی ارز"
+msgstr "معرفی ارز"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__education_level_id
+msgid "مقطع تحصیلی"
+msgstr "مقطع تحصیلی"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__executive_status_id
+msgid "موظف/غیر موظف"
+msgstr "موظف/غیر موظف"
+
+#. module: company_base_info
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_res_company_form_board
+msgid "نام عضو حقیقی یا حقوقی هیئت‌مدیره"
+msgstr "نام عضو حقیقی یا حقوقی هیئت‌مدیره"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__legal_representative_name
+msgid "نام نماینده عضو حقوقی"
+msgstr "نام نماینده عضو حقوقی"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__role_id
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_role__name
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_board_role_form
+msgid "نقش در شرکت"
+msgstr "نقش در شرکت"
+
+#. module: company_base_info
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_board_role_form
+msgid "نقش هیئت‌مدیره"
+msgstr "نقش هیئت‌مدیره"
+
+#. module: company_base_info
+#: model:ir.actions.act_window,name:company_base_info.action_company_board_role
+#: model:ir.ui.menu,name:company_base_info.menu_company_board_role
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_board_role_list
+msgid "نقش‌های هیئت‌مدیره"
+msgstr "نقش‌های هیئت‌مدیره"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency_introduction_line__conversion_type_id
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_company_currency_introduction_form
+msgid "نوع تبدیل ارز"
+msgstr "نوع تبدیل ارز"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__company_type_id
+msgid "نوع شرکت"
+msgstr "نوع شرکت"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__membership_type_id
+msgid "نوع عضویت"
+msgstr "نوع عضویت"
+
+#. module: company_base_info
+#: model_terms:ir.ui.view,arch_db:company_base_info.view_res_company_form_board
+msgid "هیئت‌مدیره"
+msgstr "هیئت‌مدیره"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_currency__code
+msgid "کد ارز"
+msgstr "کد ارز"
+
+#. module: company_base_info
+#: model:ir.model.fields,field_description:company_base_info.field_company_board_member__legal_representative_national_id
+msgid "کد ملی نماینده عضو حقوقی"
+msgstr "کد ملی نماینده عضو حقوقی"

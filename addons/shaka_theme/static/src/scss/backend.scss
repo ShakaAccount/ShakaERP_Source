@@ -1,0 +1,29 @@
+// Backend polish that variables can't express. Keep this file small: add a
+// rule only for a gap seen in visual QA, and never with !important to win
+// specificity (see design-system/shaka-erp/MASTER.md).
+
+// Visible keyboard focus on controls. Inputs keep Odoo's own focus underline.
+.o_web_client :is(a, button, .btn, [role="button"], [tabindex]):focus-visible {
+    outline: 2px solid var(--shaka-primary);
+    outline-offset: 2px;
+}
+
+// Aligned digits in data views.
+.o_list_number,
+.o_field_monetary,
+.o_field_float,
+.o_field_integer,
+.o_pivot table {
+    font-variant-numeric: tabular-nums;
+}
+
+// Reduced motion. !important is the standard pattern here: it must beat every
+// component's own transition, whatever its specificity.
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

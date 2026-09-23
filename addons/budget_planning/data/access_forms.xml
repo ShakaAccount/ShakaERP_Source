@@ -39,4 +39,11 @@
         <field name="has_workflow">False</field>
         <field name="active">True</field>
     </record>
+    <record id="access_form_financial_statement" model="shaka.access.form">
+        <field name="name">بودجه ترازنامه و سود و زیان</field>
+        <field name="model_name">budget.financial.statement</field>
+        <field name="sequence">84</field>
+        <field name="has_workflow">False</field>
+        <field name="active">True</field>
+    </record>
 </odoo>

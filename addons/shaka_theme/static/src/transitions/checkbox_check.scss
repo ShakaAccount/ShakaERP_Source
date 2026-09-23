@@ -1,0 +1,42 @@
+// Transitions.dev — Checkbox check (https://transitions.dev/detail.html?t=checkbox-check)
+// Vendored tokens; tune below. The snippet draws an inline SVG path with
+// stroke-dashoffset, but Bootstrap paints the check as a background image. So
+// the same path is sliced from the left (xMinYMid slice) and background-size
+// grows 0 → 100%: the path only runs left → right, so the slice traces the
+// stroke. Every Bootstrap checkbox; indeterminate ones and switches untouched.
+
+:root {
+    --check-box: 150ms;
+    --check-draw: 350ms;
+    --check-delay: 0ms;
+    --check-uncheck: 150ms;
+    --check-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+$shaka-check-draw-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' preserveAspectRatio='xMinYMid slice'><path fill='none' stroke='#{$form-check-input-checked-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/></svg>");
+
+.form-check-input[type="checkbox"]:not(:indeterminate):not(.form-switch *) {
+    // Set unchecked too, so unchecking can retract the stroke.
+    --#{$prefix}form-check-bg-image: #{escape-svg($shaka-check-draw-image)};
+    /*rtl:ignore*/
+    background-position: left center;
+    background-size: 0 100%;
+    transition:
+        background-color var(--check-box) var(--check-ease),
+        border-color var(--check-box) var(--check-ease),
+        box-shadow var(--check-box) var(--check-ease),
+        background-size var(--check-uncheck) var(--check-ease);
+
+    &:checked {
+        background-size: 100% 100%;
+        transition:
+            background-color var(--check-box) var(--check-ease),
+            border-color var(--check-box) var(--check-ease),
+            box-shadow var(--check-box) var(--check-ease),
+            background-size var(--check-draw) var(--check-ease) var(--check-delay);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-check-input[type="checkbox"] { transition: none !important; }
+}

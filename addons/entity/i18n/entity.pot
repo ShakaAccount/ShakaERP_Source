@@ -1,0 +1,767 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* entity
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:16+0000\n"
+"PO-Revision-Date: 2026-09-23 08:16+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "<span>DW Connection</span>"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "<span>Rebuild Catalog</span>"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "<span>Sync DW Table</span>"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Active"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,help:entity.field_raes_md_entity_column__is_user_defined
+msgid "Always forced to 1 for columns created through Odoo."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "An entity named '%(n)s' already exists in schema '%(s)s'."
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Audit"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__bigint
+msgid "BigInt"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__bit
+msgid "Bit"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Cannot drop table %(d)s.%(s)s.%(t)s on the DW server: it contains %(n)s "
+"row(s). Empty the table before deleting the entity, or detach the entity "
+"from its connection first."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Cannot drop table %(d)s.%(s)s.%(t)s on the DW server: it is referenced by foreign keys from other tables:\n"
+"  - %(det)s\n"
+"\n"
+"Delete or change those columns / entities first."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Cannot reorder the columns of %(d)s.%(s)s.%(t)s on the DW server: other tables reference it via foreign keys:\n"
+"  - %(det)s\n"
+"\n"
+"Remove those references first, or empty the referring tables."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Cannot reorder the columns of %(d)s.%(s)s.%(t)s on the DW server: the table "
+"contains %(n)s row(s). MSSQL cannot reorder columns in place. Empty the "
+"table first, then sync again — or delete the entity so the table can be "
+"rebuilt cleanly."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "Catalog rebuilt"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_search
+msgid "Category"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__category_code
+msgid "Category Code"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__category_title
+msgid "Category Title"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__category_title_en
+msgid "Category Title (EN)"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__char
+msgid "Char"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__child_ids
+msgid "Child Entities"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Classification"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Clear reference"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__code
+msgid "Code"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity_column.py:0
+msgid "Column '%(c)s' already exists on entity '%(e)s'."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Column '%(c)s' of entity '%(e)s' references entity '%(r)s', but its table "
+"%(d)s.%(s)s.%(t)s does not exist on the DW server. Open '%(r)s' and click "
+"'Sync DW Table' first."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Column '%(c)s' of entity '%(e)s' references entity '%(r)s', but its table "
+"%(d)s.%(s)s.%(t)s has no PRIMARY KEY constraint matching column '%(p)s'. "
+"Open '%(r)s' and click 'Sync DW Table' to rebuild the constraint, then save "
+"this column again."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Column '%(c)s' of entity '%(e)s' references entity '%(r)s', but that entity "
+"has no Schema or Name set. Fill them in before saving this column."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Column '%(c)s' of entity '%(e)s' references entity '%(r)s', but that entity "
+"has no column marked as Primary Key. Mark exactly one column of '%(r)s' as "
+"Primary Key, then save again."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity_column.py:0
+msgid ""
+"Column '%(c)s' references entity '%(e)s', so its Data Type must be BigInt."
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__column_type_lu
+msgid "Column Type"
+msgstr ""
+
+#. module: entity
+#: model:ir.actions.act_window,name:entity.action_raes_md_entity_column
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__column_count
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__column_ids
+#: model:ir.ui.menu,name:entity.menu_raes_md_entity_column
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Columns"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "Columns of %s"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Company Based"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_dw_schema__connection_id
+msgid "Connection"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid ""
+"Could not create or update the DW table for '%(e)s':\n"
+"%(msg)s"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Create or refresh the table on the linked MSSQL server"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Creation"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__creation_date
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__creation_date
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__creation_date
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__creation_date
+msgid "Creation Date"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__creator_user_id
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__creator_user_id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__creator_user_id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__creator_user_id
+msgid "Creator User"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__connection_id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__connection_id
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "DW Connection"
+msgstr ""
+
+#. module: entity
+#: model:ir.model,name:entity.model_raes_dw_schema
+msgid "DW Schema"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "DW table synced"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__data_type
+msgid "Data Type"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Database"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__database_name
+msgid "Database Name"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__date
+msgid "Date"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__datetime
+msgid "DateTime"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__decimal
+msgid "Decimal"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Dim"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_dw_schema__display_name
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__display_name
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__display_name
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__display_name
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__display_name
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__editor_user_id
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__editor_user_id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__editor_user_id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__editor_user_id
+msgid "Editor User"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__entity_count
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__entity_ids
+#: model:ir.ui.menu,name:entity.menu_raes_md_entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_form
+msgid "Entities"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__entity_id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__entity_id
+msgid "Entity"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity_column.py:0
+msgid ""
+"Entity '%(e)s' already has a primary-key column ('%(c)s'). Only one column "
+"can be the primary key."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity_column.py:0
+msgid ""
+"Entity '%(e)s' already has an identity column ('%(c)s'). Only one column can"
+" be identity."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid ""
+"Entity '%(e)s' has more than one column sharing ordinal position %(p)s. Each"
+" column must have a unique position starting from 1."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid "Entity '%s' has no columns; cannot create the table."
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__entity_full_name
+msgid "Entity Full Name"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__system_lu
+msgid "Entity System"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__entity_type_lu
+msgid "Entity Type"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_form
+msgid "Entry"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Fact"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,help:entity.field_raes_md_entity__database_name
+msgid "Filled automatically from the linked DW connection."
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Flags"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__float
+msgid "Float"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,help:entity.field_raes_md_entity__connection_id
+msgid ""
+"Foreign Data Wrapper connection this entity belongs to. Stored in "
+"raes.md.entity.config, not in the DW."
+msgstr ""
+
+#. module: entity
+#: model:ir.model,name:entity.model_raes_gnr_lookup
+msgid "GNR LookUp"
+msgstr ""
+
+#. module: entity
+#: model:ir.model,name:entity.model_raes_gnr_module
+msgid "GNR Module (gnr.module)"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Hierarchy"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_dw_schema__id
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__id
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__id
+msgid "ID"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__is_identity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Identity"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Inactive"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__int
+msgid "Int"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid "Invalid decimal size '%s'. Use 'precision,scale'."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid "Invalid size '%(s)s' for %(t)s."
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__is_active
+msgid "Is Active"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__is_category_based
+msgid "Is Category Based"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__is_company_based
+msgid "Is Company Based"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__is_user_defined
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__is_user_defined
+msgid "Is User Defined"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Last edit"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "Link a DW Connection before syncing the DW table."
+msgstr ""
+
+#. module: entity
+#: model:ir.actions.act_window,name:entity.action_raes_gnr_lookup
+#: model:ir.ui.menu,name:entity.menu_raes_gnr_lookup
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_list
+msgid "LookUp"
+msgstr ""
+
+#. module: entity
+#: model:ir.ui.menu,name:entity.menu_raes_md_root
+msgid "MD Data"
+msgstr ""
+
+#. module: entity
+#: model:ir.actions.act_window,name:entity.action_raes_md_entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_list
+msgid "MD Entities"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "MD Entity"
+msgstr ""
+
+#. module: entity
+#: model:ir.model,name:entity.model_raes_md_entity
+msgid "MD Entity (md.entity)"
+msgstr ""
+
+#. module: entity
+#: model:ir.model,name:entity.model_raes_md_entity_column
+msgid "MD Entity Column (md.entity_column)"
+msgstr ""
+
+#. module: entity
+#: model:ir.model,name:entity.model_raes_md_entity_config
+msgid "MD Entity DW Configuration"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__master_entity_id
+msgid "Master Entity"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__modification_date
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__modification_date
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__modification_date
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__modification_date
+msgid "Modification Date"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__module_id
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Module"
+msgstr ""
+
+#. module: entity
+#: model:ir.actions.act_window,name:entity.action_raes_gnr_module
+#: model:ir.ui.menu,name:entity.menu_raes_gnr_module
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_list
+msgid "Modules"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__nchar
+msgid "NChar"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__nvarchar
+msgid "NVarChar"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_dw_schema__name
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__name
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__name
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Name"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "No DW connection linked to this entity."
+msgstr ""
+
+#. module: entity
+#: model:ir.model.constraint,message:entity.constraint_raes_md_entity_config_entity_config_uniq
+msgid "Only one configuration row per entity is allowed."
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__ordinal_position
+msgid "Ordinal Position"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid ""
+"Ordinal positions of entity '%(e)s' must form a gap-free sequence 1..%(n)s. "
+"Current positions: %(got)s. Renumber your columns so they read 1, 2, 3, ... "
+"with no gaps."
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__original_name
+msgid "Original Name"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__title
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__title
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Persian Name"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Positions must be continuous starting at 1 with no gaps."
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__is_primary_key
+msgid "Primary Key"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__priority
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__priority
+msgid "Priority"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Rebuild the catalog of the linked connection"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__reference_entity_id
+msgid "Reference Entity"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__schema_id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__schema_name
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Schema"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "Schemas of %s refreshed."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "Set a Schema and a Name before syncing the DW table."
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__size
+msgid "Size"
+msgstr ""
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_search
+msgid "System"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "Table %(s)s.%(t)s is up to date."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid "The DW connection '%s' has no MSSQL database set."
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__time
+msgid "Time"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__tinyint
+msgid "TinyInt"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__title
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_form
+msgid "Title"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid "Unsupported data type: %s"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__is_user_defined
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_search
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "User Defined"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__value
+msgid "Value"
+msgstr ""
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__varchar
+msgid "VarChar"
+msgstr ""

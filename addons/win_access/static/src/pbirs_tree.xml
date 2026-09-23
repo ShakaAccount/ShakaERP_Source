@@ -10,24 +10,32 @@
                 <span class="badge text-bg-secondary" t-out="count + ' of ' + total + ' selected'"/>
             </div>
             <div class="o_wa_rows border rounded p-2">
-                <div t-if="!rows.length" class="text-muted">
+                <div t-if="!rootNodes.length" class="text-muted">
                     <t t-if="total">Nothing matches "<t t-out="state.query"/>".</t>
                     <t t-else="">No PBIRS items loaded. Check the API settings.</t>
                 </div>
-                <div t-foreach="rows" t-as="row" t-key="row.id" class="o_wa_row d-flex align-items-center"
-                     t-attf-style="padding-inline-start: #{row.depth * 1.5}rem;">
-                    <span t-if="row.hasChildren" class="o_wa_caret fa fa-fw me-2"
-                          t-att-class="row.open ? 'fa-caret-down' : 'fa-caret-right o_wa_flip'"
-                          t-on-click="() => this.toggle(row)"/>
-                    <span t-else="" class="fa fa-fw me-2"/>
-                    <input type="checkbox" class="form-check-input o_wa_check me-2" t-att-checked="row.checked"
-                           t-att-data-tri="row.partial ? '1' : ''"
-                           t-att-disabled="props.readonly"
-                           t-on-change="(ev) => this.onCheck(row, ev.target.checked)"/>
-                    <i t-attf-class="fa {{ row.icon }} o_wa_icon me-2"/>
-                    <span t-out="row.label"/>
-                    <small class="text-muted ms-2" t-out="row.type"/>
-                </div>
+                <t t-foreach="rootNodes" t-as="node" t-key="node.id">
+                    <TreeNode
+                            node="node"
+                            children="getChildren(node)"
+                            expandedIds="effectiveOpen"
+                            closingIds="state.closing"
+                            onToggle="(id) => this.toggleNode(id)"
+                            disabled="props.readonly"
+                            showCheckbox="true"
+                            checkState="checkState"
+                            onCheck="(n, checked) => this.onCheck(n, checked)"
+                            getChildren="getChildren"
+                            level="0"
+                            index="node_index">
+                        <t t-set-slot="icon" t-slot-scope="ctx">
+                            <i t-attf-class="fa {{ ctx.node.hasChildren ? 'fa-folder-o' : 'fa-bar-chart' }} o_wa_icon me-2"/>
+                        </t>
+                        <t t-set-slot="extra" t-slot-scope="ctx">
+                            <small class="text-muted ms-2" t-out="ctx.node.item_type"/>
+                        </t>
+                    </TreeNode>
+                </t>
             </div>
         </div>
     </t>

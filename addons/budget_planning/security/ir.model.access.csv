@@ -16,3 +16,5 @@ access_budget_initiative_admin,budget.plan.initiative.admin,model_budget_plan_in
 access_budget_project_admin,budget.plan.project.admin,model_budget_plan_project,base.group_system,1,1,1,1
 access_budget_activity_admin,budget.plan.activity.admin,model_budget_plan_activity,base.group_system,1,1,1,1
 access_budget_line_admin,budget.plan.budget.line.admin,model_budget_plan_budget_line,base.group_system,1,1,1,1
+access_statement_user,budget.financial.statement.user,model_budget_financial_statement,base.group_user,1,1,1,1
+access_statement_line_user,budget.financial.statement.line.user,model_budget_financial_statement_line,base.group_user,1,1,1,1

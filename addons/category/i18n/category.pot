@@ -1,0 +1,452 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* category
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 07:57+0000\n"
+"PO-Revision-Date: 2026-09-23 07:57+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: category
+#. odoo-python
+#: code:addons/category/models/category.py:0
+msgid ""
+"A sub-category must belong to the same entity as its tree root \"%(root)s\" "
+"(entity %(ent)s)."
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Add"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Add a sub-category here"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Add to category"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "All columns"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Cancel"
+msgstr ""
+
+#. module: category
+#. odoo-python
+#: code:addons/category/models/category.py:0
+msgid ""
+"Cannot move \"%(t)s\": a sub-category must share its tree root's entity "
+"(\"%(r)s\")."
+msgstr ""
+
+#. module: category
+#. odoo-python
+#: code:addons/category/models/category.py:0
+msgid "Cannot move \"%(title)s\" under its own descendant \"%(parent)s\"."
+msgstr ""
+
+#. module: category
+#: model:ir.ui.menu,name:category.menu_category_root
+msgid "Categories"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__category_id
+msgid "Category"
+msgstr ""
+
+#. module: category
+#. odoo-python
+#: code:addons/category/models/category.py:0
+msgid ""
+"Category \"%(title)s\" belongs to entity \"%(root)s\" (tree root "
+"\"%(root_title)s\"). A sub-category must use the same entity as its tree "
+"root."
+msgstr ""
+
+#. module: category
+#: model:ir.actions.client,name:category.action_category_manager
+#: model:ir.ui.menu,name:category.menu_category_manager
+msgid "Category Manager"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Clear"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Clear all"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Clear search"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Click"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+#: model:ir.model.fields,field_description:category.field_raes_md_category__code
+msgid "Code"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__company_id
+msgid "Company"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Create"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__creation_date
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__creation_date
+msgid "Creation Date"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__creator_user_id
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__creator_user_id
+msgid "Creator User"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__member_id
+msgid "DW Member ID"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Delete this category and all its sub-categories"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__display_name
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Display name"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Drag to resize"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__editor_user_id
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__editor_user_id
+msgid "Editor User"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__english_title
+msgid "English Title"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+#: model:ir.model.fields,field_description:category.field_raes_md_category__entity_id
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__entity_id
+msgid "Entity"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__id
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__id
+msgid "ID"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "In this category"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Inverse"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__is_node_only
+msgid "Is Node Only"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__is_user_defined
+msgid "Is User Defined"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Loading…"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Locked to the tree root's entity."
+msgstr ""
+
+#. module: category
+#: model:ir.model,name:category.model_raes_md_category
+msgid "MD Category (md.category)"
+msgstr ""
+
+#. module: category
+#: model:ir.model,name:category.model_raes_md_category_member
+msgid "MD Category Member (md.category_member)"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__member_ids
+msgid "Members"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__modification_date
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__modification_date
+msgid "Modification Date"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Nested under:"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "New Root Category"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "New Sub-category"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "New root category"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "No categories yet."
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "No columns available"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "No columns available for this entity."
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "No matching categories."
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "No matching entities"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "No uncategorized items."
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Nothing in this category yet."
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__parent_id
+msgid "Parent Category"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Per page"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Remove from category"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__reserved_attibute1
+msgid "Reserved Attibute1"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__reserved_attibute2
+msgid "Reserved Attibute2"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__reserved_attibute3
+msgid "Reserved Attibute3"
+msgstr ""
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__root_id
+msgid "Root Category"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Search entities…"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Search…"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Select a category to begin."
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Select a category to configure its display name."
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Select all on page"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "The DW entity this category belongs to."
+msgstr ""
+
+#. module: category
+#. odoo-python
+#: code:addons/category/models/category.py:0
+msgid ""
+"This member already belongs to sibling category \"%(parent)s\" and cannot be"
+" added to another sub-category of the same parent."
+msgstr ""
+
+#. module: category
+#. odoo-python
+#: code:addons/category/models/category.py:0
+msgid "This member is already in the category!"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+#: model:ir.model.fields,field_description:category.field_raes_md_category__title
+msgid "Title"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Uncategorized"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "to add one."
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "to category →"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "جستجو…"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "دسته بندی ها"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "← Remove"
+msgstr ""

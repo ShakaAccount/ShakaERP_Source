@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Tabs sliding (transitions.dev): the pill that follows the active tab. -->
+    <t t-inherit="web.Notebook" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_notebook_headers')]/ul" position="attributes">
+            <attribute name="role">tablist</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('o_notebook_headers')]/ul" position="inside">
+            <li class="t-tabs-pill" role="presentation" aria-hidden="true" t-ref="shakaTabsPill"/>
+        </xpath>
+    </t>
+
+</templates>

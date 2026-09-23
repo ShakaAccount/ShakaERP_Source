@@ -1,0 +1,71 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* dim_company_dashboard
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:00+0000\n"
+"PO-Revision-Date: 2026-09-23 08:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:model:dim.company
+msgid "Company Dimension (Read-Only, from Shaka_DW)"
+msgstr ""
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:companyid
+msgid "Company ID"
+msgstr ""
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:parentid
+msgid "Parent ID"
+msgstr ""
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:entitle
+msgid "English Title"
+msgstr ""
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:level0
+msgid "Level 0"
+msgstr ""
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:level1
+msgid "Level 1"
+msgstr ""
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:level2
+msgid "Level 2"
+msgstr ""
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:level3
+msgid "Level 3"
+msgstr ""
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:companytitle
+msgid "Company Title"
+msgstr ""
+
+#. module: dim_company_dashboard
+#: views/views.xml:action_dim_company:name
+msgid "Company Dimension"
+msgstr ""
+
+#. module: dim_company_dashboard
+#: views/views.xml:menu_dim_company_root:name
+msgid "BI Dimensions"
+msgstr ""

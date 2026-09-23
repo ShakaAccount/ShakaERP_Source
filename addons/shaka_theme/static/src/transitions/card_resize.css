@@ -1,0 +1,16 @@
+/* Transitions.dev — Card resize (https://transitions.dev/detail.html?t=card-resize)
+   Vendored tokens; tune below. Applied to dialogs by dialog_card_resize.js,
+   which tweens the height with the Web Animations API from these tokens (the
+   snippet's CSS transition can't go auto → auto, and a WAAPI tween can be
+   retargeted mid-flight). */
+
+:root {
+  --resize-dur: 300ms;
+  --resize-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Shaka: hide overflow only while tweening, so growing content doesn't spill
+   past the card mid-animation (dropdowns stay unclipped the rest of the time). */
+.t-resize.is-resizing {
+  overflow: hidden;
+}

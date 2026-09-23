@@ -15,6 +15,20 @@
         <field name="domain_force">[('company_id', 'in', company_ids)]</field>
         <field name="perm_create" eval="False"/>
     </record>
+    <record id="rule_financial_statement_company" model="ir.rule">
+        <field name="name">بودجه صورت‌های مالی: شرکت کاربر</field>
+        <field name="model_id" ref="model_budget_financial_statement"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="perm_create" eval="False"/>
+    </record>
+    <record id="rule_financial_statement_line_company" model="ir.rule">
+        <field name="name">ردیف بودجه صورت‌های مالی: شرکت کاربر</field>
+        <field name="model_id" ref="model_budget_financial_statement_line"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="perm_create" eval="False"/>
+    </record>
     <record id="rule_budget_dashboard_company" model="ir.rule">
         <field name="name">داشبورد برنامه و بودجه: شرکت کاربر</field>
         <field name="model_id" ref="model_budget_plan_dashboard"/>

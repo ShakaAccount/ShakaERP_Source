@@ -1,0 +1,107 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* shaka_ui_makeover
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:40+0000\n"
+"PO-Revision-Date: 2026-09-23 08:40+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: shaka_ui_makeover
+#: model:ir.model,name:shaka_ui_makeover.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model:ir.model,name:shaka_ui_makeover.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model:ir.model.fields,field_description:shaka_ui_makeover.field_res_company__display_name
+#: model:ir.model.fields,field_description:shaka_ui_makeover.field_res_config_settings__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model:ir.model.fields,field_description:shaka_ui_makeover.field_res_company__id
+#: model:ir.model.fields,field_description:shaka_ui_makeover.field_res_config_settings__id
+msgid "ID"
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model:ir.model.fields,help:shaka_ui_makeover.field_res_company__shaka_theme_palette
+#: model:ir.model.fields,help:shaka_ui_makeover.field_res_config_settings__shaka_theme_palette
+msgid ""
+"Light and dark mode colors as JSON. Every value is a hex color such as "
+"#16A34A. Missing keys fall back to the shipped palette."
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model_terms:ir.ui.view,arch_db:shaka_ui_makeover.shaka_login
+msgid "Show password"
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model:ir.model.fields,field_description:shaka_ui_makeover.field_res_company__shaka_theme_palette
+#: model:ir.model.fields,field_description:shaka_ui_makeover.field_res_config_settings__shaka_theme_palette
+msgid "Theme palette (JSON)"
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model_terms:ir.ui.view,arch_db:shaka_ui_makeover.res_config_settings_view_form_shaka_ui
+msgid "اعمال تغییرات"
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model_terms:ir.ui.view,arch_db:shaka_ui_makeover.res_config_settings_view_form_shaka_ui
+msgid "بازگردانی پالت پیش‌فرض"
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model_terms:ir.ui.view,arch_db:shaka_ui_makeover.res_config_settings_view_form_shaka_ui
+msgid "تنظیمات پوسته"
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model_terms:ir.ui.view,arch_db:shaka_ui_makeover.res_config_settings_view_form_shaka_ui
+msgid "ذخیره و بارگذاری مجدد"
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model_terms:ir.ui.view,arch_db:shaka_ui_makeover.res_config_settings_view_form_shaka_ui
+msgid ""
+"رنگ‌های هر دو تم را در قالب JSON وارد کنید. هر رنگ باید HEX باشد؛ مثل "
+"#16A34A."
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model_terms:ir.ui.view,arch_db:shaka_ui_makeover.res_config_settings_view_form_shaka_ui
+msgid "پالت رنگ تم"
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model_terms:ir.ui.view,arch_db:shaka_ui_makeover.res_config_settings_view_form_shaka_ui
+msgid "پالت رنگ روشن و تیره"
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model_terms:ir.ui.view,arch_db:shaka_ui_makeover.res_config_settings_view_form_shaka_ui
+msgid "پس از ذخیره، صفحه دوباره بارگذاری می‌شود و رنگ‌ها اعمال می‌شوند."
+msgstr ""
+
+#. module: shaka_ui_makeover
+#: model_terms:ir.ui.view,arch_db:shaka_ui_makeover.res_config_settings_view_form_shaka_ui
+msgid ""
+"کلیدهای مجاز: bg، surface، elevated، border، input، hover، text، muted، "
+"primary، primary_dark، on_primary، link، pill_bg، pill_text، success، "
+"warning، danger"
+msgstr ""

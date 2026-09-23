@@ -1,0 +1,811 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* entity
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:16+0000\n"
+"PO-Revision-Date: 2026-09-23 08:16+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "<span>DW Connection</span>"
+msgstr "<span>اتصال انبار داده</span>"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "<span>Rebuild Catalog</span>"
+msgstr "<span>بازسازی کاتالوگ</span>"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "<span>Sync DW Table</span>"
+msgstr "<span>همگام‌سازی جدول انبار داده</span>"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Active"
+msgstr "فعال"
+
+#. module: entity
+#: model:ir.model.fields,help:entity.field_raes_md_entity_column__is_user_defined
+msgid "Always forced to 1 for columns created through Odoo."
+msgstr "برای ستون‌هایی که از طریق اودو ایجاد می‌شوند همواره برابر ۱ تنظیم می‌شود."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "An entity named '%(n)s' already exists in schema '%(s)s'."
+msgstr "موجودیتی با نام '%(n)s' از قبل در شمای '%(s)s' وجود دارد."
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Audit"
+msgstr "بازرسی"
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__bigint
+msgid "BigInt"
+msgstr "عدد صحیح بزرگ (BigInt)"
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__bit
+msgid "Bit"
+msgstr "بیت (Bit)"
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Cannot drop table %(d)s.%(s)s.%(t)s on the DW server: it contains %(n)s "
+"row(s). Empty the table before deleting the entity, or detach the entity "
+"from its connection first."
+msgstr ""
+"حذف جدول %(d)s.%(s)s.%(t)s از سرور انبار داده امکان‌پذیر نیست: این جدول "
+"دارای %(n)s ردیف است. پیش از حذف موجودیت، ابتدا جدول را خالی کنید یا "
+"موجودیت را از اتصال آن جدا نمایید."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Cannot drop table %(d)s.%(s)s.%(t)s on the DW server: it is referenced by foreign keys from other tables:\n"
+"  - %(det)s\n"
+"\n"
+"Delete or change those columns / entities first."
+msgstr ""
+"حذف جدول %(d)s.%(s)s.%(t)s از سرور انبار داده امکان‌پذیر نیست: این جدول توسط کلیدهای خارجی جداول دیگر ارجاع داده می‌شود:\n"
+"  - %(det)s\n"
+"\n"
+"ابتدا آن ستون‌ها/موجودیت‌ها را حذف یا تغییر دهید."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Cannot reorder the columns of %(d)s.%(s)s.%(t)s on the DW server: other tables reference it via foreign keys:\n"
+"  - %(det)s\n"
+"\n"
+"Remove those references first, or empty the referring tables."
+msgstr ""
+"مرتب‌سازی مجدد ستون‌های %(d)s.%(s)s.%(t)s در سرور انبار داده امکان‌پذیر نیست: جداول دیگر از طریق کلید خارجی به آن ارجاع می‌دهند:\n"
+"  - %(det)s\n"
+"\n"
+"ابتدا این ارجاع‌ها را حذف کنید یا جداول ارجاع‌دهنده را خالی نمایید."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Cannot reorder the columns of %(d)s.%(s)s.%(t)s on the DW server: the table "
+"contains %(n)s row(s). MSSQL cannot reorder columns in place. Empty the "
+"table first, then sync again — or delete the entity so the table can be "
+"rebuilt cleanly."
+msgstr ""
+"مرتب‌سازی مجدد ستون‌های %(d)s.%(s)s.%(t)s در سرور انبار داده امکان‌پذیر نیست: "
+"این جدول دارای %(n)s ردیف است. MSSQL نمی‌تواند ستون‌ها را در محل مرتب کند. "
+"ابتدا جدول را خالی کرده و دوباره همگام‌سازی کنید، یا موجودیت را حذف کنید تا "
+"جدول به‌طور کامل بازسازی شود."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "Catalog rebuilt"
+msgstr "کاتالوگ بازسازی شد"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_search
+msgid "Category"
+msgstr "دسته‌بندی"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__category_code
+msgid "Category Code"
+msgstr "کد دسته‌بندی"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__category_title
+msgid "Category Title"
+msgstr "عنوان دسته‌بندی"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__category_title_en
+msgid "Category Title (EN)"
+msgstr "عنوان دسته‌بندی (انگلیسی)"
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__char
+msgid "Char"
+msgstr "کاراکتر (Char)"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__child_ids
+msgid "Child Entities"
+msgstr "موجودیت‌های فرزند"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Classification"
+msgstr "طبقه‌بندی"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Clear reference"
+msgstr "پاک کردن ارجاع"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__code
+msgid "Code"
+msgstr "کد"
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity_column.py:0
+msgid "Column '%(c)s' already exists on entity '%(e)s'."
+msgstr "ستون '%(c)s' از قبل در موجودیت '%(e)s' وجود دارد."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Column '%(c)s' of entity '%(e)s' references entity '%(r)s', but its table "
+"%(d)s.%(s)s.%(t)s does not exist on the DW server. Open '%(r)s' and click "
+"'Sync DW Table' first."
+msgstr ""
+"ستون '%(c)s' از موجودیت '%(e)s' به موجودیت '%(r)s' ارجاع می‌دهد، اما جدول "
+"%(d)s.%(s)s.%(t)s آن در سرور انبار داده وجود ندارد. ابتدا '%(r)s' را باز "
+"کرده و روی 'همگام‌سازی جدول انبار داده' کلیک کنید."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Column '%(c)s' of entity '%(e)s' references entity '%(r)s', but its table "
+"%(d)s.%(s)s.%(t)s has no PRIMARY KEY constraint matching column '%(p)s'. "
+"Open '%(r)s' and click 'Sync DW Table' to rebuild the constraint, then save "
+"this column again."
+msgstr ""
+"ستون '%(c)s' از موجودیت '%(e)s' به موجودیت '%(r)s' ارجاع می‌دهد، اما جدول "
+"%(d)s.%(s)s.%(t)s آن هیچ محدودیت کلید اصلی (PRIMARY KEY) منطبق با ستون "
+"'%(p)s' ندارد. '%(r)s' را باز کرده و روی 'همگام‌سازی جدول انبار داده' کلیک "
+"کنید تا محدودیت بازسازی شود، سپس این ستون را دوباره ذخیره کنید."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Column '%(c)s' of entity '%(e)s' references entity '%(r)s', but that entity "
+"has no Schema or Name set. Fill them in before saving this column."
+msgstr ""
+"ستون '%(c)s' از موجودیت '%(e)s' به موجودیت '%(r)s' ارجاع می‌دهد، اما آن "
+"موجودیت فاقد شما یا نام تنظیم‌شده است. پیش از ذخیره این ستون آن‌ها را "
+"تکمیل کنید."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid ""
+"Column '%(c)s' of entity '%(e)s' references entity '%(r)s', but that entity "
+"has no column marked as Primary Key. Mark exactly one column of '%(r)s' as "
+"Primary Key, then save again."
+msgstr ""
+"ستون '%(c)s' از موجودیت '%(e)s' به موجودیت '%(r)s' ارجاع می‌دهد، اما آن "
+"موجودیت هیچ ستونی به‌عنوان کلید اصلی مشخص‌شده ندارد. دقیقاً یک ستون از "
+"'%(r)s' را به‌عنوان کلید اصلی علامت‌گذاری کرده، سپس دوباره ذخیره کنید."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity_column.py:0
+msgid ""
+"Column '%(c)s' references entity '%(e)s', so its Data Type must be BigInt."
+msgstr ""
+"ستون '%(c)s' به موجودیت '%(e)s' ارجاع می‌دهد، بنابراین نوع داده آن باید "
+"BigInt باشد."
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__column_type_lu
+msgid "Column Type"
+msgstr "نوع ستون"
+
+#. module: entity
+#: model:ir.actions.act_window,name:entity.action_raes_md_entity_column
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__column_count
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__column_ids
+#: model:ir.ui.menu,name:entity.menu_raes_md_entity_column
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Columns"
+msgstr "ستون‌ها"
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "Columns of %s"
+msgstr "ستون‌های %s"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Company Based"
+msgstr "مبتنی بر شرکت"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_dw_schema__connection_id
+msgid "Connection"
+msgstr "اتصال"
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid ""
+"Could not create or update the DW table for '%(e)s':\n"
+"%(msg)s"
+msgstr ""
+"ایجاد یا به‌روزرسانی جدول انبار داده برای '%(e)s' ممکن نشد:\n"
+"%(msg)s"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Create or refresh the table on the linked MSSQL server"
+msgstr "ایجاد یا به‌روزرسانی جدول در سرور MSSQL متصل‌شده"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__create_uid
+msgid "Created by"
+msgstr "ایجاد شده توسط"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__create_date
+msgid "Created on"
+msgstr "تاریخ ایجاد"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Creation"
+msgstr "ایجاد"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__creation_date
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__creation_date
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__creation_date
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__creation_date
+msgid "Creation Date"
+msgstr "تاریخ ایجاد"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__creator_user_id
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__creator_user_id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__creator_user_id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__creator_user_id
+msgid "Creator User"
+msgstr "کاربر ایجادکننده"
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__connection_id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__connection_id
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "DW Connection"
+msgstr "اتصال انبار داده"
+
+#. module: entity
+#: model:ir.model,name:entity.model_raes_dw_schema
+msgid "DW Schema"
+msgstr "شمای انبار داده"
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "DW table synced"
+msgstr "جدول انبار داده همگام‌سازی شد"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__data_type
+msgid "Data Type"
+msgstr "نوع داده"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Database"
+msgstr "پایگاه داده"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__database_name
+msgid "Database Name"
+msgstr "نام پایگاه داده"
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__date
+msgid "Date"
+msgstr "تاریخ"
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__datetime
+msgid "DateTime"
+msgstr "تاریخ و زمان"
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__decimal
+msgid "Decimal"
+msgstr "اعشاری (Decimal)"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Dim"
+msgstr "بُعد (Dim)"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_dw_schema__display_name
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__display_name
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__display_name
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__display_name
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__display_name
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__display_name
+msgid "Display Name"
+msgstr "نام نمایشی"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__editor_user_id
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__editor_user_id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__editor_user_id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__editor_user_id
+msgid "Editor User"
+msgstr "کاربر ویرایشگر"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__entity_count
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__entity_ids
+#: model:ir.ui.menu,name:entity.menu_raes_md_entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_form
+msgid "Entities"
+msgstr "موجودیت‌ها"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__entity_id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__entity_id
+msgid "Entity"
+msgstr "موجودیت"
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity_column.py:0
+msgid ""
+"Entity '%(e)s' already has a primary-key column ('%(c)s'). Only one column "
+"can be the primary key."
+msgstr ""
+"موجودیت '%(e)s' از قبل دارای ستون کلید اصلی ('%(c)s') است. فقط یک ستون "
+"می‌تواند کلید اصلی باشد."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity_column.py:0
+msgid ""
+"Entity '%(e)s' already has an identity column ('%(c)s'). Only one column can"
+" be identity."
+msgstr ""
+"موجودیت '%(e)s' از قبل دارای ستون هویت ('%(c)s') است. فقط یک ستون می‌تواند "
+"هویت باشد."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid ""
+"Entity '%(e)s' has more than one column sharing ordinal position %(p)s. Each"
+" column must have a unique position starting from 1."
+msgstr ""
+"موجودیت '%(e)s' دارای بیش از یک ستون با موقعیت ترتیبی مشترک %(p)s است. هر "
+"ستون باید موقعیتی یکتا داشته باشد که از ۱ شروع شود."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid "Entity '%s' has no columns; cannot create the table."
+msgstr "موجودیت '%s' هیچ ستونی ندارد؛ امکان ایجاد جدول وجود ندارد."
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__entity_full_name
+msgid "Entity Full Name"
+msgstr "نام کامل موجودیت"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__system_lu
+msgid "Entity System"
+msgstr "سیستم موجودیت"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__entity_type_lu
+msgid "Entity Type"
+msgstr "نوع موجودیت"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_form
+msgid "Entry"
+msgstr "ورودی"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Fact"
+msgstr "واقعیت (Fact)"
+
+#. module: entity
+#: model:ir.model.fields,help:entity.field_raes_md_entity__database_name
+msgid "Filled automatically from the linked DW connection."
+msgstr "به‌طور خودکار از اتصال انبار داده متصل‌شده تکمیل می‌شود."
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Flags"
+msgstr "پرچم‌ها"
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__float
+msgid "Float"
+msgstr "اعشاری شناور (Float)"
+
+#. module: entity
+#: model:ir.model.fields,help:entity.field_raes_md_entity__connection_id
+msgid ""
+"Foreign Data Wrapper connection this entity belongs to. Stored in "
+"raes.md.entity.config, not in the DW."
+msgstr ""
+"اتصال Foreign Data Wrapper که این موجودیت به آن تعلق دارد. در "
+"raes.md.entity.config ذخیره می‌شود، نه در انبار داده."
+
+#. module: entity
+#: model:ir.model,name:entity.model_raes_gnr_lookup
+msgid "GNR LookUp"
+msgstr "جستجوی GNR"
+
+#. module: entity
+#: model:ir.model,name:entity.model_raes_gnr_module
+msgid "GNR Module (gnr.module)"
+msgstr "ماژول GNR (gnr.module)"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Hierarchy"
+msgstr "سلسله‌مراتب"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_dw_schema__id
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__id
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__id
+msgid "ID"
+msgstr "شناسه"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__is_identity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Identity"
+msgstr "هویت"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Inactive"
+msgstr "غیرفعال"
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__int
+msgid "Int"
+msgstr "عدد صحیح (Int)"
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid "Invalid decimal size '%s'. Use 'precision,scale'."
+msgstr "اندازه اعشاری نامعتبر '%s'. از قالب 'precision,scale' استفاده کنید."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid "Invalid size '%(s)s' for %(t)s."
+msgstr "اندازه نامعتبر '%(s)s' برای %(t)s."
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__is_active
+msgid "Is Active"
+msgstr "فعال است"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__is_category_based
+msgid "Is Category Based"
+msgstr "مبتنی بر دسته‌بندی است"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__is_company_based
+msgid "Is Company Based"
+msgstr "مبتنی بر شرکت است"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__is_user_defined
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__is_user_defined
+msgid "Is User Defined"
+msgstr "تعریف‌شده توسط کاربر است"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__write_uid
+msgid "Last Updated by"
+msgstr "آخرین ویرایش توسط"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_config__write_date
+msgid "Last Updated on"
+msgstr "تاریخ آخرین ویرایش"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Last edit"
+msgstr "آخرین ویرایش"
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "Link a DW Connection before syncing the DW table."
+msgstr "پیش از همگام‌سازی جدول انبار داده، ابتدا یک اتصال انبار داده را پیوند دهید."
+
+#. module: entity
+#: model:ir.actions.act_window,name:entity.action_raes_gnr_lookup
+#: model:ir.ui.menu,name:entity.menu_raes_gnr_lookup
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_lookup_list
+msgid "LookUp"
+msgstr "جستجو"
+
+#. module: entity
+#: model:ir.ui.menu,name:entity.menu_raes_md_root
+msgid "MD Data"
+msgstr "داده‌های MD"
+
+#. module: entity
+#: model:ir.actions.act_window,name:entity.action_raes_md_entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_list
+msgid "MD Entities"
+msgstr "موجودیت‌های MD"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "MD Entity"
+msgstr "موجودیت MD"
+
+#. module: entity
+#: model:ir.model,name:entity.model_raes_md_entity
+msgid "MD Entity (md.entity)"
+msgstr "موجودیت MD (md.entity)"
+
+#. module: entity
+#: model:ir.model,name:entity.model_raes_md_entity_column
+msgid "MD Entity Column (md.entity_column)"
+msgstr "ستون موجودیت MD (md.entity_column)"
+
+#. module: entity
+#: model:ir.model,name:entity.model_raes_md_entity_config
+msgid "MD Entity DW Configuration"
+msgstr "پیکربندی انبار داده موجودیت MD"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__master_entity_id
+msgid "Master Entity"
+msgstr "موجودیت اصلی"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__modification_date
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__modification_date
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__modification_date
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__modification_date
+msgid "Modification Date"
+msgstr "تاریخ تغییر"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__module_id
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_form
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Module"
+msgstr "ماژول"
+
+#. module: entity
+#: model:ir.actions.act_window,name:entity.action_raes_gnr_module
+#: model:ir.ui.menu,name:entity.menu_raes_gnr_module
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_list
+msgid "Modules"
+msgstr "ماژول‌ها"
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__nchar
+msgid "NChar"
+msgstr "NChar"
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__nvarchar
+msgid "NVarChar"
+msgstr "NVarChar"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_dw_schema__name
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__name
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__name
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Name"
+msgstr "نام"
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "No DW connection linked to this entity."
+msgstr "هیچ اتصال انبار داده‌ای به این موجودیت پیوند نخورده است."
+
+#. module: entity
+#: model:ir.model.constraint,message:entity.constraint_raes_md_entity_config_entity_config_uniq
+msgid "Only one configuration row per entity is allowed."
+msgstr "برای هر موجودیت فقط یک ردیف پیکربندی مجاز است."
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__ordinal_position
+msgid "Ordinal Position"
+msgstr "موقعیت ترتیبی"
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid ""
+"Ordinal positions of entity '%(e)s' must form a gap-free sequence 1..%(n)s. "
+"Current positions: %(got)s. Renumber your columns so they read 1, 2, 3, ... "
+"with no gaps."
+msgstr ""
+"موقعیت‌های ترتیبی موجودیت '%(e)s' باید یک دنباله پیوسته ۱..%(n)s تشکیل "
+"دهند. موقعیت‌های فعلی: %(got)s. ستون‌ها را طوری شماره‌گذاری مجدد کنید که "
+"به‌صورت ۱، ۲، ۳، ... بدون شکاف باشند."
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__original_name
+msgid "Original Name"
+msgstr "نام اصلی"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__title
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__title
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Persian Name"
+msgstr "نام فارسی"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Positions must be continuous starting at 1 with no gaps."
+msgstr "موقعیت‌ها باید پیوسته و از ۱ شروع شوند، بدون هیچ شکافی."
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__is_primary_key
+msgid "Primary Key"
+msgstr "کلید اصلی"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__priority
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__priority
+msgid "Priority"
+msgstr "اولویت"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_form
+msgid "Rebuild the catalog of the linked connection"
+msgstr "بازسازی کاتالوگ اتصال متصل‌شده"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__reference_entity_id
+msgid "Reference Entity"
+msgstr "موجودیت مرجع"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__schema_id
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity__schema_name
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "Schema"
+msgstr "شما"
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "Schemas of %s refreshed."
+msgstr "شماهای %s به‌روزرسانی شدند."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "Set a Schema and a Name before syncing the DW table."
+msgstr "پیش از همگام‌سازی جدول انبار داده، یک شما و یک نام تنظیم کنید."
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__size
+msgid "Size"
+msgstr "اندازه"
+
+#. module: entity
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_search
+msgid "System"
+msgstr "سیستم"
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/md_entity.py:0
+msgid "Table %(s)s.%(t)s is up to date."
+msgstr "جدول %(s)s.%(t)s به‌روز است."
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid "The DW connection '%s' has no MSSQL database set."
+msgstr "اتصال انبار داده '%s' هیچ پایگاه داده MSSQL تنظیم‌شده‌ای ندارد."
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__time
+msgid "Time"
+msgstr "زمان"
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__tinyint
+msgid "TinyInt"
+msgstr "عدد صحیح کوچک (TinyInt)"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_module__title
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_form
+msgid "Title"
+msgstr "عنوان"
+
+#. module: entity
+#. odoo-python
+#: code:addons/entity/models/ddl_builder.py:0
+msgid "Unsupported data type: %s"
+msgstr "نوع داده پشتیبانی‌نشده: %s"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_md_entity_column__is_user_defined
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_gnr_module_search
+#: model_terms:ir.ui.view,arch_db:entity.view_raes_md_entity_search
+msgid "User Defined"
+msgstr "تعریف‌شده توسط کاربر"
+
+#. module: entity
+#: model:ir.model.fields,field_description:entity.field_raes_gnr_lookup__value
+msgid "Value"
+msgstr "مقدار"
+
+#. module: entity
+#: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__varchar
+msgid "VarChar"
+msgstr "VarChar"

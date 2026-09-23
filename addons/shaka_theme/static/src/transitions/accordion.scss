@@ -1,0 +1,65 @@
+// Transitions.dev — Accordion (https://transitions.dev/detail.html?t=accordion)
+// Vendored as-is; tune the motion tokens below. Drives Odoo's AccordionItem
+// (accordion_item.xml/.js keep the panel mounted while it collapses) and
+// shaka_ui_kit's tree, which reuses the --acc-* tokens.
+
+:root {
+    --acc-expand: 250ms;
+    --acc-collapse: 250ms;
+    --acc-chevron: 250ms;
+    --acc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --acc-exit-ease: cubic-bezier(0.4, 0, 1, 1);
+}
+
+// grid-template-rows 0fr → 1fr gives a clean height animation with no JS
+// measurement; the inner element clips overflow.
+.t-acc-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--acc-collapse) var(--acc-exit-ease);
+}
+.t-acc[data-open="true"] .t-acc-panel {
+    grid-template-rows: 1fr;
+    transition: grid-template-rows var(--acc-expand) var(--acc-ease);
+}
+.t-acc-panel-inner {
+    overflow: hidden;
+    opacity: 0;
+    filter: blur(2px);
+    transition:
+        opacity var(--acc-collapse) var(--acc-exit-ease),
+        filter var(--acc-collapse) var(--acc-exit-ease);
+}
+.t-acc[data-open="true"] .t-acc-panel-inner {
+    opacity: 1;
+    filter: blur(0);
+    transition:
+        opacity var(--acc-expand) var(--acc-ease),
+        filter var(--acc-expand) var(--acc-ease);
+}
+// Shaka: Odoo mounts the panel on open, so the expand needs a starting style.
+@starting-style {
+    .t-acc[data-open="true"] .t-acc-panel {
+        grid-template-rows: 0fr;
+    }
+    .t-acc[data-open="true"] .t-acc-panel-inner {
+        opacity: 0;
+        filter: blur(2px);
+    }
+}
+
+// Chevron: flip vertically instead of Odoo's caret('up') swap, so the "v"
+// turns into a "^" (the snippet's scaleY(-1) on .t-acc-chevron).
+.o_accordion_toggle::after {
+    transition: transform var(--acc-chevron) var(--acc-ease);
+}
+.o_accordion_toggle.open::after {
+    @include caret-down();
+    transform: translate(-0.6em, 0.8em) scaleY(-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .t-acc-panel, .t-acc-panel-inner, .o_accordion_toggle::after {
+        transition: none !important;
+    }
+}

@@ -1,0 +1,894 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* win_access
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:40+0000\n"
+"PO-Revision-Date: 2026-09-23 08:40+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_bi_user_access_wizard__ols
+msgid ""
+"'None' hides this table entirely for the role -- no row filter is meaningful"
+" on top of that, so picking it skips the column/value step."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_option__source__ad
+msgid "AD"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_res_config_settings__win_access_domain
+#: model_terms:ir.ui.view,arch_db:win_access.view_res_config_win_access
+msgid "AD Domain (override)"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/member_list.xml:0
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_member__kind__ad
+msgid "AD user"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_win_access_member__name
+msgid "AD users are picked from the list; local users are picked or typed."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_res_config_settings__win_access_key
+#: model_terms:ir.ui.view,arch_db:win_access.view_res_config_win_access
+msgid "API Key"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_res_config_settings__win_access_url
+#: model_terms:ir.ui.view,arch_db:win_access.view_res_config_win_access
+msgid "API URL"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__access_id
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line_wizard__access_id
+msgid "Access"
+msgstr ""
+
+#. module: win_access
+#: model:ir.actions.act_window,name:win_access.action_win_access_group
+msgid "Access Groups"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__account_created
+msgid "Account Created"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model,name:win_access.model_bi_user_access_wizard
+msgid "Add BI access"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model,name:win_access.model_bi_user_access_line_wizard
+msgid "Add BI access value"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_users_form_bi_access
+msgid "Add access"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/member_list.xml:0
+msgid "Add member"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_group__ssas_permission__administrator
+msgid "Administrator"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__is_all_member
+msgid "All members of this entity"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_bi_user_access_line_wizard__member_option_id
+msgid ""
+"Auto-loaded from the warehouse when the column is that dimension's own id "
+"(e.g. WarehouseID, BranchID). Type to filter. If the row you want isn't "
+"listed, type its numeric id below instead."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_bi_user_access_line__column_id
+msgid "Auto-matched from column_name; pick a different one to change it."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_bi_user_access_line__member_option_id
+msgid ""
+"Auto-resolved from the warehouse so you edit by title, not the raw id. Only "
+"possible when the column is the table's own key; otherwise edit 'Value "
+"(MemberID)' directly."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__available_group_ids
+msgid "Available Group"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__available_table_ids
+msgid "Available Table"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_res_users__bi_access_ids
+#: model_terms:ir.ui.view,arch_db:win_access.view_users_form_bi_access
+msgid "BI Access"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model,name:win_access.model_bi_user_access
+msgid "BI Row Access"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model,name:win_access.model_bi_user_access_line
+msgid "BI Row Access Value"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_res_config_win_access
+msgid ""
+"Base URL of the Windows Access Management API, e.g. http://192.168.2.12:8443"
+" (no /v1)."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__available_group_ids
+#: model:ir.model.fields,field_description:win_access.field_res_users__bi_ssas_group_ids
+msgid "Bi Ssas Group"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_win_access_group__ssas_database_id
+msgid "Blank = no SSAS role."
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_bi_user_access_line_wizard_form
+#: model_terms:ir.ui.view,arch_db:win_access.view_bi_user_access_wizard_form
+msgid "Cancel"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/pbirs_tree.xml:0
+msgid "Collapse all"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__line_ids
+msgid "Column values"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model,name:win_access.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/sync_panel.xml:0
+msgid "Copy the error"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__create_uid
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__create_uid
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line_wizard__create_uid
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__create_uid
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__create_uid
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__create_uid
+#: model:ir.model.fields,field_description:win_access.field_win_access_option__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__create_date
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__create_date
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line_wizard__create_date
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__create_date
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__create_date
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__create_date
+#: model:ir.model.fields,field_description:win_access.field_win_access_option__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__bi_user_access__ols__default
+#: model:ir.model.fields.selection,name:win_access.selection__bi_user_access_wizard__ols__default
+msgid "Default"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__description
+msgid "Description"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__display_name
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__display_name
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line_wizard__display_name
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__display_name
+#: model:ir.model.fields,field_description:win_access.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:win_access.field_res_users__display_name
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__display_name
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__display_name
+#: model:ir.model.fields,field_description:win_access.field_win_access_option__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_group__state__draft
+msgid "Draft"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_win_access_group__pbirs_path_ids
+msgid ""
+"Empty = no PBIRS policy. The group gets the role on each selected item."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__entity_id
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__entity_id
+msgid "Entity"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/member_list.xml:0
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_member__state__error
+msgid "Error"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__bi_user_access__state__error
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_group__state__error
+msgid "Errors"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/pbirs_tree.xml:0
+msgid "Expand all"
+msgstr ""
+
+#. module: win_access
+#. odoo-python
+#: code:addons/win_access/models/bi_user_access.py:0
+msgid "Fill the user's Windows account first."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__full_name
+msgid "Full Name"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/member_list.xml:0
+msgid "Full name (optional)"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__group_id
+msgid "Group"
+msgstr ""
+
+#. module: win_access
+#: model:ir.ui.menu,name:win_access.menu_win_access_group
+msgid "Groups"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__id
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__id
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line_wizard__id
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__id
+#: model:ir.model.fields,field_description:win_access.field_res_config_settings__id
+#: model:ir.model.fields,field_description:win_access.field_res_users__id
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__id
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__id
+#: model:ir.model.fields,field_description:win_access.field_win_access_option__id
+msgid "ID"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_users_form_bi_access
+msgid "Import from warehouse"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_users_form_bi_access
+msgid "In these win_access groups (SSAS roles)"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_bi_user_access__is_all_member
+msgid "IsAllMember for this entity."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_bi_user_access__is_all_reader
+msgid "IsAllReader: unrestricted on every entity."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_option__item_type
+msgid "Item Type"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__kind
+#: model:ir.model.fields,field_description:win_access.field_win_access_option__kind
+msgid "Kind"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__write_uid
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__write_uid
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line_wizard__write_uid
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__write_uid
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__write_uid
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__write_uid
+#: model:ir.model.fields,field_description:win_access.field_win_access_option__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__write_date
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__write_date
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line_wizard__write_date
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__write_date
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__write_date
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__write_date
+#: model:ir.model.fields,field_description:win_access.field_win_access_option__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__log
+msgid "Last error"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/loading_field.xml:0
+msgid "Loading"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/loading_field.xml:0
+msgid "Loading..."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_option__source__local
+msgid "Local"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_win_access_group__name
+msgid "Local Windows group name; also used as the SSAS role name."
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/member_list.xml:0
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_member__kind__local
+msgid "Local user"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/member_list.xml:0
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__member_ids
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_member__state__added
+msgid "Member"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_win_access_group_form
+msgid "Members"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__module_id
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__module_id
+msgid "Module"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__name
+#: model:ir.model.fields,field_description:win_access.field_win_access_option__name
+msgid "Name"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_bi_user_access_wizard_form
+msgid "Next"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/pbirs_tree.xml:0
+msgid "No PBIRS items loaded. Check the API settings."
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/member_list.xml:0
+msgid "No members yet."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__bi_user_access__ols__none
+#: model:ir.model.fields.selection,name:win_access.selection__bi_user_access_wizard__ols__none
+msgid "None"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/member_list.xml:0
+msgid ""
+"Not in the AD list. Pick an existing user — this addon never creates AD "
+"accounts."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__bi_user_access__state__draft
+msgid "Not synced"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/sync_panel.xml:0
+msgid "Not synced yet."
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/pbirs_tree.xml:0
+msgid "Nothing matches \""
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__ols
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__ols
+msgid "OLS (table visibility)"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_bi_user_access_form
+msgid ""
+"OLS is set to None: this table is hidden entirely for the selected role(s), so\n"
+"                        no row filter applies and none is declared here."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_bi_user_access__ols
+msgid ""
+"Object-level security on the SSAS table itself, for this table+role. 'None' "
+"hides the table's data and metadata from the role entirely -- nobody in it "
+"can see the table exists, so the row filter below becomes irrelevant and "
+"isn't declared or pushed."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_option__source__odoo
+msgid "Odoo"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_res_config_win_access
+msgid ""
+"Optional. Normally detected from the Active Directory itself. Only set this "
+"to force the NetBIOS name used in DOMAIN\\\\user."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__options_error
+msgid "Options Error"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_option__kind__pbirs
+msgid "PBIRS item"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__pbirs_path_ids
+#: model_terms:ir.ui.view,arch_db:win_access.view_win_access_group_form
+msgid "PBIRS items"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__pbirs_role
+msgid "PBIRS role"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_option__parent_id
+msgid "Parent"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__password
+msgid "Password"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/member_list.xml:0
+msgid "Password for the new local account"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_option__path
+msgid "Path"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/member_list.xml:0
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_member__state__draft
+msgid "Pending"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__bi_user_access__ols__read
+#: model:ir.model.fields.selection,name:win_access.selection__bi_user_access_wizard__ols__read
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_group__ssas_permission__read
+msgid "Read"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_group__ssas_permission__readwrite
+msgid "ReadWrite"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/member_list.xml:0
+msgid "Remove"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_res_config_win_access
+msgid "SHAKA"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__column_id
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__column_name
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line_wizard__column_id
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_option__kind__ssas_column
+#: model_terms:ir.ui.view,arch_db:win_access.view_bi_user_access_form
+msgid "SSAS column"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__ssas_database_id
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_option__kind__ssas_db
+msgid "SSAS database"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__ssas_instance_id
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_option__kind__ssas_instance
+msgid "SSAS instance"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__group_ids
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__group_ids
+msgid "SSAS roles"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__ssas_table
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__table_id
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_option__kind__ssas_table
+msgid "SSAS table"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_bi_user_access_line_wizard_form
+msgid "Save"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_bi_user_access_line_wizard_form
+msgid "Save & add another"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/pbirs_tree.xml:0
+msgid "Search folders and reports…"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__is_all_reader
+msgid "Sees everything"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_res_config_win_access
+msgid "Sent in the X-API-Key header."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_win_access_member__account_created
+msgid "Set once the account is known to exist; sync then skips the check."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_option__source
+msgid "Source"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__ssas_permission
+msgid "Ssas Permission"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__state
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__state
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__state
+msgid "State"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__sync_result
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__sync_result
+msgid "Sync Result"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_users_form_bi_access
+msgid "Sync all"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_win_access_group_form
+msgid "Sync result"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/sync_panel.xml:0
+#: model_terms:ir.ui.view,arch_db:win_access.view_win_access_group_form
+msgid "Sync to Windows"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__bi_user_access__state__synced
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_group__state__synced
+msgid "Synced"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__synced_at
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__synced_at
+msgid "Synced At"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/sync_panel.xml:0
+msgid "Syncing…"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line_wizard__table_id
+msgid "Table"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__table_option_id
+msgid "Table Option"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_win_access_group_form
+msgid "Test API"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_bi_user_access_line__table_option_id
+msgid "The cached SSAS table this line's column belongs to."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_bi_user_access__entity_id
+msgid "The id of this entity is the EntityID written to the warehouse."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_res_users__bi_username
+msgid ""
+"The name SSAS sees as USERNAME(), e.g. RAEES\\jane. Defaulted from the AD "
+"domain and the login; correct it if the domain differs."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.constraint,message:win_access.constraint_bi_user_access_user_entity_uniq
+msgid "This user already has an access record for that entity."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_option__upn
+msgid "Upn"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model,name:win_access.model_res_users
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access__user_id
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__user_id
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__user_option_id
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_option__kind__user
+msgid "User"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_member__name
+msgid "Username"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__member_option_id
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line_wizard__member_option_id
+#: model_terms:ir.ui.view,arch_db:win_access.view_bi_user_access_form
+msgid "Value"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__member_id
+#: model:ir.model.fields,field_description:win_access.field_bi_user_access_line_wizard__member_id
+msgid "Value (MemberID)"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_bi_user_access_form
+msgid "Value (raw id, if not in the list above)"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_option__kind__dw_member
+msgid "Warehouse row"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/sync_panel.xml:0
+msgid "What to do:"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_bi_user_access__group_ids
+msgid ""
+"Which of the user's roles this grant's RLS filter is pushed to on sync. A "
+"user in several roles needs it on each one they view this data through -- "
+"SSAS unions a user's roles, so a role left out here grants unrestricted "
+"access on this table instead."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_bi_user_access_wizard__group_ids
+msgid ""
+"Which of the user's roles this grant's filter is pushed to. Pick more than "
+"one if the user needs the same access under several roles."
+msgstr ""
+
+#. module: win_access
+#: model:ir.ui.menu,name:win_access.menu_win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_res_config_win_access
+msgid "Windows Access"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_res_config_win_access
+msgid "Windows Access API"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model,name:win_access.model_win_access_option
+msgid "Windows Access Dropdown Option"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model,name:win_access.model_win_access_group
+msgid "Windows Access Group"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model,name:win_access.model_win_access_member
+msgid "Windows Access Group Member"
+msgstr ""
+
+#. module: win_access
+#: model:ir.actions.server,name:win_access.cron_win_access_sync_dw_ir_actions_server
+msgid "Windows Access: warm SSAS/warehouse pick-list cache"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_res_users__bi_username
+msgid "Windows account for BI"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_bi_user_access_line_wizard_form
+msgid "e.g. 17000000000000023"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_users_form_bi_access
+msgid "e.g. RAEES\\\\name"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/sync_panel.xml:0
+msgid "failed"
+msgstr ""
+
+#. module: win_access
+#: model_terms:ir.ui.view,arch_db:win_access.view_res_config_win_access
+msgid "http://192.168.2.12:8443"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/sync_panel.xml:0
+msgid "ok"
+msgstr ""
+
+#. module: win_access
+#. odoo-javascript
+#: code:addons/win_access/static/src/sync_panel.xml:0
+msgid "skipped"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_bi_user_access_wizard__available_group_ids
+#: model:ir.model.fields,help:win_access.field_res_users__bi_ssas_group_ids
+msgid ""
+"win_access groups (= SSAS roles) this Windows account is a member of. Pick "
+"which of these each BI access grant's RLS filter goes to on the grant "
+"itself, since the same user can need different roles for different grants."
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,help:win_access.field_bi_user_access__available_group_ids
+msgid ""
+"win_access groups (= SSAS roles) user_id's Windows account is a member of."
+msgstr ""

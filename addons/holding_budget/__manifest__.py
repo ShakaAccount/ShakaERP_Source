@@ -1,9 +1,17 @@
 {
     'name': 'بودجه هلدینگ',
     'version': '19.0.1.0.0',
-    'category': 'Accounting',
+    'category': 'Accounting/Budget',
     'summary': 'مدیریت سناریوهای بودجه هلدینگ',
+    'description': """
+Holding Budget
+==============
+Holding-level budget scenarios and the assumptions (rates, growth factors,
+lookups) each scenario is built on, per company and fiscal year.
+""",
     'author': 'ShakaERP',
+    'maintainer': 'ShakaERP',
+    'website': 'https://shakasystem.com',
     'license': 'LGPL-3',
     'icon': '/holding_budget/static/description/icon.svg',
     'depends': ['base', 'company_base_info', 'shaka_security'],

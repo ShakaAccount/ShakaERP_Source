@@ -1,0 +1,212 @@
+// ---------- Shared tokens ----------
+// Colours come from shaka_theme (SCSS vars / --shaka-* tokens), which are
+// compiled per colour scheme, so there is no dark-mode block here.
+// Declared once at :root, no wrapper class of its own — consumers override
+// individual tokens on their own outer wrapper (e.g. `.o_win_access_tree`)
+// and the override cascades in normally, since nothing below :root
+// redeclares them.
+:root {
+  --tree-border: var(--shaka-border);
+  --tree-accent: #{$o-brand-primary};
+  --tree-accent-soft: color-mix(in srgb, #{$o-brand-primary} 10%, transparent);
+  --tree-hover: var(--shaka-muted-bg);
+  --tree-selected: color-mix(in srgb, #{$o-brand-primary} 16%, transparent);
+  --tree-bg: var(--shaka-surface);
+  --tree-bg-fade: color-mix(in srgb, var(--shaka-surface) 0%, transparent);
+  --tree-text: var(--shaka-text);
+  --tree-text-muted: var(--shaka-muted);
+  --tree-gradient-dir: left;
+  --tree-radius: 6px;
+}
+
+[dir="rtl"],
+.o_rtl {
+  --tree-gradient-dir: right;
+}
+
+// ---------- Tree node ----------
+.o_tree_node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 4px 8px;
+  border-radius: var(--tree-radius);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+  user-select: none;
+  font-size: 13.5px;
+
+  // Stagger entrance
+  animation: o_tree_node_in 240ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: var(--stagger, 0ms);
+
+  // Skip layout & paint for offscreen nodes
+  content-visibility: auto;
+  contain-intrinsic-size: auto 30px;
+
+  &.o_tree_node_has_actions {
+    padding-inline-end: 58px;
+  }
+
+  &:hover {
+    background: var(--tree-hover);
+  }
+
+  &.o_tree_node_selected {
+    background: var(--tree-selected);
+    color: var(--tree-accent);
+    font-weight: 600;
+  }
+
+  &.o_tree_node_disabled {
+    cursor: default;
+  }
+
+  .o_tree_node_toggle {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--tree-text-muted);
+    transition: transform var(--acc-chevron) var(--acc-ease),
+    background 120ms ease,
+    color 120ms ease;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--tree-accent-soft);
+      color: var(--tree-accent);
+    }
+  }
+
+  .o_tree_node_toggle_open {
+    transform: rotate(90deg);
+  }
+
+  .o_tree_node_toggle_closed {
+    transform: rotate(0deg);
+  }
+
+  &:not(:has(.o_tree_node_toggle_open)):not(:has(.o_tree_node_toggle_closed))
+  .o_tree_node_toggle {
+    cursor: default;
+    font-size: 8px;
+    opacity: 0.5;
+
+    &:hover {
+      background: transparent;
+      color: var(--tree-text-muted);
+    }
+  }
+
+  .o_tree_node_check {
+    flex: 0 0 auto;
+  }
+
+  .o_tree_node_label {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--tree-text);
+    line-height: 1.3;
+  }
+
+  .o_tree_node_actions {
+    position: absolute;
+    inset-inline-end: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 2px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 140ms ease;
+    background: linear-gradient(
+            to var(--tree-gradient-dir),
+            var(--tree-bg) 55%,
+            var(--tree-bg-fade));
+    padding-inline-start: 12px;
+  }
+
+  &:hover .o_tree_node_actions,
+  &.o_tree_node_selected .o_tree_node_actions {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.o_tree_node_sentinel {
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.o_tree_children {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-inline-start: 16px;
+  border-inline-start: 1px solid var(--tree-border);
+  padding-inline-start: 4px;
+  // Accordion tokens (shaka_theme/static/src/transitions/accordion.scss).
+  // Transitions both ways (expand from @starting-style below), so toggling a
+  // node mid-animation reverses from where it is.
+  transition: grid-template-rows var(--acc-expand) var(--acc-ease),
+  opacity var(--acc-expand) var(--acc-ease),
+  filter var(--acc-expand) var(--acc-ease),
+  margin-inline-start var(--acc-expand) var(--acc-ease),
+  border-inline-start-width var(--acc-expand) var(--acc-ease),
+  padding-inline-start var(--acc-expand) var(--acc-ease);
+}
+
+@starting-style {
+  .o_tree_children {
+    grid-template-rows: 0fr;
+    opacity: 0;
+    filter: blur(2px);
+  }
+}
+
+.o_tree_children_closing {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  filter: blur(2px);
+  margin-inline-start: 0;
+  border-inline-start-width: 0;
+  padding-inline-start: 0;
+  transition: grid-template-rows var(--acc-collapse) var(--acc-exit-ease),
+  opacity var(--acc-collapse) var(--acc-exit-ease),
+  filter var(--acc-collapse) var(--acc-exit-ease),
+  margin-inline-start var(--acc-collapse) var(--acc-exit-ease),
+  border-inline-start-width var(--acc-collapse) var(--acc-exit-ease),
+  padding-inline-start var(--acc-collapse) var(--acc-exit-ease);
+}
+
+.o_tree_children_inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+// ---------- Animations ----------
+@keyframes o_tree_node_in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

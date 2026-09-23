@@ -1,0 +1,291 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* shaka_security
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:40+0000\n"
+"PO-Revision-Date: 2026-09-23 08:40+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: shaka_security
+#: model:ir.model.constraint,message:shaka_security.constraint_shaka_user_workflow_access_access_stage_unique
+msgid "A stage can only be assigned once per form access."
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.constraint,message:shaka_security.constraint_shaka_user_form_access_user_form_unique
+msgid "A user can have one access row per form."
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_workflow_access__access_id
+msgid "Access"
+msgstr ""
+
+#. module: shaka_security
+#. odoo-python
+#: code:addons/shaka_security/models/access_matrix.py:0
+msgid "Access to operation \"%s\" on form \"%s\" is not allowed."
+msgstr ""
+
+#. module: shaka_security
+#. odoo-python
+#: code:addons/shaka_security/models/access_matrix.py:0
+msgid "Access to workflow stage \"%s\" on form \"%s\" is not allowed."
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form__active
+msgid "Active"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form_stage__code
+msgid "Code"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_form_access__can_create
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_workflow_access__can_create
+msgid "Create"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form__create_uid
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form_stage__create_uid
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_form_access__create_uid
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_workflow_access__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form__create_date
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form_stage__create_date
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_form_access__create_date
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_workflow_access__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_form_access__can_unlink
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_workflow_access__can_unlink
+msgid "Delete"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_ir_ui_menu__display_name
+#: model:ir.model.fields,field_description:shaka_security.field_res_users__display_name
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form__display_name
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form_stage__display_name
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_mixin__display_name
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_form_access__display_name
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_workflow_access__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_form_access__can_write
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_workflow_access__can_write
+msgid "Edit"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form_stage__form_id
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_form_access__form_id
+msgid "Form"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_res_users__shaka_form_access_ids
+msgid "Form Access"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form__has_workflow
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_form_access__has_workflow
+msgid "Has Workflow"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_ir_ui_menu__id
+#: model:ir.model.fields,field_description:shaka_security.field_res_users__id
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form__id
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form_stage__id
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_mixin__id
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_form_access__id
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_workflow_access__id
+msgid "ID"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form__write_uid
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form_stage__write_uid
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_form_access__write_uid
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_workflow_access__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form__write_date
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form_stage__write_date
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_form_access__write_date
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_workflow_access__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model,name:shaka_security.model_ir_ui_menu
+msgid "Menu"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form__model_name
+msgid "Model Technical Name"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form__name
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form_stage__name
+msgid "Name"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.constraint,message:shaka_security.constraint_shaka_access_form_model_unique
+msgid "Only one access definition is allowed per model."
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form__sequence
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form_stage__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model,name:shaka_security.model_shaka_access_form
+msgid "Shaka Form Access Configuration"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model,name:shaka_security.model_shaka_access_form_stage
+msgid "Shaka Form Workflow Stage"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model,name:shaka_security.model_shaka_access_mixin
+msgid "Shaka User Access Control"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model,name:shaka_security.model_shaka_user_form_access
+msgid "Shaka User Form Access"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model,name:shaka_security.model_shaka_user_workflow_access
+msgid "Shaka User Workflow Access"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_form_access__can_read
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_workflow_access__can_read
+msgid "Show"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_workflow_access__stage_id
+msgid "Stage"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.constraint,message:shaka_security.constraint_shaka_access_form_stage_code_unique
+msgid "Stage code must be unique per form."
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model,name:shaka_security.model_res_users
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_form_access__user_id
+msgid "User"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_user_form_access__workflow_access_ids
+msgid "Workflow Access"
+msgstr ""
+
+#. module: shaka_security
+#: model:ir.model.fields,field_description:shaka_security.field_shaka_access_form__stage_ids
+msgid "Workflow Stages"
+msgstr ""
+
+#. module: shaka_security
+#: model_terms:ir.ui.view,arch_db:shaka_security.view_users_form_shaka_security_access
+msgid "ایجاد"
+msgstr ""
+
+#. module: shaka_security
+#: model_terms:ir.ui.view,arch_db:shaka_security.view_users_form_shaka_security_access
+msgid "این فرم گردش‌کار دارد؛ دسترسی فقط از مراحل زیر کنترل می‌شود."
+msgstr ""
+
+#. module: shaka_security
+#: model_terms:ir.ui.view,arch_db:shaka_security.view_users_form_shaka_security_access
+msgid "بارگذاری فرم‌های موجود"
+msgstr ""
+
+#. module: shaka_security
+#: model_terms:ir.ui.view,arch_db:shaka_security.view_users_form_shaka_security_access
+msgid "برای تنظیم مراحل گردش‌کار، روی سطر فرم دوبارکلیک کنید."
+msgstr ""
+
+#. module: shaka_security
+#: model_terms:ir.ui.view,arch_db:shaka_security.view_users_form_shaka_security_access
+msgid "تنظیم دسترسی فرم"
+msgstr ""
+
+#. module: shaka_security
+#: model_terms:ir.ui.view,arch_db:shaka_security.view_users_form_shaka_security_access
+msgid "حذف"
+msgstr ""
+
+#. module: shaka_security
+#: model_terms:ir.ui.view,arch_db:shaka_security.view_users_form_shaka_security_access
+msgid "دسترسی فرم‌ها"
+msgstr ""
+
+#. module: shaka_security
+#: model_terms:ir.ui.view,arch_db:shaka_security.view_users_form_shaka_security_access
+msgid "دسترسی مرحله‌های گردش‌کار"
+msgstr ""
+
+#. module: shaka_security
+#: model_terms:ir.ui.view,arch_db:shaka_security.view_users_form_shaka_security_access
+msgid "دسترسی کلی فرم"
+msgstr ""
+
+#. module: shaka_security
+#: model_terms:ir.ui.view,arch_db:shaka_security.view_users_form_shaka_security_access
+msgid "مرحله"
+msgstr ""
+
+#. module: shaka_security
+#: model_terms:ir.ui.view,arch_db:shaka_security.view_users_form_shaka_security_access
+msgid "نام فرم"
+msgstr ""
+
+#. module: shaka_security
+#: model_terms:ir.ui.view,arch_db:shaka_security.view_users_form_shaka_security_access
+msgid "نمایش"
+msgstr ""
+
+#. module: shaka_security
+#: model_terms:ir.ui.view,arch_db:shaka_security.view_users_form_shaka_security_access
+msgid "ویرایش"
+msgstr ""

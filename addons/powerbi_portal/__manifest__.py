@@ -12,6 +12,7 @@ own Windows/Kerberos session with the Report Server - Odoo never sees or
 stores report-server credentials.
 
 Includes (formerly the separate 'AD Group Sync' module, now merged in):
+
 - AD Group Sync: keeps chosen Odoo security groups in sync with Active
   Directory group membership (pull, AD -> Odoo, on a schedule).
 - PBIRS Discovery: reads the Report Server's own SQL Server database
@@ -32,6 +33,7 @@ Discovery (pull) and Access Push (write) then route through the API, fixing
 the Windows-Integrated auth problem entirely (the old 401/SSPI errors).
 
 Cross-platform notes:
+
 - Windows Integrated SOAP auth uses 'requests-kerberos' (cross-platform
   Kerberos/GSSAPI) with fallback to 'requests-negotiate-sspi' (Windows
   SSPI). On Linux, the Odoo service must have a valid Kerberos TGT. In
@@ -40,10 +42,13 @@ Cross-platform notes:
   check with 'Get-OdbcDriver | Where-Object {$_.Name -like "*SQL Server*"}'
   in PowerShell on Windows, or 'odbcinst -q -d | grep -i sql' on Linux.
 """,
-    "category": "Extra Tools",
-    "author": "Your Company",
+    "category": "Productivity/Business Intelligence",
+    "author": "ShakaERP",
+    "maintainer": "ShakaERP",
+    "website": "https://shakasystem.com",
     "license": "LGPL-3",
-    "depends": ["base", "web"],
+    "icon": "/powerbi_portal/static/description/icon.png",
+    "depends": ["base", "web", "shaka_ui_kit"],
     "external_dependencies": {
         # ldap3: AD Group Sync LDAP bind (pure Python, no C extension - avoids
         #   the python-ldap/OpenLDAP-headers compile problem on Windows).
@@ -74,4 +79,5 @@ Cross-platform notes:
     },
     "installable": True,
     "application": True,
+    "auto_install": False,
 }
