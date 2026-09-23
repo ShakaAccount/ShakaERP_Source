@@ -9,42 +9,49 @@ from odoo.exceptions import ValidationError
 
 # Single source of truth for the shipped palette. The admin edits a JSON copy
 # of this structure in Settings; any key left out falls back to these values.
+# Kept in lockstep with static/src/scss/design_tokens.scss's $lg-* defaults —
+# this is the *runtime* copy (rendered per-Company into layout_inject.xml's
+# <style> block) and wins the cascade over the static SCSS bundle, so it must
+# carry the same palette or the two diverge visually.
 SHAKA_DEFAULT_PALETTE = {
     'light': {
-        'bg': '#F2F6F3',
+        'bg': '#F8F9FA',
         'surface': '#FFFFFF',
-        'elevated': '#EAF8EF',
-        'border': '#DCE8E0',
+        'elevated': '#F1F3F4',
+        'border': '#E3E6E8',
         'input': '#FFFFFF',
-        'hover': '#EAF8EF',
-        'text': '#1C2922',
-        'muted': '#718078',
-        'primary': '#16A34A',
-        'primary_dark': '#0B7A35',
-        'on_primary': '#FFFFFF',
-        'link': '#0B6B35',
-        'pill_bg': '#E5F2E8',
-        'pill_text': '#0B6B35',
+        'hover': '#F1F3F4',
+        'text': '#333333',
+        'muted': '#6B7280',
+        'primary': '#D4E95C',
+        'primary_dark': '#BFD84A',
+        'on_primary': '#1A1A1A',
+        'link': '#4A5518',
+        'pill_bg': '#EEF0F2',
+        'pill_text': '#333333',
         'success': '#16A34A',
         'warning': '#D99A16',
         'danger': '#DC2626',
     },
     'dark': {
-        'bg': '#070A08',
-        'surface': '#101812',
-        'elevated': '#17251B',
-        'border': '#2B4935',
-        'input': '#080D0A',
-        'hover': '#234D30',
-        'text': '#F3FFF6',
-        'muted': '#B9CDBF',
-        'primary': '#22C55E',
-        'primary_dark': '#16A34A',
-        'on_primary': '#FFFFFF',
-        'link': '#7BE49B',
-        'pill_bg': '#1D3B28',
-        'pill_text': '#9AF0B0',
-        'success': '#22C55E',
+        # A soft charcoal, not near-black — harsh black/grey backgrounds and
+        # low-contrast labels were the single most common complaint against
+        # the previous dark palette.
+        'bg': '#1E1E1E',
+        'surface': '#2A2A2A',
+        'elevated': '#333333',
+        'border': '#3D3D3D',
+        'input': '#2A2A2A',
+        'hover': '#3D3D3D',
+        'text': '#F5F5F5',
+        'muted': '#B0B0B0',
+        'primary': '#D4E95C',
+        'primary_dark': '#BFD84A',
+        'on_primary': '#1A1A1A',
+        'link': '#D4E95C',
+        'pill_bg': '#3A3A3A',
+        'pill_text': '#E0E0E0',
+        'success': '#4ADE80',
         'warning': '#E0A83A',
         'danger': '#F87171',
     },
@@ -195,7 +202,7 @@ class ResCompany(models.Model):
                 f'--lg-text-on-accent:{palette["on_primary"]};--lg-pill-bg:{palette["pill_bg"]};'
                 f'--lg-pill-text:{palette["pill_text"]};--lg-success:{palette["success"]};'
                 f'--lg-warning:{palette["warning"]};--lg-danger:{palette["danger"]};'
-                f'--lg-accent-start:{palette["primary_dark"]};--lg-accent-end:{palette["primary"]};'
+                f'--lg-accent-start:{palette["primary"]};--lg-accent-end:{palette["primary"]};'
             )
 
         def rules(selector):
@@ -217,7 +224,7 @@ class ResCompany(models.Model):
                 f'{selector} body.o_web_client .o_control_panel .btn:hover,'
                 f'{selector} body.o_web_client .o_list_renderer tr:hover{{background:var(--shaka-hover)!important;color:var(--shaka-text)!important}}'
                 f'{selector} body.o_web_client .btn-primary,'
-                f'{selector} body.o_web_client .o_form_button_save{{background:var(--shaka-green-dark)!important;color:var(--lg-text-on-accent)!important;border-color:var(--shaka-green)!important}}'
+                f'{selector} body.o_web_client .o_form_button_save{{background:var(--shaka-green)!important;color:var(--lg-text-on-accent)!important;border-color:var(--shaka-green)!important}}'
                 f'{selector} body.o_web_client .o_form_label,'
                 f'{selector} body.o_web_client label{{color:var(--shaka-text)!important}}'
                 f'{selector} body.o_web_client .o_field_widget.o_field_badge,'

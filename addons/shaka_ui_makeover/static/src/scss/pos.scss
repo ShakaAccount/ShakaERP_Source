@@ -13,8 +13,6 @@ html[data-theme='glass'] .pos {
 html[data-theme='glass'] .pos .leftpane,
 html[data-theme='glass'] .pos .rightpane {
   background: var(--lg-glass-deep);
-  -webkit-backdrop-filter: blur(var(--lg-blur-md)) saturate(1.4);
-  backdrop-filter: blur(var(--lg-blur-md)) saturate(1.4);
   border-inline-end: 1px solid var(--lg-line-hi);
 }
 
@@ -86,8 +84,6 @@ html[data-theme='glass'] .pos .pos-search-bar input {
 // ---- POS header (top status bar) ----
 html[data-theme='glass'] .pos .pos-topheader {
   background: var(--lg-glass);
-  -webkit-backdrop-filter: blur(var(--lg-blur-sm)) saturate(1.3);
-  backdrop-filter: blur(var(--lg-blur-sm)) saturate(1.3);
   border-bottom: 1px solid var(--lg-line-hi);
   color: var(--lg-text);
   .pos-logo { color: var(--lg-text); }
@@ -117,8 +113,6 @@ html[data-theme='glass'] .pos .subcategory-list {
 // ---- Action pad (the cluster of Pay / Validate buttons) ----
 html[data-theme='glass'] .pos .actionpad {
   background: var(--lg-glass-soft);
-  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
-  backdrop-filter: blur(var(--lg-blur-sm));
   border: 1px solid var(--lg-line-hi);
   border-radius: var(--lg-r-md);
   padding: 8px;
@@ -235,7 +229,7 @@ html[data-theme='glass'] .pos .popup {
     border-bottom-color: var(--lg-line-lo);
     color: var(--lg-text);
     border-radius: var(--lg-r-sm);
-    &:focus { border-color: var(--lg-accent); box-shadow: 0 0 0 3px var(--lg-focus); }
+    &:focus { border-color: var(--lg-accent-strong); box-shadow: 0 0 0 3px var(--lg-focus); }
   }
 }
 
@@ -257,8 +251,6 @@ html[data-theme='glass'] .pos .numpad {
 // ---- Order summary / line items ----
 html[data-theme='glass'] .pos .order-summary {
   background: var(--lg-glass-soft);
-  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
-  backdrop-filter: blur(var(--lg-blur-sm));
   border: 1px solid var(--lg-line-hi);
   border-radius: var(--lg-r-md);
   color: var(--lg-text);

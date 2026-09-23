@@ -13,13 +13,31 @@
         --wa-border: #3a3a3a;
     }
 
+    font-size: 1rem;
+
     .o_wa_rows {
         max-height: 420px;
         overflow: auto;
     }
 
+    .o_wa_row {
+        min-height: 2.5rem;
+        padding-block: 0.375rem;
+        border-radius: 0.25rem;
+    }
+
     .o_wa_row:hover {
         background: rgba(0, 0, 0, 0.04);
+    }
+
+    .o_wa_check {
+        width: 1.1em;
+        height: 1.1em;
+    }
+
+    .o_wa_icon {
+        color: var(--wa-skip);
+        font-size: 1.05em;
     }
 
     .o_wa_caret,

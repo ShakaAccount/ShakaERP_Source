@@ -933,10 +933,19 @@ class RaesMdEntity(models.Model):
             company_id = self.env.company.id
 
         # 1. Members from the LOCAL postgres side -------------------------
+        # The "not in category" pane also excludes items already claimed
+        # by a sibling category (same parent) — a member can only sit in
+        # one sub-category among brothers, so it must not still look
+        # "uncategorized" under the others.
+        category_ids = [category_id]
+        if not in_category and category.parent_id:
+            category_ids = self.env['raes.md.category'].search(
+                [('parent_id', '=', category.parent_id.id)]).ids
+
         self.env.cr.execute(
             "SELECT member_id FROM md.category_member "
-            "WHERE category_id = %s AND entity_id = %s",
-            (category_id, entity_id))
+            "WHERE category_id = ANY(%s) AND entity_id = %s",
+            (category_ids, entity_id))
         member_ids = [r[0] for r in self.env.cr.fetchall()]
 
         if in_category and not member_ids:

@@ -252,6 +252,21 @@ class RaesMdCategoryMember(models.Model):
                 raise ValidationError(
                     _('This member is already in the category!'))
 
+            parent = rec.category_id.parent_id
+            if parent and self.search_count([
+                ('category_id.parent_id', '=', parent.id),
+                ('category_id', '!=', rec.category_id.id),
+                ('member_id', '=', rec.member_id),
+                ('entity_id', '=', rec.entity_id.id),
+                ('id', '!=', rec.id),
+            ]):
+                raise ValidationError(_(
+                    'This member already belongs to sibling category '
+                    '"%(parent)s" and cannot be added to another '
+                    'sub-category of the same parent.',
+                    parent=parent.title,
+                ))
+
     def init(self):
         try:
             refresh_writable_view(self.env, *CATEGORY_MEMBER_VIEW)

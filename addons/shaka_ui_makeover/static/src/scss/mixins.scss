@@ -31,6 +31,24 @@
   box-shadow: var(--lg-shadow-md);
 }
 
+// Floating card that visibly lifts on hover/focus — the bold, elevated
+// "raised card" look. Uses translateY + a stronger shadow, never
+// width/height, so it never triggers layout shift.
+@mixin lg-card-lift {
+  transition: transform var(--lg-t-fast), box-shadow var(--lg-t-fast);
+  &:hover, &:focus-within {
+    transform: translateY(-2px);
+    box-shadow: var(--lg-shadow-hover);
+  }
+}
+
+// Bold heading treatment shared by page titles / section headers.
+@mixin lg-heading {
+  font-weight: var(--lg-fw-heading-strong);
+  letter-spacing: var(--lg-heading-tracking);
+  color: var(--lg-text);
+}
+
 // Frosted interactive control (button-like): solid surface + 1px border
 @mixin glass-control($active: false) {
   background: var(--lg-bg-elevated);
@@ -41,7 +59,7 @@
 
   @if $active {
     background: var(--lg-accent);
-    border-color: var(--lg-accent);
+    border-color: var(--lg-accent-strong);
     color: var(--lg-text-on-accent);
   } @else {
     &:hover {

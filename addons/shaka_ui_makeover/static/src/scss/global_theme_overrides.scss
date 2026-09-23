@@ -1,81 +1,37 @@
 // Final global layer for every backend module.
 // This file intentionally comes last in shaka_ui_makeover assets so module
 // specific legacy colors cannot split the application into multiple themes.
+//
+// NOTE: this file used to also re-declare a second, hardcoded copy of the
+// entire --shaka-*/--lg-* palette here (both light and dark), duplicating
+// design_tokens.scss and _shaka_runtime_css() with stale hex values and
+// `html[data-theme='glass']` specificity high enough to beat both of them.
+// That block has been removed — the token layer (design_tokens.scss) and
+// the per-Company runtime style (models/res_config_settings.py) are the
+// only two places color enters the cascade; don't reintroduce a third copy
+// here even for a "quick" override.
 
+// Boolean toggle palette — not exported elsewhere, kept local to this file.
 html[data-theme='glass'] {
-  --shaka-bg: #f2f6f3;
-  --shaka-surface: #ffffff;
-  --shaka-soft: #eaf8ef;
-  --shaka-border: #dce8e0;
-  --shaka-text: #1c2922;
-  --shaka-muted: #718078;
-  --shaka-green: #16a34a;
-  --shaka-green-dark: #0b7a35;
-
-  --lg-bg-base: #f5f8f6;
-  --lg-bg-surface: #ffffff;
-  --lg-bg-elevated: #eef6f0;
-  --lg-border: #d7e4da;
-  --lg-accent: #168a45;
-  --lg-accent-strong: #0b6b35;
-  --lg-link: #0b6b35;
-  --lg-accent-start: #0b6b35;
-  --lg-accent-end: #20a653;
-  --lg-text: #1b2a21;
-  --lg-text-secondary: #65736a;
-  --lg-text-muted: #65736a;
-  --lg-text-on-accent: #ffffff;
-  --lg-pill-bg: #e5f2e8;
-  --lg-pill-text: #0b6b35;
-  --lg-focus: rgba(22, 138, 69, .18);
-
-  // Boolean toggle palette
   --shaka-toggle-track: #dbe7df;
   --shaka-toggle-track-hover: #cbdcd1;
   --shaka-toggle-border: #bfd2c5;
   --shaka-toggle-thumb: #ffffff;
   --shaka-toggle-thumb-shadow: 0 2px 5px rgba(27, 42, 33, .22);
-  --shaka-toggle-on-start: #0b7a35;
-  --shaka-toggle-on-end: #22b956;
-  --shaka-toggle-on-shadow: rgba(22, 163, 74, .26);
+  --shaka-toggle-on-start: var(--lg-accent-strong);
+  --shaka-toggle-on-end: var(--lg-accent);
+  --shaka-toggle-on-shadow: rgba(191, 216, 74, .32);
 }
 
 html[data-theme='glass'].shaka-dark-mode {
-  --shaka-bg: #0b120e;
-  --shaka-surface: #111b15;
-  --shaka-soft: #17271d;
-  --shaka-border: #2a4433;
-  --shaka-text: #e9f7ee;
-  --shaka-muted: #a9bcaf;
-  --shaka-green: #39b96b;
-  --shaka-green-dark: #27a85b;
-
-  --lg-bg-base: #0b120e;
-  --lg-bg-surface: #111b15;
-  --lg-bg-elevated: #17271d;
-  --lg-border: #2a4433;
-  --lg-accent: #39b96b;
-  --lg-accent-strong: #27a85b;
-  --lg-link: #65d08b;
-  --lg-accent-start: #198b49;
-  --lg-accent-end: #39b96b;
-  --lg-text: #e9f7ee;
-  --lg-text-secondary: #a9bcaf;
-  --lg-text-muted: #a9bcaf;
-  --lg-text-on-accent: #ffffff;
-  --lg-pill-bg: #1d3b28;
-  --lg-pill-text: #bce9c9;
-  --lg-focus: rgba(57, 185, 107, .24);
-
-  // Boolean toggle palette
-  --shaka-toggle-track: #263b2d;
-  --shaka-toggle-track-hover: #304a39;
-  --shaka-toggle-border: #476750;
-  --shaka-toggle-thumb: #eaf7ee;
+  --shaka-toggle-track: #3a3a3a;
+  --shaka-toggle-track-hover: #444444;
+  --shaka-toggle-border: #4d4d4d;
+  --shaka-toggle-thumb: #f5f5f5;
   --shaka-toggle-thumb-shadow: 0 2px 7px rgba(0, 0, 0, .48);
-  --shaka-toggle-on-start: #168a45;
-  --shaka-toggle-on-end: #48c878;
-  --shaka-toggle-on-shadow: rgba(57, 185, 107, .32);
+  --shaka-toggle-on-start: var(--lg-accent-strong);
+  --shaka-toggle-on-end: var(--lg-accent);
+  --shaka-toggle-on-shadow: rgba(191, 216, 74, .32);
 }
 
 // All global backend overrides must be scoped to the active Shaka theme.
@@ -111,19 +67,19 @@ html[data-theme='glass'] {
     border-color: var(--shaka-border) !important;
   }
 
-  // Keep the home screen, navbar and app tiles on one continuous surface.
-  // The icon artwork itself keeps its original brand colors; only the tile
-  // behind it is normalized with the page background.
+  // Navbar and the home-menu page itself stay on the page background; each
+  // app is its own floating card (surface bg, border, soft shadow, 12px
+  // radius) rather than blending flat into the page — see backend.scss's
+  // `.o_home_menu .o_app` for the shared rule this reinforces.
   .o_main_navbar,
-  .o_home_menu,
-  .o_home_menu .o_app,
-  .o_home_menu .o_app .o_app_icon {
+  .o_home_menu {
     background: var(--shaka-bg) !important;
   }
 
   .o_home_menu .o_app {
+    background: var(--lg-bg-surface) !important;
     border: 1px solid var(--shaka-border) !important;
-    box-shadow: none !important;
+    box-shadow: var(--lg-shadow-sm) !important;
   }
 
   .o_home_menu .o_app .o_app_icon {
@@ -201,8 +157,8 @@ html[data-theme='glass'] {
   .form-control:focus,
   .form-select:focus,
   .o_searchview_input:focus {
-    border-color: var(--shaka-green) !important;
-    box-shadow: 0 0 0 3px rgba(22, 163, 74, .12) !important;
+    border-color: var(--lg-accent-strong) !important;
+    box-shadow: 0 0 0 3px var(--lg-focus) !important;
   }
 
   .nav-tabs,
@@ -231,9 +187,9 @@ html[data-theme='glass'] {
   .badge,
   .o_field_many2many_tags .badge,
   .o_field_many2one .badge {
-    background: var(--shaka-soft) !important;
-    color: var(--shaka-green-dark) !important;
-    border-color: #b9dfc3 !important;
+    background: var(--lg-pill-bg) !important;
+    color: var(--lg-pill-text) !important;
+    border-color: var(--shaka-border) !important;
   }
 
   .btn-secondary,
@@ -248,9 +204,9 @@ html[data-theme='glass'] {
   .btn-primary,
   .o_form_button_save,
   .o_control_panel .btn-primary {
-    background: linear-gradient(135deg, var(--shaka-green-dark), #22b956) !important;
-    color: #ffffff !important;
-    border-color: var(--shaka-green-dark) !important;
+    background: var(--lg-accent-gradient) !important;
+    color: var(--lg-text-on-accent) !important;
+    border-color: var(--shaka-green) !important;
   }
 
   .o_menu_sections .o_nav_entry {
@@ -276,31 +232,13 @@ html[data-theme='glass'] {
 }
 
 @mixin shaka-dark-palette {
-    --shaka-bg: #0b120e;
-    --shaka-surface: #111b15;
-    --shaka-soft: #17271d;
-    --shaka-border: #2a4433;
-    --shaka-text: #e9f7ee;
-    --shaka-muted: #a9bcaf;
-    --shaka-green: #39b96b;
-    --shaka-green-dark: #27a85b;
-
-    --lg-bg-base: #0b120e;
-    --lg-bg-surface: #111b15;
-    --lg-bg-elevated: #17271d;
-    --lg-border: #2a4433;
-    --lg-accent: #39b96b;
-    --lg-accent-strong: #27a85b;
-    --lg-link: #65d08b;
-    --lg-accent-start: #198b49;
-    --lg-accent-end: #39b96b;
-    --lg-text: #e9f7ee;
-    --lg-text-secondary: #a9bcaf;
-    --lg-text-muted: #a9bcaf;
-    --lg-pill-bg: #1d3b28;
-    --lg-pill-text: #bce9c9;
-    --lg-focus: rgba(57, 185, 107, .24);
-
+    // Colors come from design_tokens.scss's :root export / the per-Company
+    // runtime <style> block (models/res_config_settings.py) — this mixin
+    // used to also re-declare its own third hardcoded copy of every --lg-*/
+    // --shaka-* variable here, which both duplicated and (being compiled
+    // into the static bundle, loaded before the runtime style) silently lost
+    // the cascade to the real values. Removed; the rules below now resolve
+    // against whichever palette is actually live.
     color-scheme: dark;
 
     body,
@@ -368,8 +306,8 @@ html[data-theme='glass'] {
     .o_kanban_record:hover,
     .dropdown-item:hover,
     .o_menu_sections .o_nav_entry:hover {
-      background: #1d3a26 !important;
-      color: #ffffff !important;
+      background: var(--lg-bg-elevated) !important;
+      color: var(--lg-text) !important;
     }
 
     .o_form_label,
@@ -391,7 +329,7 @@ html[data-theme='glass'] {
     .form-select,
     textarea,
     .o_searchview_input {
-      background: #0d120f !important;
+      background: var(--lg-bg-elevated) !important;
       color: var(--shaka-text) !important;
       border-color: var(--shaka-border) !important;
     }
@@ -421,7 +359,7 @@ html[data-theme='glass'] {
     .o_menu_sections .o_nav_entry.active,
     .o_menu_sections .o_nav_entry[aria-current='page'] {
       background: var(--shaka-soft) !important;
-      color: #ffffff !important;
+      color: var(--lg-text) !important;
       box-shadow: inset 0 -3px 0 var(--shaka-green) !important;
     }
 
@@ -429,17 +367,17 @@ html[data-theme='glass'] {
     .badge,
     .o_field_many2many_tags .badge,
     .o_field_many2one .badge {
-      background: #234d30 !important;
-      color: #d9ffe4 !important;
-      border-color: #3b8050 !important;
+      background: var(--lg-pill-bg) !important;
+      color: var(--lg-pill-text) !important;
+      border-color: var(--lg-border) !important;
     }
 
     .btn-primary,
     .o_form_button_save,
     .o_control_panel .btn-primary {
-      background: linear-gradient(135deg, #15803d, #22c55e) !important;
-      color: #ffffff !important;
-      border-color: #16a34a !important;
+      background: var(--lg-accent-gradient) !important;
+      color: var(--lg-text-on-accent) !important;
+      border-color: var(--lg-accent) !important;
     }
 
     // Odoo 19 and custom modules add light backgrounds to active navigation
@@ -457,9 +395,9 @@ html[data-theme='glass'] {
     .o_form_statusbar .btn-secondary,
     .o_form_statusbar .btn-light,
     .o_form_statusbar .btn-outline-secondary {
-      background: #101812 !important;
-      color: #f3fff6 !important;
-      border-color: #2b4935 !important;
+      background: var(--lg-bg-elevated) !important;
+      color: var(--lg-text) !important;
+      border-color: var(--lg-border) !important;
     }
 
     .o_main_navbar .active,
@@ -467,9 +405,9 @@ html[data-theme='glass'] {
     .o_main_navbar a.active,
     .o_menu_sections .o_nav_entry.active,
     .o_menu_sections .o_nav_entry[aria-current='page'] {
-      background: #173522 !important;
-      color: #ffffff !important;
-      box-shadow: inset 0 -3px 0 #22c55e !important;
+      background: var(--lg-bg-elevated) !important;
+      color: var(--lg-text) !important;
+      box-shadow: inset 0 -3px 0 var(--lg-accent) !important;
     }
 
     .o_control_panel .btn-primary,
@@ -477,9 +415,9 @@ html[data-theme='glass'] {
     .o_list_view .btn-primary,
     .o_form_view .btn-primary,
     .o_form_statusbar .btn-primary {
-      background: linear-gradient(135deg, #15803d, #22c55e) !important;
-      color: #ffffff !important;
-      border-color: #16a34a !important;
+      background: var(--lg-accent-gradient) !important;
+      color: var(--lg-text-on-accent) !important;
+      border-color: var(--lg-accent) !important;
     }
 
     .o_field_badge,
@@ -489,9 +427,9 @@ html[data-theme='glass'] {
     .o_form_view .badge,
     .o_status,
     .o_field_statusbar .o_arrow_button {
-      background: #234d30 !important;
-      color: #f3fff6 !important;
-      border-color: #3b8050 !important;
+      background: var(--lg-pill-bg) !important;
+      color: var(--lg-text) !important;
+      border-color: var(--lg-border) !important;
     }
 
     .o_pager,
@@ -503,9 +441,9 @@ html[data-theme='glass'] {
     .o_cp_pager .o_pager_limit,
     .o_cp_pager .o_pager_previous,
     .o_cp_pager .o_pager_next {
-      background: #101812 !important;
-      color: #f3fff6 !important;
-      border-color: #2b4935 !important;
+      background: var(--lg-bg-elevated) !important;
+      color: var(--lg-text) !important;
+      border-color: var(--lg-border) !important;
     }
 
     // High-contrast navbar and control-panel chrome.
@@ -521,7 +459,7 @@ html[data-theme='glass'] {
     body.o_web_client .o_main_navbar button,
     body.o_web_client .o_main_navbar i,
     body.o_web_client .o_main_navbar span {
-      color: #f3fff6 !important;
+      color: var(--lg-text) !important;
     }
 
     body.o_web_client .o_main_navbar .o_menu_brand,
@@ -529,8 +467,8 @@ html[data-theme='glass'] {
     body.o_web_client .o_main_navbar .o_navbar_apps_menu,
     body.o_web_client .o_main_navbar .o_menu_sections,
     body.o_web_client .o_main_navbar .o_systray {
-      background: #0b110d !important;
-      border-color: #2b4935 !important;
+      background: var(--lg-bg-base) !important;
+      border-color: var(--lg-border) !important;
     }
 
     body.o_web_client .o_control_panel,
@@ -541,7 +479,7 @@ html[data-theme='glass'] {
     body.o_web_client .o_control_panel .o_cp_pager,
     body.o_web_client .o_control_panel .o_pager,
     body.o_web_client .o_control_panel .o_pager * {
-      color: #f3fff6 !important;
+      color: var(--lg-text) !important;
     }
 
     body.o_web_client .o_control_panel .o_breadcrumb .breadcrumb-item.active,
@@ -551,9 +489,9 @@ html[data-theme='glass'] {
     body.o_web_client .o_control_panel .o_pager .o_pager_limit,
     body.o_web_client .o_control_panel .o_pager .o_pager_value,
     body.o_web_client .o_control_panel .o_cp_pager .o_pager_value {
-      background: #101812 !important;
-      color: #f3fff6 !important;
-      border-color: #2b4935 !important;
+      background: var(--lg-bg-elevated) !important;
+      color: var(--lg-text) !important;
+      border-color: var(--lg-border) !important;
     }
 
     // Avoid a tall empty dark band when Odoo renders a two-row control panel
@@ -582,8 +520,8 @@ html[data-theme='glass'] {
     body.o_web_client .o_control_panel .o_cp_action_menus .btn:hover,
     body.o_web_client .o_control_panel .o_cp_buttons .btn:hover,
     body.o_web_client .o_control_panel .o_pager .btn:hover {
-      background: #173522 !important;
-      color: #ffffff !important;
+      background: var(--lg-bg-elevated) !important;
+      color: var(--lg-text) !important;
     }
 
     // Status badges must remain readable on dark list rows.
@@ -592,9 +530,9 @@ html[data-theme='glass'] {
     body.o_web_client .o_list_renderer .o_field_badge .badge,
     body.o_web_client .o_list_renderer .o_status,
     body.o_web_client .o_list_renderer .badge {
-      background: #234d30 !important;
-      color: #f3fff6 !important;
-      border: 1px solid #3b8050 !important;
+      background: var(--lg-pill-bg) !important;
+      color: var(--lg-text) !important;
+      border: 1px solid var(--lg-border) !important;
       text-shadow: none !important;
     }
 
@@ -604,20 +542,20 @@ html[data-theme='glass'] {
     body.o_web_client .o_notebook .o_notebook_headers,
     body.o_web_client .o_notebook .nav-link,
     body.o_web_client .o_notebook .o_notebook_header {
-      background: #101812 !important;
-      color: #b9cdbf !important;
-      border-color: #2b4935 !important;
+      background: var(--lg-bg-elevated) !important;
+      color: var(--lg-text-secondary) !important;
+      border-color: var(--lg-border) !important;
     }
 
     body.o_web_client .o_notebook .nav-link.active,
     body.o_web_client .o_notebook .o_notebook_header.active,
     body.o_web_client .o_notebook .nav-link[aria-selected='true'] {
-      background: #173522 !important;
-      color: #ffffff !important;
-      border-color: #2b4935 !important;
-      border-top-color: #22c55e !important;
-      border-bottom-color: #22c55e !important;
-      box-shadow: inset 0 -3px 0 #22c55e !important;
+      background: var(--lg-bg-elevated) !important;
+      color: var(--lg-text) !important;
+      border-color: var(--lg-border) !important;
+      border-top-color: var(--lg-accent) !important;
+      border-bottom-color: var(--lg-accent) !important;
+      box-shadow: inset 0 -3px 0 var(--lg-accent) !important;
     }
 
     // Small control-panel action buttons (close/upload/settings) should use
@@ -626,9 +564,9 @@ html[data-theme='glass'] {
     body.o_web_client .o_control_panel .o_cp_action_menus button,
     body.o_web_client .o_control_panel .o_cp_buttons .btn,
     body.o_web_client .o_control_panel .o_cp_buttons button {
-      background: #101812 !important;
-      color: #f3fff6 !important;
-      border-color: #2b4935 !important;
+      background: var(--lg-bg-elevated) !important;
+      color: var(--lg-text) !important;
+      border-color: var(--lg-border) !important;
     }
 
     // Odoo's dark asset bundle paints several list layers independently.
@@ -668,8 +606,8 @@ html[data-theme='glass'] {
 
     body.o_web_client .o_list_renderer .o_list_table tbody tr:hover,
     body.o_web_client .o_list_renderer .o_list_table tbody tr:hover td {
-      background-color: #1d3a26 !important;
-      color: #ffffff !important;
+      background-color: var(--lg-bg-elevated) !important;
+      color: var(--lg-text) !important;
     }
 
     body.o_web_client .o_list_renderer .o_list_table .o_data_cell,
@@ -1276,13 +1214,13 @@ html[data-theme='glass'] body.o_web_client {
       }
 
       &:hover {
-        border-color: var(--lg-accent);
+        border-color: var(--lg-accent-strong);
         background: var(--shaka-toggle-track-hover);
         transform: translateY(-1px);
       }
 
       &:has(.form-check-input:focus-visible) {
-        border-color: var(--lg-accent);
+        border-color: var(--lg-accent-strong);
         box-shadow: 0 0 0 3px var(--lg-focus),
           inset 0 1px 1px rgba(0, 0, 0, .08);
       }
@@ -1656,4 +1594,191 @@ html[data-theme='glass'].shaka-dark-mode body.o_web_client {
     border-color: var(--lg-border) !important;
     opacity: .65 !important;
   }
+}
+
+// =====================================================================
+// Discuss app (standalone /odoo/discuss) — sidebar, channels, call overlay.
+// The in-form chatter/.o-mail-Thread already has coverage above; this section
+// covers the full-page app chrome only. Class names verified against the
+// vendored odoo/addons/mail Discuss OWL components.
+// =====================================================================
+html[data-theme='glass'] .o-mail-Discuss {
+  background: var(--lg-bg-base);
+  color: var(--lg-text);
+}
+
+html[data-theme='glass'] .o-mail-DiscussSidebar {
+  background: var(--lg-bg-surface);
+  border-inline-end: 1px solid var(--lg-border) !important;
+}
+
+html[data-theme='glass'] .o-mail-DiscussSidebarCategory {
+  border-radius: var(--lg-r-sm);
+  &:hover { background: var(--lg-bg-elevated); }
+}
+html[data-theme='glass'] .o-mail-DiscussSidebarCategory-title {
+  color: var(--lg-text-secondary);
+  font-weight: var(--lg-fw-heading);
+}
+
+html[data-theme='glass'] .o-mail-DiscussSidebar-item,
+html[data-theme='glass'] .o-mail-DiscussSidebarChannel {
+  border-radius: var(--lg-r-sm);
+  color: var(--lg-text);
+  transition: background var(--lg-t-fast), color var(--lg-t-fast);
+  &:hover { background: var(--lg-bg-elevated); }
+  &.o-active,
+  &.active {
+    background: var(--lg-accent);
+    color: var(--lg-text-on-accent);
+  }
+}
+
+html[data-theme='glass'] .o-mail-DiscussSidebar-badge,
+html[data-theme='glass'] .o-discuss-badge {
+  background: var(--lg-pill-bg);
+  color: var(--lg-pill-text);
+  border: none;
+}
+
+html[data-theme='glass'] .o-mail-DiscussSidebarCallParticipants {
+  background: transparent;
+}
+html[data-theme='glass'] .o-mail-DiscussSidebarCallParticipants-name {
+  color: var(--lg-text);
+}
+
+html[data-theme='glass'] .o-mail-Discuss-threadActionPopover {
+  @include glass-elevated();
+  border-radius: var(--lg-r-md);
+  color: var(--lg-text);
+}
+
+// Videocall overlay — kept on a dark scrim regardless of theme (a bright
+// white call surface is disorienting), but the accent stays the brand green.
+html[data-theme='glass'] .o-discuss-Call {
+  border-radius: var(--lg-r-lg);
+  overflow: hidden;
+  box-shadow: var(--lg-shadow-lg);
+}
+html[data-theme='glass'] .o-discuss-CallParticipantCard {
+  border-radius: var(--lg-r-md);
+}
+html[data-theme='glass'] .o-discuss-CallActionList {
+  @include glass-elevated(strong);
+  border-radius: var(--lg-r-pill);
+}
+html[data-theme='glass'] .o-discuss-CallActionList-pushToTalk.btn-primary {
+  background: var(--lg-accent-gradient);
+  background-color: var(--lg-accent-start);
+  border: none;
+}
+html[data-theme='glass'] .o-discuss-CallInvitation {
+  @include glass-elevated(strong);
+  border-radius: var(--lg-r-lg);
+}
+
+// =====================================================================
+// Gantt view — class names verified against the vendored web_gantt module.
+// =====================================================================
+html[data-theme='glass'] .o_gantt_renderer {
+  background: var(--lg-bg-base);
+  color: var(--lg-text);
+}
+
+html[data-theme='glass'] .o_gantt_header_cell,
+html[data-theme='glass'] .o_gantt_header_columns,
+html[data-theme='glass'] .o_gantt_header_groups {
+  background: var(--lg-bg-surface) !important;
+  border-color: var(--lg-border) !important;
+  color: var(--lg-text-secondary);
+}
+html[data-theme='glass'] .o_gantt_header_cell_title,
+html[data-theme='glass'] .o_gantt_header_title {
+  color: var(--lg-text);
+  font-weight: var(--lg-fw-heading);
+}
+
+html[data-theme='glass'] .o_gantt_row_header,
+html[data-theme='glass'] .o_gantt_row_headers {
+  background: var(--lg-bg-surface) !important;
+  border-color: var(--lg-border) !important;
+  color: var(--lg-text);
+}
+
+html[data-theme='glass'] .o_gantt_cell {
+  border-color: var(--lg-border) !important;
+}
+html[data-theme='glass'] .o_gantt_today {
+  background: var(--lg-pill-bg) !important;
+}
+
+html[data-theme='glass'] .o_gantt_pill {
+  border-radius: var(--lg-r-sm);
+  background: var(--lg-accent) !important;
+  color: var(--lg-text-on-accent) !important;
+  box-shadow: var(--lg-shadow-sm);
+}
+html[data-theme='glass'] .o_gantt_consolidated_pill,
+html[data-theme='glass'] .o_gantt_group_pill {
+  border-radius: var(--lg-r-sm);
+}
+html[data-theme='glass'] .o_gantt_progress_bar {
+  background: rgba(0, 0, 0, 0.18) !important;
+}
+
+html[data-theme='glass'] .o_gantt_popover {
+  @include glass-elevated();
+  border-radius: var(--lg-r-md);
+  color: var(--lg-text);
+}
+
+html[data-theme='glass'] .o_gantt_button_today.btn-secondary,
+html[data-theme='glass'] .o_gantt_button_add.btn-primary {
+  border-radius: var(--lg-r-pill);
+}
+
+// =====================================================================
+// Map view — chrome around the map only (sidebar, popover, pin list).
+// Leaflet's own painted `.leaflet-*` controls are left alone — fighting a
+// third-party library's inline-styled internals is out of scope. Class
+// names verified against the vendored web_map module.
+// =====================================================================
+html[data-theme='glass'] .o-map-renderer--pin-list-container {
+  background: var(--lg-bg-surface) !important;
+  border-color: var(--lg-border) !important;
+}
+
+html[data-theme='glass'] .o-map-renderer--pin-list-header {
+  color: var(--lg-text-secondary);
+  font-weight: var(--lg-fw-heading);
+}
+
+html[data-theme='glass'] .o-map-renderer--pin-list-group-header {
+  color: var(--lg-text);
+}
+
+html[data-theme='glass'] .o-map-renderer--pin-located {
+  border-radius: var(--lg-r-sm);
+  &:hover { background: var(--lg-bg-elevated); }
+}
+
+html[data-theme='glass'] .o-map-renderer--marker-badge {
+  background: var(--lg-accent) !important;
+  border: none;
+}
+
+html[data-theme='glass'] .o-map-renderer--popup-table {
+  color: var(--lg-text);
+}
+html[data-theme='glass'] .o-map-renderer--popup-buttons .btn-primary {
+  background: var(--lg-accent-gradient);
+  background-color: var(--lg-accent-start);
+  border: none;
+  border-radius: var(--lg-r-pill);
+  color: var(--lg-text-on-accent);
+}
+
+html[data-theme='glass'] .o-map-view--buttons .btn-primary {
+  border-radius: var(--lg-r-pill);
 }
