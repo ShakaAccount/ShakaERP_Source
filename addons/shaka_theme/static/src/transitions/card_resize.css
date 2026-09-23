@@ -1,0 +1,25 @@
+/* Transitions.dev — Card resize (https://transitions.dev/detail.html?t=card-resize)
+   Vendored as-is; tune the motion tokens below. Applied to dialogs by
+   dialog_card_resize.js, which pins pixel heights so auto → auto can tween. */
+
+:root {
+  --resize-dur: 300ms;
+  --resize-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.t-resize {
+  transition:
+    width  var(--resize-dur) var(--resize-ease),
+    height var(--resize-dur) var(--resize-ease);
+  will-change: width, height;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-resize { transition: none !important; }
+}
+
+/* Shaka: hide overflow only while tweening, so growing content doesn't spill
+   past the card mid-animation (dropdowns stay unclipped the rest of the time). */
+.t-resize.is-resizing {
+  overflow: hidden;
+}

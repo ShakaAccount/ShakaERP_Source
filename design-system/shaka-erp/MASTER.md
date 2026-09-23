@@ -67,6 +67,12 @@ spacing above 32px inside a view.
 
 - Colour, background and opacity transitions of 150–200ms, `ease-out`.
 - Never animate width, height or layout, and nothing moves on hover.
+  - **Exception: Card resize** (transitions.dev): dialogs tween their height when the content
+    changes size. It uses 300ms and `cubic-bezier(0.22, 1, 0.36, 1)`, exposed as `--resize-dur` and `--resize-ease`
+    in `shaka_theme/static/src/transitions/card_resize.css`. Use `.t-resize` for this and nothing else.
+  - **Menu dropdown** (transitions.dev): Odoo dropdown menus scale in from 0.97 and fade in over 250ms,
+    and fade out over 150ms. The tokens are `--dropdown-*` in `transitions/menu_dropdown.css`. This animates transform and opacity
+    only, so it doesn't break the no-layout rule. Its durations are longer than the 150–200ms default, and that is on purpose.
 - Everything is turned off under `prefers-reduced-motion: reduce`.
 - No scroll-reveal or GSAP; they belong on marketing pages, not in an ERP.
 
