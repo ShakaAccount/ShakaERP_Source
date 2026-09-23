@@ -1,0 +1,928 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* payment_request
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:24+0000\n"
+"PO-Revision-Date: 2026-09-23 08:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: payment_request
+#: model:res.groups,comment:payment_request.group_acc_mgmt
+msgid "Accepts after tax group; sends to treasurer."
+msgstr ""
+
+#. module: payment_request
+#: model:res.groups,comment:payment_request.group_accountant
+msgid "Accepts requests after unit manager. Does NOT edit مرحله پرداخت."
+msgstr ""
+
+#. module: payment_request
+#: model:res.groups,comment:payment_request.group_unit_manager
+msgid ""
+"Accepts/rejects payment requests submitted to him. Cannot see مرحله پرداخت."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_cost_center__code
+msgid "Code"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model,name:payment_request.model_odoo_raes_dim_company
+msgid "Company Dimension (Read-Only, from Shaka_DW)"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_company__companyid
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_cost_center__companyid
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_party__companyid
+msgid "Company ID"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_company__companytitle
+msgid "Company Title"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_cost_center__costcenterid
+msgid "Cost Center ID"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__create_uid
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_extra__create_uid
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_paid__create_uid
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__create_uid
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_stage__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__create_date
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_extra__create_date
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_paid__create_date
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__create_date
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_stage__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_cost_center__datasourceid
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_party__datasourceid
+msgid "Data Source ID"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_company__display_name
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_cost_center__display_name
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_party__display_name
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__display_name
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_extra__display_name
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_paid__display_name
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__display_name
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_stage__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_cost_center__englishgrouptitle
+msgid "English Group Title"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_company__entitle
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_cost_center__englishtitle
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_party__englishtitle
+msgid "English Title"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_party__englishtypetitle
+msgid "English Type Title"
+msgstr ""
+
+#. module: payment_request
+#: model:res.groups,comment:payment_request.group_tax
+msgid "Fills مرحله پرداخت stages, then sends to accounting management."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,help:payment_request.field_payment_request_payment_request__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_cost_center__grouptitle
+msgid "Group Title"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_company__id
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_cost_center__id
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_party__id
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__id
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_extra__id
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_paid__id
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__id
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_stage__id
+msgid "ID"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,help:payment_request.field_payment_request_payment_request__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,help:payment_request.field_payment_request_payment_request__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,help:payment_request.field_payment_request_payment_request__message_has_error
+#: model:ir.model.fields,help:payment_request.field_payment_request_payment_request__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,help:payment_request.field_payment_request_stage__allow_reject
+msgid "If off, the reject option is disabled for this step."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__is_acc_mgmt
+msgid "Is Acc Mgmt"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__is_accountant
+msgid "Is Accountant"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__is_site_admin
+msgid "Is Site Admin"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__is_tax
+msgid "Is Tax"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__is_treasurer
+msgid "Is Treasurer"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__is_unit_manager
+msgid "Is Unit Manager"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_cost_center__lastupdate
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_party__lastupdate
+msgid "Last Update"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__write_uid
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_extra__write_uid
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_paid__write_uid
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__write_uid
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_stage__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__write_date
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_extra__write_date
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_paid__write_date
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__write_date
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_stage__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_company__level0
+msgid "Level 0"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_company__level1
+msgid "Level 1"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_company__level2
+msgid "Level 2"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_company__level3
+msgid "Level 3"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_cost_center__moduleid
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_party__moduleid
+msgid "Module ID"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,help:payment_request.field_payment_request_payment_request__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,help:payment_request.field_payment_request_payment_request__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,help:payment_request.field_payment_request_payment_request__owner_id
+msgid ""
+"Only this user sees and edits the request while it is in draft (پیش‌نویس). "
+"Set automatically on create."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_company__parentid
+msgid "Parent ID"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_party__partyid
+msgid "Party ID"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model,name:payment_request.model_payment_request_payment_request
+msgid "Payment Request"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model,name:payment_request.model_payment_request_detail
+msgid "Payment Request Detail"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model,name:payment_request.model_payment_request_extra
+msgid "Payment Request Extra Info"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model,name:payment_request.model_payment_request_paid
+msgid "Payment Request Paid Info"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model,name:payment_request.model_payment_request_stage
+msgid "Payment Request Stage"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.actions.server,name:payment_request.cron_remind_pending_steps_ir_actions_server
+msgid "Payment Request: remind pending steps"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model,name:payment_request.model_odoo_raes_dim_cost_center
+msgid "RAES Dimension Cost Center (Read-Only, from Shaka_DW)"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model,name:payment_request.model_odoo_raes_dim_party
+msgid "RAES Dimension Party (Read-Only, from Shaka_DW)"
+msgstr ""
+
+#. module: payment_request
+#: model:res.groups,comment:payment_request.group_treasurer
+msgid ""
+"Records payments (مبلغ پرداخت شده/شماره پیگیری/شماره چک/شماره اعلامیه "
+"پرداخت/توضیحات)."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__request_id
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_extra__request_id
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_paid__request_id
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_stage__request_id
+msgid "Request"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__sequence
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_extra__sequence
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_paid__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,help:payment_request.field_payment_request_payment_request__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_cost_center__title
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_party__title
+msgid "Title"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_party__typecode
+msgid "Type Code"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_odoo_raes_dim_party__typetitle
+msgid "Type Title"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,help:payment_request.field_payment_request_payment_request__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,help:payment_request.field_payment_request_payment_request__unit_manager_id
+msgid "Unit manager this request is submitted to for approval."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,help:payment_request.field_payment_request_payment_request__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__vat
+msgid "ارزش افزوده"
+msgstr ""
+
+#. module: payment_request
+#: model_terms:ir.ui.view,arch_db:payment_request.view_payment_request_form
+msgid "ارسال برای تایید"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__extra_ids
+#: model_terms:ir.ui.view,arch_db:payment_request.view_payment_request_form
+msgid "اطلاعات تکمیلی"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__paid_ids
+#: model_terms:ir.ui.view,arch_db:payment_request.view_payment_request_form
+msgid "اطلاعات پرداخت شده"
+msgstr ""
+
+#. module: payment_request
+#: model_terms:ir.ui.view,arch_db:payment_request.view_payment_request_form
+msgid ""
+"انتخاب «تایید»: همه مراحل بالای این مرحله هم تایید می‌شوند.\n"
+"                                انتخاب «رد»: درخواست رد می‌شود."
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "این مرحله قابل رد کردن نیست."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__reason_id
+msgid "بابت"
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "برای تایید به مدیر واحد (%s) ارسال شد."
+msgstr ""
+
+#. module: payment_request
+#: model:mail.activity.type,name:payment_request.activity_pr_review
+msgid "بررسی درخواست پرداخت"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields.selection,name:payment_request.selection__payment_request_stage__state__unattended
+msgid "بررسی نشده"
+msgstr ""
+
+#. module: payment_request
+#: model:mail.activity.type,summary:payment_request.activity_pr_review
+msgid "بررسی و تایید/رد درخواست پرداخت"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__date
+msgid "تاریخ"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__agreed_date
+msgid "تاریخ توافقی پرداخت"
+msgstr ""
+
+#. module: payment_request
+#: model_terms:ir.ui.view,arch_db:payment_request.view_payment_request_form
+msgid "تایید"
+msgstr ""
+
+#. module: payment_request
+#: model_terms:ir.ui.view,arch_db:payment_request.view_payment_request_form
+msgid "تایید حسابدار"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields.selection,name:payment_request.selection__payment_request_stage__state__checked
+msgid "تایید شده"
+msgstr ""
+
+#. module: payment_request
+#: model_terms:ir.ui.view,arch_db:payment_request.view_payment_request_form
+msgid "تایید مدیر"
+msgstr ""
+
+#. module: payment_request
+#: model_terms:ir.ui.view,arch_db:payment_request.view_payment_request_form
+msgid "تایید مدیر حسابداری"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_stage__sequence
+msgid "ترتیب"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_extra__description
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_paid__description
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__description
+msgid "توضیحات"
+msgstr ""
+
+#. module: payment_request
+#: model_terms:ir.ui.view,arch_db:payment_request.view_payment_request_form
+msgid "ثبت نهایی پرداخت"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__detail_ids
+#: model_terms:ir.ui.view,arch_db:payment_request.view_payment_request_form
+msgid "جزئیات درخواست پرداخت"
+msgstr ""
+
+#. module: payment_request
+#: model_terms:ir.ui.view,arch_db:payment_request.view_payment_request_form
+msgid "جمع"
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "حداقل یک ردیف پرداخت (اطلاعات پرداخت شده) وارد کنید."
+msgstr ""
+
+#. module: payment_request
+#: model:res.groups,name:payment_request.group_accountant
+msgid "حسابدار"
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "حسابدار تایید کرد؛ در انتظار تکمیل مراحل توسط مالیات."
+msgstr ""
+
+#. module: payment_request
+#: model:res.groups,name:payment_request.group_treasurer
+msgid "خزانه دار"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields.selection,name:payment_request.selection__payment_request_payment_request__state__accountant_review
+msgid "در انتظار حسابدار"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields.selection,name:payment_request.selection__payment_request_payment_request__state__treasury
+msgid "در انتظار خزانه دار"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields.selection,name:payment_request.selection__payment_request_payment_request__state__tax_review
+msgid "در انتظار مالیات"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields.selection,name:payment_request.selection__payment_request_payment_request__state__acc_mgmt_review
+msgid "در انتظار مدیر حسابداری"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields.selection,name:payment_request.selection__payment_request_payment_request__state__unit_review
+msgid "در انتظار مدیر واحد"
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "درخواست %s ثبت شد."
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "درخواست %s در انتظار بررسی شما"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.ui.menu,name:payment_request.menu_payment_request_root
+#: model:res.groups.privilege,name:payment_request.privilege_payment_request
+msgid "درخواست پرداخت"
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "درخواست پرداخت %s (وضعیت: %s)"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.actions.act_window,name:payment_request.action_payment_request_mine
+#: model:ir.ui.menu,name:payment_request.menu_payment_request_mine
+msgid "درخواست‌های من"
+msgstr ""
+
+#. module: payment_request
+#: model_terms:ir.ui.view,arch_db:payment_request.view_payment_request_form
+msgid "رد"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields.selection,name:payment_request.selection__payment_request_payment_request__state__rejected
+#: model:ir.model.fields.selection,name:payment_request.selection__payment_request_stage__state__failed
+msgid "رد شده"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__formality
+msgid "رسمی / غیر رسمی"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_stage__child_ids
+msgid "زیرمرحله‌ها"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__name
+msgid "شرح"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__number
+msgid "شماره"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.constraint,message:payment_request.constraint_payment_request_payment_request_number_uniq
+msgid "شماره must be unique"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_paid__payment_declaration_no
+msgid "شماره اعلامیه پرداخت"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_extra__account_no
+msgid "شماره حساب"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_extra__sheba_no
+msgid "شماره شبا"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_paid__tracking_no
+msgid "شماره پیگیری"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_paid__cheque_no
+msgid "شماره چک"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__party_id
+msgid "طرف حساب"
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "فقط حسابدار مجاز است."
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "فقط خزانه دار مجاز است."
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "فقط مدیر حسابداری مجاز است."
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "فقط مدیر واحد مجاز است."
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "فقط گروه مالیات مجاز است."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_stage__allow_reject
+msgid "قابل رد"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__owner_id
+msgid "مالک درخواست"
+msgstr ""
+
+#. module: payment_request
+#: model:res.groups,name:payment_request.group_tax
+msgid "مالیات"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__amount
+msgid "مبلغ"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__net_amount
+msgid "مبلغ خالص"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_paid__paid_amount
+msgid "مبلغ پرداخت شده"
+msgstr ""
+
+#. module: payment_request
+#: model:res.groups,name:payment_request.group_acc_mgmt
+msgid "مدیر حسابداری"
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "مدیر حسابداری تایید کرد؛ در انتظار پرداخت توسط خزانه دار."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__unit_manager_id
+#: model:res.groups,name:payment_request.group_unit_manager
+msgid "مدیر واحد"
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "مدیر واحد تایید شد؛ در انتظار بررسی حسابدار."
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "مدیر واحد درخواست را رد کرد."
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "مدیر واحد را انتخاب کنید."
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "مراحل توسط مالیات تکمیل شد؛ در انتظار تایید مدیر حسابداری."
+msgstr ""
+
+#. module: payment_request
+#: model_terms:ir.ui.view,arch_db:payment_request.view_payment_request_form
+msgid "مراحل تکمیل شد؛ ارسال به مدیر حسابداری"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_stage__name
+msgid "مرحله"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_stage__parent_id
+msgid "مرحله والد"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__stage_ids
+#: model_terms:ir.ui.view,arch_db:payment_request.view_payment_request_form
+msgid "مرحله پرداخت"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__costcenter_id
+msgid "مرکز هزینه"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_extra__party_name
+msgid "نام طرف شماره حساب"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_detail__paytype_id
+msgid "نوع پرداخت"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.actions.act_window,name:payment_request.action_payment_request_all
+#: model:ir.ui.menu,name:payment_request.menu_payment_request_all
+msgid "همه درخواست‌ها"
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "همه مراحل باید تایید شده باشند. باقی‌مانده: %s"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__unit_id
+msgid "واحد سازمانی"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_payment_request__state
+#: model:ir.model.fields,field_description:payment_request.field_payment_request_stage__state
+msgid "وضعیت"
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "پرداخت توسط خزانه دار ثبت شد؛ گردش کار تمام شد."
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields.selection,name:payment_request.selection__payment_request_payment_request__state__paid
+msgid "پرداخت شده"
+msgstr ""
+
+#. module: payment_request
+#: model:ir.model.fields.selection,name:payment_request.selection__payment_request_payment_request__state__draft
+msgid "پیش‌نویس"
+msgstr ""
+
+#. module: payment_request
+#. odoo-python
+#: code:addons/payment_request/models/models.py:0
+msgid "یادآوری: درخواست %s در انتظار اقدام شما است."
+msgstr ""

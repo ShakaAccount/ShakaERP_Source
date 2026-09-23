@@ -1,0 +1,975 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* powerbi_portal
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:30+0000\n"
+"PO-Revision-Date: 2026-09-23 08:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__soap_auth_mode
+msgid ""
+"'Windows Integrated' uses Kerberos/GSSAPI authentication (via requests-"
+"kerberos - cross-platform, works on both Windows and Linux). On Windows it "
+"can also use SSPI (via requests-negotiate-sspi) as a fallback. Requires the "
+"Odoo service account to have a valid Kerberos TGT (via kinit/keytab on "
+"Linux, or running as the AD account on Windows). Use 'explicit credentials' "
+"if Odoo doesn't run as an account with PBIRS access (requires 'requests-"
+"ntlm')."
+msgstr ""
+"«Windows Integrated» از احراز هویت Kerberos/GSSAPI استفاده می‌کند (از طریق "
+"requests-kerberos - چندسکویی، هم روی ویندوز و هم لینوکس کار می‌کند). روی "
+"ویندوز می‌تواند به عنوان جایگزین از SSPI (از طریق requests-negotiate-sspi) "
+"نیز استفاده کند. نیازمند آن است که حساب سرویس اودو دارای یک Kerberos TGT "
+"معتبر باشد (از طریق kinit/keytab در لینوکس، یا اجرا به عنوان حساب AD در "
+"ویندوز). اگر اودو با حسابی که دسترسی PBIRS ندارد اجرا می‌شود از «اطلاعات "
+"کاربری صریح» استفاده کنید (نیازمند 'requests-ntlm')."
+
+#. module: powerbi_portal
+#: model:ir.actions.act_window,name:powerbi_portal.action_ad_group_sync_config
+msgid "AD Connection Settings"
+msgstr "تنظیمات اتصال AD"
+
+#. module: powerbi_portal
+#: model:ir.model,name:powerbi_portal.model_ad_group_mapping
+msgid "AD Group -> Odoo Group Mapping"
+msgstr "نگاشت گروه AD به گروه اودو"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_sync_config_form
+msgid "AD Group Auto-Creation (used by PBIRS Access Push)"
+msgstr "ایجاد خودکار گروه AD (مورد استفاده توسط ارسال دسترسی PBIRS)"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__ad_group_dn
+msgid "AD Group DN"
+msgstr "DN گروه AD"
+
+#. module: powerbi_portal
+#: model:ir.actions.act_window,name:powerbi_portal.action_ad_group_mapping
+msgid "AD Group Mappings"
+msgstr "نگاشت‌های گروه AD"
+
+#. module: powerbi_portal
+#: model:ir.ui.menu,name:powerbi_portal.menu_ad_group_sync_root
+msgid "AD Group Sync"
+msgstr "همگام‌سازی گروه AD"
+
+#. module: powerbi_portal
+#: model:ir.model,name:powerbi_portal.model_ad_group_sync_config
+msgid "AD Group Sync - Connection Settings"
+msgstr "همگام‌سازی گروه AD - تنظیمات اتصال"
+
+#. module: powerbi_portal
+#: model:ir.actions.server,name:powerbi_portal.ir_cron_ad_group_sync_ir_actions_server
+msgid "AD Group Sync: sync all active mappings"
+msgstr "همگام‌سازی گروه AD: همگام‌سازی تمام نگاشت‌های فعال"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_sync_config__binddn
+msgid ""
+"AD service account used for LDAP queries (and, once the Group Creation OU below is configured, for auto-creating AD groups too - so despite the name this isn't purely read-only anymore). e.g. CN=svc-odoo-pbi,OU=Service Accounts,DC=company,DC=local (a plain 'DOMAIN\\\\username' or UPN 'user@domain.local' also works with AD).\n"
+"Recommended: use ONE dedicated account everywhere - also run the Odoo Windows service as this same account, and it automatically covers the PBIRS Discovery SQL connection and PBIRS Access Push SOAP calls too (via Windows Integrated auth), with no extra passwords stored in Odoo for those. LDAP itself still needs the explicit DN + password below regardless, since it can't reuse the Windows process identity the way the SQL/SOAP calls can."
+msgstr ""
+"حساب سرویس AD که برای پرسمان‌های LDAP استفاده می‌شود (و پس از پیکربندی OU "
+"ایجاد گروه در پایین، برای ایجاد خودکار گروه‌های AD نیز - بنابراین علی‌رغم "
+"نام، این حساب دیگر کاملاً فقط‌خواندنی نیست). مثال: "
+"CN=svc-odoo-pbi,OU=Service Accounts,DC=company,DC=local (فرم ساده "
+"'DOMAIN\\\\username' یا UPN 'user@domain.local' نیز با AD کار می‌کند).\n"
+"توصیه: یک حساب اختصاصی را در همه‌جا استفاده کنید - سرویس ویندوزی اودو را نیز "
+"با همین حساب اجرا کنید تا به‌طور خودکار اتصال SQL کشف PBIRS و فراخوانی‌های "
+"SOAP ارسال دسترسی PBIRS را نیز پوشش دهد (از طریق احراز هویت Windows "
+"Integrated)، بدون نیاز به ذخیره رمز عبور اضافی در اودو برای آن‌ها. با این "
+"حال خود LDAP همچنان به DN و رمز عبور صریح در پایین نیاز دارد، زیرا نمی‌تواند "
+"مانند فراخوانی‌های SQL/SOAP از هویت فرآیند ویندوز مجدداً استفاده کند."
+
+#. module: powerbi_portal
+#: model:ir.model.fields.selection,name:powerbi_portal.selection__ad_group_mapping__owner__ad
+msgid "AD-owned (pull AD -> Odoo, the normal direction)"
+msgstr "متعلق به AD (کشیدن AD -> اودو، جهت معمول)"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_mapping__owner
+msgid ""
+"AD-owned: this AD group is managed externally (by an AD admin, or discovered"
+" by PBIRS Discovery) - AD is the source of truth, so the pull sync/cron "
+"keeps Odoo's group matching it. Odoo-owned: this AD group was auto-created "
+"by PBIRS Portal's automatic access-push (triggered on saving a report's "
+"Visible To Groups/Users) purely so PBIRS has a real AD principal to grant "
+"access to - Odoo's group is the source of truth here, so the pull sync "
+"deliberately skips it (pulling would silently revert membership edits made "
+"in Odoo back to whatever AD still has from the last push)."
+msgstr ""
+"متعلق به AD: این گروه AD به‌صورت خارجی مدیریت می‌شود (توسط یک مدیر AD، یا "
+"توسط PBIRS Discovery کشف شده) - AD منبع حقیقت است، بنابراین همگام‌سازی/کرون "
+"کشیدن، گروه اودو را با آن هماهنگ نگه می‌دارد. متعلق به اودو: این گروه AD "
+"به‌طور خودکار توسط ارسال دسترسی خودکار پورتال PBIRS ایجاد شده (که با ذخیره "
+"«قابل مشاهده برای گروه‌ها/کاربران» یک گزارش فعال می‌شود) صرفاً برای این که "
+"PBIRS یک اصل واقعی AD برای اعطای دسترسی داشته باشد - در این‌جا گروه اودو "
+"منبع حقیقت است، بنابراین همگام‌سازی کشیدن عمداً آن را نادیده می‌گیرد (کشیدن "
+"باعث می‌شد ویرایش‌های عضویت انجام‌شده در اودو به‌طور خاموش به آن‌چه AD از "
+"آخرین ارسال هنوز دارد بازگردد)."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__api_key
+msgid "API Key"
+msgstr "کلید API"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__api_key
+msgid "API key sent in the X-API-Key header."
+msgstr "کلید API که در هدر X-API-Key ارسال می‌شود."
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Access Push (writes TO PBIRS)"
+msgstr "ارسال دسترسی (می‌نویسد به PBIRS)"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__active
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__active
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__active
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__active
+msgid "Active"
+msgstr "فعال"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__auth_mode
+msgid "Auth Mode"
+msgstr "حالت احراز هویت"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__base_dn
+msgid "Base Dn"
+msgstr "Base DN"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__portal_base_url
+msgid ""
+"Base URL of the PBIRS web portal, e.g. "
+"https://pbirs.company.local/reports/powerbi (catalog paths get appended to "
+"this to build each report's URL)."
+msgstr ""
+"آدرس پایه پورتال وب PBIRS، مثال: "
+"https://pbirs.company.local/reports/powerbi (مسیرهای فهرست به این آدرس "
+"افزوده می‌شوند تا آدرس هر گزارش ساخته شود)."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__catalog_path
+msgid "Catalog Path"
+msgstr "مسیر فهرست"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Connection"
+msgstr "اتصال"
+
+#. module: powerbi_portal
+#: model:ir.ui.menu,name:powerbi_portal.menu_ad_group_sync_config
+msgid "Connection Settings"
+msgstr "تنظیمات اتصال"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__group_creation_prefix
+msgid "Created Group Name Prefix"
+msgstr "پیشوند نام گروه ایجادشده"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__create_uid
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__create_uid
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__create_uid
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__create_uid
+msgid "Created by"
+msgstr "ایجاد شده توسط"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__create_date
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__create_date
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__create_date
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__create_date
+msgid "Created on"
+msgstr "ایجاد شده در تاریخ"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_sync_config__group_creation_base_dn
+msgid ""
+"DN of the OU where Odoo is allowed to CREATE new AD security groups, e.g. "
+"OU=PowerBI Groups,OU=Groups,DC=shaka,DC=local - required for the automatic "
+"access-push (on saving a report) to auto-create a missing AD group. Use a "
+"dedicated OU with rights delegated only over that OU for the Service Account"
+" below (not domain-wide Create/Delete Group rights) - same recommendation as"
+" for the .NET app's own group provisioning."
+msgstr ""
+"DN واحد سازمانی (OU) که اودو مجاز است در آن گروه‌های امنیتی جدید AD ایجاد "
+"کند، مثال: OU=PowerBI Groups,OU=Groups,DC=shaka,DC=local - برای ارسال "
+"خودکار دسترسی (هنگام ذخیره یک گزارش) جهت ایجاد خودکار گروه AD گمشده لازم "
+"است. برای حساب سرویس زیر از یک OU اختصاصی با تفویض حق فقط روی همان OU "
+"استفاده کنید (نه حقوق ایجاد/حذف گروه در کل دامنه) - همان توصیه‌ای که برای "
+"تدارک گروه اپلیکیشن دات‌نت وجود دارد."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__description
+msgid "Description"
+msgstr "توضیحات"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Direct SQL Discovery (legacy, when FastAPI is off)"
+msgstr "کشف مستقیم SQL (قدیمی، هنگامی که FastAPI خاموش است)"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Discover & Sync Now"
+msgstr "کشف و همگام‌سازی اکنون"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__display_name
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__display_name
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__display_name
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__display_name
+msgid "Display Name"
+msgstr "نام نمایشی"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__soap_domain
+msgid "Domain"
+msgstr "دامنه"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__trust_server_certificate
+msgid ""
+"Enable if SQL Server uses a self-signed/untrusted TLS certificate (common on"
+" internal/test servers) and you get a certificate trust error connecting. "
+"Equivalent to 'TrustServerCertificate=true' in a SQL connection string."
+msgstr ""
+"در صورتی فعال کنید که SQL Server از گواهی TLS خودامضا/نامعتبر استفاده کند "
+"(رایج در سرورهای داخلی/آزمایشی) و هنگام اتصال خطای اعتماد گواهی دریافت "
+"کنید. معادل 'TrustServerCertificate=true' در رشته اتصال SQL."
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "FastAPI (replace SQL/SOAP - recommended for AD/SSO)"
+msgstr "FastAPI (جایگزین SQL/SOAP - توصیه‌شده برای AD/SSO)"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__api_base_url
+msgid "FastAPI Base URL"
+msgstr "آدرس پایه FastAPI"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__folder
+msgid "Folder"
+msgstr "پوشه"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_mapping__odoo_group_id
+msgid ""
+"For AD-owned mappings, this module keeps this group's membership matching "
+"the AD group above - do not also manage membership by hand, it will be "
+"overwritten on each sync. For Odoo-owned mappings, the reverse is true: "
+"manage membership in Odoo and save the related powerbi.report record - "
+"access push to AD/PBIRS happens automatically on save - since this mapping's"
+" pull sync is skipped."
+msgstr ""
+"برای نگاشت‌های متعلق به AD، این ماژول عضویت این گروه را با گروه AD بالا "
+"هماهنگ نگه می‌دارد - عضویت را دستی نیز مدیریت نکنید، زیرا در هر همگام‌سازی "
+"بازنویسی می‌شود. برای نگاشت‌های متعلق به اودو، برعکس است: عضویت را در اودو "
+"مدیریت کنید و رکورد powerbi.report مرتبط را ذخیره کنید - ارسال دسترسی به "
+"AD/PBIRS به‌طور خودکار هنگام ذخیره رخ می‌دهد - زیرا همگام‌سازی کشیدن این "
+"نگاشت نادیده گرفته می‌شود."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_mapping__ad_group_dn
+msgid ""
+"Full Distinguished Name of the AD group, e.g. "
+"CN=Finance,OU=Groups,DC=company,DC=local"
+msgstr ""
+"نام مشخص کامل (DN) گروه AD، مثال: "
+"CN=Finance,OU=Groups,DC=company,DC=local"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_powerbi_report__url
+msgid ""
+"Full URL of the report on the Power BI Report Server, e.g. https://pbirs.company.local/reports/powerbi/Finance/Sales%20Dashboard?rs:embed=true\n"
+"\n"
+"The report server authenticates the browser's own Windows/AD session directly when this URL loads in the iframe - Odoo never stores or forwards any report-server credentials."
+msgstr ""
+"آدرس کامل گزارش روی Power BI Report Server، مثال: "
+"https://pbirs.company.local/reports/powerbi/Finance/Sales%20Dashboard?rs:embed=true\n"
+"\n"
+"سرور گزارش هنگام بارگذاری این آدرس در iframe، نشست Windows/AD خود مرورگر را "
+"مستقیماً احراز هویت می‌کند - اودو هرگز هیچ اطلاعات کاربری سرور گزارش را ذخیره "
+"یا ارسال نمی‌کند."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_powerbi_report__catalog_path
+msgid ""
+"Full catalog path on the Report Server, used internally by PBIRS Discovery "
+"to match this record to the server's own item on each sync. Not set for "
+"manually-created reports."
+msgstr ""
+"مسیر کامل فهرست روی سرور گزارش، که به‌طور داخلی توسط PBIRS Discovery برای "
+"تطبیق این رکورد با آیتم خود سرور در هر همگام‌سازی استفاده می‌شود. برای "
+"گزارش‌های ایجادشده به‌صورت دستی تنظیم نمی‌شود."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__group_creation_base_dn
+msgid "Group Creation OU"
+msgstr "OU ایجاد گروه"
+
+#. module: powerbi_portal
+#: model:ir.ui.menu,name:powerbi_portal.menu_ad_group_mapping
+msgid "Group Mappings"
+msgstr "نگاشت‌های گروه"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_sync_config__server
+msgid "Hostname or IP of the AD/LDAP server, e.g. dc01.company.local"
+msgstr "نام میزبان یا IP سرور AD/LDAP، مثال: dc01.company.local"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__id
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__id
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__id
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__id
+msgid "ID"
+msgstr "شناسه"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_powerbi_report__managed_by_discovery
+msgid ""
+"If set, this record's URL and Visible To Groups are overwritten "
+"automatically by PBIRS Discovery sync to always match the Report Server's "
+"own permissions. Do not hand-edit Visible To Groups on discovery-managed "
+"reports - it will be overwritten on the next sync."
+msgstr ""
+"اگر تنظیم شود، آدرس و «قابل مشاهده برای گروه‌ها» این رکورد به‌طور خودکار "
+"توسط همگام‌سازی PBIRS Discovery بازنویسی می‌شود تا همیشه با مجوزهای خود "
+"سرور گزارش هماهنگ باشد. «قابل مشاهده برای گروه‌ها» را در گزارش‌های مدیریت‌شده "
+"توسط کشف به‌صورت دستی ویرایش نکنید - در همگام‌سازی بعدی بازنویسی خواهد شد."
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_sync_config_form
+msgid "Import from Odoo LDAP Config"
+msgstr "وارد کردن از پیکربندی LDAP اودو"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_powerbi_report__allowed_user_ids
+msgid ""
+"Individual users who can see this report, in addition to anyone matched by "
+"Visible To Groups. Used for PBIRS access granted directly to a person rather"
+" than through an AD group. Note: PBIRS Discovery can only match an "
+"individual principal here if that person has already logged into Odoo at "
+"least once (so their Odoo user record exists)."
+msgstr ""
+"کاربران خاصی که می‌توانند این گزارش را ببینند، علاوه بر هر کسی که با "
+"«قابل مشاهده برای گروه‌ها» تطبیق دارد. برای دسترسی PBIRS که مستقیماً به یک "
+"فرد اعطا شده به جای گذر از یک گروه AD استفاده می‌شود. توجه: PBIRS Discovery "
+"فقط زمانی می‌تواند یک اصل فردی را در اینجا تطبیق دهد که آن فرد حداقل یک‌بار "
+"وارد اودو شده باشد (بنابراین رکورد کاربری اودوی او وجود داشته باشد)."
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "Individual users, in addition to the groups above"
+msgstr "کاربران خاص، علاوه بر گروه‌های بالا"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__last_push_date
+msgid "Last Push Date"
+msgstr "تاریخ آخرین ارسال"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__last_push_summary
+msgid "Last Push Summary"
+msgstr "خلاصه آخرین ارسال"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "Last Push to PBIRS"
+msgstr "آخرین ارسال به PBIRS"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Last Run"
+msgstr "آخرین اجرا"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__last_run_date
+msgid "Last Run Date"
+msgstr "تاریخ آخرین اجرا"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__last_run_summary
+msgid "Last Run Summary"
+msgstr "خلاصه آخرین اجرا"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_mapping_form
+msgid "Last Sync"
+msgstr "آخرین همگام‌سازی"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__last_sync_date
+msgid "Last Sync Date"
+msgstr "تاریخ آخرین همگام‌سازی"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__last_sync_summary
+msgid "Last Sync Summary"
+msgstr "خلاصه آخرین همگام‌سازی"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__write_uid
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__write_uid
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__write_uid
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__write_uid
+msgid "Last Updated by"
+msgstr "آخرین به‌روزرسانی توسط"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__write_date
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__write_date
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__write_date
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__write_date
+msgid "Last Updated on"
+msgstr "آخرین به‌روزرسانی در تاریخ"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "Leave empty to show to everyone"
+msgstr "برای نمایش به همه، خالی بگذارید"
+
+#. module: powerbi_portal
+#. odoo-javascript
+#: code:addons/powerbi_portal/static/src/xml/powerbi_portal.xml:0
+msgid "Loading reports..."
+msgstr "در حال بارگذاری گزارش‌ها..."
+
+#. module: powerbi_portal
+#: model:ir.actions.act_window,name:powerbi_portal.action_powerbi_report_admin
+#: model:ir.ui.menu,name:powerbi_portal.menu_powerbi_portal_manage
+msgid "Manage Reports"
+msgstr "مدیریت گزارش‌ها"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__managed_by_discovery
+msgid "Managed By Discovery"
+msgstr "مدیریت‌شده توسط Discovery"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__odbc_driver
+msgid ""
+"Must match EXACTLY the name of an ODBC driver actually installed on this "
+"machine - varies by machine, do not assume 'ODBC Driver 17/18 for SQL "
+"Server' is present. On Windows, check with: Get-OdbcDriver | Where-Object "
+"{$_.Name -like \\\"*SQL Server*\\\"} in PowerShell. On Linux, check with: "
+"odbcinst -q -d | grep -i sql. Set this field to match whatever that returns "
+"exactly, WITHOUT surrounding brackets (e.g. 'ODBC Driver 18 for SQL Server',"
+" not '[ODBC Driver 18 for SQL Server]')."
+msgstr ""
+"باید دقیقاً با نام یک درایور ODBC که واقعاً روی این ماشین نصب شده مطابقت "
+"داشته باشد - بسته به ماشین متفاوت است، فرض نکنید 'ODBC Driver 17/18 for "
+"SQL Server' موجود است. روی ویندوز، با دستور زیر در PowerShell بررسی کنید: "
+"Get-OdbcDriver | Where-Object {$_.Name -like \\\"*SQL Server*\\\"}. روی "
+"لینوکس، با دستور زیر بررسی کنید: odbcinst -q -d | grep -i sql. این فیلد را "
+"دقیقاً مطابق آن‌چه بازگردانده می‌شود تنظیم کنید، بدون کروشه‌های اطراف آن "
+"(مثلاً 'ODBC Driver 18 for SQL Server'، نه '[ODBC Driver 18 for SQL "
+"Server]')."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__name
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__name
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__name
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__name
+msgid "Name"
+msgstr "نام"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__netbios_domain
+msgid "NetBIOS Domain"
+msgstr "دامنه NetBIOS"
+
+#. module: powerbi_portal
+#. odoo-javascript
+#: code:addons/powerbi_portal/static/src/xml/powerbi_portal.xml:0
+msgid "No reports are available to you yet."
+msgstr "هنوز هیچ گزارشی برای شما در دسترس نیست."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__odbc_driver
+msgid "ODBC Driver"
+msgstr "درایور ODBC"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_sync_config_form
+msgid "OU=PowerBI Groups,OU=Groups,DC=shaka,DC=local"
+msgstr "OU=PowerBI Groups,OU=Groups,DC=shaka,DC=local"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__odoo_group_id
+msgid "Odoo Group"
+msgstr "گروه اودو"
+
+#. module: powerbi_portal
+#: model:ir.model.fields.selection,name:powerbi_portal.selection__ad_group_mapping__owner__odoo
+msgid ""
+"Odoo-owned (pull is skipped - this AD group only exists to mirror an Odoo "
+"group for PBIRS access)"
+msgstr ""
+"متعلق به اودو (کشیدن نادیده گرفته می‌شود - این گروه AD فقط برای بازتاب "
+"دادن یک گروه اودو جهت دسترسی PBIRS وجود دارد)"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_powerbi_report__allowed_group_ids
+msgid ""
+"Only users in at least one of these Odoo groups will see this report in the sidebar. Leave empty (with no Visible To Users either) to show it to everyone. Pair with the 'AD Group Sync' module to drive these groups from real Active Directory group membership.\n"
+"\n"
+"Note: this only controls what's *listed* in Odoo's sidebar. The actual report data access and row-level security is enforced independently by the Report Server itself, based on the user's real Windows identity in the browser."
+msgstr ""
+"فقط کاربران عضو حداقل یکی از این گروه‌های اودو این گزارش را در نوار کناری "
+"خواهند دید. برای نمایش به همه، خالی بگذارید (بدون «قابل مشاهده برای "
+"کاربران» نیز). برای هدایت این گروه‌ها از عضویت واقعی گروه Active Directory، "
+"با ماژول «همگام‌سازی گروه AD» ترکیب کنید.\n"
+"\n"
+"توجه: این فقط چیزی را که در نوار کناری اودو *فهرست* می‌شود کنترل می‌کند. "
+"دسترسی واقعی به داده گزارش و امنیت سطح سطر مستقلاً توسط خود سرور گزارش، بر "
+"اساس هویت واقعی ویندوزی کاربر در مرورگر، اعمال می‌شود."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_powerbi_report__folder
+msgid "Optional grouping label shown as a section header in the sidebar."
+msgstr "برچسب گروه‌بندی اختیاری که به عنوان عنوان بخش در نوار کناری نمایش داده می‌شود."
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "Optional notes"
+msgstr "یادداشت‌های اختیاری"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__owner
+msgid "Owner"
+msgstr "مالک"
+
+#. module: powerbi_portal
+#: model:ir.actions.act_window,name:powerbi_portal.action_pbirs_discovery_config
+#: model:ir.ui.menu,name:powerbi_portal.menu_pbirs_discovery
+msgid "PBIRS Discovery"
+msgstr "PBIRS Discovery"
+
+#. module: powerbi_portal
+#: model:ir.model,name:powerbi_portal.model_pbirs_discovery_config
+msgid "PBIRS Discovery - SQL Connection Settings"
+msgstr "PBIRS Discovery - تنظیمات اتصال SQL"
+
+#. module: powerbi_portal
+#: model:ir.actions.server,name:powerbi_portal.ir_cron_pbirs_discovery_ir_actions_server
+msgid "PBIRS Discovery: sync reports/groups from Report Server"
+msgstr "PBIRS Discovery: همگام‌سازی گزارش‌ها/گروه‌ها از سرور گزارش"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__soap_url
+msgid "PBIRS SOAP Endpoint"
+msgstr "نقطه پایانی SOAP در PBIRS"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__port
+msgid "Port"
+msgstr "پورت"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__portal_base_url
+msgid "Portal Base Url"
+msgstr "آدرس پایه پورتال"
+
+#. module: powerbi_portal
+#: model:ir.actions.client,name:powerbi_portal.action_powerbi_portal
+#: model:ir.ui.menu,name:powerbi_portal.menu_powerbi_portal_root
+msgid "Power BI"
+msgstr "Power BI"
+
+#. module: powerbi_portal
+#: model:ir.model,name:powerbi_portal.model_powerbi_report
+msgid "Power BI Report (Portal Entry)"
+msgstr "گزارش Power BI (ورودی پورتال)"
+
+#. module: powerbi_portal
+#. odoo-javascript
+#: code:addons/powerbi_portal/static/src/xml/powerbi_portal.xml:0
+msgid "Power BI Reports"
+msgstr "گزارش‌های Power BI"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_sync_config__group_creation_prefix
+msgid ""
+"Prefix used when naming AD groups Odoo creates automatically, e.g. an Odoo "
+"group 'Finance Viewers' becomes AD group 'Odoo-Finance Viewers'."
+msgstr ""
+"پیشوندی که هنگام نام‌گذاری گروه‌های AD ایجادشده خودکار توسط اودو استفاده "
+"می‌شود، مثال: گروه اودوی 'Finance Viewers' به گروه AD 'Odoo-Finance "
+"Viewers' تبدیل می‌شود."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__use_odoo_ldap
+msgid "Read from Odoo LDAP Config"
+msgstr "خواندن از پیکربندی LDAP اودو"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_sync_config__use_odoo_ldap
+msgid ""
+"Read the AD server/port/TLS/base/bind settings from Odoo's own LDAP "
+"Authentication config (Settings > Technical > LDAP Configuration, "
+"res.company.ldap - the same connection used for LDAP login) instead of "
+"entering them here. Enable so the AD connection always matches what Odoo "
+"uses for login - change it once there, not here."
+msgstr ""
+"تنظیمات سرور/پورت/TLS/base/bind گروه AD را از پیکربندی احراز هویت LDAP "
+"خود اودو بخوانید (تنظیمات > فنی > پیکربندی LDAP، res.company.ldap - همان "
+"اتصال مورد استفاده برای ورود LDAP) به جای وارد کردن آن‌ها در اینجا. فعال "
+"کنید تا اتصال AD همیشه با آن‌چه اودو برای ورود استفاده می‌کند هماهنگ باشد - "
+"آن را یک‌بار آن‌جا تغییر دهید، نه اینجا."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__auth_mode
+msgid ""
+"Recommended: 'Windows Trusted Connection (Kerberos)' if the Odoo service "
+"runs as your dedicated AD service account with a valid Kerberos TGT - reuses"
+" that identity automatically via pyodbc's Kerberos support (works on both "
+"Windows and Linux), no SQL credentials stored in Odoo. On Windows, this uses"
+" SSPI; on Linux it uses GSSAPI - requires the machine to be domain-joined or"
+" have a valid keytab/kinit for the service account. Grant that account just "
+"db_datareader on this database - avoid using 'sa' or any sysadmin login "
+"here, this connection is read-only anyway."
+msgstr ""
+"توصیه‌شده: 'Windows Trusted Connection (Kerberos)' اگر سرویس اودو به عنوان "
+"حساب سرویس اختصاصی AD شما با یک Kerberos TGT معتبر اجرا می‌شود - آن هویت را "
+"به‌طور خودکار از طریق پشتیبانی Kerberos در pyodbc دوباره استفاده می‌کند "
+"(هم روی ویندوز و هم لینوکس کار می‌کند)، بدون ذخیره اطلاعات کاربری SQL در "
+"اودو. روی ویندوز از SSPI و روی لینوکس از GSSAPI استفاده می‌شود - نیازمند "
+"عضویت ماشین در دامنه یا داشتن keytab/kinit معتبر برای حساب سرویس است. فقط "
+"دسترسی db_datareader را برای آن حساب روی این پایگاه داده اعطا کنید - از "
+"استفاده 'sa' یا هر ورود sysadmin در اینجا خودداری کنید، این اتصال به هر "
+"حال فقط‌خواندنی است."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__url
+msgid "Report URL"
+msgstr "آدرس گزارش"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__use_api
+msgid ""
+"Route PBIRS discovery AND access push through the Windows Access Management "
+"API (FastAPI on the BI host), instead of reading the PBIRS SQL database "
+"directly and pushing via SOAP. The API runs on the BI host with the correct "
+"Windows/AD service identity, so Odoo needs no Kerberos/SSPI/NTLM libs or an "
+"ODBC driver for PBIRS access - and it also unlocks SSAS/AD/local group "
+"provisioning from the same endpoint. Enable once the FastAPI Base URL and "
+"API Key below are set."
+msgstr ""
+"مسیر کشف PBIRS و ارسال دسترسی را از طریق Windows Access Management API "
+"(FastAPI روی میزبان BI) هدایت کنید، به جای خواندن مستقیم پایگاه داده SQL "
+"PBIRS و ارسال از طریق SOAP. این API روی میزبان BI با هویت سرویس صحیح "
+"Windows/AD اجرا می‌شود، بنابراین اودو به کتابخانه‌های Kerberos/SSPI/NTLM یا "
+"درایور ODBC برای دسترسی PBIRS نیاز ندارد - و همچنین تدارک گروه‌های "
+"SSAS/AD/محلی را از همان نقطه پایانی باز می‌کند. پس از تنظیم آدرس پایه "
+"FastAPI و کلید API در پایین فعال کنید."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__soap_auth_mode
+msgid "SOAP Auth Mode"
+msgstr "حالت احراز هویت SOAP"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__soap_password
+msgid "SOAP Password"
+msgstr "رمز عبور SOAP"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__soap_username
+msgid "SOAP Username"
+msgstr "نام کاربری SOAP"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__sql_username
+msgid "SQL Login"
+msgstr "ورود SQL"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__sql_password
+msgid "SQL Password"
+msgstr "رمز عبور SQL"
+
+#. module: powerbi_portal
+#: model:ir.model.fields.selection,name:powerbi_portal.selection__pbirs_discovery_config__auth_mode__sql
+msgid "SQL Server Login"
+msgstr "ورود SQL Server"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__sql_server
+msgid "SQL Server host\\\\instance, e.g. pbirs-sql01 or pbirs-sql01\\\\SQLEXPRESS"
+msgstr "میزبان\\\\نمونه SQL Server، مثال: pbirs-sql01 یا pbirs-sql01\\\\SQLEXPRESS"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid ""
+"Saving this report (including autosave) automatically pushes\n"
+"                            the groups/users above to PBIRS as Browser access - see\n"
+"                            Last Push below for the outcome of the most recent save."
+msgstr ""
+"ذخیره این گزارش (شامل ذخیره خودکار) به‌طور خودکار گروه‌ها/کاربران بالا را\n"
+"                            به عنوان دسترسی Browser به PBIRS ارسال می‌کند - برای نتیجه\n"
+"                            آخرین ذخیره به «آخرین ارسال» در پایین مراجعه کنید."
+
+#. module: powerbi_portal
+#. odoo-javascript
+#: code:addons/powerbi_portal/static/src/xml/powerbi_portal.xml:0
+msgid "Select a report from the list on the left."
+msgstr "یک گزارش را از فهرست سمت چپ انتخاب کنید."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__sequence
+msgid "Sequence"
+msgstr "ترتیب"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__server
+msgid "Server"
+msgstr "سرور"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__binddn
+msgid "Service Account DN"
+msgstr "DN حساب سرویس"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__bind_password
+msgid "Service Account Password"
+msgstr "رمز عبور حساب سرویس"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_sync_config__netbios_domain
+msgid ""
+"Short-form Windows domain name used to build 'DOMAIN\\\\name' principal "
+"strings for systems (like PBIRS) that expect that format rather than a DN, "
+"e.g. SHAKA for shaka.local. Leave blank to auto-derive from the first "
+"component of Base DN (e.g. DC=shaka,DC=local -> SHAKA) - set this explicitly"
+" if your AD's real NetBIOS name differs from that guess."
+msgstr ""
+"نام کوتاه دامنه ویندوز که برای ساخت رشته‌های اصل 'DOMAIN\\\\name' برای "
+"سیستم‌هایی (مانند PBIRS) که به جای DN انتظار این قالب را دارند استفاده "
+"می‌شود، مثال: SHAKA برای shaka.local. برای استخراج خودکار از اولین جزء "
+"Base DN خالی بگذارید (مثال: DC=shaka,DC=local -> SHAKA) - اگر نام واقعی "
+"NetBIOS دامنه AD شما با این حدس متفاوت است، آن را به‌صراحت تنظیم کنید."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__sql_database
+msgid "Sql Database"
+msgstr "پایگاه داده SQL"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__sql_server
+msgid "Sql Server"
+msgstr "SQL Server"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_mapping_form
+msgid "Sync Now"
+msgstr "همگام‌سازی اکنون"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_sync_config_form
+msgid "Test Connection"
+msgstr "تست اتصال"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Test FastAPI Connection"
+msgstr "تست اتصال FastAPI"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Test SOAP Connection"
+msgstr "تست اتصال SOAP"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Test SQL Connection"
+msgstr "تست اتصال SQL"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_sync_config_form
+msgid ""
+"This AD connection reads its server/port/TLS/base/bind\n"
+"                        settings live from Odoo's own LDAP Authentication config\n"
+"                        (Settings &gt; Technical &gt; LDAP Configuration). Change\n"
+"                        it once there - no need to repeat it here."
+msgstr ""
+"این اتصال AD تنظیمات سرور/پورت/TLS/base/bind خود را زنده\n"
+"                        از پیکربندی احراز هویت LDAP خود اودو می‌خواند\n"
+"                        (تنظیمات &gt; فنی &gt; پیکربندی LDAP). آن را یک‌بار\n"
+"                        آن‌جا تغییر دهید - نیازی به تکرار آن در اینجا نیست."
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_mapping_form
+msgid ""
+"This AD group is Odoo-owned - it was auto-created by\n"
+"                        PBIRS Portal's access-push feature purely to give\n"
+"                        PBIRS a real AD principal. The pull sync/cron\n"
+"                        deliberately skips it. Manage membership on the Odoo\n"
+"                        group itself, then save the related report (access\n"
+"                        push happens automatically on save) to update AD/PBIRS."
+msgstr ""
+"این گروه AD متعلق به اودو است - به‌طور خودکار توسط ویژگی ارسال دسترسی\n"
+"                        پورتال PBIRS صرفاً برای دادن یک اصل واقعی AD به\n"
+"                        PBIRS ایجاد شده است. همگام‌سازی/کرون کشیدن عمداً\n"
+"                        آن را نادیده می‌گیرد. عضویت را روی خود گروه اودو\n"
+"                        مدیریت کنید، سپس گزارش مرتبط را ذخیره کنید (ارسال\n"
+"                        دسترسی به‌طور خودکار هنگام ذخیره رخ می‌دهد) تا AD/PBIRS به‌روزرسانی شود."
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form_discovery
+msgid ""
+"This report is managed by PBIRS Discovery. Its URL and\n"
+"                    Visible To Groups are overwritten automatically on each\n"
+"                    sync to match the Report Server's own permissions.\n"
+"                    Saving Visible To Groups/Users here automatically pushes\n"
+"                    that access back to PBIRS - the next Discovery sync will\n"
+"                    then read it back and should match. If Discovery's own\n"
+"                    sync writes to this report, that pull does NOT trigger\n"
+"                    another push back (avoids a pull/push loop)."
+msgstr ""
+"این گزارش توسط PBIRS Discovery مدیریت می‌شود. آدرس و «قابل مشاهده\n"
+"                    برای گروه‌ها» آن در هر همگام‌سازی به‌طور خودکار بازنویسی\n"
+"                    می‌شوند تا با مجوزهای خود سرور گزارش هماهنگ باشند.\n"
+"                    ذخیره «قابل مشاهده برای گروه‌ها/کاربران» در اینجا به‌طور\n"
+"                    خودکار آن دسترسی را به PBIRS بازمی‌گرداند - همگام‌سازی\n"
+"                    بعدی Discovery سپس آن را دوباره می‌خواند و باید مطابقت\n"
+"                    داشته باشد. اگر همگام‌سازی خود Discovery در این گزارش\n"
+"                    بنویسد، آن کشیدن باعث ارسال دیگری به عقب نمی‌شود\n"
+"                    (از حلقه کشیدن/ارسال جلوگیری می‌کند)."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__trust_server_certificate
+msgid "Trust Server Certificate"
+msgstr "اعتماد به گواهی سرور"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__soap_url
+msgid ""
+"URL of the ReportService2010 SOAP endpoint, used to PUSH access changes made"
+" in Odoo back to PBIRS (separate from the SQL settings above, which are "
+"read-only discovery). Usually "
+"https://pbirs.company.local/ReportServer/ReportService2010.asmx - note this "
+"is normally the /ReportServer/ virtual directory, not the /reports/ portal "
+"path used in Portal Base URL above."
+msgstr ""
+"آدرس نقطه پایانی SOAP سرویس ReportService2010، که برای ارسال تغییرات "
+"دسترسی انجام‌شده در اودو به PBIRS استفاده می‌شود (جدا از تنظیمات SQL بالا "
+"که کشف فقط‌خواندنی هستند). معمولاً "
+"https://pbirs.company.local/ReportServer/ReportService2010.asmx - توجه "
+"کنید که این معمولاً دایرکتوری مجازی /ReportServer/ است، نه مسیر پورتال "
+"/reports/ که در آدرس پایه پورتال بالا استفاده شده است."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__api_base_url
+msgid ""
+"URL of the Windows Access Management API, e.g. http://192.168.2.12:8443 "
+"(base only, no /v1)."
+msgstr ""
+"آدرس Windows Access Management API، مثال: http://192.168.2.12:8443 (فقط "
+"پایه، بدون /v1)."
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__use_api
+msgid "Use FastAPI (replace SQL/SOAP)"
+msgstr "استفاده از FastAPI (جایگزین SQL/SOAP)"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__use_tls
+msgid "Use StartTLS"
+msgstr "استفاده از StartTLS"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "Visibility"
+msgstr "پدیدهای مشاهده"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__allowed_group_ids
+msgid "Visible To Groups"
+msgstr "قابل مشاهده برای گروه‌ها"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__allowed_user_ids
+msgid "Visible To Users"
+msgstr "قابل مشاهده برای کاربران"
+
+#. module: powerbi_portal
+#: model:ir.model.fields.selection,name:powerbi_portal.selection__pbirs_discovery_config__soap_auth_mode__windows_explicit
+msgid "Windows - explicit domain credentials"
+msgstr "ویندوز - اطلاعات کاربری صریح دامنه"
+
+#. module: powerbi_portal
+#: model:ir.model.fields.selection,name:powerbi_portal.selection__pbirs_discovery_config__soap_auth_mode__windows_current
+msgid "Windows Integrated (run as the Odoo service account)"
+msgstr "Windows Integrated (اجرا به عنوان حساب سرویس اودو)"
+
+#. module: powerbi_portal
+#: model:ir.model.fields.selection,name:powerbi_portal.selection__pbirs_discovery_config__auth_mode__windows
+msgid "Windows Trusted Connection (Kerberos)"
+msgstr "اتصال مورد اعتماد ویندوز (Kerberos)"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_sync_config__base_dn
+msgid "e.g. DC=company,DC=local"
+msgstr "مثال: DC=company,DC=local"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "e.g. Finance"
+msgstr "مثال: مالی"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_sync_config_form
+msgid "e.g. SHAKA (auto-derived from Base DN if left blank)"
+msgstr "مثال: SHAKA (در صورت خالی گذاشتن، به‌طور خودکار از Base DN استخراج می‌شود)"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "e.g. SQL Server, or ODBC Driver 18 for SQL Server"
+msgstr "مثال: SQL Server، یا ODBC Driver 18 for SQL Server"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "e.g. Sales Dashboard"
+msgstr "مثال: داشبورد فروش"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__soap_domain
+msgid "e.g. shaka"
+msgstr "مثال: shaka"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "http://192.168.2.12:8443"
+msgstr "http://192.168.2.12:8443"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "https://pbirs.company.local/ReportServer/ReportService2010.asmx"
+msgstr "https://pbirs.company.local/ReportServer/ReportService2010.asmx"
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "https://pbirs.company.local/reports/powerbi/..."
+msgstr "https://pbirs.company.local/reports/powerbi/..."

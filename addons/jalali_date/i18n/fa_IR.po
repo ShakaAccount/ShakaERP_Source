@@ -1,0 +1,78 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* jalali_date
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:24+0000\n"
+"PO-Revision-Date: 2026-09-23 08:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: jalali_date
+#: model:ir.model.fields,field_description:jalali_date.field_res_users__calendar_type
+msgid "Calendar Type"
+msgstr "نوع تقویم"
+
+#. module: jalali_date
+#: model:ir.model.fields,help:jalali_date.field_res_users__calendar_type
+msgid ""
+"Controls which calendar system dates are displayed in throughout the "
+"interface for this user. Storage is always Gregorian; this only affects "
+"presentation."
+msgstr ""
+"تعیین می‌کند تاریخ‌ها در سراسر رابط کاربری این کاربر بر اساس کدام نظام "
+"تقویمی نمایش داده شوند. ذخیره‌سازی همواره میلادی است؛ این تنظیم فقط بر "
+"نحوه‌ی نمایش تأثیر می‌گذارد."
+
+#. module: jalali_date
+#: model:ir.model.fields,field_description:jalali_date.field_ir_http__display_name
+#: model:ir.model.fields,field_description:jalali_date.field_ir_qweb__display_name
+#: model:ir.model.fields,field_description:jalali_date.field_res_users__display_name
+msgid "Display Name"
+msgstr "نام نمایشی"
+
+#. module: jalali_date
+#: model:ir.model.fields.selection,name:jalali_date.selection__res_users__calendar_type__gregorian
+msgid "Gregorian"
+msgstr "میلادی"
+
+#. module: jalali_date
+#: model:ir.model,name:jalali_date.model_ir_http
+msgid "HTTP Routing"
+msgstr "مسیریابی HTTP"
+
+#. module: jalali_date
+#: model:ir.model.fields,field_description:jalali_date.field_ir_http__id
+#: model:ir.model.fields,field_description:jalali_date.field_ir_qweb__id
+#: model:ir.model.fields,field_description:jalali_date.field_res_users__id
+msgid "ID"
+msgstr "شناسه"
+
+#. module: jalali_date
+#: model:ir.model.fields.selection,name:jalali_date.selection__res_users__calendar_type__jalali
+msgid "Jalali (Persian)"
+msgstr "جلالی (شمسی)"
+
+#. module: jalali_date
+#: model:ir.model,name:jalali_date.model_ir_qweb
+msgid "Qweb"
+msgstr "Qweb"
+
+#. module: jalali_date
+#: model:ir.model,name:jalali_date.model_res_users
+msgid "User"
+msgstr "کاربر"
+
+#. module: jalali_date
+#. odoo-javascript
+#: code:addons/jalali_date/static/src/xml/datetime_picker_template_patch.xml:0
+msgid "امروز"
+msgstr "امروز"

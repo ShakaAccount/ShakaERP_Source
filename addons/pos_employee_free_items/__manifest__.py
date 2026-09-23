@@ -1,5 +1,5 @@
-    'icon': '/pos_employee_free_items/static/description/icon.svg',
 {
+    "icon": "/pos_employee_free_items/static/description/icon.svg",
     "name": "POS Employee Free Items",
     "version": "19.0.3.0.0",
     "summary": "Allow POS employees to claim a limited number of free catalogue items each day.",

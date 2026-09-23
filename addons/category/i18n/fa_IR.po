@@ -1,0 +1,452 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* category
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-09-23 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: category
+#. odoo-python
+#: code:addons/category/models/category.py:0
+msgid ""
+"A sub-category must belong to the same entity as its tree root \"%(root)s\" "
+"(entity %(ent)s)."
+msgstr "یک زیرمجموعه باید متعلق به همان موجودیتِ ریشه درخت خود «%(root)s» باشد (موجودیت %(ent)s)."
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Add"
+msgstr "افزودن"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Add a sub-category here"
+msgstr "یک زیرمجموعه در اینجا اضافه کنید"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Add to category"
+msgstr "افزودن به دسته"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "All columns"
+msgstr "همه ستون‌ها"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Cancel"
+msgstr "انصراف"
+
+#. module: category
+#. odoo-python
+#: code:addons/category/models/category.py:0
+msgid ""
+"Cannot move \"%(t)s\": a sub-category must share its tree root's entity "
+"(\"%(r)s\")."
+msgstr "امکان جابجایی «%(t)s» وجود ندارد: یک زیرمجموعه باید موجودیت ریشه درخت خود را به اشتراک بگذارد («%(r)s»)."
+
+#. module: category
+#. odoo-python
+#: code:addons/category/models/category.py:0
+msgid "Cannot move \"%(title)s\" under its own descendant \"%(parent)s\"."
+msgstr "امکان جابجایی «%(title)s» زیر فرزند خودش «%(parent)s» وجود ندارد."
+
+#. module: category
+#: model:ir.ui.menu,name:category.menu_category_root
+msgid "Categories"
+msgstr "دسته‌بندی‌ها"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__category_id
+msgid "Category"
+msgstr "دسته"
+
+#. module: category
+#. odoo-python
+#: code:addons/category/models/category.py:0
+msgid ""
+"Category \"%(title)s\" belongs to entity \"%(root)s\" (tree root "
+"\"%(root_title)s\"). A sub-category must use the same entity as its tree "
+"root."
+msgstr "دسته «%(title)s» متعلق به موجودیت «%(root)s» است (ریشه درخت «%(root_title)s»). یک زیرمجموعه باید از همان موجودیت ریشه درخت خود استفاده کند."
+
+#. module: category
+#: model:ir.actions.client,name:category.action_category_manager
+#: model:ir.ui.menu,name:category.menu_category_manager
+msgid "Category Manager"
+msgstr "مدیریت دسته‌بندی"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Clear"
+msgstr "پاک کردن"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Clear all"
+msgstr "پاک کردن همه"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Clear search"
+msgstr "پاک کردن جستجو"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Click"
+msgstr "کلیک کنید"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+#: model:ir.model.fields,field_description:category.field_raes_md_category__code
+msgid "Code"
+msgstr "کد"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__company_id
+msgid "Company"
+msgstr "شرکت"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Create"
+msgstr "ایجاد"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__creation_date
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__creation_date
+msgid "Creation Date"
+msgstr "تاریخ ایجاد"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__creator_user_id
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__creator_user_id
+msgid "Creator User"
+msgstr "کاربر ایجادکننده"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__member_id
+msgid "DW Member ID"
+msgstr "شناسه عضو انبار داده"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Delete this category and all its sub-categories"
+msgstr "حذف این دسته و همه زیرمجموعه‌های آن"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__display_name
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__display_name
+msgid "Display Name"
+msgstr "نام نمایشی"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Display name"
+msgstr "نام نمایشی"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Drag to resize"
+msgstr "برای تغییر اندازه بکشید"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__editor_user_id
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__editor_user_id
+msgid "Editor User"
+msgstr "کاربر ویرایشگر"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__english_title
+msgid "English Title"
+msgstr "عنوان انگلیسی"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+#: model:ir.model.fields,field_description:category.field_raes_md_category__entity_id
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__entity_id
+msgid "Entity"
+msgstr "موجودیت"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__id
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__id
+msgid "ID"
+msgstr "شناسه"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "In this category"
+msgstr "در این دسته"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Inverse"
+msgstr "معکوس"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__is_node_only
+msgid "Is Node Only"
+msgstr "فقط گره"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__is_user_defined
+msgid "Is User Defined"
+msgstr "تعریف‌شده توسط کاربر"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Loading…"
+msgstr "در حال بارگذاری…"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Locked to the tree root's entity."
+msgstr "قفل‌شده به موجودیت ریشه درخت."
+
+#. module: category
+#: model:ir.model,name:category.model_raes_md_category
+msgid "MD Category (md.category)"
+msgstr "دسته MD (md.category)"
+
+#. module: category
+#: model:ir.model,name:category.model_raes_md_category_member
+msgid "MD Category Member (md.category_member)"
+msgstr "عضو دسته MD (md.category_member)"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__member_ids
+msgid "Members"
+msgstr "اعضا"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__modification_date
+#: model:ir.model.fields,field_description:category.field_raes_md_category_member__modification_date
+msgid "Modification Date"
+msgstr "تاریخ تغییر"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Nested under:"
+msgstr "تودرتو زیر:"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "New Root Category"
+msgstr "دسته ریشه جدید"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "New Sub-category"
+msgstr "زیرمجموعه جدید"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "New root category"
+msgstr "دسته ریشه جدید"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "No categories yet."
+msgstr "هنوز دسته‌ای وجود ندارد."
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "No columns available"
+msgstr "ستونی موجود نیست"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "No columns available for this entity."
+msgstr "ستونی برای این موجودیت موجود نیست."
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "No matching categories."
+msgstr "دسته‌ای مطابقت ندارد."
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "No matching entities"
+msgstr "موجودیتی مطابقت ندارد"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "No uncategorized items."
+msgstr "موردی بدون دسته‌بندی وجود ندارد."
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Nothing in this category yet."
+msgstr "هنوز چیزی در این دسته نیست."
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__parent_id
+msgid "Parent Category"
+msgstr "دسته والد"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Per page"
+msgstr "در هر صفحه"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Remove from category"
+msgstr "حذف از دسته"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__reserved_attibute1
+msgid "Reserved Attibute1"
+msgstr "ویژگی رزرو ۱"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__reserved_attibute2
+msgid "Reserved Attibute2"
+msgstr "ویژگی رزرو ۲"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__reserved_attibute3
+msgid "Reserved Attibute3"
+msgstr "ویژگی رزرو ۳"
+
+#. module: category
+#: model:ir.model.fields,field_description:category.field_raes_md_category__root_id
+msgid "Root Category"
+msgstr "دسته ریشه"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Search entities…"
+msgstr "جستجوی موجودیت‌ها…"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Search…"
+msgstr "جستجو…"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Select a category to begin."
+msgstr "یک دسته را برای شروع انتخاب کنید."
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Select a category to configure its display name."
+msgstr "یک دسته را برای پیکربندی نام نمایشی آن انتخاب کنید."
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Select all on page"
+msgstr "انتخاب همه در صفحه"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "The DW entity this category belongs to."
+msgstr "موجودیت انبار داده‌ای که این دسته به آن تعلق دارد."
+
+#. module: category
+#. odoo-python
+#: code:addons/category/models/category.py:0
+msgid ""
+"This member already belongs to sibling category \"%(parent)s\" and cannot be"
+" added to another sub-category of the same parent."
+msgstr "این عضو قبلاً به دسته هم‌سطح «%(parent)s» تعلق دارد و نمی‌تواند به زیرمجموعه دیگری از همان والد اضافه شود."
+
+#. module: category
+#. odoo-python
+#: code:addons/category/models/category.py:0
+msgid "This member is already in the category!"
+msgstr "این عضو از قبل در این دسته قرار دارد!"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+#: model:ir.model.fields,field_description:category.field_raes_md_category__title
+msgid "Title"
+msgstr "عنوان"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "Uncategorized"
+msgstr "بدون دسته‌بندی"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "to add one."
+msgstr "برای افزودن یکی."
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "to category →"
+msgstr "به دسته ←"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "جستجو…"
+msgstr "جستجو…"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "دسته بندی ها"
+msgstr "دسته بندی ها"
+
+#. module: category
+#. odoo-javascript
+#: code:addons/category/static/src/xml/category_manager.xml:0
+msgid "← Remove"
+msgstr "→ حذف"

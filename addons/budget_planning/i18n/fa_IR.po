@@ -1,0 +1,877 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* budget_planning
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-09-23 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_dashboard_kanban
+msgid "<i class=\"fa fa-line-chart\" role=\"img\" aria-label=\"داشبورد\"/>"
+msgstr "<i class=\"fa fa-line-chart\" role=\"img\" aria-label=\"داشبورد\"/>"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_dashboard_kanban
+msgid "<small>KPI</small>"
+msgstr "<small>KPI</small>"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_dashboard_kanban
+msgid "<small>استراتژی</small>"
+msgstr "<small>استراتژی</small>"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_dashboard_kanban
+msgid "<small>اقدام</small>"
+msgstr "<small>اقدام</small>"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_dashboard_kanban
+msgid "<small>فعالیت</small>"
+msgstr "<small>فعالیت</small>"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_dashboard_kanban
+msgid "<small>هدف</small>"
+msgstr "<small>هدف</small>"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_dashboard_kanban
+msgid "<small>پروژه</small>"
+msgstr "<small>پروژه</small>"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid ""
+"<span class=\"bp-step-"
+"number\">۱</span><span><strong>استراتژی</strong><small>برنامه‌های "
+"کلان</small></span>"
+msgstr "<span class=\"bp-step-number\">۱</span><span><strong>استراتژی</strong><small>برنامه‌های کلان</small></span>"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid ""
+"<span class=\"bp-step-"
+"number\">۲</span><span><strong>اهداف</strong><small>هدف‌های "
+"قابل‌اندازه‌گیری</small></span>"
+msgstr "<span class=\"bp-step-number\">۲</span><span><strong>اهداف</strong><small>هدف‌های قابل‌اندازه‌گیری</small></span>"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid ""
+"<span class=\"bp-step-"
+"number\">۳</span><span><strong>KPIها</strong><small>شاخص‌های "
+"عملکرد</small></span>"
+msgstr "<span class=\"bp-step-number\">۳</span><span><strong>KPIها</strong><small>شاخص‌های عملکرد</small></span>"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid ""
+"<span class=\"bp-step-"
+"number\">۴</span><span><strong>اقدامات</strong><small>چند اقدام برای هر "
+"KPI</small></span>"
+msgstr "<span class=\"bp-step-number\">۴</span><span><strong>اقدامات</strong><small>چند اقدام برای هر KPI</small></span>"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid ""
+"<span class=\"bp-step-"
+"number\">۵</span><span><strong>پروژه‌ها</strong><small>تقسیم "
+"اقدام‌ها</small></span>"
+msgstr "<span class=\"bp-step-number\">۵</span><span><strong>پروژه‌ها</strong><small>تقسیم اقدام‌ها</small></span>"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid ""
+"<span class=\"bp-step-"
+"number\">۶</span><span><strong>فعالیت‌ها</strong><small>فعالیت‌های "
+"اجرایی</small></span>"
+msgstr "<span class=\"bp-step-number\">۶</span><span><strong>فعالیت‌ها</strong><small>فعالیت‌های اجرایی</small></span>"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid ""
+"<span class=\"bp-step-number\">۷</span><span><strong>تخصیص "
+"بودجه</strong><small>کنترل مصرف</small></span>"
+msgstr "<span class=\"bp-step-number\">۷</span><span><strong>تخصیص بودجه</strong><small>کنترل مصرف</small></span>"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_dashboard_kanban
+msgid "<span>مصرف بودجه</span>"
+msgstr "<span>مصرف بودجه</span>"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__message_needaction
+msgid "Action Needed"
+msgstr "اقدام مورد نیاز"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__activity_count
+msgid "Activity Count"
+msgstr "تعداد فعالیت‌ها"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__message_attachment_count
+msgid "Attachment Count"
+msgstr "تعداد پیوست‌ها"
+
+#. module: budget_planning
+#: model:ir.model,name:budget_planning.model_budget_plan_activity
+msgid "Budget Activity"
+msgstr "فعالیت بودجه"
+
+#. module: budget_planning
+#: model:ir.model,name:budget_planning.model_budget_plan_budget_line
+msgid "Budget Allocation Line"
+msgstr "ردیف تخصیص بودجه"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__budget_consumption
+msgid "Budget Consumption"
+msgstr "مصرف بودجه"
+
+#. module: budget_planning
+#: model:ir.model,name:budget_planning.model_budget_plan_initiative
+msgid "Budget Initiative"
+msgstr "اقدام بودجه"
+
+#. module: budget_planning
+#: model:ir.model,name:budget_planning.model_budget_plan_kpi
+msgid "Budget KPI"
+msgstr "KPI بودجه"
+
+#. module: budget_planning
+#: model:ir.model,name:budget_planning.model_budget_plan_child_mixin
+msgid "Budget Planning Child"
+msgstr "زیرمجموعه برنامه‌ریزی بودجه"
+
+#. module: budget_planning
+#: model:ir.model,name:budget_planning.model_budget_plan_dashboard
+msgid "Budget Planning Dashboard"
+msgstr "داشبورد برنامه‌ریزی بودجه"
+
+#. module: budget_planning
+#: model:ir.model,name:budget_planning.model_budget_planning_number_mixin
+msgid "Budget Planning Number Helper"
+msgstr "کمک‌شماره‌گذار برنامه‌ریزی بودجه"
+
+#. module: budget_planning
+#: model:ir.model,name:budget_planning.model_budget_plan_project
+msgid "Budget Project"
+msgstr "پروژه بودجه"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__budget_spent
+msgid "Budget Spent"
+msgstr "بودجه مصرف‌شده"
+
+#. module: budget_planning
+#: model:ir.model,name:budget_planning.model_budget_plan_strategy
+msgid "Budget Strategy"
+msgstr "استراتژی بودجه"
+
+#. module: budget_planning
+#: model:ir.model,name:budget_planning.model_budget_plan_target
+msgid "Budget Target"
+msgstr "هدف بودجه"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__budget_total
+msgid "Budget Total"
+msgstr "کل بودجه"
+
+#. module: budget_planning
+#: model:ir.model,name:budget_planning.model_budget_plan
+msgid "Budget and Planning Plan"
+msgstr "برنامه بودجه و برنامه‌ریزی"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__create_uid
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__create_uid
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__create_uid
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__create_uid
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__create_uid
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__create_uid
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__create_uid
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__create_uid
+msgid "Created by"
+msgstr "ایجاد شده توسط"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__create_date
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__create_date
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__create_date
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__create_date
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__create_date
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__create_date
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__create_date
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__create_date
+msgid "Created on"
+msgstr "تاریخ ایجاد"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__display_name
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__display_name
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__display_name
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_child_mixin__display_name
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__display_name
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__display_name
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__display_name
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__display_name
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__display_name
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__display_name
+#: model:ir.model.fields,field_description:budget_planning.field_budget_planning_number_mixin__display_name
+msgid "Display Name"
+msgstr "نام نمایشی"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__message_follower_ids
+msgid "Followers"
+msgstr "پیگیران"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "پیگیران (طرف‌های حساب)"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__has_message
+msgid "Has Message"
+msgstr "دارای پیام"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_child_mixin__id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_planning_number_mixin__id
+msgid "ID"
+msgstr "شناسه"
+
+#. module: budget_planning
+#: model:ir.model.fields,help:budget_planning.field_budget_plan__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "در صورت انتخاب، پیام‌های جدید نیاز به توجه شما دارند."
+
+#. module: budget_planning
+#: model:ir.model.fields,help:budget_planning.field_budget_plan__message_has_error
+#: model:ir.model.fields,help:budget_planning.field_budget_plan__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "در صورت انتخاب، برخی پیام‌ها خطای ارسال دارند."
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__initiative_count
+msgid "Initiative Count"
+msgstr "تعداد اقدامات"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__message_is_follower
+msgid "Is Follower"
+msgstr "پیگیر است"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__kpi_count
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__kpi_id
+msgid "KPI"
+msgstr "KPI"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__kpi_ids
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__kpi_ids
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "KPIها"
+msgstr "KPIها"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__kpi_count
+msgid "Kpi Count"
+msgstr "تعداد KPI"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__write_uid
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__write_uid
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__write_uid
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__write_uid
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__write_uid
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__write_uid
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__write_uid
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__write_uid
+msgid "Last Updated by"
+msgstr "آخرین بروزرسانی توسط"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__write_date
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__write_date
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__write_date
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__write_date
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__write_date
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__write_date
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__write_date
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__write_date
+msgid "Last Updated on"
+msgstr "تاریخ آخرین بروزرسانی"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__message_has_error
+msgid "Message Delivery error"
+msgstr "خطای ارسال پیام"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__message_ids
+msgid "Messages"
+msgstr "پیام‌ها"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__message_needaction_counter
+msgid "Number of Actions"
+msgstr "تعداد اقدامات"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__message_has_error_counter
+msgid "Number of errors"
+msgstr "تعداد خطاها"
+
+#. module: budget_planning
+#: model:ir.model.fields,help:budget_planning.field_budget_plan__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "تعداد پیام‌های نیازمند اقدام"
+
+#. module: budget_planning
+#: model:ir.model.fields,help:budget_planning.field_budget_plan__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "تعداد پیام‌های دارای خطای ارسال"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__project_count
+msgid "Project Count"
+msgstr "تعداد پروژه‌ها"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "خطای ارسال پیامک"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__strategy_count
+msgid "Strategy Count"
+msgstr "تعداد استراتژی‌ها"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__target_count
+msgid "Target Count"
+msgstr "تعداد اهداف"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__website_message_ids
+msgid "Website Messages"
+msgstr "پیام‌های وب‌سایت"
+
+#. module: budget_planning
+#: model:ir.model.fields,help:budget_planning.field_budget_plan__website_message_ids
+msgid "Website communication history"
+msgstr "تاریخچه ارتباطات وب‌سایت"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__unlocked_step
+msgid "آخرین مرحله فعال"
+msgstr "آخرین مرحله فعال"
+
+#. module: budget_planning
+#: model:ir.model.fields.selection,name:budget_planning.selection__budget_plan__state__submitted
+msgid "ارسال‌شده"
+msgstr "ارسال‌شده"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__strategy_count
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__strategy_id
+msgid "استراتژی"
+msgstr "استراتژی"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__strategy_ids
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "استراتژی‌ها"
+msgstr "استراتژی‌ها"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__initiative_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__initiative_count
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__initiative_id
+msgid "اقدام"
+msgstr "اقدام"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__initiative_ids
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__initiative_ids
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "اقدامات"
+msgstr "اقدامات"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__target_ids
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__target_ids
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "اهداف"
+msgstr "اهداف"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "بازگشت به پیش‌نویس"
+msgstr "بازگشت به پیش‌نویس"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__plan_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__plan_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_child_mixin__plan_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__plan_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__plan_name
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__plan_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__plan_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__plan_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__plan_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__plan_id
+msgid "برنامه"
+msgstr "برنامه"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "برنامه عملیاتی و بودجه سالانه..."
+msgstr "برنامه عملیاتی و بودجه سالانه..."
+
+#. module: budget_planning
+#: model:ir.ui.menu,name:budget_planning.menu_budget_planning_root
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "برنامه و بودجه"
+msgstr "برنامه و بودجه"
+
+#. module: budget_planning
+#: model:res.groups,name:budget_planning.budget_group_manager
+msgid "برنامه و بودجه / مدیر"
+msgstr "برنامه و بودجه / مدیر"
+
+#. module: budget_planning
+#: model:res.groups,name:budget_planning.budget_group_user
+msgid "برنامه و بودجه / کاربر"
+msgstr "برنامه و بودجه / کاربر"
+
+#. module: budget_planning
+#: model:ir.actions.act_window,name:budget_planning.action_budget_plan
+#: model:ir.ui.menu,name:budget_planning.menu_budget_plan
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_list
+msgid "برنامه‌ها و بودجه‌ها"
+msgstr "برنامه‌ها و بودجه‌ها"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__budget_line_ids
+msgid "بودجه"
+msgstr "بودجه"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__approved_amount
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__budget_total
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__approved_amount
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_list
+msgid "بودجه مصوب"
+msgstr "بودجه مصوب"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "بودجه و برنامه‌ریزی"
+msgstr "بودجه و برنامه‌ریزی"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "تأیید"
+msgstr "تأیید"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "تأیید نهایی و ارسال برای بررسی"
+msgstr "تأیید نهایی و ارسال برای بررسی"
+
+#. module: budget_planning
+#: model:ir.model.fields.selection,name:budget_planning.selection__budget_plan__state__approved
+msgid "تأییدشده"
+msgstr "تأییدشده"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__budget_line_ids
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "تخصیص بودجه"
+msgstr "تخصیص بودجه"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__allocated_amount
+msgid "تخصیص‌یافته"
+msgstr "تخصیص‌یافته"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__description
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__description
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "توضیحات"
+msgstr "توضیحات"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "توضیحات برنامه..."
+msgstr "توضیحات برنامه..."
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "ثبت مرحله‌ای برنامه و بودجه سالانه"
+msgstr "ثبت مرحله‌ای برنامه و بودجه سالانه"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "ثبت و رفتن به مرحله بعد"
+msgstr "ثبت و رفتن به مرحله بعد"
+
+#. module: budget_planning
+#: model:ir.actions.act_window,name:budget_planning.action_budget_dashboard
+#: model:ir.ui.menu,name:budget_planning.menu_budget_dashboard
+msgid "داشبورد برنامه و بودجه"
+msgstr "داشبورد برنامه و بودجه"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__achievement
+msgid "درصد تحقق"
+msgstr "درصد تحقق"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__consumption
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__budget_consumption
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_list
+msgid "درصد مصرف"
+msgstr "درصد مصرف"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "رد"
+msgstr "رد"
+
+#. module: budget_planning
+#: model:ir.model.fields.selection,name:budget_planning.selection__budget_plan__state__rejected
+msgid "ردشده"
+msgstr "ردشده"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__horizon_start
+msgid "سال شروع افق"
+msgstr "سال شروع افق"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__fiscal_year_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__fiscal_year_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__fiscal_year_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_child_mixin__fiscal_year_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__year
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__fiscal_year_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__fiscal_year_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__fiscal_year_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__fiscal_year_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__fiscal_year_id
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_list
+msgid "سال مالی"
+msgstr "سال مالی"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "سال مالی *"
+msgstr "سال مالی *"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__horizon_end
+msgid "سال پایان افق"
+msgstr "سال پایان افق"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__date_start
+msgid "شروع"
+msgstr "شروع"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__company_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__company_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__company_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_child_mixin__company_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__company_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__company_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__company_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__company_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__company_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__company_id
+msgid "شرکت"
+msgstr "شرکت"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__number
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__number
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_child_mixin__number
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__number
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__number
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__number
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__number
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__number
+#: model:ir.model.fields,field_description:budget_planning.field_budget_planning_number_mixin__number
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_list
+msgid "شماره"
+msgstr "شماره"
+
+#. module: budget_planning
+#: model:ir.model.constraint,message:budget_planning.constraint_budget_plan_kpi_number_unique
+msgid "شماره KPI برای این هدف باید یکتا باشد."
+msgstr "شماره KPI برای این هدف باید یکتا باشد."
+
+#. module: budget_planning
+#: model:ir.model.constraint,message:budget_planning.constraint_budget_plan_strategy_number_unique
+msgid "شماره استراتژی در این برنامه باید یکتا باشد."
+msgstr "شماره استراتژی در این برنامه باید یکتا باشد."
+
+#. module: budget_planning
+#: model:ir.model.constraint,message:budget_planning.constraint_budget_plan_initiative_number_unique
+msgid "شماره اقدام برای این KPI باید یکتا باشد."
+msgstr "شماره اقدام برای این KPI باید یکتا باشد."
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__number
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "شماره برنامه"
+msgstr "شماره برنامه"
+
+#. module: budget_planning
+#: model:ir.model.constraint,message:budget_planning.constraint_budget_plan_plan_number_unique
+msgid "شماره برنامه در هر سال مالی باید یکتا باشد."
+msgstr "شماره برنامه در هر سال مالی باید یکتا باشد."
+
+#. module: budget_planning
+#: model:ir.model.constraint,message:budget_planning.constraint_budget_plan_budget_line_number_unique
+msgid "شماره ردیف بودجه برای این اقدام باید یکتا باشد."
+msgstr "شماره ردیف بودجه برای این اقدام باید یکتا باشد."
+
+#. module: budget_planning
+#: model:ir.model.constraint,message:budget_planning.constraint_budget_plan_activity_number_unique
+msgid "شماره فعالیت برای این پروژه باید یکتا باشد."
+msgstr "شماره فعالیت برای این پروژه باید یکتا باشد."
+
+#. module: budget_planning
+#: model:ir.model.constraint,message:budget_planning.constraint_budget_plan_target_number_unique
+msgid "شماره هدف برای این استراتژی باید یکتا باشد."
+msgstr "شماره هدف برای این استراتژی باید یکتا باشد."
+
+#. module: budget_planning
+#: model:ir.model.constraint,message:budget_planning.constraint_budget_plan_project_number_unique
+msgid "شماره پروژه برای این اقدام باید یکتا باشد."
+msgstr "شماره پروژه برای این اقدام باید یکتا باشد."
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__title
+msgid "عنوان KPI"
+msgstr "عنوان KPI"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__title
+msgid "عنوان استراتژی"
+msgstr "عنوان استراتژی"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__title
+msgid "عنوان اقدام"
+msgstr "عنوان اقدام"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__name
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_list
+msgid "عنوان برنامه"
+msgstr "عنوان برنامه"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "عنوان برنامه *"
+msgstr "عنوان برنامه *"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__title
+msgid "عنوان ردیف"
+msgstr "عنوان ردیف"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__title
+msgid "عنوان فعالیت"
+msgstr "عنوان فعالیت"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__title
+msgid "عنوان هدف"
+msgstr "عنوان هدف"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__title
+msgid "عنوان پروژه"
+msgstr "عنوان پروژه"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__activity_count
+msgid "فعالیت"
+msgstr "فعالیت"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__activity_ids
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__activity_ids
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "فعالیت‌ها"
+msgstr "فعالیت‌ها"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__owner_role_id
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "مالک اقدام"
+msgstr "مالک اقدام"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__balance
+msgid "مانده"
+msgstr "مانده"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_strategy__owner_role_id
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_list
+msgid "متولی"
+msgstr "متولی"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__owner_role_id
+msgid "متولی برنامه / نقش شرکت"
+msgstr "متولی برنامه / نقش شرکت"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__responsible_role_id
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "مسئول پروژه"
+msgstr "مسئول پروژه"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_dashboard_kanban
+msgid "مصرف:"
+msgstr "مصرف:"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_budget_line__spent_amount
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__budget_spent
+msgid "مصرف‌شده"
+msgstr "مصرف‌شده"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_dashboard_kanban
+msgid "مصوب:"
+msgstr "مصوب:"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__quantity
+msgid "مقدار"
+msgstr "مقدار"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__current_value
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__current_value
+msgid "مقدار فعلی"
+msgstr "مقدار فعلی"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__target_value
+msgid "مقدار هدف"
+msgstr "مقدار هدف"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__target_count
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__target_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__target_value
+msgid "هدف"
+msgstr "هدف"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__cost
+msgid "هزینه"
+msgstr "هزینه"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__actual_amount
+msgid "هزینه واقعی"
+msgstr "هزینه واقعی"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__unit_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__unit_id
+msgid "واحد"
+msgstr "واحد"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_target__unit_id
+msgid "واحد اندازه‌گیری"
+msgstr "واحد اندازه‌گیری"
+
+#. module: budget_planning
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "واحد سازمانی *"
+msgstr "واحد سازمانی *"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__weight
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_kpi__weight
+msgid "وزن"
+msgstr "وزن"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__state
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__status_id
+msgid "وضعیت"
+msgstr "وضعیت"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__date_end
+msgid "پایان"
+msgstr "پایان"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_activity__project_id
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_dashboard__project_count
+msgid "پروژه"
+msgstr "پروژه"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan__project_ids
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_initiative__project_ids
+#: model_terms:ir.ui.view,arch_db:budget_planning.view_budget_plan_form
+msgid "پروژه‌ها"
+msgstr "پروژه‌ها"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__physical_progress
+msgid "پیشرفت فیزیکی %"
+msgstr "پیشرفت فیزیکی %"
+
+#. module: budget_planning
+#: model:ir.model.fields,field_description:budget_planning.field_budget_plan_project__financial_progress
+msgid "پیشرفت مالی %"
+msgstr "پیشرفت مالی %"
+
+#. module: budget_planning
+#: model:ir.model.fields.selection,name:budget_planning.selection__budget_plan__state__draft
+msgid "پیش‌نویس"
+msgstr "پیش‌نویس"

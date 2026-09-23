@@ -1,0 +1,209 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* holding_budget
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:24+0000\n"
+"PO-Revision-Date: 2026-09-23 08:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption__create_uid
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption_line__create_uid
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario__create_uid
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario_line__create_uid
+msgid "Created by"
+msgstr "ایجاد شده توسط"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption__create_date
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption_line__create_date
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario__create_date
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario_line__create_date
+msgid "Created on"
+msgstr "تاریخ ایجاد"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption__display_name
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption_line__display_name
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario__display_name
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario_line__display_name
+msgid "Display Name"
+msgstr "نام نمایشی"
+
+#. module: holding_budget
+#: model:ir.model,name:holding_budget.model_holding_budget_assumption_line
+msgid "Holding Budget Assumption Line"
+msgstr "ردیف مفروضات بودجه هلدینگ"
+
+#. module: holding_budget
+#: model:ir.model,name:holding_budget.model_holding_budget_assumption
+msgid "Holding Budget Assumptions"
+msgstr "مفروضات بودجه هلدینگ"
+
+#. module: holding_budget
+#: model:ir.model,name:holding_budget.model_holding_budget_scenario_line
+msgid "Holding Budget Scenario Line"
+msgstr "ردیف سناریوی بودجه هلدینگ"
+
+#. module: holding_budget
+#: model:ir.model,name:holding_budget.model_holding_budget_scenario
+msgid "Holding Budget Scenarios"
+msgstr "سناریوهای بودجه هلدینگ"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption__id
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption_line__id
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario__id
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario_line__id
+msgid "ID"
+msgstr "شناسه"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption__write_uid
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption_line__write_uid
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario__write_uid
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario_line__write_uid
+msgid "Last Updated by"
+msgstr "آخرین ویرایش توسط"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption__write_date
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption_line__write_date
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario__write_date
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario_line__write_date
+msgid "Last Updated on"
+msgstr "تاریخ آخرین ویرایش"
+
+#. module: holding_budget
+#: model:ir.model.constraint,message:holding_budget.constraint_holding_budget_assumption_line_assumption_title_unique
+msgid "این عنوان در همین گروه مفروضات قبلاً ثبت شده است."
+msgstr "این عنوان در همین گروه مفروضات قبلاً ثبت شده است."
+
+#. module: holding_budget
+#: model:ir.model.constraint,message:holding_budget.constraint_holding_budget_scenario_line_scenario_name_unique
+msgid "این عنوان سناریو قبلاً در همین فرم ثبت شده است."
+msgstr "این عنوان سناریو قبلاً در همین فرم ثبت شده است."
+
+#. module: holding_budget
+#: model:ir.ui.menu,name:holding_budget.menu_holding_budget_root
+msgid "بودجه هلدینگ"
+msgstr "بودجه هلدینگ"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption__registration_date
+msgid "تاریخ ثبت"
+msgstr "تاریخ ثبت"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption_line__sequence
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario_line__sequence
+msgid "ترتیب"
+msgstr "ترتیب"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario_line__description
+#: model_terms:ir.ui.view,arch_db:holding_budget.view_holding_budget_scenario_form
+msgid "توضیحات"
+msgstr "توضیحات"
+
+#. module: holding_budget
+#: model_terms:ir.ui.view,arch_db:holding_budget.view_holding_budget_scenario_form
+msgid "جزئیات سناریوهای بودجه"
+msgstr "جزئیات سناریوهای بودجه"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption__line_ids
+msgid "جزئیات مفروضات"
+msgstr "جزئیات مفروضات"
+
+#. module: holding_budget
+#: model_terms:ir.ui.view,arch_db:holding_budget.view_holding_budget_assumption_form
+msgid "جزئیات مفروضات بودجه"
+msgstr "جزئیات مفروضات بودجه"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption_line__impact_percent
+#: model_terms:ir.ui.view,arch_db:holding_budget.view_holding_budget_assumption_form
+msgid "درصد اثرگذاری"
+msgstr "درصد اثرگذاری"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption__fiscal_year_id
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario__fiscal_year_id
+msgid "سال مالی"
+msgstr "سال مالی"
+
+#. module: holding_budget
+#: model:ir.actions.act_window,name:holding_budget.action_holding_budget_scenario
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario__line_ids
+#: model:ir.ui.menu,name:holding_budget.menu_holding_budget_scenario
+#: model_terms:ir.ui.view,arch_db:holding_budget.view_holding_budget_scenario_form
+#: model_terms:ir.ui.view,arch_db:holding_budget.view_holding_budget_scenario_list
+msgid "سناریوهای بودجه"
+msgstr "سناریوهای بودجه"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption__scenario_id
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption__scenario_line_id
+#: model_terms:ir.ui.view,arch_db:holding_budget.view_holding_budget_assumption_form
+#: model_terms:ir.ui.view,arch_db:holding_budget.view_holding_budget_assumption_list
+msgid "سناریوی بودجه"
+msgstr "سناریوی بودجه"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption__company_id
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario__company_id
+msgid "شرکت"
+msgstr "شرکت"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption_line__title
+#: model_terms:ir.ui.view,arch_db:holding_budget.view_holding_budget_assumption_form
+msgid "عنوان"
+msgstr "عنوان"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario_line__scenario_name
+#: model_terms:ir.ui.view,arch_db:holding_budget.view_holding_budget_scenario_form
+msgid "عنوان سناریو"
+msgstr "عنوان سناریو"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption__name
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario__name
+msgid "عنوان فرم"
+msgstr "عنوان فرم"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_scenario_line__scenario_id
+msgid "فرم سناریوهای بودجه"
+msgstr "فرم سناریوهای بودجه"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption_line__assumption_id
+msgid "فرم مفروضات بودجه"
+msgstr "فرم مفروضات بودجه"
+
+#. module: holding_budget
+#: model:ir.actions.act_window,name:holding_budget.action_holding_budget_assumption
+#: model:ir.ui.menu,name:holding_budget.menu_holding_budget_assumption
+#: model_terms:ir.ui.view,arch_db:holding_budget.view_holding_budget_assumption_form
+#: model_terms:ir.ui.view,arch_db:holding_budget.view_holding_budget_assumption_list
+msgid "مفروضات بودجه"
+msgstr "مفروضات بودجه"
+
+#. module: holding_budget
+#: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption_line__assumption_group_id
+#: model_terms:ir.ui.view,arch_db:holding_budget.view_holding_budget_assumption_form
+msgid "گروه مفروضات"
+msgstr "گروه مفروضات"

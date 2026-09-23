@@ -1,0 +1,832 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* powerbi_portal
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:30+0000\n"
+"PO-Revision-Date: 2026-09-23 08:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__soap_auth_mode
+msgid ""
+"'Windows Integrated' uses Kerberos/GSSAPI authentication (via requests-"
+"kerberos - cross-platform, works on both Windows and Linux). On Windows it "
+"can also use SSPI (via requests-negotiate-sspi) as a fallback. Requires the "
+"Odoo service account to have a valid Kerberos TGT (via kinit/keytab on "
+"Linux, or running as the AD account on Windows). Use 'explicit credentials' "
+"if Odoo doesn't run as an account with PBIRS access (requires 'requests-"
+"ntlm')."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.actions.act_window,name:powerbi_portal.action_ad_group_sync_config
+msgid "AD Connection Settings"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model,name:powerbi_portal.model_ad_group_mapping
+msgid "AD Group -> Odoo Group Mapping"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_sync_config_form
+msgid "AD Group Auto-Creation (used by PBIRS Access Push)"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__ad_group_dn
+msgid "AD Group DN"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.actions.act_window,name:powerbi_portal.action_ad_group_mapping
+msgid "AD Group Mappings"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.ui.menu,name:powerbi_portal.menu_ad_group_sync_root
+msgid "AD Group Sync"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model,name:powerbi_portal.model_ad_group_sync_config
+msgid "AD Group Sync - Connection Settings"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.actions.server,name:powerbi_portal.ir_cron_ad_group_sync_ir_actions_server
+msgid "AD Group Sync: sync all active mappings"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_sync_config__binddn
+msgid ""
+"AD service account used for LDAP queries (and, once the Group Creation OU below is configured, for auto-creating AD groups too - so despite the name this isn't purely read-only anymore). e.g. CN=svc-odoo-pbi,OU=Service Accounts,DC=company,DC=local (a plain 'DOMAIN\\\\username' or UPN 'user@domain.local' also works with AD).\n"
+"Recommended: use ONE dedicated account everywhere - also run the Odoo Windows service as this same account, and it automatically covers the PBIRS Discovery SQL connection and PBIRS Access Push SOAP calls too (via Windows Integrated auth), with no extra passwords stored in Odoo for those. LDAP itself still needs the explicit DN + password below regardless, since it can't reuse the Windows process identity the way the SQL/SOAP calls can."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields.selection,name:powerbi_portal.selection__ad_group_mapping__owner__ad
+msgid "AD-owned (pull AD -> Odoo, the normal direction)"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_mapping__owner
+msgid ""
+"AD-owned: this AD group is managed externally (by an AD admin, or discovered"
+" by PBIRS Discovery) - AD is the source of truth, so the pull sync/cron "
+"keeps Odoo's group matching it. Odoo-owned: this AD group was auto-created "
+"by PBIRS Portal's automatic access-push (triggered on saving a report's "
+"Visible To Groups/Users) purely so PBIRS has a real AD principal to grant "
+"access to - Odoo's group is the source of truth here, so the pull sync "
+"deliberately skips it (pulling would silently revert membership edits made "
+"in Odoo back to whatever AD still has from the last push)."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__api_key
+msgid "API Key"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__api_key
+msgid "API key sent in the X-API-Key header."
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Access Push (writes TO PBIRS)"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__active
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__active
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__active
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__active
+msgid "Active"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__auth_mode
+msgid "Auth Mode"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__base_dn
+msgid "Base Dn"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__portal_base_url
+msgid ""
+"Base URL of the PBIRS web portal, e.g. "
+"https://pbirs.company.local/reports/powerbi (catalog paths get appended to "
+"this to build each report's URL)."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__catalog_path
+msgid "Catalog Path"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Connection"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.ui.menu,name:powerbi_portal.menu_ad_group_sync_config
+msgid "Connection Settings"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__group_creation_prefix
+msgid "Created Group Name Prefix"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__create_uid
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__create_uid
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__create_uid
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__create_date
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__create_date
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__create_date
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_sync_config__group_creation_base_dn
+msgid ""
+"DN of the OU where Odoo is allowed to CREATE new AD security groups, e.g. "
+"OU=PowerBI Groups,OU=Groups,DC=shaka,DC=local - required for the automatic "
+"access-push (on saving a report) to auto-create a missing AD group. Use a "
+"dedicated OU with rights delegated only over that OU for the Service Account"
+" below (not domain-wide Create/Delete Group rights) - same recommendation as"
+" for the .NET app's own group provisioning."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__description
+msgid "Description"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Direct SQL Discovery (legacy, when FastAPI is off)"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Discover & Sync Now"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__display_name
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__display_name
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__display_name
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__soap_domain
+msgid "Domain"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__trust_server_certificate
+msgid ""
+"Enable if SQL Server uses a self-signed/untrusted TLS certificate (common on"
+" internal/test servers) and you get a certificate trust error connecting. "
+"Equivalent to 'TrustServerCertificate=true' in a SQL connection string."
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "FastAPI (replace SQL/SOAP - recommended for AD/SSO)"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__api_base_url
+msgid "FastAPI Base URL"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__folder
+msgid "Folder"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_mapping__odoo_group_id
+msgid ""
+"For AD-owned mappings, this module keeps this group's membership matching "
+"the AD group above - do not also manage membership by hand, it will be "
+"overwritten on each sync. For Odoo-owned mappings, the reverse is true: "
+"manage membership in Odoo and save the related powerbi.report record - "
+"access push to AD/PBIRS happens automatically on save - since this mapping's"
+" pull sync is skipped."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_mapping__ad_group_dn
+msgid ""
+"Full Distinguished Name of the AD group, e.g. "
+"CN=Finance,OU=Groups,DC=company,DC=local"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_powerbi_report__url
+msgid ""
+"Full URL of the report on the Power BI Report Server, e.g. https://pbirs.company.local/reports/powerbi/Finance/Sales%20Dashboard?rs:embed=true\n"
+"\n"
+"The report server authenticates the browser's own Windows/AD session directly when this URL loads in the iframe - Odoo never stores or forwards any report-server credentials."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_powerbi_report__catalog_path
+msgid ""
+"Full catalog path on the Report Server, used internally by PBIRS Discovery "
+"to match this record to the server's own item on each sync. Not set for "
+"manually-created reports."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__group_creation_base_dn
+msgid "Group Creation OU"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.ui.menu,name:powerbi_portal.menu_ad_group_mapping
+msgid "Group Mappings"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_sync_config__server
+msgid "Hostname or IP of the AD/LDAP server, e.g. dc01.company.local"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__id
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__id
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__id
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__id
+msgid "ID"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_powerbi_report__managed_by_discovery
+msgid ""
+"If set, this record's URL and Visible To Groups are overwritten "
+"automatically by PBIRS Discovery sync to always match the Report Server's "
+"own permissions. Do not hand-edit Visible To Groups on discovery-managed "
+"reports - it will be overwritten on the next sync."
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_sync_config_form
+msgid "Import from Odoo LDAP Config"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_powerbi_report__allowed_user_ids
+msgid ""
+"Individual users who can see this report, in addition to anyone matched by "
+"Visible To Groups. Used for PBIRS access granted directly to a person rather"
+" than through an AD group. Note: PBIRS Discovery can only match an "
+"individual principal here if that person has already logged into Odoo at "
+"least once (so their Odoo user record exists)."
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "Individual users, in addition to the groups above"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__last_push_date
+msgid "Last Push Date"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__last_push_summary
+msgid "Last Push Summary"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "Last Push to PBIRS"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Last Run"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__last_run_date
+msgid "Last Run Date"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__last_run_summary
+msgid "Last Run Summary"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_mapping_form
+msgid "Last Sync"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__last_sync_date
+msgid "Last Sync Date"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__last_sync_summary
+msgid "Last Sync Summary"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__write_uid
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__write_uid
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__write_uid
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__write_date
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__write_date
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__write_date
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "Leave empty to show to everyone"
+msgstr ""
+
+#. module: powerbi_portal
+#. odoo-javascript
+#: code:addons/powerbi_portal/static/src/xml/powerbi_portal.xml:0
+msgid "Loading reports..."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.actions.act_window,name:powerbi_portal.action_powerbi_report_admin
+#: model:ir.ui.menu,name:powerbi_portal.menu_powerbi_portal_manage
+msgid "Manage Reports"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__managed_by_discovery
+msgid "Managed By Discovery"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__odbc_driver
+msgid ""
+"Must match EXACTLY the name of an ODBC driver actually installed on this "
+"machine - varies by machine, do not assume 'ODBC Driver 17/18 for SQL "
+"Server' is present. On Windows, check with: Get-OdbcDriver | Where-Object "
+"{$_.Name -like \\\"*SQL Server*\\\"} in PowerShell. On Linux, check with: "
+"odbcinst -q -d | grep -i sql. Set this field to match whatever that returns "
+"exactly, WITHOUT surrounding brackets (e.g. 'ODBC Driver 18 for SQL Server',"
+" not '[ODBC Driver 18 for SQL Server]')."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__name
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__name
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__name
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__name
+msgid "Name"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__netbios_domain
+msgid "NetBIOS Domain"
+msgstr ""
+
+#. module: powerbi_portal
+#. odoo-javascript
+#: code:addons/powerbi_portal/static/src/xml/powerbi_portal.xml:0
+msgid "No reports are available to you yet."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__odbc_driver
+msgid "ODBC Driver"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_sync_config_form
+msgid "OU=PowerBI Groups,OU=Groups,DC=shaka,DC=local"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__odoo_group_id
+msgid "Odoo Group"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields.selection,name:powerbi_portal.selection__ad_group_mapping__owner__odoo
+msgid ""
+"Odoo-owned (pull is skipped - this AD group only exists to mirror an Odoo "
+"group for PBIRS access)"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_powerbi_report__allowed_group_ids
+msgid ""
+"Only users in at least one of these Odoo groups will see this report in the sidebar. Leave empty (with no Visible To Users either) to show it to everyone. Pair with the 'AD Group Sync' module to drive these groups from real Active Directory group membership.\n"
+"\n"
+"Note: this only controls what's *listed* in Odoo's sidebar. The actual report data access and row-level security is enforced independently by the Report Server itself, based on the user's real Windows identity in the browser."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_powerbi_report__folder
+msgid "Optional grouping label shown as a section header in the sidebar."
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "Optional notes"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_mapping__owner
+msgid "Owner"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.actions.act_window,name:powerbi_portal.action_pbirs_discovery_config
+#: model:ir.ui.menu,name:powerbi_portal.menu_pbirs_discovery
+msgid "PBIRS Discovery"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model,name:powerbi_portal.model_pbirs_discovery_config
+msgid "PBIRS Discovery - SQL Connection Settings"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.actions.server,name:powerbi_portal.ir_cron_pbirs_discovery_ir_actions_server
+msgid "PBIRS Discovery: sync reports/groups from Report Server"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__soap_url
+msgid "PBIRS SOAP Endpoint"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__port
+msgid "Port"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__portal_base_url
+msgid "Portal Base Url"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.actions.client,name:powerbi_portal.action_powerbi_portal
+#: model:ir.ui.menu,name:powerbi_portal.menu_powerbi_portal_root
+msgid "Power BI"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model,name:powerbi_portal.model_powerbi_report
+msgid "Power BI Report (Portal Entry)"
+msgstr ""
+
+#. module: powerbi_portal
+#. odoo-javascript
+#: code:addons/powerbi_portal/static/src/xml/powerbi_portal.xml:0
+msgid "Power BI Reports"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_sync_config__group_creation_prefix
+msgid ""
+"Prefix used when naming AD groups Odoo creates automatically, e.g. an Odoo "
+"group 'Finance Viewers' becomes AD group 'Odoo-Finance Viewers'."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__use_odoo_ldap
+msgid "Read from Odoo LDAP Config"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_sync_config__use_odoo_ldap
+msgid ""
+"Read the AD server/port/TLS/base/bind settings from Odoo's own LDAP "
+"Authentication config (Settings > Technical > LDAP Configuration, "
+"res.company.ldap - the same connection used for LDAP login) instead of "
+"entering them here. Enable so the AD connection always matches what Odoo "
+"uses for login - change it once there, not here."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__auth_mode
+msgid ""
+"Recommended: 'Windows Trusted Connection (Kerberos)' if the Odoo service "
+"runs as your dedicated AD service account with a valid Kerberos TGT - reuses"
+" that identity automatically via pyodbc's Kerberos support (works on both "
+"Windows and Linux), no SQL credentials stored in Odoo. On Windows, this uses"
+" SSPI; on Linux it uses GSSAPI - requires the machine to be domain-joined or"
+" have a valid keytab/kinit for the service account. Grant that account just "
+"db_datareader on this database - avoid using 'sa' or any sysadmin login "
+"here, this connection is read-only anyway."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__url
+msgid "Report URL"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__use_api
+msgid ""
+"Route PBIRS discovery AND access push through the Windows Access Management "
+"API (FastAPI on the BI host), instead of reading the PBIRS SQL database "
+"directly and pushing via SOAP. The API runs on the BI host with the correct "
+"Windows/AD service identity, so Odoo needs no Kerberos/SSPI/NTLM libs or an "
+"ODBC driver for PBIRS access - and it also unlocks SSAS/AD/local group "
+"provisioning from the same endpoint. Enable once the FastAPI Base URL and "
+"API Key below are set."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__soap_auth_mode
+msgid "SOAP Auth Mode"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__soap_password
+msgid "SOAP Password"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__soap_username
+msgid "SOAP Username"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__sql_username
+msgid "SQL Login"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__sql_password
+msgid "SQL Password"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields.selection,name:powerbi_portal.selection__pbirs_discovery_config__auth_mode__sql
+msgid "SQL Server Login"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__sql_server
+msgid "SQL Server host\\\\instance, e.g. pbirs-sql01 or pbirs-sql01\\\\SQLEXPRESS"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid ""
+"Saving this report (including autosave) automatically pushes\n"
+"                            the groups/users above to PBIRS as Browser access - see\n"
+"                            Last Push below for the outcome of the most recent save."
+msgstr ""
+
+#. module: powerbi_portal
+#. odoo-javascript
+#: code:addons/powerbi_portal/static/src/xml/powerbi_portal.xml:0
+msgid "Select a report from the list on the left."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__server
+msgid "Server"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__binddn
+msgid "Service Account DN"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__bind_password
+msgid "Service Account Password"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_sync_config__netbios_domain
+msgid ""
+"Short-form Windows domain name used to build 'DOMAIN\\\\name' principal "
+"strings for systems (like PBIRS) that expect that format rather than a DN, "
+"e.g. SHAKA for shaka.local. Leave blank to auto-derive from the first "
+"component of Base DN (e.g. DC=shaka,DC=local -> SHAKA) - set this explicitly"
+" if your AD's real NetBIOS name differs from that guess."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__sql_database
+msgid "Sql Database"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__sql_server
+msgid "Sql Server"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_mapping_form
+msgid "Sync Now"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_sync_config_form
+msgid "Test Connection"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Test FastAPI Connection"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Test SOAP Connection"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "Test SQL Connection"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_sync_config_form
+msgid ""
+"This AD connection reads its server/port/TLS/base/bind\n"
+"                        settings live from Odoo's own LDAP Authentication config\n"
+"                        (Settings &gt; Technical &gt; LDAP Configuration). Change\n"
+"                        it once there - no need to repeat it here."
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_mapping_form
+msgid ""
+"This AD group is Odoo-owned - it was auto-created by\n"
+"                        PBIRS Portal's access-push feature purely to give\n"
+"                        PBIRS a real AD principal. The pull sync/cron\n"
+"                        deliberately skips it. Manage membership on the Odoo\n"
+"                        group itself, then save the related report (access\n"
+"                        push happens automatically on save) to update AD/PBIRS."
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form_discovery
+msgid ""
+"This report is managed by PBIRS Discovery. Its URL and\n"
+"                    Visible To Groups are overwritten automatically on each\n"
+"                    sync to match the Report Server's own permissions.\n"
+"                    Saving Visible To Groups/Users here automatically pushes\n"
+"                    that access back to PBIRS - the next Discovery sync will\n"
+"                    then read it back and should match. If Discovery's own\n"
+"                    sync writes to this report, that pull does NOT trigger\n"
+"                    another push back (avoids a pull/push loop)."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__trust_server_certificate
+msgid "Trust Server Certificate"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__soap_url
+msgid ""
+"URL of the ReportService2010 SOAP endpoint, used to PUSH access changes made"
+" in Odoo back to PBIRS (separate from the SQL settings above, which are "
+"read-only discovery). Usually "
+"https://pbirs.company.local/ReportServer/ReportService2010.asmx - note this "
+"is normally the /ReportServer/ virtual directory, not the /reports/ portal "
+"path used in Portal Base URL above."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__api_base_url
+msgid ""
+"URL of the Windows Access Management API, e.g. http://192.168.2.12:8443 "
+"(base only, no /v1)."
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_pbirs_discovery_config__use_api
+msgid "Use FastAPI (replace SQL/SOAP)"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_ad_group_sync_config__use_tls
+msgid "Use StartTLS"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "Visibility"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__allowed_group_ids
+msgid "Visible To Groups"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,field_description:powerbi_portal.field_powerbi_report__allowed_user_ids
+msgid "Visible To Users"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields.selection,name:powerbi_portal.selection__pbirs_discovery_config__soap_auth_mode__windows_explicit
+msgid "Windows - explicit domain credentials"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields.selection,name:powerbi_portal.selection__pbirs_discovery_config__soap_auth_mode__windows_current
+msgid "Windows Integrated (run as the Odoo service account)"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields.selection,name:powerbi_portal.selection__pbirs_discovery_config__auth_mode__windows
+msgid "Windows Trusted Connection (Kerberos)"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_ad_group_sync_config__base_dn
+msgid "e.g. DC=company,DC=local"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "e.g. Finance"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_ad_group_sync_config_form
+msgid "e.g. SHAKA (auto-derived from Base DN if left blank)"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "e.g. SQL Server, or ODBC Driver 18 for SQL Server"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "e.g. Sales Dashboard"
+msgstr ""
+
+#. module: powerbi_portal
+#: model:ir.model.fields,help:powerbi_portal.field_pbirs_discovery_config__soap_domain
+msgid "e.g. shaka"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "http://192.168.2.12:8443"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_pbirs_discovery_config_form
+msgid "https://pbirs.company.local/ReportServer/ReportService2010.asmx"
+msgstr ""
+
+#. module: powerbi_portal
+#: model_terms:ir.ui.view,arch_db:powerbi_portal.view_powerbi_report_form
+msgid "https://pbirs.company.local/reports/powerbi/..."
+msgstr ""

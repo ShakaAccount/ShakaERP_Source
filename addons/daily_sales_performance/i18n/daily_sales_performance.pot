@@ -1,0 +1,1225 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* daily_sales_performance
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:00+0000\n"
+"PO-Revision-Date: 2026-09-23 08:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: daily_sales_performance
+#: models/branch_access.py
+msgid "Branch Name"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/branch_access.py
+msgid "Company"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/branch_access.py
+msgid "Data Source"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/branch_access.py
+msgid "Assigned Branch"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/branch_access.py
+msgid "Branch Access"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/branch_access.py
+msgid "Shaka DW Branch"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/branch_access.py
+msgid "Shaka User Branch Access"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/performance.py
+#: models/return_form.py
+#: models/tip.py
+msgid "برای کاربر شما هیچ شعبه‌ای تعریف نشده است."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/return_form.py
+#: models/tip.py
+msgid "این فیلدها فقط از طریق گردش‌کار قابل تغییر هستند."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/return_form.py
+#: models/tip.py
+msgid "فقط فرم‌های پیش‌نویس قابل ارسال هستند."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+msgid "حداقل یک فاکتور اصلاحی باید ثبت شود."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/return_form.py
+#: models/tip.py
+msgid "فقط یک فرم ارسال‌شده قابل رد است."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/deposit_split.py
+#: models/performance.py
+#: models/reject_wizard.py
+#: models/return_form.py
+#: models/tip.py
+#: views/corrective_invoice_views.xml
+#: views/reject_wizard_views.xml
+#: views/return_views.xml
+#: views/tip_views.xml
+msgid "دلیل رد"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/return_form.py
+#: models/tip.py
+msgid "برای رد کردن، دلیل رد را وارد کنید."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+msgid "مبلغ فاکتور ابطالی نمی‌تواند منفی باشد."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/deposit_split.py
+#: models/performance.py
+#: views/corrective_invoice_views.xml
+#: views/deposit_split_views.xml
+msgid "شماره"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/deposit_split.py
+#: models/performance.py
+#: models/return_form.py
+#: models/tip.py
+#: views/corrective_invoice_views.xml
+#: views/deposit_split_views.xml
+#: views/performance_views.xml
+#: views/return_views.xml
+#: views/tip_views.xml
+msgid "تاریخ"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/deposit_split.py
+#: models/performance.py
+#: models/pos_terminal.py
+#: models/return_form.py
+#: models/tip.py
+#: views/corrective_invoice_views.xml
+#: views/deposit_split_views.xml
+#: views/performance_views.xml
+#: views/return_views.xml
+#: views/tip_views.xml
+#: views/users_branch_access_views.xml
+msgid "شعبه"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/deposit_split.py
+#: models/performance.py
+#: models/tip.py
+#: views/corrective_invoice_views.xml
+#: views/performance_views.xml
+#: views/tip_views.xml
+msgid "ثبت‌کننده"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/deposit_split.py
+#: models/performance.py
+#: models/return_form.py
+#: models/tip.py
+#: views/corrective_invoice_views.xml
+#: views/performance_views.xml
+#: views/return_views.xml
+#: views/tip_views.xml
+msgid "وضعیت"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: views/corrective_invoice_views.xml
+msgid "فاکتورهای اصلاحی"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+msgid "شماره فاکتور ابطالی"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: views/corrective_invoice_views.xml
+msgid "شماره فاکتور اصلاحی"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+msgid "مبلغ فاکتور ابطالی (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+msgid "Daily Sales Corrective Invoice"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+msgid "Daily Sales Corrective Invoice Line"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/deposit_split.py
+#: models/performance.py
+#: models/return_form.py
+#: models/tip.py
+msgid "پیش‌نویس"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/deposit_split.py
+#: models/performance.py
+#: models/return_form.py
+#: models/tip.py
+msgid "ارسال‌شده"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/deposit_split.py
+#: models/performance.py
+#: models/return_form.py
+#: models/tip.py
+msgid "تأییدشده"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/corrective_invoice.py
+#: models/deposit_split.py
+#: models/performance.py
+#: models/return_form.py
+#: models/tip.py
+msgid "ردشده"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "فقط عملکردهای تأییدشده قابل تفکیک واریزی هستند."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "برای این عملکرد قبلاً فرم تفکیک واریزی ساخته شده است."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "عملکرد مرتبط پس از ایجاد قابل تغییر نیست."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "حداقل یک پوز باید وجود داشته باشد."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "فقط فرم پیش‌نویس قابل ارسال است."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+#: models/performance.py
+msgid "لطفاً رد کردن را برای هر رکورد جداگانه انجام دهید."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "فقط فرم‌های ارسال‌شده قابل رد هستند."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "برای رد کردن تفکیک واریزی، دلیل رد را وارد کنید."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "تفکیک واریزی توسط %s رد شد."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "مبلغ واریزی نمی‌تواند منفی باشد."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "ساعت واریز باید بین ۰۰:۰۰ تا ۲۳:۵۹ باشد."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "ترمینال انتخاب‌شده متعلق به عملکرد این فرم نیست."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+#: models/performance.py
+#: views/deposit_split_views.xml
+msgid "عملکرد روزانه"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "پوزها"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "واریزی‌ها"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "جمع مبلغ پوز"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "جمع واریزی"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "مانده"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "پوز عملکرد"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+#: models/performance.py
+#: models/pos_terminal.py
+#: views/deposit_split_views.xml
+msgid "شماره ترمینال پوز"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+#: views/deposit_split_views.xml
+msgid "مبلغ پوز (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "ترمینال واسط"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+#: views/pos_terminal_views.xml
+msgid "ترمینال پوز"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "شماره ترمینال"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "تاریخ و ساعت واریز"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "تاریخ واریز"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "ساعت واریز"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "مبلغ واریزی (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+#: models/performance.py
+#: models/pos_terminal.py
+#: models/return_form.py
+#: views/deposit_split_views.xml
+#: views/return_views.xml
+msgid "توضیحات"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "Daily Sales Deposit Split"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "Deposit Split POS"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/deposit_split.py
+msgid "POS Deposit Line"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "عملکرد روزانه جدید"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "شما اجازه ثبت عملکرد برای این شعبه را ندارید."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "عملکرد روزانه %s ثبت شد."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "این فیلدها فقط توسط عملیات گردش‌کار قابل تغییر هستند."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "فقط عملکردهای پیش‌نویس قابل ارسال هستند."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "باید دقیقاً یک ردیف درآمد برای فرم ثبت شود."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "عملکرد برای بررسی تأمین ارسال شد."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "فقط عملکردهای ارسال‌شده قابل تأیید هستند."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "عملکرد توسط %s تأیید شد."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "فقط عملکردهای ارسال‌شده قابل رد هستند."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "برای رد کردن عملکرد، دلیل رد را وارد کنید."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "عملکرد توسط %s رد شد."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "شعبه انتخاب‌شده به کاربر شما تخصیص داده نشده است."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "مبالغ درآمد نمی‌توانند منفی باشند."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "مبلغ پوز نمی‌تواند منفی باشد."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "انتخاب شماره ترمینال پوز الزامی است."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "ترمینال انتخاب‌شده متعلق به شعبه این عملکرد نیست."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "ترتیب سالانه"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "سال شمسی"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "ارسال‌کننده"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "زمان ارسال"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "تأییدکننده"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "زمان تأیید"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "ردکننده"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "زمان رد"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "درآمدهای روزانه"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+#: views/pos_terminal_views.xml
+msgid "ترمینال‌های پوز"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "جمع کل درآمدها"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "جمع کل پوز"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "مبلغ نقد روز دریافتی"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "مبلغ اسنپ"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "مبلغ فودرو"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "مبلغ لینک پرداخت"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "مبلغ وب‌سایت"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "مبلغ باشگاه مشتریان"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "مبلغ باشگاه مشتریان پلادیوم"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "مبلغ رزرو اتاق جلسات"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "شماره ذخیره‌شده ترمینال"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "مبلغ پوز"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "Daily Sales Performance"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "Daily Sales Revenue"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/performance.py
+msgid "Daily Sales POS Line"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/pos_terminal.py
+msgid "فعال"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/pos_terminal.py
+msgid "POS Terminal Master Data"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/reject_wizard.py
+msgid "Daily Sales Performance Reject Wizard"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "شما اجازه ثبت عودت برای این شعبه را ندارید."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "حداقل یک سطر عودت باید ثبت شود."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "فقط فرم‌های ارسال‌شده قابل تأیید هستند."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "مبالغ نمی‌توانند منفی باشند."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "مبلغ عودت‌داده‌شده نمی‌تواند بیشتر از مبلغ فاکتور باشد."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+#: models/tip.py
+#: views/return_views.xml
+#: views/tip_views.xml
+msgid "شماره سند"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+#: views/return_views.xml
+msgid "ایجادکننده"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "جزئیات عودت"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "جمع کل مبلغ عودت‌داده‌شده"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "فرم عودت"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "شماره فاکتور"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "نام و نام خانوادگی"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "شماره کارت بانکی"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "تلفن"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "مبلغ فاکتور (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "دلیل عودت"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+#: views/return_views.xml
+msgid "تأیید پرداخت"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "مبلغ عودت‌داده‌شده (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+#: data/return_sequence.xml
+msgid "Daily Sales Return"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/return_form.py
+msgid "Daily Sales Return Line"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/tip.py
+msgid "مبالغ انعام نمی‌توانند منفی باشند."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/tip.py
+msgid "شما اجازه ثبت انعام برای این شعبه را ندارید."
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/tip.py
+#: views/tip_views.xml
+msgid "انعام پوز (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/tip.py
+#: views/tip_views.xml
+msgid "انعام نقد (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/tip.py
+#: views/tip_views.xml
+msgid "جمع کل انعام"
+msgstr ""
+
+#. module: daily_sales_performance
+#: models/tip.py
+msgid "Daily Sales Tip"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/corrective_invoice_views.xml
+#: views/reject_wizard_views.xml
+#: data/corrective_invoice_sequence.xml
+msgid "فاکتور اصلاحی"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/corrective_invoice_views.xml
+#: views/deposit_split_views.xml
+#: views/performance_views.xml
+#: views/return_views.xml
+#: views/tip_views.xml
+msgid "ارسال برای تأیید"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/corrective_invoice_views.xml
+#: views/deposit_split_views.xml
+#: views/performance_views.xml
+#: views/return_views.xml
+#: views/tip_views.xml
+msgid "تأیید"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/corrective_invoice_views.xml
+#: views/deposit_split_views.xml
+#: views/performance_views.xml
+#: views/return_views.xml
+#: views/tip_views.xml
+msgid "رد"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/corrective_invoice_views.xml
+#: views/performance_views.xml
+#: views/return_views.xml
+#: views/tip_views.xml
+msgid "بازگشت به پیش‌نویس"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/corrective_invoice_views.xml
+#: views/performance_views.xml
+#: views/return_views.xml
+#: views/tip_views.xml
+msgid "تاریخ *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/corrective_invoice_views.xml
+#: views/performance_views.xml
+#: views/return_views.xml
+#: views/tip_views.xml
+msgid "شعبه *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/corrective_invoice_views.xml
+#: views/performance_views.xml
+#: views/tip_views.xml
+msgid "ثبت‌کننده *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/corrective_invoice_views.xml
+msgid "شماره فاکتور ابطالی *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/corrective_invoice_views.xml
+msgid "مبلغ فاکتور ابطالی (ریال) *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/corrective_invoice_views.xml
+#: views/deposit_split_views.xml
+#: views/performance_views.xml
+#: views/return_views.xml
+#: views/tip_views.xml
+msgid "دلیل رد..."
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/deposit_split_views.xml
+#: views/performance_views.xml
+msgid "جمع پوز (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/deposit_split_views.xml
+msgid "جمع واریزی (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/deposit_split_views.xml
+msgid "مانده (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/deposit_split_views.xml
+#: views/reject_wizard_views.xml
+#: data/sequence.xml
+msgid "تفکیک واریزی"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/deposit_split_views.xml
+msgid "عملکرد روزانه *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/deposit_split_views.xml
+msgid "ترمینال پوز *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/deposit_split_views.xml
+msgid "تاریخ واریز *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/deposit_split_views.xml
+msgid "ساعت واریز *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/deposit_split_views.xml
+msgid "مبلغ واریزی (ریال) *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "انتخاب عملکرد روزانه"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "شماره عملکرد"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "جمع درآمد (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "عملکرد روزانه فروش"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "نقد (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "اسنپ (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "فودرو (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "لینک پرداخت (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "وب‌سایت (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "باشگاه مشتریان (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "باشگاه پلادیوم (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "رزرو اتاق جلسات (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+#: views/tip_views.xml
+msgid "جمع کل (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "شماره ترمینال پوز *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "مبلغ پوز (ریال) *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "اطلاعات گردش کار"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "توضیحات عملکرد روزانه..."
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "عملکردهای روزانه"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "شعبات"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "جمع درآمدها"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/performance_views.xml
+msgid "جمع پوز"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/pos_terminal_views.xml
+msgid "برای مثال: 12345678"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/reject_wizard_views.xml
+msgid "دلیل رد عملکرد روزانه"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/reject_wizard_views.xml
+msgid "عملکرد"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/reject_wizard_views.xml
+#: views/return_views.xml
+msgid "عودت"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/reject_wizard_views.xml
+msgid "تأیید رد"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/reject_wizard_views.xml
+msgid "انصراف"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/reject_wizard_views.xml
+msgid "لطفاً دلیل رد این عملکرد را بنویسید..."
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/return_views.xml
+msgid "جمع عودت (ریال)"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/return_views.xml
+msgid "ایجادکننده *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/return_views.xml
+msgid "شماره فاکتور *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/return_views.xml
+msgid "نام و نام خانوادگی *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/return_views.xml
+msgid "شماره کارت بانکی *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/return_views.xml
+msgid "تلفن *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/return_views.xml
+msgid "مبلغ فاکتور (ریال) *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/return_views.xml
+msgid "دلیل عودت *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/return_views.xml
+msgid "مبلغ عودت‌داده‌شده (ریال) *"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/return_views.xml
+msgid "عودت‌ها"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/return_views.xml
+msgid "جمع عودت"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/tip_views.xml
+msgid "انعام"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/tip_views.xml
+msgid "انعام‌ها"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/tip_views.xml
+msgid "جمع انعام پوز"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/tip_views.xml
+msgid "جمع انعام نقد"
+msgstr ""
+
+#. module: daily_sales_performance
+#: views/users_branch_access_views.xml
+msgid "دسترسی شعب"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "عملکرد روزانه: شعبه‌های کاربر"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "عملکرد روزانه: مدیر سیستم"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "ترمینال پوز: شعبه‌های کاربر"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "ترمینال پوز: مدیر سیستم"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "تفکیک واریزی: شعبه کاربر"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "تفکیک واریزی: مدیر سیستم"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "پوز تفکیک واریزی: شعبه کاربر"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "پوز تفکیک واریزی: مدیر سیستم"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "واریزی: شعبه کاربر"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "واریزی: مدیر سیستم"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "فاکتور اصلاحی: شعبه کاربر"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "فاکتور اصلاحی: مدیر سیستم"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "جزئیات فاکتور اصلاحی: شعبه کاربر"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "جزئیات فاکتور اصلاحی: مدیر سیستم"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "عودت: شعبه کاربر"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "عودت: مدیر سیستم"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "جزئیات عودت: شعبه کاربر"
+msgstr ""
+
+#. module: daily_sales_performance
+#: security/security.xml
+msgid "جزئیات عودت: مدیر سیستم"
+msgstr ""
+

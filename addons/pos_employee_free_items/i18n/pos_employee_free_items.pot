@@ -1,0 +1,258 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_employee_free_items
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:00+0000\n"
+"PO-Revision-Date: 2026-09-23 08:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: pos_employee_free_items
+#: model:ir.model.constraint,message:pos_employee_free_items.constraint_pos_free_item_catalog_product_id_company_id_uniq
+msgid "A product can appear only once in the free-item catalogue per company."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/models/pos_config_extension.py:0
+msgid "Daily Free Item Limit"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/models/pos_config_extension.py:0
+msgid "Default Daily Free Item Limit"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/models/pos_config_extension.py:0
+msgid ""
+"Default maximum number of free items an employee can claim per day "
+"at this POS. 0 means use global default of 2. "
+"Employee-specific limit takes precedence."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:ir.model,name:pos_employee_free_items.model_employee_free_allowance
+msgid "Employee Daily Free-Item Allowance"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:ir.actions.act_window,name:pos_employee_free_items.action_employee_free_allowance
+#: model:ir.ui.menu,name:pos_employee_free_items.menu_employee_free_allowance
+#: model_terms:ir.ui.view,arch_db:pos_employee_free_items.view_employee_free_allowance_tree
+msgid "Employee Free Allowances"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model_terms:ir.ui.view,arch_db:pos_employee_free_items.view_pos_config_form_inherit_free_limit
+msgid "Employee Free Items"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Employee mode is required"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Enable Employees in this POS configuration before using employee free items."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Enter the 6-digit authenticator code."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "Free item could not be claimed"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Free item was not added"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:ir.model.fields,field_description:pos_employee_free_items.field_pos_order_line__is_free_item
+msgid "Free Item"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:ir.model.fields,field_description:pos_employee_free_items.field_pos_order_line__free_item_allowance_id
+msgid "Free-Item Allowance"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:ir.actions.act_window,name:pos_employee_free_items.action_pos_free_item_catalog
+#: model:ir.ui.menu,name:pos_employee_free_items.menu_pos_free_item_catalog
+#: model_terms:ir.ui.view,arch_db:pos_employee_free_items.view_pos_free_item_catalog_tree
+msgid "Free-Item Catalogue"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:ir.rule,name:pos_employee_free_items.rule_free_item_catalog_manager
+msgid "Free Item Catalog – manager only"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:ir.rule,name:pos_employee_free_items.rule_free_item_catalog_read
+msgid "Free Item Catalog – read for POS users"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:ir.model.fields,field_description:pos_employee_free_items.field_pos_order__free_item_line_ids
+msgid "Free-Item Lines"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model_terms:ir.ui.view,arch_db:pos_employee_free_items.view_pos_order_form_inherit_free
+msgid "Free Items"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:res.groups,name:pos_employee_free_items.group_pos_free_item_manager
+msgid "POS Free Item Manager"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:res.groups,name:pos_employee_free_items.group_pos_free_item_user
+msgid "POS Free Item User"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:res.groups.privilege,name:pos_employee_free_items.res_groups_privilege_pos_free_items
+#: model_terms:ir.ui.view,arch_db:pos_employee_free_items.view_employee_form_inherit_free_limit
+msgid "POS Free Items"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:ir.model,name:pos_employee_free_items.model_pos_free_item_catalog
+msgid "POS Free-Item Catalogue (admin-defined)"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid ""
+"Please check the cashier, product catalogue, and authenticator code, then "
+"try again."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:ir.model.fields,field_description:pos_employee_free_items.field_pos_free_item_catalog__product_id
+msgid "Product"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Product unavailable"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:ir.model.fields,help:pos_employee_free_items.field_pos_free_item_catalog__product_id
+msgid "Product that may be given for free."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "Quantity must be greater than zero."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Select a cashier"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Select an employee cashier before claiming a free item."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "The allowance was approved, but Odoo could not add the item to this order."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "The cashier must be linked to an Odoo user with two-factor authentication enabled."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "The POS configuration could not be found."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "The POS configuration is not available for this company."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "The selected cashier could not be found."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "This catalogue product is not loaded in the current POS. Check that it is available in POS."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "This cashier is not allowed to use this POS configuration."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "This product is not available as a free item."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:ir.model.fields,help:pos_employee_free_items.field_hr_employee__free_item_daily_limit
+msgid ""
+"Maximum number of free items this employee can claim per day. "
+"0 means use the POS configuration default (or global default of 2)."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model_terms:ir.ui.view,arch_db:pos_employee_free_items.view_pos_config_form_inherit_free_limit
+msgid "Maximum number of free items an employee can claim per day (default 2)."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:ir.model.constraint,message:pos_employee_free_items.constraint_employee_free_allowance_employee_id_date_company_id_uniq
+msgid "Only one allowance record per employee per day per company."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: model:ir.model.fields,help:pos_employee_free_items.field_employee_free_allowance__used_qty
+msgid "Number of free items already claimed today"
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/models/employee_free_allowance.py:0
+msgid "You have already claimed your %s free items for today (limit: %s)."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "Two-factor authentication is not enabled for this cashier."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/controllers/totp_enroll.py:0
+msgid "Verification failed. Enter the current 6-digit authenticator code."
+msgstr ""
+
+#. module: pos_employee_free_items
+#: code:addons/pos_employee_free_items/static/src/js/pos_free_items.js:0
+msgid "Confirm free item"
+msgstr ""

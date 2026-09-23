@@ -1,0 +1,72 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* dim_company_dashboard
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-23 08:00+0000\n"
+"PO-Revision-Date: 2026-09-23 08:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:model:dim.company
+msgid "Company Dimension (Read-Only, from Shaka_DW)"
+msgstr "بُعد شرکت (فقط خواندنی، از Shaka_DW)"
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:companyid
+msgid "Company ID"
+msgstr "شناسه شرکت"
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:parentid
+msgid "Parent ID"
+msgstr "شناسه والد"
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:entitle
+msgid "English Title"
+msgstr "عنوان انگلیسی"
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:level0
+msgid "Level 0"
+msgstr "سطح ۰"
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:level1
+msgid "Level 1"
+msgstr "سطح ۱"
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:level2
+msgid "Level 2"
+msgstr "سطح ۲"
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:level3
+msgid "Level 3"
+msgstr "سطح ۳"
+
+#. module: dim_company_dashboard
+#: models/dim_company.py:field:dim.company:companytitle
+msgid "Company Title"
+msgstr "عنوان شرکت"
+
+#. module: dim_company_dashboard
+#: views/views.xml:action_dim_company:name
+msgid "Company Dimension"
+msgstr "بُعد شرکت"
+
+#. module: dim_company_dashboard
+#: views/views.xml:menu_dim_company_root:name
+msgid "BI Dimensions"
+msgstr "ابعاد هوش تجاری"
