@@ -1,0 +1,22 @@
+// Vazirmatn (OFL). The family is wired in through $o-font-family-sans-serif,
+// so no selector here forces it.
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("/shaka_theme/static/src/fonts/Vazirmatn-Regular.woff2") format("woff2");
+    font-weight: 100 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("/shaka_theme/static/src/fonts/Vazirmatn-Medium.woff2") format("woff2");
+    font-weight: 500 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("/shaka_theme/static/src/fonts/Vazirmatn-Bold.woff2") format("woff2");
+    font-weight: 700 900;
+    font-display: swap;
+}

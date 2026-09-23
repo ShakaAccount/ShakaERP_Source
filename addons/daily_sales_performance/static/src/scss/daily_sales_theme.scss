@@ -102,110 +102,112 @@ $shaka-white: #ffffff;
     }
 }
 
-// Keep the custom daily-sales forms aligned with the global dark theme.
-// This block comes after the light visual design above so its colors win when
-// Odoo is using the dark-mode class on the root element.
-html[data-theme='glass'].shaka-dark-mode .shaka-sales-form {
-    --shaka-green: #22c55e;
-    --shaka-green-dark: #16a34a;
-    --shaka-green-soft: #173522;
-    --shaka-black: #080c0a;
-    --shaka-ink: #f3fff6;
-    --shaka-muted: #b9cdbf;
-    --shaka-border: #2b4935;
-    --shaka-white: #111a14;
+// Dark variant: Odoo compiles this file again for its dark bundle, so the block
+// only exists in dark mode. `html:root:root` keeps the specificity of the old
+// `html[data-theme].shaka-dark-mode` gate so it still beats the light rules.
+@if $o-webclient-color-scheme == dark {
+    html:root:root .shaka-sales-form {
+        --shaka-green: #22c55e;
+        --shaka-green-dark: #16a34a;
+        --shaka-green-soft: #173522;
+        --shaka-black: #080c0a;
+        --shaka-ink: #f3fff6;
+        --shaka-muted: #b9cdbf;
+        --shaka-border: #2b4935;
+        --shaka-white: #111a14;
 
-    background: #070a08 !important;
-    color: #f3fff6 !important;
-
-    .o_form_sheet_bg,
-    .shaka-sales-sheet {
-        background: #0b110d !important;
+        background: #070a08 !important;
         color: #f3fff6 !important;
-    }
 
-    .shaka-sales-sheet {
-        border: 1px solid #1e3827 !important;
-        box-shadow: 0 18px 48px rgba(0, 0, 0, .35) !important;
-    }
+        .o_form_sheet_bg,
+        .shaka-sales-sheet {
+            background: #0b110d !important;
+            color: #f3fff6 !important;
+        }
 
-    .shaka-info-panel,
-    .shaka-data-panel,
-    .shaka-workflow-panel {
-        background: #101812 !important;
-        color: #f3fff6 !important;
-        border-color: #2b4935 !important;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, .22) !important;
-    }
+        .shaka-sales-sheet {
+            border: 1px solid #1e3827 !important;
+            box-shadow: 0 18px 48px rgba(0, 0, 0, .35) !important;
+        }
 
-    .shaka-info-panel .o_form_label,
-    .shaka-section-heading h3,
-    .shaka-section-heading p,
-    .shaka-form-hint,
-    .o_form_label,
-    label {
-        color: #f3fff6 !important;
-    }
+        .shaka-info-panel,
+        .shaka-data-panel,
+        .shaka-workflow-panel {
+            background: #101812 !important;
+            color: #f3fff6 !important;
+            border-color: #2b4935 !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .22) !important;
+        }
 
-    .shaka-info-panel .o_input,
-    .shaka-info-panel .o_field_widget,
-    .shaka-info-panel .o_input input,
-    .shaka-info-panel textarea,
-    .shaka-data-panel .o_input,
-    .shaka-data-panel .o_field_widget {
-        background: #080d0a !important;
-        color: #f3fff6 !important;
-        border-color: #2b4935 !important;
-    }
+        .shaka-info-panel .o_form_label,
+        .shaka-section-heading h3,
+        .shaka-section-heading p,
+        .shaka-form-hint,
+        .o_form_label,
+        label {
+            color: #f3fff6 !important;
+        }
 
-    .shaka-info-panel .o_input:focus,
-    .shaka-data-panel .o_input:focus {
-        border-color: #22c55e !important;
-        box-shadow: 0 0 0 3px rgba(34, 197, 94, .20) !important;
-    }
+        .shaka-info-panel .o_input,
+        .shaka-info-panel .o_field_widget,
+        .shaka-info-panel .o_input input,
+        .shaka-info-panel textarea,
+        .shaka-data-panel .o_input,
+        .shaka-data-panel .o_field_widget {
+            background: #080d0a !important;
+            color: #f3fff6 !important;
+            border-color: #2b4935 !important;
+        }
 
-    .shaka-data-panel .o_list_renderer,
-    .shaka-data-panel .o_list_table,
-    .shaka-data-panel .o_list_table tbody,
-    .shaka-data-panel .o_list_table tbody tr,
-    .shaka-data-panel .o_list_table tbody td {
-        background: #101812 !important;
-        color: #f3fff6 !important;
-        border-color: #2b4935 !important;
-    }
+        .shaka-info-panel .o_input:focus,
+        .shaka-data-panel .o_input:focus {
+            border-color: #22c55e !important;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, .20) !important;
+        }
 
-    .shaka-data-panel .o_list_table tbody tr:hover,
-    .shaka-data-panel .o_list_table tbody tr:hover td {
-        background: #173522 !important;
-        color: #ffffff !important;
-    }
+        .shaka-data-panel .o_list_renderer,
+        .shaka-data-panel .o_list_table,
+        .shaka-data-panel .o_list_table tbody,
+        .shaka-data-panel .o_list_table tbody tr,
+        .shaka-data-panel .o_list_table tbody td {
+            background: #101812 !important;
+            color: #f3fff6 !important;
+            border-color: #2b4935 !important;
+        }
 
-    .shaka-data-panel .o_list_table thead,
-    .shaka-data-panel .o_list_table thead tr,
-    .shaka-data-panel .o_list_table thead th {
-        background: #0a100c !important;
-        color: #ffffff !important;
-        border-color: #2b4935 !important;
-    }
+        .shaka-data-panel .o_list_table tbody tr:hover,
+        .shaka-data-panel .o_list_table tbody tr:hover td {
+            background: #173522 !important;
+            color: #ffffff !important;
+        }
 
-    .shaka-data-panel .o_field_x2many_list_row_add a,
-    .shaka-section-heading p {
-        color: #4ade80 !important;
-    }
+        .shaka-data-panel .o_list_table thead,
+        .shaka-data-panel .o_list_table thead tr,
+        .shaka-data-panel .o_list_table thead th {
+            background: #0a100c !important;
+            color: #ffffff !important;
+            border-color: #2b4935 !important;
+        }
 
-    .shaka-kpi-card--white {
-        background: #101812 !important;
-        color: #f3fff6 !important;
-        border-color: #2b4935 !important;
-    }
+        .shaka-data-panel .o_field_x2many_list_row_add a,
+        .shaka-section-heading p {
+            color: #4ade80 !important;
+        }
 
-    .shaka-kpi-card--white .shaka-kpi-icon {
-        color: #86efac !important;
-        background: #173522 !important;
-    }
+        .shaka-kpi-card--white {
+            background: #101812 !important;
+            color: #f3fff6 !important;
+            border-color: #2b4935 !important;
+        }
 
-    .o_form_statusbar {
-        background: #101812 !important;
-        border-color: #2b4935 !important;
+        .shaka-kpi-card--white .shaka-kpi-icon {
+            color: #86efac !important;
+            background: #173522 !important;
+        }
+
+        .o_form_statusbar {
+            background: #101812 !important;
+            border-color: #2b4935 !important;
+        }
     }
 }

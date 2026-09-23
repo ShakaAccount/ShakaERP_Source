@@ -1,31 +1,22 @@
 // ---------- Shared tokens ----------
+// Colours come from shaka_theme (SCSS vars / --shaka-* tokens), which are
+// compiled per colour scheme, so there is no dark-mode block here.
 // Declared once at :root, no wrapper class of its own — consumers override
 // individual tokens on their own outer wrapper (e.g. `.o_win_access_tree`)
 // and the override cascades in normally, since nothing below :root
 // redeclares them.
 :root {
-  --tree-border: #dee2e6;
-  --tree-accent: var(--o-brand-odoo, #714b67);
-  --tree-accent-soft: rgba(113, 75, 103, 0.10);
-  --tree-hover: #f0f0f0;
-  --tree-selected: rgba(113, 75, 103, 0.14);
-  --tree-bg: #fff;
-  --tree-bg-fade: rgba(255, 255, 255, 0);
-  --tree-text: #212529;
-  --tree-text-muted: #6c757d;
+  --tree-border: var(--shaka-border);
+  --tree-accent: #{$o-brand-primary};
+  --tree-accent-soft: color-mix(in srgb, #{$o-brand-primary} 10%, transparent);
+  --tree-hover: var(--shaka-muted-bg);
+  --tree-selected: color-mix(in srgb, #{$o-brand-primary} 16%, transparent);
+  --tree-bg: var(--shaka-surface);
+  --tree-bg-fade: color-mix(in srgb, var(--shaka-surface) 0%, transparent);
+  --tree-text: var(--shaka-text);
+  --tree-text-muted: var(--shaka-muted);
   --tree-gradient-dir: left;
   --tree-radius: 6px;
-}
-
-html[data-theme='glass'].shaka-dark-mode {
-  --tree-border: #3a3a3a;
-  --tree-accent-soft: rgba(180, 140, 170, 0.18);
-  --tree-hover: #2d2d2d;
-  --tree-selected: rgba(180, 140, 170, 0.28);
-  --tree-bg: #1e1e1e;
-  --tree-bg-fade: rgba(30, 30, 30, 0);
-  --tree-text: #e0e0e0;
-  --tree-text-muted: #999;
 }
 
 [dir="rtl"],

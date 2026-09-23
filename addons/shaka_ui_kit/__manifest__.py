@@ -5,7 +5,7 @@
     'category': 'Technical',
     'version': '19.0.1.0.0',
     'license': 'LGPL-3',
-    'depends': ['web'],
+    'depends': ['web', 'shaka_theme'],
     'assets': {
         'web.assets_backend': [
             'shaka_ui_kit/static/src/js/tree_node.js',

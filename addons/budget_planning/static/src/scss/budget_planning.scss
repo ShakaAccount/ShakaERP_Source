@@ -104,13 +104,12 @@
 .bp-dash-budget-row strong { color:#0f766e; font-size:18px; }
 .bp-dash-bar { height:12px; margin:10px 0 8px; overflow:hidden; border-radius:999px; background:rgba(100,116,139,.16); }
 .bp-dash-bar span { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#14b8a6,#0f766e); }
-html[data-theme='glass'].shaka-dark-mode .bp-dash-card { --shaka-surface:rgba(15,23,42,.72); --shaka-text:#e2e8f0; --shaka-muted:#94a3b8; --shaka-border:rgba(148,163,184,.2); }
-html[data-theme='glass'].shaka-dark-mode .bp-dash-stats div { background:rgba(45,212,191,.12); }
+@if $o-webclient-color-scheme == dark { .bp-dash-stats div { background:rgba(45,212,191,.12); } }
 @media (max-width: 900px) { .bp-dash-stats { grid-template-columns:repeat(3,minmax(0,1fr)); } }
 @media (max-width: 560px) { .bp-dash-stats { grid-template-columns:repeat(2,minmax(0,1fr)); } .bp-dash-money { flex-direction:column; gap:3px; } }
 
-html[data-theme='glass'].shaka-dark-mode .o_form_view:has(.bp-top) {
-  .bp-card { --shaka-surface: rgba(15,23,42,.68); --shaka-text:#e2e8f0; --shaka-muted:#94a3b8; --shaka-border:rgba(148,163,184,.2); }
-  .bp-step.active { color:#e2e8f0; }
-  .bp-main .o_list_table thead th { background:rgba(45,212,191,.12); }
+// Surface/text/border colours come from shaka_theme's --shaka-* tokens, which
+// already switch per colour scheme; only the teal tints need a dark variant.
+@if $o-webclient-color-scheme == dark {
+  .o_form_view:has(.bp-top) .bp-main .o_list_table thead th { background:rgba(45,212,191,.12); }
 }

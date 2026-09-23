@@ -1,22 +1,23 @@
 .o_category_manager {
   // ---------- Light theme tokens ----------
-  --cat-border: #dee2e6;
-  --cat-border-soft: rgba(0, 0, 0, 0.08);
-  --cat-bg: #fff;
-  --cat-bg-soft: #f8f9fa;
-  --cat-bg-head: #e9ecef;
-  --cat-text: #212529;
-  --cat-text-muted: #6c757d;
-  --cat-accent: var(--o-brand-odoo, #714b67);
+  // Colours from shaka_theme; compiled per colour scheme (no dark block).
+  --cat-border: var(--shaka-border);
+  --cat-border-soft: color-mix(in srgb, var(--shaka-text) 8%, transparent);
+  --cat-bg: var(--shaka-surface);
+  --cat-bg-soft: var(--shaka-bg);
+  --cat-bg-head: var(--shaka-muted-bg);
+  --cat-text: var(--shaka-text);
+  --cat-text-muted: var(--shaka-muted);
+  --cat-accent: #{$o-brand-primary};
   --cat-accent-text: #fff;
-  --cat-accent-soft: rgba(113, 75, 103, 0.10);
-  --cat-hover: #f0f0f0;
-  --cat-selected: rgba(113, 75, 103, 0.14);
-  --cat-danger: #dc3545;
-  --cat-success: #198754;
+  --cat-accent-soft: color-mix(in srgb, #{$o-brand-primary} 10%, transparent);
+  --cat-hover: var(--shaka-muted-bg);
+  --cat-selected: color-mix(in srgb, #{$o-brand-primary} 16%, transparent);
+  --cat-danger: #{$o-danger};
+  --cat-success: #{$o-success};
   --cat-radius: 8px;
-  --cat-bg-fade: rgba(255, 255, 255, 0);
-  --cat-scroll-shadow: rgba(0, 0, 0, 0.12);
+  --cat-bg-fade: color-mix(in srgb, var(--shaka-surface) 0%, transparent);
+  --cat-scroll-shadow: rgba(0, 0, 0, 0.2);
   --cat-gradient-dir: left;
   --cat-row-in-x: -6px;
 
@@ -24,23 +25,6 @@
   font-size: $font-size-sm;
   color: var(--cat-text);
   background: var(--cat-bg);
-
-  // ---------- Dark theme overrides ----------
-  html[data-theme='glass'].shaka-dark-mode & {
-    --cat-border: #3a3a3a;
-    --cat-border-soft: rgba(255, 255, 255, 0.08);
-    --cat-bg: #1e1e1e;
-    --cat-bg-soft: #252525;
-    --cat-bg-head: #2a2a2a;
-    --cat-text: #e0e0e0;
-    --cat-text-muted: #999;
-    --cat-accent-soft: rgba(180, 140, 170, 0.18);
-    --cat-hover: #2d2d2d;
-    --cat-selected: rgba(180, 140, 170, 0.28);
-    --cat-bg-fade: rgba(30, 30, 30, 0);
-    --cat-scroll-shadow: rgba(0, 0, 0, 0.45);
-    --cat-gradient-dir: left;
-  }
 
   // ---------- RTL override ----------
   [dir="rtl"] &,

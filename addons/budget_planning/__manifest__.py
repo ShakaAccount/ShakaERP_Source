@@ -6,7 +6,7 @@
     'author': 'ShakaERP',
     'license': 'LGPL-3',
     'icon': '/budget_planning/static/description/icon.svg',
-    'depends': ['base', 'generic_lookup', 'company_base_info', 'shaka_ui_makeover', 'jalali_date'],
+    'depends': ['base', 'generic_lookup', 'company_base_info', 'shaka_theme', 'jalali_date'],
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',

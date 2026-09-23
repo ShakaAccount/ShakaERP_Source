@@ -1,0 +1,46 @@
+///
+/// Shaka theme — dark values. Loaded before primary_variables.scss in the dark
+/// bundle (web.dark_mode_variables), so these win. Keep every colour variable of
+/// primary_variables.scss mirrored here.
+///
+/// Odoo's dark grays run the other way: 100 is the darkest background, 900 the
+/// lightest text. Primary fills stay a mid blue so white button text keeps
+/// 4.5:1; the lighter blues are for text/links only.
+///
+
+$o-gray-100: #0B1220 !default;
+$o-gray-200: #111827 !default;
+$o-gray-300: #1F2937 !default;
+$o-gray-400: #334155 !default;
+$o-gray-500: #475569 !default;
+$o-gray-600: #64748B !default;
+$o-gray-700: #94A3B8 !default;
+$o-gray-800: #CBD5E1 !default;
+$o-gray-900: #E2E8F0 !default;
+
+$o-enterprise-color: #2563EB !default;
+$o-enterprise-action-color: #60A5FA !default;
+
+$o-success: #16A34A !default;
+$o-info: #60A5FA !default;
+$o-warning: #F59E0B !default;
+$o-danger: #DC2626 !default;
+$o-main-favorite-color: #F59E0B !default;
+$o-theme-text-colors: (
+    "primary": #93C5FD,
+    "success": #4ADE80,
+    "info": #93C5FD,
+    "warning": #FBBF24,
+    "danger": #F87171,
+) !default;
+
+$shaka-theme-primary: #60A5FA !default;
+$shaka-theme-accent: #F59E0B !default;
+$shaka-theme-bg: #0B1220 !default;
+$shaka-theme-surface: #111827 !default;
+$shaka-theme-muted-bg: #1F2937 !default;
+$shaka-theme-text: #E2E8F0 !default;
+$shaka-theme-muted: #94A3B8 !default;
+$shaka-theme-border: #1F2937 !default;
+$shaka-theme-shadow-card: 0 1px 2px rgba(0, 0, 0, .4) !default;
+$shaka-theme-shadow-pop: 0 8px 24px rgba(0, 0, 0, .5) !default;

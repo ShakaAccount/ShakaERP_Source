@@ -43,11 +43,10 @@ Two different mechanisms exist side by side:
   the standard Odoo test flags: `--test-enable --test-tags /<module>
   --stop-after-init -u <module>`.
 - **Standalone scripts**, not wired into the Odoo test runner — e.g.
-  `addons/shaka_ui_makeover/tests/scss_compile_check.py` compiles every SCSS
-  bundle through libsass in the exact concatenation order declared in the
-  manifest's `assets` key, and separately asserts every `@mixin` in
-  `mixins.scss` is actually used. Run these directly:
-  `.venv/bin/python addons/shaka_ui_makeover/tests/scss_compile_check.py`.
+  `addons/shaka_theme/tests/scss_compile_check.py` compiles the theme through
+  libsass in the same order Odoo builds the light and dark bundles and asserts
+  the variables resolve to the Shaka palette. Run these directly:
+  `.venv/bin/python addons/shaka_theme/tests/scss_compile_check.py`.
 
 ## Module icons — a specific gotcha
 
@@ -117,16 +116,17 @@ with an additional workflow-stage access check
 (`_shaka_check_workflow_access`). Superusers and `base.group_system` always
 bypass it.
 
-<!--### UI theme layer
+### UI theme layer
 
-`shaka_ui_makeover` replaces Odoo's default look via SCSS only (no JS theme
-switching — "single theme" by design, see the module's `ONBOARDING.md`).
-The SCSS files are concatenated in the exact order listed in
-`web.assets_backend`/`web.assets_frontend`/POS asset bundles in the
-manifest; `scss_compile_check.py` (see Tests above) enforces that this
-concatenation order actually compiles and has no dead mixins — update both
-the manifest's asset list and `BACKEND_ORDER`/`FRONTEND_ORDER` in that
-script together if you add or reorder a file.-->
+`shaka_theme` themes Odoo by overriding its SCSS variables
+(`web._assets_primary_variables`, plus `web.dark_mode_variables` for dark), so
+Odoo Enterprise's own dark mode is the only dark mode. Addon SCSS uses the
+`var(--shaka-*)` tokens it exports (or Odoo's `$o-*` vars), never
+dark-mode selectors — a page-specific dark tweak goes in
+`@if $o-webclient-color-scheme == dark { … }`, since each bundle is compiled
+once per scheme. The design source of truth is
+`design-system/shaka-erp/MASTER.md`. `shaka_ui_makeover` is deprecated
+(`installable: False`, see its `DEPRECATED.md`).
 
 ## Deployment / disaster recovery
 

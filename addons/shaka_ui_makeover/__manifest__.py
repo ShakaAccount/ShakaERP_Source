@@ -1,10 +1,12 @@
 {
     'icon': '/shaka_ui_makeover/static/description/icon.svg',
-    'name': 'Shaka UI Makeover + Liquid Glass',
+    'name': '[DEPRECATED] Shaka UI Makeover + Liquid Glass',
     'version': '1.0.0',
     'category': 'Themes',
     'summary': 'Full liquid-glass UI makeover for ShakaERP — glass chrome, views, POS, settings coverage, settable button colors, Persian font, single theme',
     'description': """
+DEPRECATED — replaced by ``shaka_theme``. Not installable; see DEPRECATED.md.
+
 Liquid Glass UI theme for ShakaERP.
 
 A complete liquid-glass redesign that covers every backend surface:
@@ -69,7 +71,7 @@ after this theme has been validated.
             'shaka_ui_makeover/static/src/scss/pos.scss',
         ],
     },
-    'installable': True,
+    'installable': False,  # deprecated, see DEPRECATED.md
     'application': False,
     'auto_install': False,
     'license': 'LGPL-3',

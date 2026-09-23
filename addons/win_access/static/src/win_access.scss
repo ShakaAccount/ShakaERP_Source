@@ -1,14 +1,10 @@
 .o_win_access_tree,
 .o_win_access_sync,
 .o_win_access_members {
-    --wa-border: #dee2e6;
-    --wa-ok: #198754;
-    --wa-fail: #dc3545;
-    --wa-skip: #6c757d;
-
-    html[data-theme='glass'].shaka-dark-mode & {
-        --wa-border: #3a3a3a;
-    }
+    --wa-border: var(--shaka-border);
+    --wa-ok: #{$o-success};
+    --wa-fail: #{$o-danger};
+    --wa-skip: var(--shaka-muted);
 
     font-size: 1rem;
 

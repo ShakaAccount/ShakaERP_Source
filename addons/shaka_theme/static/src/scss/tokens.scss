@@ -1,0 +1,25 @@
+// Role tokens for addon SCSS. Compiled once per colour scheme (light bundle,
+// dark bundle), so consumers just use var(--shaka-*) — no dark-mode selectors.
+:root {
+    --shaka-primary: #{$shaka-theme-primary};
+    --shaka-accent: #{$shaka-theme-accent};
+    --shaka-bg: #{$shaka-theme-bg};
+    --shaka-surface: #{$shaka-theme-surface};
+    --shaka-muted-bg: #{$shaka-theme-muted-bg};
+    --shaka-text: #{$shaka-theme-text};
+    --shaka-muted: #{$shaka-theme-muted};
+    --shaka-border: #{$shaka-theme-border};
+    --shaka-shadow-card: #{$shaka-theme-shadow-card};
+    --shaka-shadow-pop: #{$shaka-theme-shadow-pop};
+    --shaka-radius: 6px;
+    --shaka-radius-card: 8px;
+    --shaka-ease: 150ms ease-out;
+}
+
+// Home menu / login background: flat app background instead of Enterprise's
+// artwork. `html` bumps specificity over web_enterprise's .dark.scss, which
+// loads after this file in the dark bundle.
+html .o_home_menu_background {
+    --homeMenu-bg-color: #{$shaka-theme-bg};
+    --homeMenu-bg-image: none;
+}

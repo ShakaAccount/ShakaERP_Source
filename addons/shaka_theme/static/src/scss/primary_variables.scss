@@ -1,0 +1,58 @@
+///
+/// Shaka theme — light values. Source of truth: design-system/shaka-erp/MASTER.md
+///
+/// Loaded *before* web_enterprise's primary_variables.scss, so every `!default`
+/// here is the first definition and wins. In dark mode primary_variables.dark.scss
+/// loads before this file: every colour set here MUST also be set there, or the
+/// light value leaks into dark mode (tests/scss_compile_check.py enforces this).
+///
+
+// = Neutrals (slate) — Odoo maps grays onto borders, muted text, backgrounds.
+$o-gray-100: #F8FAFC !default;
+$o-gray-200: #E2E8F0 !default;
+$o-gray-300: #CBD5E1 !default;
+$o-gray-400: #94A3B8 !default;
+$o-gray-500: #64748B !default;
+$o-gray-600: #475569 !default;
+$o-gray-700: #334155 !default;
+$o-gray-800: #1E293B !default;
+$o-gray-900: #0F172A !default;
+
+// = Brand
+$o-enterprise-color: #1E40AF !default;
+$o-enterprise-action-color: #1D4ED8 !default;
+
+// = Status
+$o-success: #15803D !default;
+$o-info: #2563EB !default;
+$o-warning: #B45309 !default;
+$o-danger: #DC2626 !default;
+$o-main-favorite-color: #D97706 !default;
+$o-theme-text-colors: (
+    "primary": #1E40AF,
+    "success": #15803D,
+    "info": #1D4ED8,
+    "warning": #B45309,
+    "danger": #B91C1C,
+) !default;
+
+// = Shaka role tokens, exported as --shaka-* by tokens.scss
+$shaka-theme-primary: #1E40AF !default;
+$shaka-theme-accent: #D97706 !default;
+$shaka-theme-bg: #F8FAFC !default;
+$shaka-theme-surface: #FFFFFF !default;
+$shaka-theme-muted-bg: #E9EEF6 !default;
+$shaka-theme-text: #0F172A !default;
+$shaka-theme-muted: #475569 !default;
+$shaka-theme-border: #E2E8F0 !default;
+$shaka-theme-shadow-card: 0 1px 2px rgba(15, 23, 42, .06) !default;
+$shaka-theme-shadow-pop: 0 8px 24px rgba(15, 23, 42, .12) !default;
+
+// = Typography (scheme-independent — not repeated in the dark file)
+$o-font-family-sans-serif: o-add-unicode-support-font(("Vazirmatn", -apple-system, "Segoe UI", Roboto, Arial, sans-serif)) !default;
+$o-headings-font-family: $o-font-family-sans-serif !default;
+
+// = Shape (scheme-independent)
+$o-border-radius-sm: o-to-rem(4px) !default;
+$o-border-radius: o-to-rem(6px) !default;
+$o-border-radius-lg: o-to-rem(8px) !default;
