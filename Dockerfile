@@ -61,7 +61,7 @@ RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor
     && apt-get update \
     && env ACCEPT_EULA=Y apt-get install -y --no-install-recommends unixodbc msodbcsql18 \
     && rm -rf /var/lib/apt/lists/* \
-    && pip install --no-cache-dir ldap3 pyodbc
+    && pip install --no-cache-dir ldap3 pyodbc pymssql
 
 # 6. Create unprivileged odoo user and directories
 RUN useradd -m -U -s /bin/bash odoo \
