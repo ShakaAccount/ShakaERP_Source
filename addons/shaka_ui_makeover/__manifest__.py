@@ -1,8 +1,8 @@
 {
     'icon': '/shaka_ui_makeover/static/description/icon.svg',
     'name': '[DEPRECATED] Shaka UI Makeover + Liquid Glass',
-    'version': '1.0.0',
-    'category': 'Themes',
+    'version': '19.0.1.0.0',
+    'category': 'Themes/Backend',
     'summary': 'Full liquid-glass UI makeover for ShakaERP — glass chrome, views, POS, settings coverage, settable button colors, Persian font, single theme',
     'description': """
 DEPRECATED — replaced by ``shaka_theme``. Not installable; see DEPRECATED.md.
@@ -26,6 +26,9 @@ chatter, settings, login, POS, and a subtle ambient world animation.
 Replaces the older ``shaka_skeuomorphic_ui`` addon; uninstall that one
 after this theme has been validated.
 """,
+    'author': 'ShakaERP',
+    'maintainer': 'ShakaERP',
+    'website': 'https://shakasystem.com',
     'depends': ['web', 'point_of_sale'],
     'data': [
         'views/layout_inject.xml',

@@ -1,10 +1,19 @@
 {
     'name': 'Shaka UI Kit',
-    'summary': 'Reusable OWL UI building blocks shared across Shaka ERP addons.',
-    'author': 'RAES',
-    'category': 'Technical',
     'version': '19.0.1.0.0',
+    'category': 'Technical',
+    'summary': 'Reusable OWL UI building blocks shared across Shaka ERP addons.',
+    'description': """
+Shaka UI Kit
+============
+Shared OWL components styled with the ``shaka_theme`` tokens, starting with
+the tree component used by ``category`` and ``win_access``.
+""",
+    'author': 'ShakaERP',
+    'maintainer': 'ShakaERP',
+    'website': 'https://shakasystem.com',
     'license': 'LGPL-3',
+    'icon': '/shaka_ui_kit/static/description/icon.svg',
     'depends': ['web', 'shaka_theme'],
     'assets': {
         'web.assets_backend': [
@@ -15,4 +24,5 @@
     },
     'installable': True,
     'application': False,
+    'auto_install': False,
 }

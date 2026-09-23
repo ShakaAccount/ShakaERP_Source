@@ -1,33 +1,37 @@
 {
-    "icon": "/pos_employee_free_items/static/description/icon.svg",
-    "name": "POS Employee Free Items",
-    "version": "19.0.3.0.0",
-    "summary": "Allow POS employees to claim a limited number of free catalogue items each day.",
-    "category": "Point of Sale",
-    "depends": [
-        "point_of_sale",
-        "pos_hr",
-        "auth_totp",
-        "hr"
+    'name': 'POS Employee Free Items',
+    'version': '19.0.3.0.0',
+    'category': 'Sales/Point of Sale',
+    'summary': 'Allow POS employees to claim a limited number of free catalogue items each day.',
+    'description': """
+POS Employee Free Items
+=======================
+A catalogue of items POS employees may claim for free, with a daily
+per-employee allowance, TOTP-confirmed claims at the till and the claims
+recorded on the POS order.
+""",
+    'author': 'ShakaERP',
+    'maintainer': 'ShakaERP',
+    'website': 'https://shakasystem.com',
+    'license': 'LGPL-3',
+    'icon': '/pos_employee_free_items/static/description/icon.svg',
+    'depends': ['point_of_sale', 'pos_hr', 'auth_totp', 'hr'],
+    'data': [
+        'security/pos_free_item_security.xml',
+        'security/ir.model.access.csv',
+        'views/free_item_catalog_views.xml',
+        'views/employee_free_allowance_views.xml',
+        'views/pos_config_views.xml',
+        'views/pos_order_views.xml',
+        'data/pos_free_item_demo.xml',
     ],
-    "data": [
-        "security/pos_free_item_security.xml",
-        "security/ir.model.access.csv",
-        "views/free_item_catalog_views.xml",
-        "views/employee_free_allowance_views.xml",
-        "views/pos_config_views.xml",
-        "views/pos_order_views.xml",
-        "data/pos_free_item_demo.xml",
-    ],
-    "assets": {
-        "point_of_sale._assets_pos": [
-            "pos_employee_free_items/static/src/js/pos_free_items.js",
-            "pos_employee_free_items/static/src/xml/pos_screen_templates.xml",
-        ]
+    'assets': {
+        'point_of_sale._assets_pos': [
+            'pos_employee_free_items/static/src/js/pos_free_items.js',
+            'pos_employee_free_items/static/src/xml/pos_screen_templates.xml',
+        ],
     },
-    "author": "ShakaERP",
-    "license": "LGPL-3",
-    "installable": True,
-    "application": False,
-    "auto_install": False
+    'installable': True,
+    'application': False,
+    'auto_install': False,
 }

@@ -3,7 +3,15 @@
     'version': '19.0.1.0.0',
     'category': 'Administration',
     'summary': 'مدیریت سال‌های مالی شرکت‌ها',
+    'description': """
+Company Base Information
+========================
+Master data shared by the Shaka finance modules: company fiscal years,
+boards of directors, ownership structure and currencies.
+""",
     'author': 'ShakaERP',
+    'maintainer': 'ShakaERP',
+    'website': 'https://shakasystem.com',
     'license': 'LGPL-3',
     'icon': '/company_base_info/static/description/icon.svg',
     'depends': ['base', 'jalali_date', 'shaka_security', 'generic_lookup'],

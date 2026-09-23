@@ -1,6 +1,7 @@
 {
-    'icon': '/category/static/description/icon.svg',
     'name': 'Category',
+    'version': '19.0.1.0.0',
+    'category': 'Technical/Shaka DW',
     'summary': 'Standalone 3-pane Category Manager over md.category / '
                'md.category_member (Shaka DW).',
     'description': """
@@ -15,16 +16,12 @@ addresses them through writable public mirror views
 (``public.raes_md_category`` / ``public.raes_md_category_member``) rebuilt by
 ``refresh_writable_view`` on every install and upgrade.
 """,
-    'author': 'RAES',
-    'website': 'https://www.yourcompany.com',
-    'category': 'Technical',
-    'version': '19.0.1.0.0',
+    'author': 'ShakaERP',
+    'maintainer': 'ShakaERP',
+    'website': 'https://shakasystem.com',
     'license': 'LGPL-3',
-
-    # any module necessary for this one to work correctly
+    'icon': '/category/static/description/icon.svg',
     'depends': ['base', 'web', 'entity', 'shaka_ui_kit'],
-
-    # always loaded
     'data': [
         'security/ir.model.access.csv',
         'views/category_views.xml',
@@ -38,4 +35,5 @@ addresses them through writable public mirror views
     },
     'installable': True,
     'application': True,
+    'auto_install': False,
 }

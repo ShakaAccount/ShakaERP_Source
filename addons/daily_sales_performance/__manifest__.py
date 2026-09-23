@@ -1,11 +1,20 @@
 {
     'name': 'Daily Sales Performance',
     'version': '19.0.1.0.0',
+    'category': 'Sales/Sales',
     'summary': 'Daily branch sales performance with revenue and POS details',
-    'category': 'Sales',
+    'description': """
+Daily Sales Performance
+=======================
+Daily per-branch sales reports with POS terminal totals, deposit splits,
+corrective invoices and returns, a reject/approve workflow and per-user
+branch access.
+""",
     'author': 'ShakaERP',
+    'maintainer': 'ShakaERP',
+    'website': 'https://shakasystem.com',
     'license': 'LGPL-3',
-    'icon': '/daily_sales_performance/static/description/icon.svg',
+    'icon': '/daily_sales_performance/static/description/icon.png',
     'depends': ['base', 'mail', 'jalali_date', 'shaka_security'],
     'data': [
         'security/security.xml',
