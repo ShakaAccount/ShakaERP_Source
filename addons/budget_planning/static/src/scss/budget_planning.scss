@@ -90,10 +90,8 @@
   max-width: none !important;
   margin-inline: 15px 0;
   .o_form_sheet { width: 100%; max-width: none; }
-  .bp-header-grid { grid-template-columns: 110px minmax(220px, 1.3fr) minmax(160px, .8fr) minmax(220px, 1.1fr) minmax(260px, 1.5fr); }
-  .bp-number-field { align-items: flex-start; text-align: left; }
-  .bp-number-field .o_field_widget { width: 100%; text-align: left; font-weight: 700; }
-  .bp-header-grid .bp-field .o_field_widget { max-width: 100%; }
+  .bp-header-grid { width: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.6fr); gap: 14px; }
+  .bp-header-grid > .bp-field .o_field_widget { width: 100%; max-width: 100% !important; }
   .bp-financial-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
   .bp-financial-toolbar .o_field_widget { min-width: 260px; }
   .bp-financial-toolbar .bp-note { margin: 0; }

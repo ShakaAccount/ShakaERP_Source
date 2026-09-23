@@ -25,7 +25,6 @@
                     </div>
                     <section class="bp-card bp-header">
                         <div class="bp-header-grid">
-                            <div class="bp-field bp-number-field" invisible="number == 0"><label for="number">شماره</label><field name="number" string="شماره" readonly="1"/></div>
                             <div class="bp-field"><label for="company_id"/><field name="company_id" required="1"/></div>
                             <div class="bp-field"><label for="fiscal_year_id"/><field name="fiscal_year_id" required="1" options="{'no_create': True}"/></div>
                             <div class="bp-field"><label for="scenario_id"/><field name="scenario_id" required="1" options="{'no_create': True}"/></div>
