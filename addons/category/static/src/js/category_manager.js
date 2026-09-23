@@ -384,15 +384,16 @@ export class CategoryManager extends Component {
 
     toggleExpand(id) {
         const isOpen = !!this.state.expandedIds[id];
-        const isClosing = !!this.state.closingIds[id];
-        if (!isOpen) {
+        this._closeTimers ||= {};
+        if (this.state.closingIds[id]) {
+            // Reopened mid-collapse: cancel the unmount, the CSS reverses.
+            clearTimeout(this._closeTimers[id]);
+            delete this.state.closingIds[id];
+        } else if (!isOpen) {
             this.state.expandedIds[id] = true;
-            if (this.state.closingIds[id]) {
-                delete this.state.closingIds[id];
-            }
-        } else if (!isClosing) {
+        } else {
             this.state.closingIds[id] = true;
-            setTimeout(() => {
+            this._closeTimers[id] = setTimeout(() => {
                 delete this.state.expandedIds[id];
                 delete this.state.closingIds[id];
                 // Free the paginated children of this whole subtree.

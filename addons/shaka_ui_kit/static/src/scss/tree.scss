@@ -161,13 +161,22 @@
   border-inline-start: 1px solid var(--tree-border);
   padding-inline-start: 4px;
   // Accordion tokens (shaka_theme/static/src/transitions/accordion.scss).
-  animation: o_tree_expand var(--acc-expand) var(--acc-ease);
-  transition: grid-template-rows var(--acc-collapse) var(--acc-ease),
-  opacity var(--acc-collapse) var(--acc-ease),
-  filter var(--acc-collapse) var(--acc-ease),
-  margin-inline-start var(--acc-collapse) var(--acc-ease),
-  border-inline-start-width var(--acc-collapse) var(--acc-ease),
-  padding-inline-start var(--acc-collapse) var(--acc-ease);
+  // Transitions both ways (expand from @starting-style below), so toggling a
+  // node mid-animation reverses from where it is.
+  transition: grid-template-rows var(--acc-expand) var(--acc-ease),
+  opacity var(--acc-expand) var(--acc-ease),
+  filter var(--acc-expand) var(--acc-ease),
+  margin-inline-start var(--acc-expand) var(--acc-ease),
+  border-inline-start-width var(--acc-expand) var(--acc-ease),
+  padding-inline-start var(--acc-expand) var(--acc-ease);
+}
+
+@starting-style {
+  .o_tree_children {
+    grid-template-rows: 0fr;
+    opacity: 0;
+    filter: blur(2px);
+  }
 }
 
 .o_tree_children_closing {
@@ -177,7 +186,12 @@
   margin-inline-start: 0;
   border-inline-start-width: 0;
   padding-inline-start: 0;
-  animation: none;
+  transition: grid-template-rows var(--acc-collapse) var(--acc-exit-ease),
+  opacity var(--acc-collapse) var(--acc-exit-ease),
+  filter var(--acc-collapse) var(--acc-exit-ease),
+  margin-inline-start var(--acc-collapse) var(--acc-exit-ease),
+  border-inline-start-width var(--acc-collapse) var(--acc-exit-ease),
+  padding-inline-start var(--acc-collapse) var(--acc-exit-ease);
 }
 
 .o_tree_children_inner {
@@ -186,18 +200,6 @@
 }
 
 // ---------- Animations ----------
-@keyframes o_tree_expand {
-  from {
-    grid-template-rows: 0fr;
-    opacity: 0;
-    filter: blur(2px);
-  }
-  to {
-    grid-template-rows: 1fr;
-    opacity: 1;
-  }
-}
-
 @keyframes o_tree_node_in {
   from {
     opacity: 0;

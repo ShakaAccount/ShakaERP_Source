@@ -129,15 +129,16 @@ export class PbirsTreeField extends Component {
 
     toggleNode(id) {
         const isOpen = !!this.state.open[id];
-        const isClosing = !!this.state.closing[id];
-        if (!isOpen) {
+        this._closeTimers ||= {};
+        if (this.state.closing[id]) {
+            // Reopened mid-collapse: cancel the unmount, the CSS reverses.
+            clearTimeout(this._closeTimers[id]);
+            delete this.state.closing[id];
+        } else if (!isOpen) {
             this.state.open[id] = true;
-            if (this.state.closing[id]) {
-                delete this.state.closing[id];
-            }
-        } else if (!isClosing) {
+        } else {
             this.state.closing[id] = true;
-            setTimeout(() => {
+            this._closeTimers[id] = setTimeout(() => {
                 delete this.state.open[id];
                 delete this.state.closing[id];
             }, parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--acc-collapse")) || 250);
@@ -148,6 +149,7 @@ export class PbirsTreeField extends Component {
         this.state.open = open
             ? Object.fromEntries(this.recs.filter((r) => this.children[r.path]).map((r) => [r.id, true]))
             : {};
+        Object.values(this._closeTimers || {}).forEach(clearTimeout);
         this.state.closing = {};
     }
 
