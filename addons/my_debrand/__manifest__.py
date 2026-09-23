@@ -1,4 +1,5 @@
 {
+    'icon': '/my_debrand/static/description/icon.svg',
     'name': 'My Debrand',
     'version': '1.0',
     'category': 'Customizations',

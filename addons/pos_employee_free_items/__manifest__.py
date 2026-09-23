@@ -1,3 +1,4 @@
+    'icon': '/pos_employee_free_items/static/description/icon.svg',
 {
     "name": "POS Employee Free Items",
     "version": "19.0.3.0.0",

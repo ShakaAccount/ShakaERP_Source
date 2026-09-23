@@ -1,4 +1,5 @@
 {
+    'icon': '/dim_company_dashboard/static/description/icon.svg',
     'name': 'Company Dimension (SQL Server BI)',
     'version': '19.0.1.0.0',
     'category': 'Reporting',

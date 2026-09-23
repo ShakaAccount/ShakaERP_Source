@@ -1,4 +1,5 @@
 {
+    'icon': '/entity/static/description/icon.svg',
     'name': 'RAES — MD Entity / Module (Shaka DW)',
     'version': '19.0.1.0.0',
     'summary': 'Direct Odoo models over md.entity and gnr.module.',

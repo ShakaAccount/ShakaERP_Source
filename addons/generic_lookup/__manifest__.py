@@ -1,4 +1,5 @@
 {
+    'icon': '/generic_lookup/static/description/icon.svg',
     'name': 'Generic Lookup Tables',
     'version': '19.0.1.0.0',
     'category': 'Technical',

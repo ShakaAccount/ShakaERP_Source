@@ -1,4 +1,5 @@
 {
+    'icon': '/estate/static/description/icon.svg',
     'name': "Real Estate",
     'summary': "Real Estate module for the Odoo tutorial",
     'description': """

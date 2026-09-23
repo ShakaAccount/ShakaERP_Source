@@ -1,4 +1,5 @@
 {
+    'icon': '/shaka_ui_makeover/static/description/icon.svg',
     'name': 'Shaka UI Makeover + Liquid Glass',
     'version': '1.0.0',
     'category': 'Themes',

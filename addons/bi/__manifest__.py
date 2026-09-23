@@ -1,4 +1,5 @@
 {
+    'icon': '/bi/static/description/icon.svg',
     'name': "bi",
 
     'summary': "Short (1 phrase/line) summary of the module's purpose",

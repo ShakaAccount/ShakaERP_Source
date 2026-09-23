@@ -1,4 +1,5 @@
 {
+    'icon': '/dayoff/static/description/icon.svg',
     'name': 'Leave Request Workflow',
     'version': '19.0.1.0.0',
     'category': 'Human Resources',

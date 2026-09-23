@@ -1,4 +1,5 @@
 {
+    'icon': '/shaka_security/static/description/icon.svg',
     'name': 'Shaka Security',
     'version': '19.0.1.0.0',
     'summary': 'Central roles and access levels for Shaka modules',

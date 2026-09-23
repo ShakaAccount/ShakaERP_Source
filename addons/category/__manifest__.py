@@ -1,4 +1,5 @@
 {
+    'icon': '/category/static/description/icon.svg',
     'name': 'Category',
     'summary': 'Standalone 3-pane Category Manager over md.category / '
                'md.category_member (Shaka DW).',

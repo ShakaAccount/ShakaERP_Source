@@ -1,4 +1,5 @@
 {
+    'icon': '/raes_dw_connector/static/description/icon.svg',
     'name': 'RAES DW Connector',
     'summary': 'MSSQL data-warehouse foreign tables exposed as Odoo views',
     'category': 'Technical',

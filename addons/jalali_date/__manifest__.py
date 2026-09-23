@@ -1,3 +1,4 @@
+    'icon': '/jalali_date/static/description/icon.svg',
 {
     "name": "Jalali (Persian) Calendar Support",
     "version": "19.0.1.0.0",

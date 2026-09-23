@@ -1,4 +1,5 @@
 {
+    'icon': '/boot_removal/static/description/icon.svg',
     'name': 'Boot Removal',
     'version': '19.0.1.0.0',
     'category': 'Hidden',
