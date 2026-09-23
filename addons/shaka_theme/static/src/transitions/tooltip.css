@@ -7,11 +7,11 @@
 
 :root {
   --tt-in-dur: 150ms;
-  --tt-out-dur: 50ms;
+  --tt-out-dur: 100ms;
   --tt-scale: 0.98;
   --tt-delay: 80ms;
   --tt-in-ease: ease-out;
-  --tt-out-ease: ease-out;
+  --tt-out-ease: cubic-bezier(0.4, 0, 1, 1);
 }
 
 /* Default rule controls the LEAVE state: no delay, so hiding plays immediately. */

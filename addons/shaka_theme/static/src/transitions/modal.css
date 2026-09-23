@@ -1,0 +1,53 @@
+/* Transitions.dev — Modal open / close (https://transitions.dev/detail.html?t=modal-open-close)
+   Vendored tokens; tune below. modal.js applies it to every Odoo dialog:
+   .t-modal is the .modal-dialog (the card scales/fades), and Odoo's dim layer —
+   the .modal's own background, Bootstrap's backdrop is hidden — fades with it
+   (.t-modal-backdrop). Odoo removes a dialog at once on close, so .is-closing
+   plays on an inert clone. Shaka: the close accelerates out (--modal-exit-ease,
+   MASTER.md §Motion), and the snippet's pointer-events are dropped — Bootstrap
+   keeps .modal-dialog click-through so a click beside the card reaches the dim. */
+
+:root {
+  --modal-open-dur: 250ms;
+  --modal-close-dur: 150ms;
+  --modal-scale: 0.96;
+  --modal-scale-close: 0.96;
+  --modal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --modal-exit-ease: cubic-bezier(0.4, 0, 1, 1);
+}
+
+.t-modal {
+  transform-origin: center;
+  transform: scale(var(--modal-scale));
+  opacity: 0;
+  transition:
+    transform var(--modal-open-dur) var(--modal-ease),
+    opacity   var(--modal-open-dur) var(--modal-ease);
+  will-change: transform, opacity;
+}
+.t-modal.is-open {
+  transform: scale(1);
+  opacity: 1;
+}
+.t-modal.is-closing {
+  transform: scale(var(--modal-scale-close));
+  opacity: 0;
+  transition:
+    transform var(--modal-close-dur) var(--modal-exit-ease),
+    opacity   var(--modal-close-dur) var(--modal-exit-ease);
+}
+
+/* Shaka: the dim fades on the same clock. */
+.t-modal-backdrop {
+  transition: background-color var(--modal-open-dur) var(--modal-ease);
+}
+.t-modal-backdrop:not(.is-open) {
+  background-color: transparent;
+}
+.t-modal-backdrop.is-closing {
+  transition: background-color var(--modal-close-dur) var(--modal-exit-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-modal, .t-modal-backdrop { transition: none !important; }
+}

@@ -1,42 +1,25 @@
 /* Transitions.dev — Toggle (https://transitions.dev/detail.html?t=toggle)
    Vendored tokens; tune below. Bootstrap's switch paints its thumb as a
-   background image, so the keyframes move background-position (left → right,
-   mirrored by rtlcss for RTL) instead of translating a thumb element, and the
-   travel is the whole track (no --toggle-travel). toggle.js adds .is-init on
-   first interaction so the "off" keyframes don't play on load. */
+   background image, so the thumb travels by background-position (left → right,
+   mirrored by rtlcss for RTL) instead of translating a thumb element.
+   Shaka: a transition, not the snippet's keyframes, so flipping the switch
+   mid-travel reverses from where the thumb is (the keyframes restarted from the
+   far end). The overshoot lives in the easing (y > 1) instead of the
+   --toggle-ov* keyframe stops, and nothing plays on load (no change to tween). */
 
 :root {
   --toggle-dur: 350ms;
-  --toggle-ov1: 1px;
-  --toggle-ov2: 0px;
   --toggle-track: 0ms;
   --toggle-ease: cubic-bezier(0.34, 1.35, 0.64, 1);
 }
 
 .form-switch .form-check-input {
   transition:
-    background-color var(--toggle-track) var(--toggle-ease),
-    border-color     var(--toggle-track) var(--toggle-ease);
-}
-.form-switch .form-check-input.is-init:checked {
-  animation: t-toggle-on var(--toggle-dur) var(--toggle-ease) both;
-}
-.form-switch .form-check-input.is-init:not(:checked) {
-  animation: t-toggle-off var(--toggle-dur) var(--toggle-ease) both;
-}
-@keyframes t-toggle-on {
-  0%   { background-position: left center; }
-  55%  { background-position: calc(100% + var(--toggle-ov1)) center; }
-  80%  { background-position: calc(100% - var(--toggle-ov2)) center; }
-  100% { background-position: right center; }
-}
-@keyframes t-toggle-off {
-  0%   { background-position: right center; }
-  55%  { background-position: calc(0% - var(--toggle-ov1)) center; }
-  80%  { background-position: calc(0% + var(--toggle-ov2)) center; }
-  100% { background-position: left center; }
+    background-position var(--toggle-dur)   var(--toggle-ease),
+    background-color    var(--toggle-track) var(--toggle-ease),
+    border-color        var(--toggle-track) var(--toggle-ease);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .form-switch .form-check-input { animation: none !important; }
+  .form-switch .form-check-input { transition: none !important; }
 }

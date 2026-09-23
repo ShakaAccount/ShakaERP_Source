@@ -8,6 +8,7 @@
     --acc-collapse: 250ms;
     --acc-chevron: 250ms;
     --acc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --acc-exit-ease: cubic-bezier(0.4, 0, 1, 1);
 }
 
 // grid-template-rows 0fr → 1fr gives a clean height animation with no JS
@@ -15,7 +16,7 @@
 .t-acc-panel {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows var(--acc-collapse) var(--acc-ease);
+    transition: grid-template-rows var(--acc-collapse) var(--acc-exit-ease);
 }
 .t-acc[data-open="true"] .t-acc-panel {
     grid-template-rows: 1fr;
@@ -26,8 +27,8 @@
     opacity: 0;
     filter: blur(2px);
     transition:
-        opacity var(--acc-collapse) var(--acc-ease),
-        filter var(--acc-collapse) var(--acc-ease);
+        opacity var(--acc-collapse) var(--acc-exit-ease),
+        filter var(--acc-collapse) var(--acc-exit-ease);
 }
 .t-acc[data-open="true"] .t-acc-panel-inner {
     opacity: 1;
