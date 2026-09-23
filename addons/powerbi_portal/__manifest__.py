@@ -2,8 +2,7 @@
     "name": "Power BI Portal",
     "version": "19.0.1.0.0",
     "summary": "Power BI reports sidebar + AD-driven access, with two-way sync to PBIRS",
-    "description": """
-Power BI Portal
+    "description": """Power BI Portal
 ================
 Shows a side navigation list of Power BI Report Server reports the current
 user is allowed to see, filtered by Odoo security groups. Clicking a report
@@ -23,21 +22,23 @@ Includes (formerly the separate 'AD Group Sync' module, now merged in):
   and auto-creates a matching AD group, seeded with the right members, if
   one doesn't already exist - the reverse direction, Odoo -> AD/PBIRS.
 
-Recommended setup - one service account for everything:
-Rather than separate credentials per integration, create a single
-dedicated AD service account (e.g. DOMAIN\\svc-odoo-pbi) and:
-  1. Run the Odoo Windows service AS this account (Services > Odoo > Log
-     On tab). This alone covers Windows-Integrated auth for both the
-     PBIRS Discovery SQL connection and the PBIRS SOAP access-push calls,
-     with no extra passwords stored in Odoo for either.
-  2. Use the SAME account's DN + password for the AD Group Sync LDAP bind
-     below (LDAP needs an explicit bind, it can't reuse the Windows
-     process identity the way the SQL/SOAP calls can).
-  3. Grant this one account: db_datareader on the PBIRS ReportServer SQL
-     database; Content Manager (or a narrower custom role) on the PBIRS
-     folders reports live in; and Create Group objects delegated on a
-     dedicated AD OU (for the access-push auto-create feature) - not
-     domain admin, not sa, not System Administrator in PBIRS.
+FastAPI mode (recommended - replaces direct SQL + SOAP):
+Turn on 'Use FastAPI' in PBIRS Discovery > Connection Settings and provide
+the Windows Access Management API Base URL + API Key. The API runs on the BI
+host with the correct Windows/AD service identity, so Odoo no longer needs
+Kerberos/SSPI/NTLM libraries or an ODBC driver to reach PBIRS - it also
+unlocks SSAS, AD and local-group provisioning from the same endpoint. Both
+Discovery (pull) and Access Push (write) then route through the API, fixing
+the Windows-Integrated auth problem entirely (the old 401/SSPI errors).
+
+Cross-platform notes:
+- Windows Integrated SOAP auth uses 'requests-kerberos' (cross-platform
+  Kerberos/GSSAPI) with fallback to 'requests-negotiate-sspi' (Windows
+  SSPI). On Linux, the Odoo service must have a valid Kerberos TGT. In
+  FastAPI mode none of this is needed.
+- ODBC driver name must match exactly what's installed on the machine:
+  check with 'Get-OdbcDriver | Where-Object {$_.Name -like "*SQL Server*"}'
+  in PowerShell on Windows, or 'odbcinst -q -d | grep -i sql' on Linux.
 """,
     "category": "Extra Tools",
     "author": "Your Company",
@@ -46,13 +47,14 @@ dedicated AD service account (e.g. DOMAIN\\svc-odoo-pbi) and:
     "external_dependencies": {
         # ldap3: AD Group Sync LDAP bind (pure Python, no C extension - avoids
         #   the python-ldap/OpenLDAP-headers compile problem on Windows).
-        # pyodbc: PBIRS Discovery SQL connection.
-        # requests: PBIRS Access Push SOAP calls. Also needs EITHER
-        #   requests-negotiate-sspi (Windows Integrated, recommended - see
-        #   single-account setup above) OR requests-ntlm (explicit domain
-        #   credentials) depending on SOAP Auth Mode - not listed here since
-        #   only one of the two is needed; the module gives an install hint
-        #   naming the right one if it's missing.
+        # pyodbc: PBIRS Discovery SQL connection (only in legacy non-FastAPI mode).
+        # requests: PBIRS Access Push calls - used by the FastAPI client
+        #   (recommended). In legacy SOAP mode it also needs EITHER
+        #   requests-kerberos (cross-platform Kerberos/GSSAPI - recommended,
+        #   works on both Windows and Linux) OR requests-negotiate-sspi
+        #   (Windows-only SSPI) OR requests-ntlm (explicit domain credentials).
+        #   Not listed here since which one is needed depends on the auth mode;
+        #   the module gives an install hint naming the right one if missing.
         "python": ["ldap3", "pyodbc", "requests"]
     },
     "data": [

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_company_fiscal_year_list" model="ir.ui.view">
+        <field name="name">company.fiscal.year.list</field>
+        <field name="model">company.fiscal.year</field>
+        <field name="arch" type="xml">
+            <list string="سال‌های مالی">
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_company_fiscal_year_form" model="ir.ui.view">
+        <field name="name">company.fiscal.year.form</field>
+        <field name="model">company.fiscal.year</field>
+        <field name="arch" type="xml">
+            <form string="سال مالی">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" string="سال مالی"/>
+                        <h1><field name="name" placeholder="مثلاً ۱۴۰۴"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="company_id"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <group>
+                            <field name="active" widget="boolean_toggle"/>
+                            <field name="note" placeholder="توضیحات سال مالی..."/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_company_fiscal_year" model="ir.actions.act_window">
+        <field name="name">سال‌های مالی</field>
+        <field name="res_model">company.fiscal.year</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_company_fiscal_year"
+              name="سال‌های مالی"
+              parent="base.menu_users"
+              action="action_company_fiscal_year"
+              sequence="35"/>
+</odoo>

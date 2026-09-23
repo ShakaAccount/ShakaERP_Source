@@ -1,21 +1,26 @@
-# Shaka Liquid Glass — Onboarding Guide
+# Shaka UI Makeover — Onboarding Guide
 
-The `shaka_ui_makeover` addon replaces every Odoo 19 surface with a
-frosted-glass UI. This guide explains how the theme works, how to edit it,
-and how to ship changes.
+The `shaka_ui_makeover` addon replaces every Odoo 19 backend surface with a
+bold, flat, elevated redesign — large-radius floating cards on a soft
+light-green surface, not the frosted-glass/blur treatment the addon was
+originally built around (blur tokens are now hard-locked to `0`; the
+`glass-*` mixin/variable names are kept only for API compatibility with the
+hundreds of existing call sites). This guide explains how the theme works,
+how to edit it, and how to ship changes.
 
 ---
 
 ## 1. Architecture at a Glance
 
 A pure presentation layer. No core addon in `odoo/addons/` is touched.
-Three mechanisms, in order of specificity:
+Four mechanisms, in order of specificity:
 
 | Layer | File | What it does |
 |---|---|---|
-| 1. CSS variables | `static/src/scss/design_tokens.scss` | Defines `--lg-*` (colors, gradients, shadows, blurs). Override at runtime via DevTools. |
-| 2. Component SCSS | `backend.scss`, `chrome.scss`, `views.scss`, `settings.scss`, `login.scss`, `pos.scss` | Uses the variables to restyle every Odoo surface. |
-| 3. QWeb inheritance | `views/layout_inject.xml` | Injects a `<script>` (sets `data-theme='glass'`) and a `<style>` block (Company color CSS vars) into `web.layout` `<head>`. |
+| 1. CSS variables | `static/src/scss/design_tokens.scss` | Defines `--lg-*` (colors, radius, shadows, type). Override at runtime via DevTools. |
+| 2. Dark-mode class sync | `static/src/js/theme_mode.js` | Reads Odoo's own `color_scheme` cookie (and the OS preference as a fallback) and toggles a `.shaka-dark-mode` class on `<html>`. |
+| 3. Component SCSS | `backend.scss`, `chrome.scss`, `views.scss`, `settings.scss`, `login.scss`, `pos.scss`, `global_forms.scss`, `global_theme_overrides.scss` | Uses the variables to restyle every Odoo surface. |
+| 4. QWeb inheritance | `views/layout_inject.xml` | Injects a `<script>` (sets `data-theme='glass'`) and a server-rendered `<style>` block (the active Company's JSON palette, as CSS custom properties) into `web.layout` `<head>`. |
 
 Every SCSS rule is gated on `html[data-theme='glass']`, which guarantees
 higher specificity than the stock `.o_*` selectors regardless of asset
@@ -24,14 +29,16 @@ bundle ordering.
 ```
 ┌──────────────────────────────────────────────────────────┐
 │  Browser renders the page                                │
-│  └─ QWeb layout_inject fires before <body> parses       │
-│     └─ <script> sets data-theme="glass"                  │
-│     └─ <style> writes --lg-btn-primary / --lg-btn-text  │
-│                from res.company.shaka_*_color            │
-│  └─ web.assets_backend (or assets_frontend for login)    │
-│     └─ design_tokens.scss  → --lg-* on :root            │
-│     └─ mixins.scss         → @mixin lg-glass-panel etc.  │
-│     └─ themed files        → every surface is glass     │
+│  └─ QWeb layout_inject fires before <body> parses         │
+│     └─ <script> sets data-theme="glass"                   │
+│     └─ <style> writes --lg-* from res.company             │
+│                .shaka_theme_palette (JSON, light + dark)  │
+│  └─ theme_mode.js toggles .shaka-dark-mode on <html>      │
+│     based on the color_scheme cookie                      │
+│  └─ web.assets_backend (or assets_frontend for login)     │
+│     └─ design_tokens.scss  → --lg-* defaults on :root     │
+│     └─ mixins.scss         → @mixin lg-glass-panel etc.   │
+│     └─ themed files        → every surface restyled       │
 └──────────────────────────────────────────────────────────┘
 ```
 
@@ -45,19 +52,25 @@ addons/shaka_ui_makeover/
 ├── __manifest__.py                 # asset bundles (no local @import)
 ├── models/
 │   ├── __init__.py
-│   └── res_config_settings.py      # Settings fields + apply action
+│   └── res_config_settings.py      # ResCompany.shaka_theme_palette (JSON) + Settings wizard
 ├── views/
 │   ├── layout_inject.xml           # web.layout <head> injection
-│   └── company_settings_views.xml  # Shaka UI settings block
+│   ├── company_settings_views.xml  # Shaka UI theme-palette settings block
+│   └── login_templates.xml         # show-password icon markup swap
+├── static/src/js/
+│   └── theme_mode.js               # syncs the color_scheme cookie into .shaka-dark-mode
 ├── static/src/scss/
-│   ├── design_tokens.scss          # variables, gradients, shadows
-│   ├── mixins.scss                 # @mixin lg-glass-panel, etc.
-│   ├── backend.scss                # global: navbar, modals, tables
-│   ├── chrome.scss                 # statusbar, searchview, pager
+│   ├── design_tokens.scss          # variables: colors, radius, shadows, type
+│   ├── mixins.scss                 # @mixin lg-glass-panel, lg-card-lift, lg-heading, etc.
+│   ├── backend.scss                # global: navbar, modals, tables, cards
+│   ├── chrome.scss                 # statusbar, searchview, pager, badges
 │   ├── views.scss                  # kanban, list, form, chatter
 │   ├── settings.scss               # Settings + module install
 │   ├── login.scss                  # login, signup, DB list
-│   └── pos.scss                    # POS panes, products, receipt
+│   ├── pos.scss                    # POS panes, products, receipt
+│   ├── global_forms.scss           # generic form/list/kanban/notebook widget polish
+│   └── global_theme_overrides.scss # catch-all: calendar, graph/pivot, mail/Discuss,
+│                                    # Gantt, Map, notifications, popovers, search panel
 └── tests/
     └── scss_compile_check.py       # libsass compile + bundle subtests
 ```
@@ -69,16 +82,20 @@ addons/shaka_ui_makeover/
 All overrides flow through three channels:
 
 1. **CSS variables** on `:root` — change `$lg-accent` in `design_tokens.scss`
-   and every glass surface updates. Dark mode is automatic via
-   `prefers-color-scheme: dark`.
+   and every restyled surface updates. Dark mode is driven by the
+   `.shaka-dark-mode` class that `theme_mode.js` toggles from Odoo's own
+   `color_scheme` cookie (falling back to `prefers-color-scheme` only when
+   the cookie hasn't been set yet) — it is not a pure CSS media query.
 2. **Theme-attribute gating** — every rule is wrapped in
    `html[data-theme='glass']`, so the SCSS always wins against stock
    `.o_*` selectors at the same level.
-3. **Per-Company colors** — `res.company.shaka_primary_color` and
-   `res.company.shaka_button_text_color` are rendered into a `<style>`
-   block at page-load time, so the first paint already shows the
-   configured color. The "Reload to apply" button triggers a
-   real `ir.actions.client` reload.
+3. **Per-Company palette** — `res.company.shaka_theme_palette` stores a JSON
+   document (`{"light": {...}, "dark": {...}}`, see
+   `models/res_config_settings.py:SHAKA_DEFAULT_PALETTE` for the full key
+   list and shipped defaults) rendered into a `<style>` block at page-load
+   time by `_shaka_runtime_css()`, so the first paint already shows the
+   configured colors. The "Reload to apply" button triggers a real
+   `ir.actions.client` reload.
 
 ---
 
@@ -90,11 +107,15 @@ Open `addons/shaka_ui_makeover/static/src/scss/design_tokens.scss`.
 
 | Goal | Variable |
 |---|---|
-| Change the brand blue | `$lg-accent`, `$lg-accent-strong` |
-| Change the dark-glass tints | `$lg-glass-dark-1/2/3` |
-| Change blur intensity | `$lg-blur-sm/md/lg` |
-| Change corner radius | `$lg-r-sm/md/lg/pill` |
-| Change world backdrop blobs | `$lg-bg-blob-a/b/c` |
+| Change the brand green | `$lg-accent`, `$lg-accent-strong`, `$lg-accent-start/end` |
+| Change card/panel elevation | `$lg-shadow-sm/md/lg/hover` |
+| Change corner radius | `$lg-r-sm/md/lg/xl/pill` |
+| Change heading boldness | `$lg-fw-heading`, `$lg-fw-heading-strong` |
+
+`$lg-blur-*` and the `$lg-glass-dark-*`/`$lg-bg-blob-*` aliases still exist
+for API compatibility with older call sites, but are locked to `0` /
+transparent — this is a flat, non-blurred theme. Don't reintroduce blur
+values there; add a new token instead if a future direction needs it.
 
 All tokens have `!default` so user-side overrides still work. After
 editing, refresh the page (Odoo recompiles SCSS per request in dev).
@@ -113,6 +134,7 @@ Pick the right file:
 | Settings page + module install | `settings.scss` |
 | Login / signup / DB list | `login.scss` |
 | POS panes, products, receipt, ticket | `pos.scss` |
+| Calendar, graph/pivot, Discuss, Gantt, Map, notifications, popovers | `global_theme_overrides.scss` (catch-all) |
 
 Add a new rule wrapped in the theme gate:
 
@@ -250,18 +272,22 @@ that's bind-mounted into the web container. To deploy:
 
 ## 10. Dark Mode
 
-Dark mode is implemented via `@media (prefers-color-scheme: dark)`
-inside the `html[data-theme='glass']` gate in `design_tokens.scss`.
-The dark override re-binds the same `--lg-*` variables to dark
-equivalents and adjusts the world backdrop blobs to deeper blues
-and purples.
+Dark mode is **class-driven**, not a pure CSS media query. `theme_mode.js`
+reads Odoo's own `color_scheme` cookie (set by Odoo's own Dark/Light
+selector) and toggles a `.shaka-dark-mode` class on `<html>`; if the cookie
+hasn't been set yet it falls back to `prefers-color-scheme: dark` for the
+first paint. Component rules key off
+`html[data-theme='glass'].shaka-dark-mode` (see `global_theme_overrides.scss`
+for the bulk of them). The Company's `shaka_theme_palette` JSON also carries
+a `dark` key, rendered into the same class selector by `_shaka_runtime_css()`.
 
 To tune dark mode:
 
-1. Open `design_tokens.scss` → search for
-   `@media (prefers-color-scheme: dark)`.
-2. Adjust the variable overrides inside the `html[data-theme='glass']`
-   block.
+1. Open `global_theme_overrides.scss` → search for
+   `html[data-theme='glass'].shaka-dark-mode`.
+2. Adjust the variable overrides inside that selector, or the `dark` half
+   of `SHAKA_DEFAULT_PALETTE` in `models/res_config_settings.py` for the
+   Company-configurable palette.
 3. Verify that any new component you add has acceptable contrast in
    both modes.
 
@@ -272,19 +298,20 @@ minimum. Use a contrast checker before shipping.
 
 ## 11. Per-Company Brand Colors
 
-Two optional Company fields control the primary button color and the
-button text color:
+`res.company.shaka_theme_palette` is a JSON text field holding a full
+light + dark color document (keys: `bg`, `surface`, `elevated`, `border`,
+`input`, `hover`, `text`, `muted`, `primary`, `primary_dark`, `on_primary`,
+`link`, `pill_bg`, `pill_text`, `success`, `warning`, `danger` — see
+`SHAKA_DEFAULT_PALETTE` in `models/res_config_settings.py` for the shipped
+values). Any key left out, or the whole field left blank, falls back to the
+shipped default for that key; an unrecognised key or invalid hex value is
+rejected on save (`ResCompany._check_shaka_theme_palette`).
 
-- `res.company.shaka_primary_color` (e.g. `#4E8DFF`)
-- `res.company.shaka_button_text_color` (e.g. `#FFFFFF`)
-
-Edit them in **Settings > General Settings > Shaka ERP > UI Theme**.
-After saving, click **Reload to apply** (or just navigate to another
-page) — the colors are re-rendered into the `<style>` block in
-`web.layout` `<head>` on every page load.
-
-The fields are optional. If left blank, the theme uses the design
-token defaults (`$lg-accent-strong` and `#FFFFFF`).
+Edit it in **Settings > General Settings > Shaka ERP > UI Theme** as a JSON
+textarea. After saving, click **Reload to apply** (or just navigate to
+another page) — the palette is re-rendered into the `<style>` block in
+`web.layout` `<head>` on every page load. **Reset to Shipped Defaults**
+restores `SHAKA_DEFAULT_PALETTE` verbatim.
 
 ---
 
@@ -361,8 +388,8 @@ reload.
 
 ### Styles work in one browser but another
 
-- Use **standard CSS** (no hand-rolled vendor prefixes; the theme
-  provides `-webkit-` fallbacks for `backdrop-filter`).
+- Use **standard CSS**. The theme is flat (no `backdrop-filter`/blur in the
+  current design) so there are no vendor-prefix concerns to worry about.
 - Test in **both** light and dark modes.
 
 ---
@@ -370,11 +397,11 @@ reload.
 ## 14. Performance Notes
 
 - **No raster textures** in the bundle. All surfaces are pure CSS
-  (gradients + `backdrop-filter`). The cost is GPU compositing,
-  not network requests.
-- **No external fonts.** The CSS uses a system stack
-  (`"Shaka Persian", "Inter", -apple-system, ...`) so there's no
-  font-load delay.
+  (gradients + soft box-shadows). The cost is a handful of extra paint
+  layers, not network requests.
+- **One self-hosted font family.** `fonts.scss` ships the Vazirmatn
+  (Persian) weights as `.woff2` under `static/src/fonts/` — no external
+  font-host request, but do budget for the font-load delay on first paint.
 - **No JS** in the addon at all. The theme attribute is set by a
   tiny inline `<script>` in `web.layout` `<head>`, and Company
   colors are server-rendered. No bundle to download, no patch
@@ -392,8 +419,8 @@ reload.
 | Goal | File to edit |
 |---|---|
 | Change a color | `static/src/scss/design_tokens.scss` |
-| Change a gradient | `static/src/scss/design_tokens.scss` |
-| Change a blur intensity | `static/src/scss/design_tokens.scss` |
+| Change card/modal elevation | `static/src/scss/design_tokens.scss` |
+| Change corner radius | `static/src/scss/design_tokens.scss` |
 | Tweak the navbar | `static/src/scss/backend.scss` |
 | Tweak the control panel | `static/src/scss/backend.scss` |
 | Tweak kanban cards | `static/src/scss/views.scss` |
@@ -403,6 +430,7 @@ reload.
 | Tweak settings layout | `static/src/scss/settings.scss` |
 | Tweak login | `static/src/scss/login.scss` |
 | Tweak POS | `static/src/scss/pos.scss` |
-| Add a Company color | `models/res_config_settings.py` |
+| Tweak Discuss, Gantt, Map, calendar, graph/pivot | `static/src/scss/global_theme_overrides.scss` |
+| Add a Company palette key | `models/res_config_settings.py` (`SHAKA_DEFAULT_PALETTE`) |
 | Inject a script/style in head | `views/layout_inject.xml` |
 | Add a Settings field | `views/company_settings_views.xml` |

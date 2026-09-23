@@ -1,0 +1,21 @@
+{
+    'name': 'بودجه هلدینگ',
+    'version': '19.0.1.0.0',
+    'category': 'Accounting',
+    'summary': 'مدیریت سناریوهای بودجه هلدینگ',
+    'author': 'ShakaERP',
+    'license': 'LGPL-3',
+    'icon': '/holding_budget/static/description/icon.svg',
+    'depends': ['base', 'company_base_info', 'shaka_security'],
+    'data': [
+        'security/ir.model.access.csv',
+        'security/security.xml',
+        'data/access_forms.xml',
+        'data/assumption_lookup_data.xml',
+        'views/budget_scenario_views.xml',
+        'views/budget_assumption_views.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- scheduled follow-up task, one open activity per responsible user -->
+        <record id="activity_pr_review" model="mail.activity.type">
+            <field name="name">بررسی درخواست پرداخت</field>
+            <field name="summary">بررسی و تایید/رد درخواست پرداخت</field>
+            <field name="res_model">payment_request.payment_request</field>
+            <field name="icon">fa-check-square-o</field>
+            <field name="delay_count">3</field>
+            <field name="delay_unit">days</field>
+            <field name="delay_from">current_date</field>
+            <field name="category">default</field>
+        </record>
+    </data>
+
+    <data>
+        <!-- daily sweep: re-notify whoever is holding a request -->
+        <record id="cron_remind_pending_steps" model="ir.cron">
+            <field name="name">Payment Request: remind pending steps</field>
+            <field name="model_id" ref="model_payment_request_payment_request"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_remind_pending_steps()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="priority">6</field>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

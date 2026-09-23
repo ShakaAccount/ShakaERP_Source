@@ -56,7 +56,16 @@ html[data-theme='glass'] .settings_tab {
 }
 
 // ---- Section headers ("Users", "Languages", "Company") ----
-// Bold, white, larger than card body text. Clear vertical spacing above
+// Core gives these a sticky background (--settings__title-bg, a generic
+// Bootstrap gray) so scrolled content doesn't show through underneath —
+// repoint it at the page tone instead so the sticky header blends in
+// rather than reading as a separate gray banner.
+html[data-theme='glass'] .o_settings,
+html[data-theme='glass'] .app_settings_block {
+  --settings__title-bg: var(--lg-bg-base);
+}
+
+// Bold, larger than card body text. Clear vertical spacing above
 // and below — not a thin divider line.
 html[data-theme='glass'] .o_settings h2,
 html[data-theme='glass'] .app_settings_block h2,
@@ -64,7 +73,7 @@ html[data-theme='glass'] .o_settings h3,
 html[data-theme='glass'] .app_settings_block h3,
 html[data-theme='glass'] .o_setting_heading {
   color: var(--lg-text);
-  font-weight: 700;
+  font-weight: var(--lg-fw-heading-strong);
   font-size: 1.15rem;
   letter-spacing: 0.01em;
   margin-top: 32px;
@@ -138,7 +147,7 @@ html[data-theme='glass'] .o_setting_right_pane {
     color: var(--lg-text);
     border-radius: var(--lg-r-sm);
     &:focus {
-      box-shadow: 0 0 0 2px var(--lg-accent);
+      box-shadow: 0 0 0 2px var(--lg-accent-strong);
     }
   }
 }

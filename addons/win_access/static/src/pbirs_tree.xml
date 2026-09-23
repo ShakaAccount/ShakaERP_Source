@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="win_access.PbirsTree">
+        <div class="o_win_access_tree" t-ref="root">
+            <div class="o_wa_toolbar d-flex align-items-center gap-2 mb-2">
+                <input type="search" class="form-control w-auto flex-grow-1"
+                       placeholder="Search folders and reports…" t-model="state.query"/>
+                <button type="button" class="btn btn-light" t-on-click="() => this.expandAll(true)">Expand all</button>
+                <button type="button" class="btn btn-light" t-on-click="() => this.expandAll(false)">Collapse all</button>
+                <span class="badge text-bg-secondary" t-out="count + ' of ' + total + ' selected'"/>
+            </div>
+            <div class="o_wa_rows border rounded p-2">
+                <div t-if="!rows.length" class="text-muted">
+                    <t t-if="total">Nothing matches "<t t-out="state.query"/>".</t>
+                    <t t-else="">No PBIRS items loaded. Check the API settings.</t>
+                </div>
+                <div t-foreach="rows" t-as="row" t-key="row.id" class="o_wa_row d-flex align-items-center"
+                     t-attf-style="padding-inline-start: #{row.depth * 1.5}rem;">
+                    <span t-if="row.hasChildren" class="o_wa_caret fa fa-fw me-2"
+                          t-att-class="row.open ? 'fa-caret-down' : 'fa-caret-right o_wa_flip'"
+                          t-on-click="() => this.toggle(row)"/>
+                    <span t-else="" class="fa fa-fw me-2"/>
+                    <input type="checkbox" class="form-check-input o_wa_check me-2" t-att-checked="row.checked"
+                           t-att-data-tri="row.partial ? '1' : ''"
+                           t-att-disabled="props.readonly"
+                           t-on-change="(ev) => this.onCheck(row, ev.target.checked)"/>
+                    <i t-attf-class="fa {{ row.icon }} o_wa_icon me-2"/>
+                    <span t-out="row.label"/>
+                    <small class="text-muted ms-2" t-out="row.type"/>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

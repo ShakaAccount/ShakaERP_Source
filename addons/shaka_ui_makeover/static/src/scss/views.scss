@@ -39,7 +39,7 @@ html[data-theme='glass'] .o_kanban_record {
     background: var(--lg-bg-elevated);
   }
   &:focus-within {
-    box-shadow: 0 0 0 2px var(--lg-accent);
+    box-shadow: 0 0 0 2px var(--lg-accent-strong);
   }
 }
 
@@ -174,7 +174,7 @@ html[data-theme='glass'] .o_Chatter_composer {
     border-radius: var(--lg-r-md);
     color: var(--lg-text);
     &:focus-within {
-      box-shadow: 0 0 0 2px var(--lg-accent);
+      box-shadow: 0 0 0 2px var(--lg-accent-strong);
     }
   }
   .o_Composer_actionButton {
@@ -264,7 +264,7 @@ html[data-theme='glass'] .o_input {
   border-radius: var(--lg-r-sm);
   &::placeholder { color: var(--lg-text-secondary); }
   &:focus {
-    box-shadow: 0 0 0 2px var(--lg-accent);
+    box-shadow: 0 0 0 2px var(--lg-accent-strong);
     background: var(--lg-bg-elevated);
   }
 }
@@ -287,7 +287,7 @@ html[data-theme='glass'] .o_wrap_input {
     color: var(--lg-text);
     border-radius: var(--lg-r-sm);
     &:focus {
-      box-shadow: 0 0 0 2px var(--lg-accent);
+      box-shadow: 0 0 0 2px var(--lg-accent-strong);
     }
   }
 }
@@ -325,6 +325,18 @@ html[data-theme='glass'] .o_field_many2one_selection {
   }
 }
 
+// A many2many_tags cell inside a list row can hold dozens of chips (e.g. a
+// long PBIRS/permission path list) and blow up into an unreadable wall of
+// text. Clip it to one line with a fade-out edge instead of letting the
+// row grow — the full list is still available in the record's form view.
+html[data-theme='glass'] .o_list_renderer .o_field_many2many_tags {
+  flex-wrap: nowrap;
+  overflow: hidden;
+  max-height: 30px;
+  mask-image: linear-gradient(90deg, #000 85%, transparent 100%);
+  .badge, .o_tag, .tag { flex-shrink: 0; }
+}
+
 // ---- Many2many tags (the language chips in "Add Languages") ----
 html[data-theme='glass'] .o_field_many2many_tags,
 html[data-theme='glass'] .o_field_tags,
@@ -335,7 +347,7 @@ html[data-theme='glass'] .o_tags_input {
   color: var(--lg-text);
   padding: 4px 6px;
   &:focus-within {
-    box-shadow: 0 0 0 2px var(--lg-accent);
+    box-shadow: 0 0 0 2px var(--lg-accent-strong);
   }
   // the selected-language tag chips — pill style per spec
   .badge,
@@ -379,7 +391,7 @@ html[data-theme='glass'] .o_field_radio {
   }
   .form-check-input:checked {
     background-color: var(--lg-accent);
-    border-color: var(--lg-accent);
+    border-color: var(--lg-accent-strong);
   }
 }
 

@@ -7,13 +7,23 @@ class AdGroupSyncConfig(models.Model):
     _description = "AD Group Sync - Connection Settings"
 
     name = fields.Char(default="AD Connection", required=True)
-    server = fields.Char(required=True, help="Hostname or IP of the AD/LDAP server, e.g. dc01.company.local")
+    use_odoo_ldap = fields.Boolean(
+        string="Read from Odoo LDAP Config",
+        default=False,
+        help="Read the AD server/port/TLS/base/bind settings from Odoo's own "
+             "LDAP Authentication config (Settings > Technical > LDAP "
+             "Configuration, res.company.ldap - the same connection used for "
+             "LDAP login) instead of entering them here. Enable so the AD "
+             "connection always matches what Odoo uses for login - change it "
+             "once there, not here.",
+    )
+    server = fields.Char(required=False, help="Hostname or IP of the AD/LDAP server, e.g. dc01.company.local")
     port = fields.Integer(default=389)
     use_tls = fields.Boolean(default=True, string="Use StartTLS")
-    base_dn = fields.Char(required=True, help="e.g. DC=company,DC=local")
+    base_dn = fields.Char(required=False, help="e.g. DC=company,DC=local")
     binddn = fields.Char(
         string="Service Account DN",
-        required=True,
+        required=False,
         help="AD service account used for LDAP queries (and, once the "
              "Group Creation OU below is configured, for auto-creating AD "
              "groups too - so despite the name this isn't purely read-only "
@@ -58,16 +68,61 @@ class AdGroupSyncConfig(models.Model):
     )
     active = fields.Boolean(default=True)
 
+    def _odoo_ldap_config(self):
+        """Return the active res.company.ldap record, or None."""
+        model = self.env.get("res.company.ldap")
+        if model is None:
+            return None
+        return model.search([], limit=1)
+
+    def _effective_settings(self):
+        """Resolve the connection settings actually used, honouring
+        use_odoo_ldap (which reads live from Odoo's own LDAP config)."""
+        self.ensure_one()
+        if not self.use_odoo_ldap:
+            return {
+                "server": self.server,
+                "port": self.port,
+                "use_tls": self.use_tls,
+                "base_dn": self.base_dn,
+                "binddn": self.binddn,
+                "bind_password": self.bind_password or "",
+            }
+        ldap_rec = self._odoo_ldap_config()
+        if not ldap_rec:
+            raise UserError(
+                "Read-from-Odoo-LDAP is enabled on this AD connection, but no "
+                "LDAP config was found under Settings > Technical > LDAP "
+                "Configuration (res.company.ldap). Set that up first, or "
+                "turn off 'Read from Odoo LDAP Config' and fill the fields "
+                "here manually."
+            )
+        # ldap_tls field name has varied between versions; fall back gracefully.
+        use_tls = getattr(ldap_rec, "ldap_tls", None)
+        if use_tls is None:
+            use_tls = getattr(ldap_rec, "use_tls", self.use_tls)
+        return {
+            "server": ldap_rec.ldap_server,
+            "port": ldap_rec.ldap_server_port,
+            "use_tls": bool(use_tls),
+            "base_dn": ldap_rec.ldap_base,
+            "binddn": ldap_rec.ldap_binddn,
+            "bind_password": ldap_rec.ldap_password or "",
+        }
+
     def _get_netbios_domain(self):
         self.ensure_one()
         if self.netbios_domain:
             return self.netbios_domain
-        first_dc = (self.base_dn or "").split(",")[0]
+        base_dn = self._effective_settings()["base_dn"] or ""
+        first_dc = base_dn.split(",")[0]
         return first_dc.split("=")[-1].upper() if "=" in first_dc else first_dc.upper()
 
     def _get_connection(self):
         """Open and bind an LDAP connection using the service account, via ldap3
         (pure Python, no compiler/OpenLDAP headers needed - works on Windows).
+        When use_odoo_ldap is on, the server/port/TLS/base/bind settings are
+        read live from Odoo's own LDAP authentication config.
         Raises UserError with a readable message on failure."""
         try:
             from ldap3 import Server, Connection, ALL
@@ -79,11 +134,14 @@ class AdGroupSyncConfig(models.Model):
             )
 
         self.ensure_one()
-        server = Server(self.server, port=self.port, use_ssl=False, get_info=ALL)
-        conn = Connection(server, user=self.binddn, password=self.bind_password or "", auto_bind=False)
+        cfg = self._effective_settings()
+        server = Server(cfg["server"], port=cfg["port"], use_ssl=False, get_info=ALL)
+        conn = Connection(
+            server, user=cfg["binddn"], password=cfg["bind_password"], auto_bind=False
+        )
         try:
             conn.open()
-            if self.use_tls:
+            if cfg["use_tls"]:
                 conn.start_tls()
             if not conn.bind():
                 raise UserError(
@@ -140,6 +198,7 @@ class AdGroupSyncConfig(models.Model):
             "base_dn": ldap_rec.ldap_base,
             "binddn": ldap_rec.ldap_binddn,
             "bind_password": ldap_rec.ldap_password,
+            "use_odoo_ldap": True,
         })
         return {
             "type": "ir.actions.client",
@@ -147,7 +206,9 @@ class AdGroupSyncConfig(models.Model):
             "params": {
                 "title": "Imported",
                 "message": "Connection settings copied from Odoo LDAP "
-                           "Configuration. Click Test Connection to confirm.",
+                           "Configuration, which is now set as the live source "
+                           "(Read from Odoo LDAP Config is ON). Click Test "
+                           "Connection to confirm.",
                 "type": "success",
                 "sticky": False,
             },

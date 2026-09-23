@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="access_form_company_fiscal_year" model="shaka.access.form">
+        <field name="name">سال‌های مالی</field>
+        <field name="model_name">company.fiscal.year</field>
+        <field name="sequence">60</field>
+        <field name="has_workflow">0</field>
+    </record>
+</odoo>

@@ -1,0 +1,1535 @@
+diff --git a/addons/category/__init__.py b/addons/category/__init__.py
+index 91c5580fe..0650744f6 100644
+--- a/addons/category/__init__.py
++++ b/addons/category/__init__.py
+@@ -1,2 +1 @@
+-from . import controllers
+ from . import models
+diff --git a/addons/category/__manifest__.py b/addons/category/__manifest__.py
+index 844c14e74..8f8362776 100644
+--- a/addons/category/__manifest__.py
++++ b/addons/category/__manifest__.py
+@@ -1,44 +1,39 @@
+ {
+-    'name': "category",
+-
+-    'summary': "Short (1 phrase/line) summary of the module's purpose",
+-
++    'name': 'Category',
++    'summary': 'Standalone 3-pane Category Manager over md.category / '
++               'md.category_member (Shaka DW).',
+     'description': """
+-Long description of module's purpose
+-    """,
+-
+-    'author': "My Company",
+-    'website': "https://www.yourcompany.com",
++Category Manager
++================
++A standalone OWL client action that links rows of a dynamic data-warehouse
++table to the legacy ``md.category`` hierarchy through
++``md.category_member``.
+ 
+-    # Categories can be used to filter modules in modules listing
+-    # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
+-    # for the full list
+-    'category': 'Uncategorized',
+-    'version': '0.1',
++The legacy tables live in the ``md`` schema and cannot be modified, so Odoo
++addresses them through writable public mirror views
++(``public.raes_md_category`` / ``public.raes_md_category_member``) rebuilt by
++``refresh_writable_view`` on every install and upgrade.
++""",
++    'author': 'RAES',
++    'website': 'https://www.yourcompany.com',
++    'category': 'Technical',
++    'version': '19.0.1.0.0',
++    'license': 'LGPL-3',
+ 
+     # any module necessary for this one to work correctly
+-    'depends': ['base','web','entity'],
++    'depends': ['base', 'web', 'entity'],
+ 
+     # always loaded
+     'data': [
+         'security/ir.model.access.csv',
+         'views/category_views.xml',
+-        # 'views/actions.xml',
+     ],
+     'assets': {
+         'web.assets_backend': [
+-            'category/static/src/js/split_view.js',
+-            'category/static/src/xml/split_view.xml',
+             'category/static/src/js/category_manager.js',
+             'category/static/src/xml/category_manager.xml',
+-            # 'my_module/static/src/scss/split_view.scss',  # Optional for custom styling
+         ],
+     },
+-    # only loaded in demonstration mode
+-    'demo': [
+-        'demo/demo.xml',
+-    ],
+     'installable': True,
+     'application': True,
+ }
+-
+diff --git a/addons/category/controllers/__init__.py b/addons/category/controllers/__init__.py
+deleted file mode 100644
+index e046e49fb..000000000
+--- a/addons/category/controllers/__init__.py
++++ /dev/null
+@@ -1 +0,0 @@
+-from . import controllers
+diff --git a/addons/category/controllers/controllers.py b/addons/category/controllers/controllers.py
+deleted file mode 100644
+index e6215b6d4..000000000
+--- a/addons/category/controllers/controllers.py
++++ /dev/null
+@@ -1,21 +0,0 @@
+-# from odoo import http
+-
+-
+-# class Category(http.Controller):
+-#     @http.route('/category/category', auth='public')
+-#     def index(self, **kw):
+-#         return "Hello, world"
+-
+-#     @http.route('/category/category/objects', auth='public')
+-#     def list(self, **kw):
+-#         return http.request.render('category.listing', {
+-#             'root': '/category/category',
+-#             'objects': http.request.env['category.category'].search([]),
+-#         })
+-
+-#     @http.route('/category/category/objects/<model("category.category"):obj>', auth='public')
+-#     def object(self, obj, **kw):
+-#         return http.request.render('category.object', {
+-#             'object': obj
+-#         })
+-
+diff --git a/addons/category/demo/demo.xml b/addons/category/demo/demo.xml
+deleted file mode 100644
+index 051187c85..000000000
+--- a/addons/category/demo/demo.xml
++++ /dev/null
+@@ -1,30 +0,0 @@
+-<odoo>
+-    <data>
+-<!--
+-          <record id="object0" model="category.category">
+-            <field name="name">Object 0</field>
+-            <field name="value">0</field>
+-          </record>
+-
+-          <record id="object1" model="category.category">
+-            <field name="name">Object 1</field>
+-            <field name="value">10</field>
+-          </record>
+-
+-          <record id="object2" model="category.category">
+-            <field name="name">Object 2</field>
+-            <field name="value">20</field>
+-          </record>
+-
+-          <record id="object3" model="category.category">
+-            <field name="name">Object 3</field>
+-            <field name="value">30</field>
+-          </record>
+-
+-          <record id="object4" model="category.category">
+-            <field name="name">Object 4</field>
+-            <field name="value">40</field>
+-          </record>
+--->
+-    </data>
+-</odoo>
+diff --git a/addons/category/models/__init__.py b/addons/category/models/__init__.py
+index 516488919..c49306a20 100644
+--- a/addons/category/models/__init__.py
++++ b/addons/category/models/__init__.py
+@@ -1,2 +1,2 @@
+ from . import category_view
+-from . import category
+\ No newline at end of file
++from . import category
+diff --git a/addons/category/models/category.py b/addons/category/models/category.py
+index c12a64ffa..3107062ab 100644
+--- a/addons/category/models/category.py
++++ b/addons/category/models/category.py
+@@ -56,18 +56,119 @@ class RaesMdCategory(models.Model):
+             _logger.exception("Could not (re)build view raes_md_category")
+             raise
+ 
++    @api.constrains('parent_id', 'entity_id')
++    def _check_same_entity_as_root(self):
++        """A node must share its tree root's entity.
++
++        The legacy ``md.category_same_entity`` trigger already enforces
++        this with a recursive ancestor walk, but it raises a raw
++        PostgreSQL error. Checking here turns that into a proper
++        ValidationError the UI can display.
++        """
++        for rec in self:
++            root = rec._get_tree_root()
++            if root and root.entity_id and rec.entity_id != root.entity_id:
++                raise ValidationError(_(
++                    'Category "%(title)s" belongs to entity "%(root)s" '
++                    '(tree root "%(root_title)s"). A sub-category must use '
++                    'the same entity as its tree root.',
++                    title=rec.title,
++                    root=root.entity_id.display_name,
++                    root_title=root.title,
++                ))
++
++    def _get_tree_root(self):
++        """Return the root record of this node's branch.
++
++        Follows ``parent_id`` upward (falling back to ``root_id`` when it
++        is already correct) and tolerates a broken/cyclic chain by
++        returning an empty recordset.
++        """
++        self.ensure_one()
++        seen = set()
++        node = self
++        while node and node.id not in seen:
++            seen.add(node.id)
++            if not node.parent_id:
++                return node
++            node = node.parent_id
++        return self.browse()
++
+     @api.model_create_multi
+     def create(self, vals_list):
+         for vals in vals_list:
+             vals.setdefault('company_id', self.env.company.id)
+             vals.setdefault('creator_user_id', self.env.uid)
+             vals.setdefault('creation_date', fields.Datetime.now())
+-        return super().create(vals_list)
++            # Categories created from the Category Manager are user
++            # defined, and ``root_id`` must point at the root of their
++            # branch (the legacy app expects it to be non-null on every
++            # row — the seeded roots carry ``root_id = id``).
++            vals.setdefault('is_user_defined', True)
++            if not vals.get('root_id'):
++                parent_id = vals.get('parent_id')
++                if parent_id:
++                    parent = self.browse(parent_id)
++                    # Inherit the parent's entity when not supplied: a
++                    # child MUST match its tree root, and the caller
++                    # (the OWL modal) works from the parent's entity.
++                    if not vals.get('entity_id') and parent.entity_id:
++                        vals['entity_id'] = parent.entity_id.id
++                    vals['root_id'] = parent.root_id.id or parent.id
++        records = super().create(vals_list)
++        # A brand-new root has no root_id yet: it is its own root. Done
++        # per record because each new root points at itself.
++        for rec in records.filtered(lambda r: not r.root_id):
++            rec.sudo().write({'root_id': rec.id})
++        return records
+ 
+     def write(self, vals):
++        vals = dict(vals)
++        # Re-parenting must keep root_id in sync and must not create a
++        # cycle (a node cannot become its own ancestor). The legacy
++        # schema stores the branch root on every row, so it has to be
++        # recomputed whenever parent_id changes.
++        if 'parent_id' in vals:
++            new_parent = (self.browse(vals['parent_id']) if vals['parent_id']
++                          else self.browse())
++            for rec in self:
++                if new_parent:
++                    # Reject a cycle: the new parent must not sit below
++                    # this record in the tree.
++                    node, seen = new_parent, set()
++                    while node and node.id not in seen:
++                        if node.id == rec.id:
++                            raise ValidationError(_(
++                                'Cannot move "%(title)s" under its own '
++                                'descendant "%(parent)s".',
++                                title=rec.title,
++                                parent=new_parent.title,
++                            ))
++                        seen.add(node.id)
++                        node = node.parent_id
++                    vals.setdefault(
++                        'root_id', new_parent.root_id.id or new_parent.id)
++                else:
++                    vals.setdefault('root_id', rec.id)
+         vals.setdefault('editor_user_id', self.env.uid)
+         vals.setdefault('modification_date', fields.Datetime.now())
+-        return super().write(vals)
++        result = super().write(vals)
++        # A node that became a root must point at itself.
++        if 'parent_id' in vals and not vals['parent_id']:
++            for rec in self.filtered(lambda r: r.root_id.id != r.id):
++                rec.sudo().write({'root_id': rec.id})
++        return result
++
++    def unlink(self):
++        """Delete members first, then the category.
++
++        ``md.category_member`` has no ON DELETE CASCADE toward
++        ``md.category`` (it is a legacy table we must not alter), so the
++        member rows have to be removed explicitly or they would be left
++        pointing at a vanished category.
++        """
++        self.mapped('member_ids').sudo().unlink()
++        return super().unlink()
+ 
+ 
+ class RaesMdCategoryMember(models.Model):
+@@ -120,4 +221,10 @@ class RaesMdCategoryMember(models.Model):
+         for vals in vals_list:
+             vals.setdefault('creator_user_id', self.env.uid)
+             vals.setdefault('creation_date', fields.Datetime.now())
+-        return super().create(vals_list)
+\ No newline at end of file
++        return super().create(vals_list)
++
++    def write(self, vals):
++        vals = dict(vals)
++        vals.setdefault('editor_user_id', self.env.uid)
++        vals.setdefault('modification_date', fields.Datetime.now())
++        return super().write(vals)
+\ No newline at end of file
+diff --git a/addons/category/models/category_view.py b/addons/category/models/category_view.py
+index 71e2bf620..dd53e703b 100644
+--- a/addons/category/models/category_view.py
++++ b/addons/category/models/category_view.py
+@@ -1,5 +1,18 @@
+-"""Writable public mirror views for md.category / md.category_member."""
+-from odoo.addons.entity.models.md_view import refresh_writable_view
++"""Writable public mirror views for md.category / md.category_member.
++
++``refresh_writable_view`` is re-exported explicitly: ``category.py``
++imports it from here, so it must be a real name of this module rather
++than an incidental side effect of the import below.
++"""
++from odoo.addons.entity.models.md_view import (  # noqa: F401
++    refresh_md_view,
++    refresh_writable_view,
++)
++
++__all__ = [
++    'CATEGORY_VIEW', 'CATEGORY_MEMBER_VIEW',
++    'refresh_md_view', 'refresh_writable_view',
++]
+ 
+ _CATEGORY_COLUMNS = {
+     'id': 'bigint',
+diff --git a/addons/category/models/models.py b/addons/category/models/models.py
+deleted file mode 100644
+index 700a4cbc3..000000000
+--- a/addons/category/models/models.py
++++ /dev/null
+@@ -1,8 +0,0 @@
+-from odoo import models, fields
+-
+-class MyDirectoryModel(models.Model):
+-    _name = 'my.directory'
+-    _description = 'Directory Record'
+-
+-    name = fields.Char(string='Name', required=True)
+-    description = fields.Text(string='Description')
+\ No newline at end of file
+diff --git a/addons/category/static/src/js/category_manager.js b/addons/category/static/src/js/category_manager.js
+index 5570f837e..5b78acc56 100644
+--- a/addons/category/static/src/js/category_manager.js
++++ b/addons/category/static/src/js/category_manager.js
+@@ -3,10 +3,15 @@ import { registry } from "@web/core/registry";
+ import { useService } from "@web/core/utils/hooks";
+ import { Component, useState, onWillStart } from "@odoo/owl";
+ 
++const PAGE_SIZE = 20;
++
+ // ---------- Recursive Tree Node ----------
+ export class CategoryNode extends Component {
+     get hasChildren() {
+-        return this.props.children && this.props.children.length > 0;
++        return !!(this.props.children && this.props.children.length);
++    }
++    get isSelected() {
++        return this.props.selectedId === this.props.category.id;
+     }
+     onClick(ev) {
+         ev.stopPropagation();
+@@ -14,7 +19,14 @@ export class CategoryNode extends Component {
+     }
+     onToggle(ev) {
+         ev.stopPropagation();
+-        this.props.onToggle(this.props.category.id);
++        if (this.hasChildren) {
++            this.props.onToggle(this.props.category.id);
++        }
++    }
++    /** Create a sub-category nested under this node. */
++    onAddChild(ev) {
++        ev.stopPropagation();
++        this.props.onAddChild(this.props.category);
+     }
+ }
+ CategoryNode.template = "category.CategoryNode";
+@@ -25,10 +37,12 @@ CategoryNode.props = {
+     expandedIds: Object,
+     onSelect: Function,
+     onToggle: Function,
++    onAddChild: Function,
+     getChildren: Function,
+     level: Number,
+ };
+-// FIX: register the component in itself so it can recurse
++// Recursive components must be registered on themselves so the template
++// can reference <CategoryNode> while rendering a CategoryNode.
+ CategoryNode.components = { CategoryNode };
+ 
+ 
+@@ -37,18 +51,28 @@ export class CategoryManager extends Component {
+     setup() {
+         this.orm = useService("orm");
+         this.notification = useService("notification");
++        this.pageSize = PAGE_SIZE;
+ 
+         this.state = useState({
+             tree: [],
+             treeByParent: {},
++            loading: true,
+             selectedCategory: null,
+             expandedIds: {},
+-            left:  { records: [], total: 0, page: 1, search: '' },
+-            right: { records: [], total: 0, page: 1, search: '' },
++            left: { records: [], total: 0, page: 1, search: "", reason: null },
++            right: { records: [], total: 0, page: 1, search: "", reason: null },
+             showNewCategory: false,
+-            newCategory: { title: '', code: '', parent_id: null, entity_id: null },
++            newCategory: { title: "", code: "", entity_id: null },
++            saving: false,
+         });
+ 
++        // Bound once so they are stable references across re-renders; the
++        // templates hand them down to every recursive node.
++        this.getChildren = (cat) => this.state.treeByParent[cat.id] || [];
++        this.onSelect = (cat) => this.selectCategory(cat);
++        this.onToggle = (id) => this.toggleExpand(id);
++        this.onAddChild = (cat) => this.openNewCategory(cat);
++
+         onWillStart(async () => {
+             await this.reloadTree();
+         });
+@@ -56,108 +80,175 @@ export class CategoryManager extends Component {
+ 
+     // ---------- Tree ----------
+     async reloadTree() {
+-        const flat = await this.orm.call("raes.md.entity", "get_category_tree", []);
+-        const byParent = {};
+-        for (const c of flat) {
+-            const key = c.parent_id ? c.parent_id[0] : 0;
+-            (byParent[key] = byParent[key] || []).push(c);
+-        }
+-        for (const k in byParent) {
+-            byParent[k].sort((a, b) => (a.title || '').localeCompare(b.title || ''));
++        try {
++            const flat = await this.orm.call(
++                "raes.md.entity", "get_category_tree", []);
++            const byParent = {};
++            for (const c of flat) {
++                const key = c.parent_id ? c.parent_id[0] : 0;
++                (byParent[key] = byParent[key] || []).push(c);
++            }
++            for (const k of Object.keys(byParent)) {
++                byParent[k].sort((a, b) =>
++                    (a.title || "").localeCompare(b.title || ""));
++            }
++            this.state.tree = flat;
++            this.state.treeByParent = byParent;
++        } catch (e) {
++            console.error("get_category_tree failed", e);
++            this.notification.add(
++                "Could not load the category tree.", { type: "danger" });
++        } finally {
++            this.state.loading = false;
+         }
+-        this.state.tree = flat;
+-        this.state.treeByParent = byParent;
+     }
+ 
+     get rootNodes() {
+         return this.state.treeByParent[0] || [];
+     }
+ 
+-    // FIX: bind getChildren so it's a stable function on `this`
+-    getChildren = (cat) => {
+-        return this.state.treeByParent[cat.id] || [];
+-    };
+-
+     toggleExpand(id) {
+         this.state.expandedIds[id] = !this.state.expandedIds[id];
+     }
+ 
+     async selectCategory(cat) {
+         this.state.selectedCategory = cat;
+-        this.state.left.page = 1;
+-        this.state.right.page = 1;
+-        this.state.left.search = '';
+-        this.state.right.search = '';
++        for (const side of ["left", "right"]) {
++            this.state[side].page = 1;
++            this.state[side].search = "";
++        }
++        await this.reloadPanes();
++    }
++
++    async reloadPanes() {
+         await Promise.all([this.loadLeft(), this.loadRight()]);
+     }
+ 
+     // ---------- DW item lists ----------
+-    async loadLeft() {
++    /**
++     * Fetch one pane. `entity_id` is mandatory: without it there is no DW
++     * table to read from, so bail out early rather than issue an RPC that
++     * can only fail.
++     */
++    async fetchPane(sideName, method) {
++        const side = this.state[sideName];
+         const cat = this.state.selectedCategory;
+         if (!cat || !cat.entity_id) {
+-            this.state.left.records = [];
+-            this.state.left.total = 0;
++            side.records = [];
++            side.total = 0;
++            side.reason = cat ? "no-entity" : null;
+             return;
+         }
+-        const entity_id = cat.entity_id[0];
+-        const res = await this.orm.call(
+-            "raes.md.entity",
+-            "get_items_not_in_category",
+-            [entity_id, cat.id,
+-             (this.state.left.page - 1) * 20, 20,
+-             this.state.left.search || ''],
+-        );
+-        this.state.left.records = res.records;
+-        this.state.left.total = res.total;
++        const entityId = cat.entity_id[0];
++        try {
++            const res = await this.orm.call("raes.md.entity", method, [
++                entityId,
++                cat.id,
++                (side.page - 1) * this.pageSize,
++                this.pageSize,
++                side.search || "",
++            ]);
++            side.records = res.records || [];
++            side.total = res.total || 0;
++            side.reason = res.reason || null;
++        } catch (e) {
++            console.error(`${method} failed`, e);
++            side.records = [];
++            side.total = 0;
++            side.reason = "rpc-error";
++            this.notification.add("Could not load DW items.", { type: "danger" });
++        }
+     }
+ 
+-    async loadRight() {
+-        const cat = this.state.selectedCategory;
+-        if (!cat || !cat.entity_id) {
+-            this.state.right.records = [];
+-            this.state.right.total = 0;
+-            return;
++    loadLeft() {
++        return this.fetchPane("left", "get_items_not_in_category");
++    }
++    loadRight() {
++        return this.fetchPane("right", "get_items_in_category");
++    }
++
++    /** Explain an empty pane caused by an unresolved DW relation. */
++    reasonMessage(reason) {
++        const sel = this.state.selectedCategory;
++        const table = sel && sel.entity_id ? sel.entity_id[1] : "this entity";
++        switch (reason) {
++            case "no-connection":
++                return `No data-warehouse connection is configured for "${table}". ` +
++                       `Set one on the entity to link items.`;
++            case "not-imported":
++                return `The data-warehouse table for "${table}" is not imported ` +
++                       `into PostgreSQL yet. Run the DW import for this entity.`;
++            case "no-pk":
++                return `No primary key column could be resolved for "${table}".`;
++            case "no-entity":
++                return `This category has no entity assigned.`;
++            case "no-entity-record":
++                return `The entity assigned to this category no longer exists.`;
++            case "rpc-error":
++                return `The data-warehouse query failed — see the browser console.`;
++            default:
++                return "";
+         }
+-        const entity_id = cat.entity_id[0];
+-        const res = await this.orm.call(
+-            "raes.md.entity",
+-            "get_items_in_category",
+-            [entity_id, cat.id,
+-             (this.state.right.page - 1) * 20, 20,
+-             this.state.right.search || ''],
+-        );
+-        this.state.right.records = res.records;
+-        this.state.right.total = res.total;
+     }
+ 
++    // ---------- Add / remove ----------
+     async addToCategory(record) {
+         const cat = this.state.selectedCategory;
+-        if (!cat) return;
++        if (!cat || !cat.entity_id) {
++            return;
++        }
++        // `record.id` is the DW primary key, normalised server-side by
++        // _dw_normalize_record (the raw DW column is e.g. `partyid`).
++        // Posting an undefined id would violate the NOT NULL on
++        // md.category_member.member_id.
++        if (record.id === undefined || record.id === null) {
++            this.notification.add(
++                "This DW row has no primary key; cannot add it.",
++                { type: "warning" });
++            return;
++        }
+         try {
+             await this.orm.create("raes.md.category.member", [{
+                 category_id: cat.id,
+                 member_id: record.id,
+                 entity_id: cat.entity_id[0],
+             }]);
+-            await Promise.all([this.loadLeft(), this.loadRight()]);
++            await this.reloadPanes();
+         } catch (e) {
+-            this.notification.add("Could not add record.", { type: "danger" });
++            console.error("create raes.md.category.member failed", e);
++            this.notification.add(
++                "Could not add the record. It may already be in this category.",
++                { type: "danger" });
+         }
+     }
+ 
+     async removeFromCategory(record) {
+         const cat = this.state.selectedCategory;
+-        if (!cat) return;
+-        const members = await this.orm.searchRead(
+-            "raes.md.category.member",
+-            [["category_id", "=", cat.id],
+-             ["member_id", "=", record.id],
+-             ["entity_id", "=", cat.entity_id[0]]],
+-            ["id"],
+-        );
+-        if (members.length) {
+-            await this.orm.unlink("raes.md.category.member", [members[0].id]);
+-            await Promise.all([this.loadLeft(), this.loadRight()]);
++        if (!cat || !cat.entity_id) {
++            return;
++        }
++        try {
++            const members = await this.orm.searchRead(
++                "raes.md.category.member",
++                [["category_id", "=", cat.id],
++                 ["member_id", "=", record.id],
++                 ["entity_id", "=", cat.entity_id[0]]],
++                ["id"],
++            );
++            if (!members.length) {
++                this.notification.add(
++                    "This record is no longer in the category.",
++                    { type: "warning" });
++                await this.reloadPanes();
++                return;
++            }
++            await this.orm.unlink(
++                "raes.md.category.member", members.map((m) => m.id));
++            await this.reloadPanes();
++        } catch (e) {
++            console.error("unlink raes.md.category.member failed", e);
++            this.notification.add(
++                "Could not remove the record.", { type: "danger" });
+         }
+     }
+ 
+@@ -172,8 +263,15 @@ export class CategoryManager extends Component {
+         this.loadRight();
+     }
+ 
++    get leftPages() {
++        return Math.max(1, Math.ceil(this.state.left.total / this.pageSize));
++    }
++    get rightPages() {
++        return Math.max(1, Math.ceil(this.state.right.total / this.pageSize));
++    }
++
+     async nextLeft() {
+-        if (this.state.left.page * 20 < this.state.left.total) {
++        if (this.state.left.page < this.leftPages) {
+             this.state.left.page++;
+             await this.loadLeft();
+         }
+@@ -185,7 +283,7 @@ export class CategoryManager extends Component {
+         }
+     }
+     async nextRight() {
+-        if (this.state.right.page * 20 < this.state.right.total) {
++        if (this.state.right.page < this.rightPages) {
+             this.state.right.page++;
+             await this.loadRight();
+         }
+@@ -198,13 +296,30 @@ export class CategoryManager extends Component {
+     }
+ 
+     // ---------- New category ----------
+-    openNewCategory(parentCat = null) {
++    /**
++     * Open the create modal.
++     *
++     * `parentCat` is set when the user clicks the `+` on a tree node, in
++     * which case the new category is nested under it and inherits its
++     * entity (md.category_same_entity() requires a child to share its
++     * tree root's entity_id, so this must not be freely editable).
++     */
++    openNewCategory(parentCat) {
++        const parent = parentCat || this.state.selectedCategory;
++        const nested = !!parentCat;
+         this.state.newCategory = {
+-            title: '',
+-            code: '',
+-            parent_id: parentCat ? parentCat.id : null,
+-            entity_id: parentCat && parentCat.entity_id ? parentCat.entity_id[0] : null,
++            title: "",
++            code: "",
++            parent_id: nested ? parent.id : null,
++            parent_title: nested ? parent.title : null,
++            // The entity is fixed to the tree root's entity when nested:
++            // the legacy trigger rejects a mismatching child.
++            entity_id: parent && parent.entity_id ? parent.entity_id[0] : null,
+         };
++        // Auto-expand the parent so the new child is immediately visible.
++        if (nested) {
++            this.state.expandedIds[parentCat.id] = true;
++        }
+         this.state.showNewCategory = true;
+     }
+     cancelNewCategory() {
+@@ -217,22 +332,48 @@ export class CategoryManager extends Component {
+             return;
+         }
+         if (!nc.entity_id) {
+-            this.notification.add("Please set an entity.", { type: "warning" });
++            this.notification.add(
++                "An entity is required — select a category first, or type an entity id.",
++                { type: "warning" });
+             return;
+         }
+-        await this.orm.create("raes.md.category", [{
+-            title: nc.title,
+-            code: nc.code || false,
+-            parent_id: nc.parent_id || false,
+-            entity_id: nc.entity_id,
+-        }]);
+-        this.state.showNewCategory = false;
+-        await this.reloadTree();
++        this.state.saving = true;
++        try {
++            const vals = {
++                title: nc.title,
++                code: nc.code || false,
++                entity_id: nc.entity_id,
++            };
++            if (nc.parent_id) {
++                vals.parent_id = nc.parent_id;
++            }
++            await this.orm.create("raes.md.category", [vals]);
++            this.state.showNewCategory = false;
++            await this.reloadTree();
++            if (nc.parent_id) {
++                this.state.expandedIds[nc.parent_id] = true;
++            }
++            this.notification.add(
++                nc.parent_id
++                    ? `Sub-category created under "${nc.parent_title}".`
++                    : "Root category created.",
++                { type: "success" });
++        } catch (e) {
++            console.error("create raes.md.category failed", e);
++            this.notification.add(
++                "Could not create the category. A sub-category must belong " +
++                "to the same entity as its tree root.",
++                { type: "danger" });
++        } finally {
++            this.state.saving = false;
++        }
+     }
+ 
++    // ---------- View helpers ----------
++    /** Server computes `label`; keep a fallback for safety. */
+     recordLabel(record) {
+-        return record.title || record.name || record.english_title ||
+-               `#${record.id}`;
++        return record.label || record.title || record.name ||
++               record.englishtitle || record.english_title || `#${record.id}`;
+     }
+ }
+ CategoryManager.template = "category.CategoryManager";
+diff --git a/addons/category/static/src/js/split_view.js b/addons/category/static/src/js/split_view.js
+deleted file mode 100644
+index fd3c7df9f..000000000
+--- a/addons/category/static/src/js/split_view.js
++++ /dev/null
+@@ -1,112 +0,0 @@
+-/** @odoo-module **/
+-import { registry } from "@web/core/registry";
+-import { useService } from "@web/core/utils/hooks";
+-import { Component, useState, onWillStart } from "@odoo/owl";
+-
+-export class MySplitView extends Component {
+-    setup() {
+-        this.orm = useService("orm");
+-        this.notification = useService("notification");
+-
+-        // Get category_id from context (passed when opening the action)
+-        const context = this.props.action.context || {};
+-        const categoryId = context.active_id || context.default_category_id;
+-
+-        this.state = useState({
+-            categoryId: categoryId,
+-            category: null,
+-            entityId: null,
+-            records: [],
+-            selectedRecord: null,
+-            page: 1,
+-            limit: 10,
+-            total: 0,
+-            searchTerm: "",
+-        });
+-
+-        onWillStart(async () => {
+-            if (this.state.categoryId) {
+-                await this.loadCategory();
+-                await this.loadRecords();
+-            }
+-        });
+-    }
+-
+-    async loadCategory() {
+-        const categories = await this.orm.read("raes.md.category", [this.state.categoryId], ["title", "entity_id"]);
+-        if (categories.length > 0) {
+-            this.state.category = categories[0];
+-            this.state.entityId = this.state.category.entity_id ? this.state.category.entity_id[0] : null;
+-        }
+-    }
+-
+-    async loadRecords() {
+-        if (!this.state.entityId) return;
+-
+-        const result = await this.orm.call(
+-            "raes.md.entity",
+-            "get_dw_records",
+-            [
+-                this.state.entityId,
+-                (this.state.page - 1) * this.state.limit,
+-                this.state.limit,
+-                this.state.searchTerm
+-            ]
+-        );
+-        this.state.records = result.records;
+-        this.state.total = result.total;
+-    }
+-
+-    async selectRecord(record) {
+-        this.state.selectedRecord = record;
+-    }
+-
+-    async addSelectedToCategory() {
+-        if (!this.state.selectedRecord || !this.state.categoryId) return;
+-
+-        try {
+-            await this.orm.create("raes.md.category.member", [{
+-                category_id: this.state.categoryId,
+-                member_id: this.state.selectedRecord.id, // The PK from the DW table
+-                entity_id: this.state.entityId,
+-            }]);
+-            this.notification.add("Record added to category successfully!", { type: "success" });
+-            this.state.selectedRecord = null;
+-        } catch (error) {
+-            this.notification.add("Error adding record. It might already exist.", { type: "danger" });
+-        }
+-    }
+-
+-    async nextPage() {
+-        if (this.state.page * this.state.limit < this.state.total) {
+-            this.state.page++;
+-            await this.loadRecords();
+-        }
+-    }
+-
+-    async prevPage() {
+-        if (this.state.page > 1) {
+-            this.state.page--;
+-            await this.loadRecords();
+-        }
+-    }
+-
+-    async firstPage() {
+-        this.state.page = 1;
+-        await this.loadRecords();
+-    }
+-
+-    async lastPage() {
+-        this.state.page = Math.ceil(this.state.total / this.state.limit) || 1;
+-        await this.loadRecords();
+-    }
+-
+-    onSearch(ev) {
+-        this.state.searchTerm = ev.target.value;
+-        this.state.page = 1;
+-        this.loadRecords();
+-    }
+-}
+-
+-MySplitView.template = "my_module.MySplitView";
+-registry.category("actions").add("my_directory_split_view", MySplitView);
+\ No newline at end of file
+diff --git a/addons/category/static/src/xml/category_manager.xml b/addons/category/static/src/xml/category_manager.xml
+index 6636d10c4..e68118a0b 100644
+--- a/addons/category/static/src/xml/category_manager.xml
++++ b/addons/category/static/src/xml/category_manager.xml
+@@ -4,23 +4,29 @@
+     <!-- ============ Recursive tree node ============ -->
+     <t t-name="category.CategoryNode">
+         <div class="category-node d-flex align-items-center"
+-             t-att-class="{ 'bg-primary text-white': props.category.id === props.selectedId }"
++             t-att-class="{ 'bg-primary text-white': isSelected }"
+              t-att-style="'padding-left:' + (props.level * 16) + 'px'"
+-             t-on-click="(ev) => this.onClick(ev)">
++             t-att-title="props.category.title"
++             t-on-click="onClick">
+             <span class="toggle-icon me-1"
+-                  t-on-click="(ev) => this.onToggle(ev)">
++                  t-att-class="{ 'text-muted': !hasChildren }"
++                  t-on-click="onToggle">
+                 <t t-if="hasChildren">
+                     <t t-if="props.expandedIds[props.category.id]">&#9660;</t>
+                     <t t-else="">&#9654;</t>
+                 </t>
+                 <t t-else="">&#160;&#160;</t>
+             </span>
+-            <span t-esc="props.category.title"/>
++            <span class="text-truncate flex-grow-1" t-esc="props.category.title"/>
++            <!-- Create a sub-category nested under this node -->
++            <button class="btn btn-sm border-0 py-0 px-1 node-add-child"
++                    t-att-class="{ 'text-white': isSelected }"
++                    t-on-click="onAddChild"
++                    title="Add a sub-category here">+</button>
+         </div>
+ 
+         <t t-if="props.expandedIds[props.category.id]">
+             <t t-foreach="props.children" t-as="child" t-key="child.id">
+-                <!-- FIX: use props.getChildren(child) instead of env.getChildren -->
+                 <CategoryNode
+                     category="child"
+                     children="props.getChildren(child)"
+@@ -28,6 +34,7 @@
+                     expandedIds="props.expandedIds"
+                     onSelect="props.onSelect"
+                     onToggle="props.onToggle"
++                    onAddChild="props.onAddChild"
+                     getChildren="props.getChildren"
+                     level="props.level + 1"/>
+             </t>
+@@ -39,30 +46,35 @@
+         <div class="category-manager d-flex h-100 w-100 bg-white">
+ 
+             <!-- ================= PANE 1: Tree ================= -->
+-            <div class="pane-tree border-end d-flex flex-column" style="width: 260px;">
++            <div class="pane-tree border-end d-flex flex-column" style="width: 280px;">
+                 <div class="pane-header bg-light border-bottom d-flex justify-content-between align-items-center p-2">
+                     <strong>Categories</strong>
+                     <button class="btn btn-sm btn-primary"
+-                            t-on-click="() => this.openNewCategory(null)"
++                            t-on-click="openNewCategory"
+                             title="New root category">+</button>
+                 </div>
+                 <div class="flex-grow-1 overflow-auto p-2">
+-                    <t t-if="rootNodes.length === 0">
++                    <t t-if="state.loading">
++                        <div class="text-muted small p-2">Loading&#8230;</div>
++                    </t>
++                    <t t-elif="rootNodes.length === 0">
+                         <div class="text-muted small p-2">
+                             No categories yet. Click <b>+</b> to add one.
+                         </div>
+                     </t>
+-                    <t t-foreach="rootNodes" t-as="root" t-key="root.id">
+-                        <!-- FIX: pass getChildren binding via arrow -->
+-                        <CategoryNode
+-                            category="root"
+-                            children="getChildren(root)"
+-                            selectedId="state.selectedCategory ? state.selectedCategory.id : -1"
+-                            expandedIds="state.expandedIds"
+-                            onSelect="(c) => this.selectCategory(c)"
+-                            onToggle="(id) => this.toggleExpand(id)"
+-                            getChildren="getChildren"
+-                            level="0"/>
++                    <t t-else="">
++                        <t t-foreach="rootNodes" t-as="root" t-key="root.id">
++                            <CategoryNode
++                                category="root"
++                                children="getChildren(root)"
++                                selectedId="state.selectedCategory ? state.selectedCategory.id : -1"
++                                expandedIds="state.expandedIds"
++                                onSelect="onSelect"
++                                onToggle="onToggle"
++                                onAddChild="onAddChild"
++                                getChildren="getChildren"
++                                level="0"/>
++                        </t>
+                     </t>
+                 </div>
+             </div>
+@@ -72,13 +84,12 @@
+                 <div class="pane-header bg-light border-bottom p-2 d-flex justify-content-between">
+                     <strong>
+                         Uncategorized
+-                        <span class="badge bg-secondary ms-1"
+-                              t-esc="state.left.total"/>
++                        <span class="badge bg-secondary ms-1" t-esc="state.left.total"/>
+                     </strong>
+                 </div>
+                 <div class="p-2 border-bottom">
+                     <input type="text" class="form-control form-control-sm"
+-                           placeholder="Search…"
++                           placeholder="Search&#8230;"
+                            t-on-input="onSearchLeft"/>
+                 </div>
+                 <div class="flex-grow-1 overflow-auto">
+@@ -87,12 +98,20 @@
+                             Select a category to begin.
+                         </div>
+                     </t>
++                    <t t-elif="state.left.reason">
++                        <div class="alert alert-warning small m-2"
++                             t-esc="reasonMessage(state.left.reason)"/>
++                    </t>
++                    <t t-elif="state.left.records.length === 0">
++                        <div class="text-muted text-center mt-5 small">
++                            No uncategorized items.
++                        </div>
++                    </t>
+                     <t t-else="">
+                         <table class="table table-sm table-hover mb-0">
+                             <tbody>
+-                                <tr t-foreach="state.left.records"
+-                                    t-as="rec" t-key="rec.id">
+-                                    <td t-esc="recordLabel(rec)"/>
++                                <tr t-foreach="state.left.records" t-as="rec" t-key="rec.id">
++                                    <td class="text-truncate" t-esc="recordLabel(rec)"/>
+                                     <td class="text-end" style="width:60px;">
+                                         <button class="btn btn-sm btn-outline-success"
+                                                 t-on-click="() => this.addToCategory(rec)"
+@@ -108,10 +127,10 @@
+                             t-on-click="prevLeft"
+                             t-att-disabled="state.left.page === 1">&#9664;</button>
+                     <span class="small text-muted align-self-center"
+-                          t-esc="'Page ' + state.left.page"/>
++                          t-esc="'Page ' + state.left.page + ' / ' + leftPages"/>
+                     <button class="btn btn-sm btn-light"
+                             t-on-click="nextLeft"
+-                            t-att-disabled="state.left.page * 20 >= state.left.total">&#9654;</button>
++                            t-att-disabled="state.left.page >= leftPages">&#9654;</button>
+                 </div>
+             </div>
+ 
+@@ -120,13 +139,12 @@
+                 <div class="pane-header bg-light border-bottom p-2 d-flex justify-content-between">
+                     <strong>
+                         In this category
+-                        <span class="badge bg-primary ms-1"
+-                              t-esc="state.right.total"/>
++                        <span class="badge bg-primary ms-1" t-esc="state.right.total"/>
+                     </strong>
+                 </div>
+                 <div class="p-2 border-bottom">
+                     <input type="text" class="form-control form-control-sm"
+-                           placeholder="Search…"
++                           placeholder="Search&#8230;"
+                            t-on-input="onSearchRight"/>
+                 </div>
+                 <div class="flex-grow-1 overflow-auto">
+@@ -135,12 +153,20 @@
+                             Select a category to begin.
+                         </div>
+                     </t>
++                    <t t-elif="state.right.reason">
++                        <div class="alert alert-warning small m-2"
++                             t-esc="reasonMessage(state.right.reason)"/>
++                    </t>
++                    <t t-elif="state.right.records.length === 0">
++                        <div class="text-muted text-center mt-5 small">
++                            Nothing in this category yet.
++                        </div>
++                    </t>
+                     <t t-else="">
+                         <table class="table table-sm table-hover mb-0">
+                             <tbody>
+-                                <tr t-foreach="state.right.records"
+-                                    t-as="rec" t-key="rec.id">
+-                                    <td t-esc="recordLabel(rec)"/>
++                                <tr t-foreach="state.right.records" t-as="rec" t-key="rec.id">
++                                    <td class="text-truncate" t-esc="recordLabel(rec)"/>
+                                     <td class="text-end" style="width:60px;">
+                                         <button class="btn btn-sm btn-outline-danger"
+                                                 t-on-click="() => this.removeFromCategory(rec)"
+@@ -156,10 +182,10 @@
+                             t-on-click="prevRight"
+                             t-att-disabled="state.right.page === 1">&#9664;</button>
+                     <span class="small text-muted align-self-center"
+-                          t-esc="'Page ' + state.right.page"/>
++                          t-esc="'Page ' + state.right.page + ' / ' + rightPages"/>
+                     <button class="btn btn-sm btn-light"
+                             t-on-click="nextRight"
+-                            t-att-disabled="state.right.page * 20 >= state.right.total">&#9654;</button>
++                            t-att-disabled="state.right.page >= rightPages">&#9654;</button>
+                 </div>
+             </div>
+ 
+@@ -171,10 +197,19 @@
+                 <div class="modal-dialog">
+                     <div class="modal-content">
+                         <div class="modal-header">
+-                            <h5 class="modal-title">New Category</h5>
++                            <h5 class="modal-title">
++                                <t t-if="state.newCategory.parent_id">New Sub-category</t>
++                                <t t-else="">New Root Category</t>
++                            </h5>
+                             <button class="btn-close" t-on-click="cancelNewCategory"/>
+                         </div>
+                         <div class="modal-body">
++                            <t t-if="state.newCategory.parent_id">
++                                <div class="alert alert-light border py-1 px-2 small mb-2">
++                                    Nested under:
++                                    <b t-esc="state.newCategory.parent_title"/>
++                                </div>
++                            </t>
+                             <div class="mb-2">
+                                 <label class="form-label">Title</label>
+                                 <input type="text" class="form-control"
+@@ -183,14 +218,24 @@
+                             <div class="mb-2">
+                                 <label class="form-label">Code</label>
+                                 <input type="text" class="form-control"
++                                       maxlength="10"
+                                        t-model="state.newCategory.code"/>
+                             </div>
+                             <div class="mb-2">
+                                 <label class="form-label">Entity ID</label>
+                                 <input type="number" class="form-control"
++                                       t-att-readonly="!!state.newCategory.parent_id"
+                                        t-model.number="state.newCategory.entity_id"/>
+                                 <small class="text-muted">
+-                                    The DW entity this category belongs to.
++                                    <t t-if="state.newCategory.parent_id">
++                                        Locked to the tree root's entity — the legacy
++                                        trigger requires every node in a tree to share
++                                        one entity.
++                                    </t>
++                                    <t t-else="">
++                                        The DW entity this category belongs to.
++                                        Prefilled from the selected category.
++                                    </t>
+                                 </small>
+                             </div>
+                         </div>
+@@ -198,7 +243,9 @@
+                             <button class="btn btn-secondary" t-on-click="cancelNewCategory">
+                                 Cancel
+                             </button>
+-                            <button class="btn btn-primary" t-on-click="saveNewCategory">
++                            <button class="btn btn-primary"
++                                    t-att-disabled="state.saving"
++                                    t-on-click="saveNewCategory">
+                                 Create
+                             </button>
+                         </div>
+@@ -208,4 +255,4 @@
+         </t>
+     </t>
+ 
+-</templates>
+\ No newline at end of file
++</templates>
+diff --git a/addons/category/static/src/xml/split_view.xml b/addons/category/static/src/xml/split_view.xml
+deleted file mode 100644
+index 650d6a206..000000000
+--- a/addons/category/static/src/xml/split_view.xml
++++ /dev/null
+@@ -1,74 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<templates xml:space="preserve">
+-    <t t-name="my_module.MySplitView">
+-        <div class="d-flex h-100 w-100 bg-white">
+-
+-            <!-- LEFT PANE: Category Details & Action -->
+-            <div class="w-50 border-end d-flex flex-column">
+-                <div class="p-2 bg-light border-bottom fw-bold text-center">
+-                    Category Details
+-                </div>
+-                <div class="p-3 flex-grow-1" t-if="state.category">
+-                    <h3 t-esc="state.category.title"/>
+-                    <p class="text-muted">Entity: <t t-esc="state.category.entity_id[1]"/></p>
+-
+-                    <div class="mt-4" t-if="state.selectedRecord">
+-                        <div class="alert alert-info">
+-                            <strong>Selected DW Record ID:</strong> <t t-esc="state.selectedRecord.id"/>
+-                        </div>
+-                        <button class="btn btn-primary w-100" t-on-click="addSelectedToCategory">
+-                            ➕ Add to Category
+-                        </button>
+-                    </div>
+-                    <div class="mt-4 text-muted" t-else="">
+-                        Select a record from the right to add it to this category.
+-                    </div>
+-                </div>
+-                <div class="p-3 text-danger" t-else="">
+-                    No Category ID provided in context.
+-                </div>
+-            </div>
+-
+-            <!-- MIDDLE PANE: Pagination -->
+-            <div class="d-flex flex-column justify-content-center align-items-center px-2 bg-light" style="width: 60px;">
+-                <button class="btn btn-sm btn-outline-secondary mb-2" t-on-click="firstPage">⏮</button>
+-                <button class="btn btn-sm btn-outline-secondary mb-2" t-on-click="prevPage">◀</button>
+-                <button class="btn btn-sm btn-outline-secondary mb-2" t-on-click="nextPage">▶</button>
+-                <button class="btn btn-sm btn-outline-secondary" t-on-click="lastPage">⏭</button>
+-            </div>
+-
+-            <!-- RIGHT PANE: DW Records List -->
+-            <div class="w-50 d-flex flex-column border-start">
+-                <div class="p-2 bg-secondary text-white fw-bold text-center">
+-                    Data Warehouse Records
+-                </div>
+-                <div class="p-2 border-bottom">
+-                    <input type="text" class="form-control" placeholder="Search DW records..." t-on-input="onSearch"/>
+-                </div>
+-                <div class="flex-grow-1 overflow-auto">
+-                    <table class="table table-hover mb-0">
+-                        <thead>
+-                            <tr>
+-                                <th>ID</th>
+-                                <th>Record Data</th>
+-                            </tr>
+-                        </thead>
+-                        <tbody>
+-                            <tr t-foreach="state.records" t-as="record" t-key="record.id"
+-                                t-on-click="() => this.selectRecord(record)"
+-                                t-att-class="state.selectedRecord and state.selectedRecord.id === record.id ? 'table-active' : ''"
+-                                style="cursor: pointer;">
+-                                <td t-esc="record.id"/>
+-                                <td>
+-                                    <!-- Display a summary of the record. Adjust based on DW columns -->
+-                                    <t t-esc="record.name || record.title || JSON.stringify(record).substring(0, 50)"/>
+-                                </td>
+-                            </tr>
+-                        </tbody>
+-                    </table>
+-                </div>
+-            </div>
+-
+-        </div>
+-    </t>
+-</templates>
+\ No newline at end of file
+diff --git a/addons/category/views/category_views.xml b/addons/category/views/category_views.xml
+index 5f3c36904..a7f6c910d 100644
+--- a/addons/category/views/category_views.xml
++++ b/addons/category/views/category_views.xml
+@@ -1,15 +1,22 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <odoo>
+ 
++    <!-- Client action hosting the standalone 3-pane OWL Category Manager.
++         `tag` must match the key registered in the "actions" registry by
++         static/src/js/category_manager.js. -->
+     <record id="action_category_manager" model="ir.actions.client">
+         <field name="name">Category Manager</field>
+         <field name="tag">category.category_manager</field>
+     </record>
+ 
+-    <menuitem id="menu_category_root" name="Categories" sequence="10"/>
++    <menuitem id="menu_category_root"
++              name="Categories"
++              sequence="10"/>
++
+     <menuitem id="menu_category_manager"
+               name="Category Manager"
+               parent="menu_category_root"
+-              action="action_category_manager"/>
++              action="action_category_manager"
++              sequence="10"/>
+ 
+ </odoo>
+\ No newline at end of file
+diff --git a/addons/category/views/templates.xml b/addons/category/views/templates.xml
+deleted file mode 100644
+index 2f37b71f8..000000000
+--- a/addons/category/views/templates.xml
++++ /dev/null
+@@ -1,24 +0,0 @@
+-<odoo>
+-    <data>
+-<!--
+-        <template id="listing">
+-          <ul>
+-            <li t-foreach="objects" t-as="object">
+-              <a t-attf-href="#{ root }/objects/#{ object.id }">
+-                <t t-esc="object.display_name"/>
+-              </a>
+-            </li>
+-          </ul>
+-        </template>
+-        <template id="object">
+-          <h1><t t-esc="object.display_name"/></h1>
+-          <dl>
+-            <t t-foreach="object._fields" t-as="field">
+-              <dt><t t-esc="field"/></dt>
+-              <dd><t t-esc="object[field]"/></dd>
+-            </t>
+-          </dl>
+-        </template>
+--->
+-    </data>
+-</odoo>
+diff --git a/addons/category/views/views.xml b/addons/category/views/views.xml
+deleted file mode 100644
+index 0a4317a7b..000000000
+--- a/addons/category/views/views.xml
++++ /dev/null
+@@ -1,60 +0,0 @@
+-<odoo>
+-  <data>
+-    <!-- explicit list view definition -->
+-<!--
+-    <record model="ir.ui.view" id="category.list">
+-      <field name="name">category list</field>
+-      <field name="model">category.category</field>
+-      <field name="arch" type="xml">
+-        <list>
+-          <field name="name"/>
+-          <field name="value"/>
+-          <field name="value2"/>
+-        </list>
+-      </field>
+-    </record>
+--->
+-
+-    <!-- actions opening views on models -->
+-<!--
+-    <record model="ir.actions.act_window" id="category.action_window">
+-      <field name="name">category window</field>
+-      <field name="res_model">category.category</field>
+-      <field name="view_mode">list,form</field>
+-    </record>
+--->
+-
+-    <!-- server action to the one above -->
+-<!--
+-    <record model="ir.actions.server" id="category.action_server">
+-      <field name="name">category server</field>
+-      <field name="model_id" ref="model_category_category"/>
+-      <field name="state">code</field>
+-      <field name="code">
+-        action = {
+-          "type": "ir.actions.act_window",
+-          "view_mode": "list,form",
+-          "res_model": model._name,
+-        }
+-      </field>
+-    </record>
+--->
+-
+-    <!-- Top menu item -->
+-<!--
+-    <menuitem name="category" id="category.menu_root"/>
+--->
+-    <!-- menu categories -->
+-<!--
+-    <menuitem name="Menu 1" id="category.menu_1" parent="category.menu_root"/>
+-    <menuitem name="Menu 2" id="category.menu_2" parent="category.menu_root"/>
+--->
+-    <!-- actions -->
+-<!--
+-    <menuitem name="List" id="category.menu_1_list" parent="category.menu_1"
+-              action="category.action_window"/>
+-    <menuitem name="Server to list" id="category" parent="category.menu_2"
+-              action="category.action_server"/>
+--->
+-  </data>
+-</odoo>
+diff --git a/addons/entity/models/md_entity.py b/addons/entity/models/md_entity.py
+index 49f4555db..02a2e31c6 100644
+--- a/addons/entity/models/md_entity.py
++++ b/addons/entity/models/md_entity.py
+@@ -465,20 +465,34 @@ class RaesMdEntity(models.Model):
+ 
+     @api.model
+     def get_dw_records(self, entity_id, offset=0, limit=10, search_term=''):
+-        'Fetch records dynamically from the DW table linked to this entity.'
+-        empty = {'records': [], 'total': 0}
++        """Fetch records dynamically from the DW table linked to this entity.
++
++        Returns ``{'records': [...], 'total': n, 'reason': str|None}``.
++        Each record carries a normalized ``id`` (the resolved DW primary
++        key) and a display ``label`` in addition to the raw DW columns —
++        the raw PK column is a lowercased MSSQL name (``partyid``,
++        ``detailedledgerid``, ...), so callers must not assume
++        ``record.id`` exists unless it is normalized here.
++        """
++        empty = {'records': [], 'total': 0, 'reason': None}
+         entity = self.browse(entity_id)
+         if not entity.exists():
+-            return empty
++            return dict(empty, reason='no-entity')
+ 
+         conn, relation, source = self._dw_resolve_relation(entity)
+         if not relation:
+             _logger.info(
+                 'DW relation unresolved for entity %s (%s.%s): %s',
+                 entity.id, entity.schema_name, entity.name, source)
+-            return empty
++            return dict(empty, reason=source or 'unresolved')
++
++        pk = self._dw_pk_column(entity, relation)
++        if not pk:
++            _logger.warning(
++                'No PK column resolvable for entity %s on %s',
++                entity.id, relation)
++            return dict(empty, reason='no-pk')
+ 
+-        pk = self._dw_pk_column(entity, relation) or 'id'
+         clause, params = self._build_dw_where(
+             search_term, self._dw_search_columns(entity, relation))
+         where = 'WHERE ' + clause if clause else ''
+@@ -493,8 +507,9 @@ class RaesMdEntity(models.Model):
+             'SELECT t.* FROM %s t %s ORDER BY t.%s LIMIT %%s OFFSET %%s'
+             % (relation, where, pk), params + [limit, offset])
+         cols = [c[0] for c in self.env.cr.description]
+-        records = [dict(zip(cols, r)) for r in self.env.cr.fetchall()]
+-        return {'records': records, 'total': total}
++        raw = [dict(zip(cols, r)) for r in self.env.cr.fetchall()]
++        records = [self._dw_normalize_record(r, pk) for r in raw]
++        return {'records': records, 'total': total, 'reason': None}
+ 
+     def unlink(self):
+         """Drop the DW table on the linked MSSQL server, then delete the
+@@ -678,27 +693,36 @@ class RaesMdEntity(models.Model):
+                  in_category):
+         """Shared implementation of the two category item panes.
+ 
+-        Returns ``{'records': [...], 'total': n}``. Unresolvable DW
+-        relations degrade to an empty page instead of raising.
++        Returns ``{'records': [...], 'total': n, 'reason': str|None}``.
++
++        Every record carries a normalized ``id`` (the DW primary key, i.e.
++        the value stored in ``md.category_member.member_id``) and a
++        display ``label``. The raw DW columns are preserved alongside
++        those two keys so callers can render extra detail.
++
++        Unresolvable DW relations degrade to an empty page instead of
++        raising, but the ``reason`` key names the failing branch
++        (``'no-connection'``, ``'not-imported'``, ``'no-pk'``) so the UI
++        can explain the empty pane instead of silently showing nothing.
+         """
+-        empty = {'records': [], 'total': 0}
++        empty = {'records': [], 'total': 0, 'reason': None}
+         entity = self.browse(entity_id)
+         if not entity.exists():
+-            return empty
++            return dict(empty, reason='no-entity')
+ 
+         conn, relation, source = self._dw_resolve_relation(entity)
+         if not relation:
+             _logger.info(
+                 "DW relation unresolved for entity %s (%s.%s): %s",
+                 entity.id, entity.schema_name, entity.name, source)
+-            return empty
++            return dict(empty, reason=source or 'unresolved')
+ 
+         pk = self._dw_pk_column(entity, relation)
+         if not pk:
+             _logger.warning(
+                 "No PK column resolvable for entity %s on %s",
+                 entity.id, relation)
+-            return empty
++            return dict(empty, reason='no-pk')
+ 
+         clause, params = self._build_dw_where(
+             search_term, self._dw_search_columns(entity, relation))
+@@ -721,8 +745,62 @@ class RaesMdEntity(models.Model):
+             f'SELECT t.* FROM {relation} t {where} '
+             f'ORDER BY t.{pk} LIMIT %s OFFSET %s', params + [limit, offset])
+         cols = [c[0] for c in self.env.cr.description]
+-        records = [dict(zip(cols, r)) for r in self.env.cr.fetchall()]
+-        return {'records': records, 'total': total}
++        raw = [dict(zip(cols, r)) for r in self.env.cr.fetchall()]
++
++        records = [self._dw_normalize_record(r, pk) for r in raw]
++        return {'records': records, 'total': total, 'reason': None}
++
++    _DW_LABEL_CANDIDATES = (
++        'title', 'name', 'englishtitle', 'english_title', 'codetitle',
++        'companytitle', 'partytitle', 'valuetitle', 'value',
++    )
++
++    def _dw_normalize_record(self, record, pk):
++        """Expose the DW primary key as ``id`` and pick a ``label``.
++
++        The DW column names are MSSQL PascalCase names lowercased by the
++        bootstrap alias view (``PartyID`` -> ``partyid``), so the client
++        cannot assume ``record.id`` exists. Without this normalization
++        ``record.id`` is ``undefined`` and the ``+`` button would post a
++        ``member_id`` of ``undefined``.
++        """
++        rec = dict(record)
++        rec['id'] = rec.get(pk)
++        rec['_pk'] = pk
++        label = None
++        for cand in self._DW_LABEL_CANDIDATES:
++            val = rec.get(cand)
++            if val not in (None, False, ''):
++                label = str(val).strip()
++                break
++        rec['label'] = label or f'#{rec["id"]}'
++        return rec
++
++    @api.model
++    def get_dw_pane_diagnostics(self, entity_id):
++        """Explain why a pane may be empty for `entity_id`.
++
++        Returns ``{'entity': str, 'schema': str, 'table': str,
++        'relation': str|None, 'source': str, 'pk': str|None,
++        'search_columns': [...], 'connection_id': int|None}``. Used by
++        the client action to show an actionable warning instead of a
++        blank pane.
++        """
++        entity = self.browse(entity_id)
++        if not entity.exists():
++            return {'error': 'Entity %s does not exist.' % entity_id}
++        conn, relation, source = self._dw_resolve_relation(entity)
++        return {
++            'entity': entity.display_name,
++            'schema': entity.schema_name or '',
++            'table': entity.name or '',
++            'connection_id': conn.id if conn else None,
++            'relation': relation,
++            'source': source,
++            'pk': self._dw_pk_column(entity, relation) if relation else None,
++            'search_columns': (self._dw_search_columns(entity, relation)
++                               if relation else []),
++        }
+ 
+     @api.model
+     def get_items_not_in_category(self, entity_id, category_id,

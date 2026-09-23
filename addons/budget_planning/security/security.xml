@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="budget_group_user" model="res.groups">
+        <field name="name">برنامه و بودجه / کاربر</field>
+    </record>
+    <record id="budget_group_manager" model="res.groups">
+        <field name="name">برنامه و بودجه / مدیر</field>
+        <field name="implied_ids" eval="[(4, ref('budget_planning.budget_group_user'))]"/>
+    </record>
+
+    <record id="rule_budget_plan_company" model="ir.rule">
+        <field name="name">برنامه و بودجه: شرکت کاربر</field>
+        <field name="model_id" ref="model_budget_plan"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="perm_create" eval="False"/>
+    </record>
+    <record id="rule_budget_dashboard_company" model="ir.rule">
+        <field name="name">داشبورد برنامه و بودجه: شرکت کاربر</field>
+        <field name="model_id" ref="model_budget_plan_dashboard"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_budget_strategy_company" model="ir.rule"><field name="name">برنامه و بودجه: استراتژی شرکت کاربر</field><field name="model_id" ref="model_budget_plan_strategy"/><field name="groups" eval="[(4, ref('base.group_user'))]"/><field name="domain_force">[('plan_id.company_id', 'in', company_ids)]</field><field name="perm_create" eval="False"/></record>
+    <record id="rule_budget_target_company" model="ir.rule"><field name="name">برنامه و بودجه: هدف شرکت کاربر</field><field name="model_id" ref="model_budget_plan_target"/><field name="groups" eval="[(4, ref('base.group_user'))]"/><field name="domain_force">[('plan_id.company_id', 'in', company_ids)]</field><field name="perm_create" eval="False"/></record>
+    <record id="rule_budget_kpi_company" model="ir.rule"><field name="name">برنامه و بودجه: KPI شرکت کاربر</field><field name="model_id" ref="model_budget_plan_kpi"/><field name="groups" eval="[(4, ref('base.group_user'))]"/><field name="domain_force">[('plan_id.company_id', 'in', company_ids)]</field><field name="perm_create" eval="False"/></record>
+    <record id="rule_budget_initiative_company" model="ir.rule"><field name="name">برنامه و بودجه: اقدام شرکت کاربر</field><field name="model_id" ref="model_budget_plan_initiative"/><field name="groups" eval="[(4, ref('base.group_user'))]"/><field name="domain_force">[('plan_id.company_id', 'in', company_ids)]</field><field name="perm_create" eval="False"/></record>
+    <record id="rule_budget_project_company" model="ir.rule"><field name="name">برنامه و بودجه: پروژه شرکت کاربر</field><field name="model_id" ref="model_budget_plan_project"/><field name="groups" eval="[(4, ref('base.group_user'))]"/><field name="domain_force">[('plan_id.company_id', 'in', company_ids)]</field><field name="perm_create" eval="False"/></record>
+    <record id="rule_budget_activity_company" model="ir.rule"><field name="name">برنامه و بودجه: فعالیت شرکت کاربر</field><field name="model_id" ref="model_budget_plan_activity"/><field name="groups" eval="[(4, ref('base.group_user'))]"/><field name="domain_force">[('plan_id.company_id', 'in', company_ids)]</field><field name="perm_create" eval="False"/></record>
+    <record id="rule_budget_line_company" model="ir.rule"><field name="name">برنامه و بودجه: ردیف بودجه شرکت کاربر</field><field name="model_id" ref="model_budget_plan_budget_line"/><field name="groups" eval="[(4, ref('base.group_user'))]"/><field name="domain_force">[('plan_id.company_id', 'in', company_ids)]</field><field name="perm_create" eval="False"/></record>
+</odoo>

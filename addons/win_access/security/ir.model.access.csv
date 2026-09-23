@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_win_access_group,win.access.group,model_win_access_group,base.group_system,1,1,1,1
+access_win_access_member,win.access.member,model_win_access_member,base.group_system,1,1,1,1
+access_win_access_option,win.access.option,model_win_access_option,base.group_system,1,1,1,1
+access_bi_user_access,bi.user.access,model_bi_user_access,base.group_system,1,1,1,1
+access_bi_user_access_line,bi.user.access.line,model_bi_user_access_line,base.group_system,1,1,1,1
+access_bi_user_access_wizard,bi.user.access.wizard,model_bi_user_access_wizard,base.group_system,1,1,1,1
+access_bi_user_access_line_wizard,bi.user.access.line.wizard,model_bi_user_access_line_wizard,base.group_system,1,1,1,1

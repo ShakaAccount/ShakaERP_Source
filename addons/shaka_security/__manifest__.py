@@ -1,0 +1,19 @@
+{
+    'name': 'Shaka Security',
+    'version': '19.0.1.0.0',
+    'summary': 'Central roles and access levels for Shaka modules',
+    'category': 'Administration',
+    'author': 'ShakaERP',
+    'license': 'LGPL-3',
+    'depends': ['base', 'raes_dw_connector'],
+    'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/access_forms.xml',
+        'data/cleanup_legacy_access.xml',
+        'views/users_views.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+}

@@ -1,0 +1,111 @@
+<odoo>
+    <!-- Business record rules. Central form/workflow rules live in shaka_security. -->
+    <record id="rule_branch_user_visibility" model="ir.rule">
+        <field name="name">عملکرد روزانه: شعبه‌های کاربر</field>
+        <field name="model_id" ref="model_daily_sales_performance"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('branch_id', 'in', user.shaka_branch_access_ids.mapped('branch_id').ids)] if user.shaka_branch_access_ids else [(1, '=', 1)]</field>
+    </record>
+    <record id="rule_daily_sales_performance_admin_all" model="ir.rule">
+        <field name="name">عملکرد روزانه: مدیر سیستم</field>
+        <field name="model_id" ref="model_daily_sales_performance"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_pos_terminal_branch_user" model="ir.rule">
+        <field name="name">ترمینال پوز: شعبه‌های کاربر</field>
+        <field name="model_id" ref="model_daily_sales_pos_terminal"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('branch_id', 'in', user.shaka_branch_access_ids.mapped('branch_id').ids)] if user.shaka_branch_access_ids else [(1, '=', 1)]</field>
+    </record>
+    <record id="rule_pos_terminal_admin_all" model="ir.rule">
+        <field name="name">ترمینال پوز: مدیر سیستم</field>
+        <field name="model_id" ref="model_daily_sales_pos_terminal"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_deposit_split_branch_user" model="ir.rule">
+        <field name="name">تفکیک واریزی: شعبه کاربر</field>
+        <field name="model_id" ref="model_daily_sales_deposit_split"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('branch_id', 'in', user.shaka_branch_access_ids.mapped('branch_id').ids)] if user.shaka_branch_access_ids else [(1, '=', 1)]</field>
+    </record>
+    <record id="rule_deposit_split_admin_all" model="ir.rule">
+        <field name="name">تفکیک واریزی: مدیر سیستم</field>
+        <field name="model_id" ref="model_daily_sales_deposit_split"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_deposit_split_pos_branch_user" model="ir.rule">
+        <field name="name">پوز تفکیک واریزی: شعبه کاربر</field>
+        <field name="model_id" ref="model_daily_sales_deposit_split_pos"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('split_id.branch_id', 'in', user.shaka_branch_access_ids.mapped('branch_id').ids)] if user.shaka_branch_access_ids else [(1, '=', 1)]</field>
+    </record>
+    <record id="rule_deposit_split_pos_admin_all" model="ir.rule">
+        <field name="name">پوز تفکیک واریزی: مدیر سیستم</field>
+        <field name="model_id" ref="model_daily_sales_deposit_split_pos"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_deposit_line_branch_user" model="ir.rule">
+        <field name="name">واریزی: شعبه کاربر</field>
+        <field name="model_id" ref="model_daily_sales_deposit_line"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('split_id.branch_id', 'in', user.shaka_branch_access_ids.mapped('branch_id').ids)] if user.shaka_branch_access_ids else [(1, '=', 1)]</field>
+    </record>
+    <record id="rule_deposit_line_admin_all" model="ir.rule">
+        <field name="name">واریزی: مدیر سیستم</field>
+        <field name="model_id" ref="model_daily_sales_deposit_line"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_corrective_invoice_branch_user" model="ir.rule">
+        <field name="name">فاکتور اصلاحی: شعبه کاربر</field>
+        <field name="model_id" ref="model_daily_sales_corrective_invoice"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('branch_id', 'in', user.shaka_branch_access_ids.mapped('branch_id').ids)] if user.shaka_branch_access_ids else [(1, '=', 1)]</field>
+    </record>
+    <record id="rule_corrective_invoice_admin_all" model="ir.rule">
+        <field name="name">فاکتور اصلاحی: مدیر سیستم</field>
+        <field name="model_id" ref="model_daily_sales_corrective_invoice"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_corrective_invoice_line_branch_user" model="ir.rule">
+        <field name="name">جزئیات فاکتور اصلاحی: شعبه کاربر</field>
+        <field name="model_id" ref="model_daily_sales_corrective_invoice_line"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('invoice_id.branch_id', 'in', user.shaka_branch_access_ids.mapped('branch_id').ids)] if user.shaka_branch_access_ids else [(1, '=', 1)]</field>
+    </record>
+    <record id="rule_corrective_invoice_line_admin_all" model="ir.rule">
+        <field name="name">جزئیات فاکتور اصلاحی: مدیر سیستم</field>
+        <field name="model_id" ref="model_daily_sales_corrective_invoice_line"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_return_branch_user" model="ir.rule">
+        <field name="name">عودت: شعبه کاربر</field>
+        <field name="model_id" ref="model_daily_sales_return"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('branch_id', 'in', user.shaka_branch_access_ids.mapped('branch_id').ids)] if user.shaka_branch_access_ids else [(1, '=', 1)]</field>
+    </record>
+    <record id="rule_return_admin_all" model="ir.rule">
+        <field name="name">عودت: مدیر سیستم</field>
+        <field name="model_id" ref="model_daily_sales_return"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_return_line_branch_user" model="ir.rule">
+        <field name="name">جزئیات عودت: شعبه کاربر</field>
+        <field name="model_id" ref="model_daily_sales_return_line"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('return_id.branch_id', 'in', user.shaka_branch_access_ids.mapped('branch_id').ids)] if user.shaka_branch_access_ids else [(1, '=', 1)]</field>
+    </record>
+    <record id="rule_return_line_admin_all" model="ir.rule">
+        <field name="name">جزئیات عودت: مدیر سیستم</field>
+        <field name="model_id" ref="model_daily_sales_return_line"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>

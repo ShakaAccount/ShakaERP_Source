@@ -1,0 +1,33 @@
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/shaka_ui_makeover/static/src/fonts/Vazirmatn-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/shaka_ui_makeover/static/src/fonts/Vazirmatn-Medium.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/shaka_ui_makeover/static/src/fonts/Vazirmatn-Bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700 900;
+  font-display: swap;
+}
+
+html[data-theme='glass'],
+html[data-theme='glass'] body,
+html[data-theme='glass'] .o_web_client,
+html[data-theme='glass'] button,
+html[data-theme='glass'] input,
+html[data-theme='glass'] textarea,
+html[data-theme='glass'] select {
+  font-family: "Vazirmatn", Tahoma, Arial, sans-serif !important;
+}

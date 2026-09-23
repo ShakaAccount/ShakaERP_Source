@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_win_access_group_form" model="ir.ui.view">
+        <field name="name">win.access.group.form</field>
+        <field name="model">win.access.group</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_sync" string="Sync to Windows" type="object" class="btn-primary"/>
+                    <button name="action_test_connection" string="Test API" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-warning" role="alert" invisible="not options_error">
+                        <field name="options_error"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/><field name="description"/>
+                            
+                        </group>
+                        <group>
+                            <field name="ssas_instance_id" options="{'no_create': True}"/>
+                            <field name="ssas_database_id" options="{'no_create': True}"
+                                   domain="[('kind', '=', 'ssas_db'), ('parent_id', '=', ssas_instance_id)]"/>
+                            <field name="ssas_permission"/>
+                            <field name="pbirs_role"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="PBIRS items">
+                            <field name="pbirs_path_ids" widget="win_access_tree" nolabel="1"/>
+                        </page>
+                        <page string="Members">
+                            <field name="member_ids" widget="win_access_members" nolabel="1">
+                                <list>
+                                    <field name="kind"/>
+                                    <field name="user_option_id"/>
+                                    <field name="name"/>
+                                    <field name="full_name"/>
+                                    <field name="password"/>
+                                    <field name="state"/>
+                                    <field name="log"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Sync result">
+                            <field name="sync_result" widget="win_access_sync" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_win_access_group_list" model="ir.ui.view">
+        <field name="name">win.access.group.list</field>
+        <field name="model">win.access.group</field>
+        <field name="arch" type="xml">
+            <list><field name="name"/><field name="ssas_database_id"/><field name="pbirs_path_ids" widget="many2many_tags"/><field name="state"/></list>
+        </field>
+    </record>
+    <record id="action_win_access_group" model="ir.actions.act_window">
+        <field name="name">Access Groups</field>
+        <field name="res_model">win.access.group</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_res_config_win_access" model="ir.ui.view">
+        <field name="name">res.config.settings.win.access</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Windows Access" name="win_access" groups="base.group_system">
+                    <block title="Windows Access API">
+                        <setting string="API URL" help="Base URL of the Windows Access Management API, e.g. http://192.168.2.12:8443 (no /v1).">
+                            <field name="win_access_url" placeholder="http://192.168.2.12:8443"/>
+                        </setting>
+                        <setting string="API Key" help="Sent in the X-API-Key header.">
+                            <field name="win_access_key" password="True"/>
+                        </setting>
+                        <setting string="AD Domain (override)" help="Optional. Normally detected from the Active Directory itself. Only set this to force the NetBIOS name used in DOMAIN\\user.">
+                            <field name="win_access_domain" placeholder="SHAKA"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+    <menuitem id="menu_win_access" name="Windows Access" sequence="90" groups="base.group_system"/>
+    <menuitem id="menu_win_access_group" name="Groups" parent="menu_win_access" action="action_win_access_group"/>
+</odoo>

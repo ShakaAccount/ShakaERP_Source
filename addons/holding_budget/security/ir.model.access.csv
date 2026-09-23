@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_holding_budget_scenario_user,holding.budget.scenario.user,model_holding_budget_scenario,base.group_user,1,0,0,0
+access_holding_budget_scenario_admin,holding.budget.scenario.admin,model_holding_budget_scenario,base.group_system,1,1,1,1
+access_holding_budget_scenario_line_user,holding.budget.scenario.line.user,model_holding_budget_scenario_line,base.group_user,1,0,0,0
+access_holding_budget_scenario_line_admin,holding.budget.scenario.line.admin,model_holding_budget_scenario_line,base.group_system,1,1,1,1
+access_holding_budget_assumption_user,holding.budget.assumption.user,model_holding_budget_assumption,base.group_user,1,0,0,0
+access_holding_budget_assumption_admin,holding.budget.assumption.admin,model_holding_budget_assumption,base.group_system,1,1,1,1
+access_holding_budget_assumption_line_user,holding.budget.assumption.line.user,model_holding_budget_assumption_line,base.group_user,1,0,0,0
+access_holding_budget_assumption_line_admin,holding.budget.assumption.line.admin,model_holding_budget_assumption_line,base.group_system,1,1,1,1

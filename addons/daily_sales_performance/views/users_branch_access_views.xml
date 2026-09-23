@@ -1,0 +1,15 @@
+<odoo>
+    <record id="view_users_form_daily_sales_branch_access" model="ir.ui.view">
+        <field name="name">res.users.daily.sales.branch.access.form</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="shaka_security.view_users_form_shaka_security_access"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="دسترسی شعب" groups="base.group_system">
+                    <div class="alert alert-warning" role="alert">اگر هیچ شعبه‌ای انتخاب نشود، کاربر به همه شعب دسترسی دارد.</div>
+                    <field name="shaka_branch_access_ids" nolabel="1"><list editable="bottom"><field name="branch_id" string="شعبه"/></list></field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

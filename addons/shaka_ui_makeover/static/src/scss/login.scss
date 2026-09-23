@@ -119,7 +119,7 @@ html[data-theme='glass'] .oe_login_form .input-group .form-control {
     border-color: var(--lg-text-secondary);
   }
   &:focus {
-    border-color: var(--lg-accent);
+    border-color: var(--lg-accent-strong);
     box-shadow: 0 0 0 3px var(--lg-focus);
     background: var(--lg-bg-elevated);
     color: var(--lg-text);
@@ -173,7 +173,7 @@ html[data-theme='glass'] .oe_login_form .oe_login_buttons .btn-primary {
   &:hover { filter: brightness(1.08); }
   &:active { filter: brightness(0.95); }
   &:focus-visible {
-    outline: 2px solid var(--lg-accent);
+    outline: 2px solid var(--lg-accent-strong);
     outline-offset: 2px;
   }
 }

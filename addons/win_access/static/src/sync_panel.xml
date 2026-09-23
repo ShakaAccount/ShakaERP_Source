@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="win_access.SyncPanel">
+        <div class="o_win_access_sync">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <button type="button" class="btn btn-primary" t-att-disabled="state.busy" t-on-click="runSync">
+                    <i t-attf-class="fa me-1 {{ state.busy ? 'fa-spinner fa-spin' : 'fa-refresh' }}"/>
+                    <t t-if="state.busy">Syncing…</t><t t-else="">Sync to Windows</t>
+                </button>
+                <t t-if="steps.length">
+                    <span class="text-success"><i class="fa fa-check me-1"/><t t-out="counts.ok"/> ok</span>
+                    <span t-att-class="counts.fail ? 'text-danger fw-bold' : 'text-muted'"><i class="fa fa-times me-1"/><t t-out="counts.fail"/> failed</span>
+                    <span class="text-muted"><i class="fa fa-minus me-1"/><t t-out="counts.skip"/> skipped</span>
+                </t>
+            </div>
+            <div t-if="!steps.length" class="text-muted">Not synced yet.</div>
+            <div t-foreach="sections" t-as="sec" t-key="sec.key" class="o_wa_section border rounded mb-2">
+                <div class="o_wa_section_head d-flex align-items-center p-2" t-on-click="() => this.toggle(sec)">
+                    <i t-attf-class="fa fa-fw me-2 {{ isOpen(sec) ? 'fa-caret-down' : 'fa-caret-right o_wa_flip' }}"/>
+                    <strong t-out="sec.title"/>
+                    <span class="ms-2 badge" t-att-class="sec.failed ? 'text-bg-danger' : 'text-bg-success'"
+                          t-out="sec.failed ? 'failed' : 'ok'"/>
+                </div>
+                <div t-if="isOpen(sec)" class="px-3 pb-2">
+                    <div t-foreach="sec.steps" t-as="step" t-key="step_index"
+                         t-attf-class="o_wa_step o_wa_{{ step.status }} py-1">
+                        <div class="d-flex align-items-start">
+                            <i t-attf-class="fa fa-fw mt-1 me-2 {{ icon(step.status) }}"/>
+                            <div class="flex-grow-1">
+                                <div t-out="step.label"/>
+                                <div class="o_wa_msg small" t-out="step.message"/>
+                                <div t-if="step.hint" class="small fst-italic">What to do: <t t-out="step.hint"/></div>
+                            </div>
+                            <button t-if="step.status === 'fail'" type="button" class="btn btn-sm btn-link"
+                                    title="Copy the error" t-on-click="() => this.copy(step)">
+                                <i class="fa fa-clipboard"/>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

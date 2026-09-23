@@ -1,0 +1,22 @@
+<odoo>
+    <record id="view_daily_sales_performance_reject_wizard" model="ir.ui.view">
+        <field name="name">daily.sales.performance.reject.wizard.form</field>
+        <field name="model">daily.sales.performance.reject.wizard</field>
+        <field name="arch" type="xml">
+            <form string="دلیل رد عملکرد روزانه" class="shaka-reject-wizard">
+                <div class="shaka-wizard-hero"><div class="shaka-wizard-icon"><i class="fa fa-exclamation-triangle" role="img" aria-label="رد عملکرد"/></div><div><h3>ثبت دلیل رد</h3><p>لطفاً دلیل بازگشت این عملکرد را وارد کنید.</p></div></div>
+                <group>
+                    <field name="performance_id" string="عملکرد" readonly="1" invisible="not performance_id"/>
+                    <field name="deposit_split_id" string="تفکیک واریزی" readonly="1" invisible="not deposit_split_id"/>
+                    <field name="corrective_invoice_id" string="فاکتور اصلاحی" readonly="1" invisible="not corrective_invoice_id"/>
+                    <field name="return_id" string="عودت" readonly="1" invisible="not return_id"/>
+                    <field name="reason" string="دلیل رد" placeholder="لطفاً دلیل رد این عملکرد را بنویسید..."/>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object" string="تأیید رد" icon="fa-check" class="btn-primary"/>
+                    <button string="انصراف" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="access_form_holding_budget_scenario" model="shaka.access.form">
+        <field name="name">سناریوهای بودجه</field>
+        <field name="model_name">holding.budget.scenario</field>
+        <field name="sequence">10</field>
+        <field name="has_workflow">0</field>
+    </record>
+    <record id="access_form_holding_budget_assumption" model="shaka.access.form">
+        <field name="name">مفروضات بودجه</field>
+        <field name="model_name">holding.budget.assumption</field>
+        <field name="sequence">20</field>
+        <field name="has_workflow">0</field>
+    </record>
+</odoo>

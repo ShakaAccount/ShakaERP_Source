@@ -29,7 +29,10 @@
                 <t t-if="state.selectedReport">
                     <iframe t-att-src="state.selectedReport.url"
                             class="o_powerbi_iframe"
-                            t-att-title="state.selectedReport.name"/>
+                            t-att-title="state.selectedReport.name"
+                            allow="same-origin"
+                            referrerpolicy="no-referrer"
+                            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-downloads"/>
                 </t>
                 <t t-else="">
                     <div class="o_powerbi_placeholder">Select a report from the list on the left.</div>

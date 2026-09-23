@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_holding_budget_scenario_company" model="ir.rule">
+        <field name="name">بودجه هلدینگ: شرکت کاربر</field>
+        <field name="model_id" ref="model_holding_budget_scenario"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="rule_holding_budget_scenario_admin" model="ir.rule">
+        <field name="name">بودجه هلدینگ: مدیر سیستم</field>
+        <field name="model_id" ref="model_holding_budget_scenario"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_holding_budget_scenario_line_company" model="ir.rule">
+        <field name="name">سناریوهای بودجه: شرکت کاربر</field>
+        <field name="model_id" ref="model_holding_budget_scenario_line"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('scenario_id.company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="rule_holding_budget_scenario_line_admin" model="ir.rule">
+        <field name="name">سناریوهای بودجه: مدیر سیستم</field>
+        <field name="model_id" ref="model_holding_budget_scenario_line"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_holding_budget_assumption_company" model="ir.rule">
+        <field name="name">مفروضات بودجه: شرکت کاربر</field>
+        <field name="model_id" ref="model_holding_budget_assumption"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="rule_holding_budget_assumption_admin" model="ir.rule">
+        <field name="name">مفروضات بودجه: مدیر سیستم</field>
+        <field name="model_id" ref="model_holding_budget_assumption"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_holding_budget_assumption_line_company" model="ir.rule">
+        <field name="name">جزئیات مفروضات بودجه: شرکت کاربر</field>
+        <field name="model_id" ref="model_holding_budget_assumption_line"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('assumption_id.company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="rule_holding_budget_assumption_line_admin" model="ir.rule">
+        <field name="name">جزئیات مفروضات بودجه: مدیر سیستم</field>
+        <field name="model_id" ref="model_holding_budget_assumption_line"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>

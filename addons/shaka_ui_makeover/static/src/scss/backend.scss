@@ -29,17 +29,6 @@ html[data-theme='glass'] .o_web_client {
   background: transparent;
 }
 
-// Dark: deeper world behind dark glass
-@media (prefers-color-scheme: dark) {
-  html[data-theme='glass'] {
-    --lg-bg-deep: #{$lg-bg-dark-deep};
-    --lg-bg-mid: #{lighten($lg-bg-dark-deep, 5%)};
-    --lg-bg-blob-a: rgba(64, 96, 170, 0.35);
-    --lg-bg-blob-b: rgba(120, 80, 170, 0.3);
-    --lg-bg-blob-c: rgba(40, 120, 120, 0.28);
-  }
-}
-
 html[data-theme='glass'] .o_web_client {
   color: var(--lg-text);
   @include lg-font-stack;
@@ -58,6 +47,52 @@ html[data-theme='glass'] .o_main_navbar a {
   color: var(--lg-text);
 }
 
+html[data-theme='glass'] .o_main_navbar .o_menu_toggle {
+    background: #1E1E1E00 !important;
+}
+
+html[data-theme='glass'] .o_main
+
+// Navbar controls must sit directly on the navbar surface. Do not give the
+// app switcher, menu toggle, user menu, or systray buttons a separate tile.
+html[data-theme='glass'] .o_main_navbar .o_menu_toggle,
+html[data-theme='glass'] .o_main_navbar .o_navbar_apps_menu > button,
+html[data-theme='glass'] .o_main_navbar .o_menu_systray > li > button,
+html[data-theme='glass'] .o_main_navbar .o_menu_systray .dropdown-toggle,
+html[data-theme='glass'] .o_main_navbar .o_user_menu .dropdown-toggle,
+html[data-theme='glass'] .o_main_navbar .o_user_menu button {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--lg-text) !important;
+}
+
+html[data-theme='glass'] .o_main_navbar .o_menu_toggle:hover,
+html[data-theme='glass'] .o_main_navbar .o_navbar_apps_menu > button:hover,
+html[data-theme='glass'] .o_main_navbar .o_menu_systray .dropdown-toggle:hover,
+html[data-theme='glass'] .o_main_navbar .o_user_menu .dropdown-toggle:hover {
+  background: var(--lg-bg-elevated) !important;
+  border-radius: var(--lg-r-sm);
+}
+
+// Circular icon chip for the app-switcher grid button — echoes the
+// reference's rounded icon rail without changing Odoo's top-nav layout
+// (no OWL template restructuring).
+html[data-theme='glass'] .o_main_navbar .o_navbar_apps_menu > button {
+  width: 38px;
+  height: 38px;
+  border-radius: 50% !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// User avatar: round the image itself (not the button, which also wraps a
+// name label in debug mode) so it always renders as a clean circle chip.
+html[data-theme='glass'] .o_main_navbar .o_user_menu .o_user_avatar {
+  border-radius: 50% !important;
+}
+
 // ---- Control panel — same base, bottom border, no rounded "ribbon" ----
 html[data-theme='glass'] .o_control_panel {
   background: var(--lg-bg-base);
@@ -73,14 +108,27 @@ html[data-theme='glass'] .o_form_sheet_bg {
 }
 
 // ---- Cards / sheets ----
-// No visible border (per spec — separation is by tone). 16px radius.
+// No visible border — separation is by tone + a soft floating shadow.
+// Large radius + a real hover lift for the bold "elevated card" look.
 html[data-theme='glass'] div.o_card,
 html[data-theme='glass'] .o_kanban_renderer .o_kanban_record,
 html[data-theme='glass'] .card {
   background: var(--lg-bg-surface);
   border: none;
   border-radius: var(--lg-r-lg);
+  box-shadow: var(--lg-shadow-sm);
   color: var(--lg-text);
+  @include lg-card-lift;
+}
+
+// ---- Headings — bold, confident type across every surface ----
+html[data-theme='glass'] h1,
+html[data-theme='glass'] h2,
+html[data-theme='glass'] h3,
+html[data-theme='glass'] .o_form_label_size_lg,
+html[data-theme='glass'] .o_breadcrumb h1,
+html[data-theme='glass'] .oe_title h1 {
+  @include lg-heading;
 }
 
 // ---- Modals - solid dark dialog (no glass blur on solid dark) ----
@@ -98,21 +146,23 @@ html[data-theme='glass'] .o_dialog {
   color: var(--lg-text);
 }
 
-// ---- Dropdowns - solid elevated surface, accent on hover/active ----
+// ---- Dropdowns — floating white card, not a flat gray panel ----
 html[data-theme='glass'] .dropdown-menu,
 html[data-theme='glass'] .o_dropdown_menu {
-  background: var(--lg-bg-elevated);
-  border: none;
+  background: var(--lg-bg-surface);
+  border: 1px solid var(--lg-border);
   border-radius: var(--lg-r-md);
   box-shadow: var(--lg-shadow-md);
   color: var(--lg-text);
+  padding: 8px;
   .dropdown-item {
     color: var(--lg-text);
     border-radius: var(--lg-r-sm);
+    padding: 8px 12px;
     &:hover, &:focus {
       background: var(--lg-bg-elevated);
       color: var(--lg-text);
-      outline: 1px solid var(--lg-accent);
+      outline: 1px solid var(--lg-accent-strong);
     }
     &.active,
     &.selected,
@@ -121,6 +171,23 @@ html[data-theme='glass'] .o_dropdown_menu {
       color: var(--lg-text-on-accent);
     }
   }
+  .dropdown-divider {
+    border-color: var(--lg-border);
+    margin: 6px 0;
+  }
+}
+
+// Small action buttons inside dropdowns/systray panels (e.g. "Install",
+// "Enable") — outline style so a cluster of them doesn't read as a wall of
+// solid accent blocks.
+html[data-theme='glass'] .dropdown-menu .btn-sm,
+html[data-theme='glass'] .o_menu_systray .btn-sm {
+  background: transparent;
+  border: 1px solid var(--lg-accent-strong);
+  color: var(--lg-link);
+  border-radius: var(--lg-r-pill);
+  font-weight: 500;
+  &:hover { background: var(--lg-bg-elevated); }
 }
 
 // ---- Notifications ----
@@ -169,7 +236,7 @@ html[data-theme='glass'] .o_web_settings_invite.btn-primary {
     filter: brightness(0.95);
   }
   &:focus-visible {
-    outline: 2px solid var(--lg-accent);
+    outline: 2px solid var(--lg-accent-strong);
     outline-offset: 2px;
   }
 }
@@ -180,7 +247,7 @@ html[data-theme='glass'] .btn-secondary {
   color: var(--lg-text);
   &:hover { background: var(--lg-bg-elevated); filter: brightness(1.15); }
   &:focus-visible {
-    outline: 2px solid var(--lg-accent);
+    outline: 2px solid var(--lg-accent-strong);
     outline-offset: 2px;
   }
   &[aria-pressed='true'],
@@ -206,9 +273,10 @@ html[data-theme='glass'] input.form-control {
   border: none;
   color: var(--lg-text);
   border-radius: var(--lg-r-sm);
+  padding: 8px 12px;
   &::placeholder { color: var(--lg-text-secondary); }
   &:focus {
-    box-shadow: 0 0 0 2px var(--lg-accent);
+    box-shadow: 0 0 0 2px var(--lg-accent-strong);
   }
 }
 
@@ -219,15 +287,19 @@ html[data-theme='glass'] .o_list_renderer table.o_list_table {
     background: var(--lg-bg-surface);
     color: var(--lg-text-secondary);
     border-bottom: 1px solid var(--lg-border);
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
   tbody tr.o_data_row {
     background: var(--lg-bg-surface);
     color: var(--lg-text);
     border-bottom: 1px solid var(--lg-border);
+    transition: background var(--lg-t-fast);
+    td { padding-top: 10px; padding-bottom: 10px; }
     &:hover { background: var(--lg-bg-elevated); }
     &.o_selected_row {
       background: var(--lg-bg-elevated);
-      box-shadow: inset 3px 0 0 var(--lg-accent);
+      box-shadow: inset 3px 0 0 var(--lg-accent-strong);
       color: var(--lg-text);
     }
   }
@@ -245,7 +317,7 @@ html[data-theme='glass'] ::-webkit-scrollbar-thumb:hover { background: var(--lg-
 
 // ---- Focus ring ----
 html[data-theme='glass'] :focus-visible {
-  outline: 2px solid var(--lg-accent);
+  outline: 2px solid var(--lg-accent-strong);
   outline-offset: 2px;
 }
 
@@ -288,18 +360,33 @@ html[data-theme='glass'] .o_navbar_apps_menu {
 html[data-theme='glass'] .o_home_menu {
   background: var(--lg-bg-base);
   .o_home_menu_scrollable {
-    padding: var(--lg-r-lg);
+    padding: 24px;
+    gap: 16px;
+
+    // Odoo 19 renders the application tiles inside different wrapper names
+    // depending on the home-menu layout. Keep the spacing consistent in both.
+    .o_home_menu_apps,
+    .o_apps {
+      gap: 16px;
+    }
   }
+  // Each app as its own floating white card (12px radius, soft shadow) —
+  // not a borderless tile flush against the page background.
+  // Bootstrap's `rounded-3` utility (present on every .o_app tile) sets
+  // border-radius with !important, beating this rule regardless of
+  // selector specificity — match it with !important too.
   .o_app {
     background: var(--lg-bg-surface);
-    border: none;
-    border-radius: var(--lg-r-lg);
-    padding: var(--lg-r-md);
+    border: 1px solid var(--lg-border);
+    border-radius: var(--lg-r-lg) !important;
+    padding: 16px;
     color: var(--lg-text);
-    transition: transform var(--lg-t-fast), background var(--lg-t-fast);
+    box-shadow: var(--lg-shadow-sm);
+    transition: transform var(--lg-t-fast), box-shadow var(--lg-t-fast), background var(--lg-t-fast);
     &:hover {
       transform: translateY(-2px);
-      background: var(--lg-bg-elevated);
+      background: var(--lg-bg-surface);
+      box-shadow: var(--lg-shadow-hover);
     }
   }
 }

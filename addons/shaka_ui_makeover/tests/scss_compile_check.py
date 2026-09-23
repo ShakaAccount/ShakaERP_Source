@@ -12,8 +12,10 @@ import sass  # python-sass (Libsass binding) — importable as `sass`
 ADDON_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCSS_DIR = os.path.join(ADDON_ROOT, 'static/src/scss')
 
-# Order MUST match web.assets_backend in __manifest__.py
+# Order MUST match web.assets_backend in __manifest__.py (theme_mode.js is
+# JS, not SCSS, so it's excluded from this concatenation).
 BACKEND_ORDER = [
+    'fonts.scss',
     'design_tokens.scss',
     'mixins.scss',
     'backend.scss',
@@ -21,11 +23,13 @@ BACKEND_ORDER = [
     'views.scss',
     'settings.scss',
     'login.scss',
-    'pos.scss',
+    'global_forms.scss',
+    'global_theme_overrides.scss',
 ]
 
 # web.assets_frontend (login only)
 FRONTEND_ORDER = [
+    'fonts.scss',
     'design_tokens.scss',
     'mixins.scss',
     'login.scss',
@@ -51,18 +55,19 @@ def _read_concat(order):
 def test_backend_bundle():
     blob, paths = _read_concat(BACKEND_ORDER)
     css = sass.compile(string=blob)
-    assert len(css) > 30_000, f'backend bundle too small: {len(css)} bytes'
-    # Sanity: glass surface is present
-    assert 'backdrop-filter' in css or '-webkit-backdrop-filter' in css, \
-        'no backdrop-filter in compiled backend CSS'
+    assert len(css) > 60_000, f'backend bundle too small: {len(css)} bytes'
     # The --lg-* design tokens are exported to :root
     assert '--lg-accent' in css, 'no --lg-accent in compiled backend CSS'
+    # Elevation (soft-shadow) tokens back the floating-card look
+    assert '--lg-shadow-sm' in css, 'no --lg-shadow-sm in compiled backend CSS'
     # Theme gate appears many times
     gate = "data-theme='glass'"
     assert css.count(gate) > 100, \
         f'expected >100 theme gates, got {css.count(gate)}'
-    # Dark mode is wired in
-    assert 'prefers-color-scheme: dark' in css, 'no dark-mode media query'
+    # Dark mode is wired in — real trigger is the cookie-synced
+    # `.shaka-dark-mode` class (see static/src/js/theme_mode.js), not a
+    # prefers-color-scheme media query.
+    assert 'shaka-dark-mode' in css, 'no .shaka-dark-mode dark-mode rules'
     # Reduced-motion respected
     assert 'prefers-reduced-motion: reduce' in css, \
         'no reduced-motion media query'
@@ -73,10 +78,9 @@ def test_frontend_bundle():
     blob, paths = _read_concat(FRONTEND_ORDER)
     css = sass.compile(string=blob)
     assert len(css) > 4_000, f'frontend bundle too small: {len(css)} bytes'
-    # Locked dark theme — no backdrop-filter. Check for a key login selector
-    # and the locked surface color.
     assert '.oe_login_form' in css, 'login form selector missing'
-    assert '#0B0F19' in css or '0B0F19' in css, 'locked page-base color not in bundle'
+    # Locked page-base color (flat neutral-lime palette, not the old navy).
+    assert '#f8f9fa' in css.lower(), 'locked page-base color not in bundle'
     return len(css)
 
 
@@ -84,7 +88,6 @@ def test_pos_bundle():
     blob, paths = _read_concat(POS_ORDER)
     css = sass.compile(string=blob)
     assert len(css) > 5_000, f'POS bundle too small: {len(css)} bytes'
-    assert 'backdrop-filter' in css or '-webkit-backdrop-filter' in css
     # POS classes verified during development
     assert '.pos' in css, 'no .pos selector in compiled POS CSS'
     return len(css)

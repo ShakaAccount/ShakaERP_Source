@@ -1,0 +1,9 @@
+<odoo>
+    <record id="seq_daily_sales_corrective_invoice" model="ir.sequence">
+        <field name="name">فاکتور اصلاحی</field>
+        <field name="code">daily.sales.corrective.invoice</field>
+        <field name="prefix">FI/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

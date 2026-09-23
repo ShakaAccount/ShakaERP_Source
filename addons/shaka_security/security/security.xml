@@ -1,0 +1,8 @@
+<odoo>
+    <record id="rule_shaka_access_matrix_admin" model="ir.rule">
+        <field name="name">ماتریس دسترسی: مدیر سیستم</field>
+        <field name="model_id" ref="model_shaka_access_form"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>

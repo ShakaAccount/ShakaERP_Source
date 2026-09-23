@@ -1,0 +1,3 @@
+<odoo>
+    <function model="shaka.access.form" name="_cleanup_legacy_ui"/>
+</odoo>
