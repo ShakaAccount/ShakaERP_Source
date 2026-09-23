@@ -31,7 +31,12 @@
   .bp-field .o_input { min-height:34px; padding-inline:10px; border-radius:8px; }
   .bp-note { margin:10px 0 0; color:var(--shaka-muted, #64748b); font-size:11px; }
   // Keep the right-hand step rail; the notebook tab bar is redundant.
-  .bp-shell { display:grid; grid-template-columns:190px minmax(0,1fr); gap:35px; width:calc(100% - 15px); height:calc(100vh - 350px); min-height:420px; margin-top:10px; margin-inline-end:15px; }
+  // The sheet fills .o_form_sheet_bg (a fixed-height flex column) and the shell
+  // takes what is left, so the step rail ends inside the sheet at any header
+  // height. flex-shrink:0 lets the sheet grow (and the page scroll) instead of
+  // clipping the shell when the viewport is shorter than min-height allows.
+  .o_form_sheet:has(> .bp-shell) { display:flex; flex:1 0 auto; flex-direction:column; }
+  .bp-shell { display:grid; flex:1 1 auto; grid-template-columns:190px minmax(0,1fr); grid-template-rows:minmax(0,1fr); gap:35px; width:calc(100% - 15px); min-height:420px; margin-top:10px; margin-inline-end:15px; }
   .bp-steps { grid-column:1; grid-row:1; box-sizing:border-box; height:calc(100% - 10px); min-height:0; padding:10px; overflow-y:auto; }
   .bp-step { display:flex; width:100%; align-items:center; gap:9px; padding:9px; border:0; border-radius:9px; color:var(--shaka-muted, #64748b); background:transparent; text-align:start; cursor:pointer; transition:background .16s ease, color .16s ease, transform .16s ease; }
   .bp-step:hover { color:var(--shaka-text, #0f172a); background:rgba(20,184,166,.07); transform:translateX(-2px); }
@@ -47,7 +52,9 @@
   .bp-main .o_notebook .o_notebook_headers { display:none !important; }
   .bp-main .o_notebook .tab-content { display:flex; flex:1 1 auto; height:100%; min-height:0 !important; border:0; }
   .bp-main .o_notebook_content { padding:0 !important; margin:0 !important; }
-  .bp-main .o_notebook_content > .tab-pane { display:flex; flex:1 1 auto; flex-direction:column; height:100%; min-height:0; padding:0 !important; }
+  // min-width:0 lets the pane shrink below the list's frozen column widths
+  // (a flex item defaults to min-width:auto and would overflow .bp-main).
+  .bp-main .o_notebook_content > .tab-pane { display:flex; flex:1 1 auto; flex-direction:column; min-width:0; height:100%; min-height:0; padding:0 !important; }
   .bp-main .o_notebook_content > .tab-pane > .o_field_widget.o_field_one2many { display:flex; flex:1 1 auto; flex-direction:column; height:100%; min-height:0; }
   .bp-main .o_notebook .o_notebook_header { border:1px solid var(--shaka-border, rgba(100,116,139,.18)); border-radius:8px; margin-inline-end:5px; }
   .bp-main .o_notebook .o_notebook_page { display:flex; flex:1 1 auto; flex-direction:column; height:100%; min-height:0 !important; padding:0; }
@@ -65,6 +72,9 @@
     flex-direction:column;
     align-self:stretch;
     min-height:0;
+    // Odoo bleeds sheet x2many lists out by -16px each side; here that pushes
+    // the list past the step rail and the sheet edge.
+    margin-inline:0 !important;
     overflow:hidden;
     padding-bottom:0 !important;
     // Keep the panel full-height, but render normal-height guide rows instead
@@ -81,7 +91,7 @@
   .bp-main .o_list_renderer > .o_list_table { flex:0 0 auto; align-self:stretch; }
   .bp-main .o_list_table { width:100% !important; height:auto; min-height:0; border-radius:9px 9px 0 0; overflow:hidden; }
   .bp-main .o_list_table thead th { background:rgba(20,184,166,.08); }
-  @media (max-width: 900px) { .bp-header-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .bp-shell { grid-template-columns:minmax(0,1fr); height:auto; min-height:0; } .bp-steps { grid-column:1; grid-row:1; display:flex; height:auto; overflow:auto; gap:4px; } .bp-step { min-width:145px; } .bp-main { grid-column:1; grid-row:2; height:auto; min-height:330px; } }
+  @media (max-width: 900px) { .bp-header-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .bp-shell { grid-template-columns:minmax(0,1fr); grid-template-rows:auto; height:auto; min-height:0; } .bp-steps { grid-column:1; grid-row:1; display:flex; height:auto; overflow:auto; gap:4px; } .bp-step { min-width:145px; } .bp-main { grid-column:1; grid-row:2; height:auto; min-height:330px; } }
   @media (max-width: 560px) { .bp-top { align-items:flex-start; flex-direction:column; } .bp-header-grid { grid-template-columns:1fr 1fr; } .bp-field-wide { grid-column:span 2; } }
 }
 
