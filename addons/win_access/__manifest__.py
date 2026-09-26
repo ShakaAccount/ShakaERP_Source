@@ -1,7 +1,7 @@
 {
     'name': 'Windows Access Manager',
     'version': '19.0.1.0.0',
-    'category': 'Administration',
+    'category': 'Shaka ERP',
     'summary': 'Manage groups + members across AD, local Windows, SSAS and PBIRS via the Windows Access Management API',
     'description': """
 Windows Access Manager

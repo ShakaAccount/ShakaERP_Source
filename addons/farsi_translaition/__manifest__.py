@@ -1,7 +1,7 @@
 {
     'name': 'Global Persian Translation',
     'version': '19.0.1.0.0',
-    'category': 'Localization',
+    'category': 'Shaka ERP',
     'summary': 'Global Persian translations for Odoo',
     'description': """
 Global Persian Translation

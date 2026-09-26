@@ -1,7 +1,7 @@
 {
     'name': 'برنامه و بودجه',
     'version': '19.0.1.0.0',
-    'category': 'Accounting/Budget',
+    'category': 'Shaka ERP',
     'summary': 'مدیریت برنامه‌ریزی، بودجه و زنجیره اجرای اهداف',
     'description': """
 Budget Planning

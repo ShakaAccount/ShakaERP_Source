@@ -1,7 +1,7 @@
 {
     'name': 'اطلاعات پایه شرکت',
     'version': '19.0.1.0.0',
-    'category': 'Administration',
+    'category': 'Shaka ERP',
     'summary': 'مدیریت سال‌های مالی شرکت‌ها',
     'description': """
 Company Base Information

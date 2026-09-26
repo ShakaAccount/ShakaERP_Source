@@ -1,7 +1,7 @@
 {
     'name': 'Daily Sales Performance',
     'version': '19.0.1.0.0',
-    'category': 'Sales/Sales',
+    'category': 'Shaka ERP',
     'summary': 'Daily branch sales performance with revenue and POS details',
     'description': """
 Daily Sales Performance

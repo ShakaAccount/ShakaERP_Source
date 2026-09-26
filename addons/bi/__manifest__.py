@@ -1,7 +1,7 @@
 {
     'name': 'BI',
     'version': '19.0.1.0.0',
-    'category': 'Productivity/Business Intelligence',
+    'category': 'Shaka ERP',
     'summary': 'Placeholder module for Shaka business-intelligence features',
     'description': """
 BI

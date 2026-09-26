@@ -1,7 +1,7 @@
 {
     'name': 'My Debrand',
     'version': '19.0.1.0.0',
-    'category': 'Customizations',
+    'category': 'Shaka ERP',
     'summary': 'Strip Odoo branding from the login page and shell',
     'description': """
 Debrand
