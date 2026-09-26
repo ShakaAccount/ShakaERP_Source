@@ -101,7 +101,10 @@ Confirmed decisions:
 
 Order: 0 → 1 → 2 → 3 → 4 → 5, then 6–13 in any order, then 14 → 17. Each of Tasks 4–12 owns one numbered file in `scss/surfaces/`, so they don't conflict. The numbered names keep the glob load order right: primitives before surfaces.
 
-- [ ] [Task 0: Environment (you run this; ~15 min)](tasks/task-00-environment.md)
+- [x] [Task 0: Environment (you run this; ~15 min)](tasks/task-00-environment.md)
+  - `shaka_design` built. Installed: `budget_planning`, `category`, `win_access`, `powerbi_portal`, `jalali_date`.
+  - Skipped: `daily_sales_performance` (DW: `daily.sales.branch` has no table), `sales_analysis` (DW: `ir_model_access` with null `model_id`), `my_debrand` (not DW: a template xpath fails, `ParseError ... None:8`). Task 6 cleanup of `my_debrand` can't be checked in `shaka_design` until that's fixed.
+  - Run with `--dev=xml` (`odoo.conf` has no `dev_mode`).
 - [ ] [Task 1: Tooling, tracker, product context](tasks/task-01-tooling-tracker-product-context.md)
 - [ ] [Task 2: Direction and spec (no theme code)](tasks/task-02-direction-and-spec.md)
 - [ ] [Task 3: Foundations (the whole app re-skins through variables)](tasks/task-03-foundations.md)
