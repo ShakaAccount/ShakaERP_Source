@@ -106,8 +106,8 @@ Order: 0 → 1 → 2 → 3 → 4 → 5, then 6–13 in any order, then 14 → 17
   - Skipped: `daily_sales_performance` (DW: `daily.sales.branch` has no table), `sales_analysis` (DW: `ir_model_access` with null `model_id`), `my_debrand` (not DW: a template xpath fails, `ParseError ... None:8`). Task 6 cleanup of `my_debrand` can't be checked in `shaka_design` until that's fixed.
   - Run with `--dev=xml` (`odoo.conf` has no `dev_mode`).
 - [x] [Task 1: Tooling, tracker, product context](tasks/task-01-tooling-tracker-product-context.md)
-  - `apple-design` was already linked; `ui-ux-pro-max` installed globally (`search.py` present). `impeccable` is **not** installed in `~/.claude/skills` yet; install it before Task 2.
-  - PRODUCT.md written by hand, not by `/impeccable init`.
+  - `apple-design` was already linked; `ui-ux-pro-max` installed globally (`search.py` present). `impeccable` 4.4.0 is installed as a plugin, at `~/.claude/plugins/cache/impeccable/impeccable/4.4.0/skills/impeccable`, not `~/.claude/skills/impeccable`. Its `scripts/impeccable` launcher currently refuses to download its binary (sha256 sidecar unverifiable), so `context`/`detect` don't run yet.
+  - PRODUCT.md written through `/impeccable init` (schema 1), with context read by hand.
 
 **Notes: skipped modules** (not installed in `shaka_design`; any task touching them is checked only in code): `daily_sales_performance`, `sales_analysis`, `my_debrand` (see Task 0).
 - [ ] [Task 2: Direction and spec (no theme code)](tasks/task-02-direction-and-spec.md)
