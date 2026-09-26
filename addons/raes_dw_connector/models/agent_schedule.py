@@ -2,6 +2,7 @@
 Agent's msdb encoding (sysschedules columns / sp_add_schedule arguments) and
 the ETL.spGatheringData step command. No Odoo import, so
 tests/agent_job_check.py can run it standalone."""
+import json
 import re
 from datetime import date
 
@@ -146,3 +147,22 @@ def parse_command(cmd):
         else:
             out[field] = int(lit)
     return out
+
+
+SSAS_STEP = 'Process SSAS'
+SSAS_REFRESH = ('full', 'automatic', 'dataOnly', 'calculate', 'clearValues')
+
+
+def build_ssas_command(database, refresh_type):
+    """TMSL refresh for a Tabular database (Agent ANALYSISCOMMAND step)."""
+    return json.dumps({'refresh': {'type': refresh_type,
+                                   'objects': [{'database': database}]}},
+                      indent=2)
+
+
+def parse_ssas_command(cmd):
+    try:
+        refresh = json.loads(cmd)['refresh']
+        return refresh['objects'][0]['database'], refresh['type']
+    except (ValueError, KeyError, IndexError, TypeError):
+        return False, 'full'

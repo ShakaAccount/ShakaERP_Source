@@ -42,6 +42,21 @@ class RaesDwAgentJob(models.Model):
     p_label = fields.Char('@Label', help='Empty = NULL')
     command_preview = fields.Text(compute='_compute_command_preview')
 
+    # --- SSAS processing, a job step run after the ETL step succeeds ------
+    ssas_enabled = fields.Boolean(
+        'Process SSAS after ETL', default=True,
+        help='Adds a "Process SSAS" step that refreshes the Tabular database '
+             'whenever the ETL step succeeds. The SQL Agent service account '
+             'needs admin rights on that SSAS database.')
+    ssas_server = fields.Char(
+        'SSAS server',
+        help='Empty = the DW connection host. Set only for a named instance, '
+             r'e.g. HOST\TABULAR.')
+    ssas_database = fields.Char('SSAS database name', default='Shaka_SSAS')
+    ssas_refresh_type = fields.Selection(
+        [(t, t) for t in sched.SSAS_REFRESH], string='Refresh type',
+        default='full', required=True)
+
     # --- schedule, mirrors the SSMS "Job Schedule Properties" dialog -----
     schedule_name = fields.Char(required=True, default='ScheduleETL')
     schedule_enabled = fields.Boolean('Enabled', default=True)
@@ -131,18 +146,27 @@ class RaesDwAgentJob(models.Model):
                 "ORDER BY CASE WHEN s.name = %s THEN 0 ELSE 1 END, "
                 "s.schedule_id", (self.job_name, self.schedule_name))
             schedule = cur.fetchone()
-            return job, schedule, self._last_outcome(cur)
+            ssas = self._ssas_step(cur)
+            return job, schedule, ssas, self._last_outcome(cur)
 
         found = self._run(load)
         if not found:
             self.write({'job_exists': False, 'last_sync': fields.Datetime.now()})
             return self._notify(_('Job "%s" not found on SQL Server — '
                                   'Apply will create it.', self.job_name))
-        job, schedule, outcome = found
+        job, schedule, ssas, outcome = found
         vals = sched.parse_command(job['command'])
         vals.update(job_exists=True, last_sync=fields.Datetime.now(),
                     last_run_outcome=outcome,
-                    step_database=job['database_name'] or self.step_database)
+                    step_database=job['database_name'] or self.step_database,
+                    ssas_enabled=bool(ssas))
+        if ssas:
+            db, refresh = sched.parse_ssas_command(ssas['command'])
+            server = ssas['server']
+            vals.update(ssas_server=False if server == self.connection_id.host
+                        else server,
+                        ssas_database=db or self.ssas_database,
+                        ssas_refresh_type=refresh)
         if schedule:
             vals.update(sched.schedule_values(schedule))
         self.write(vals)
@@ -154,6 +178,9 @@ class RaesDwAgentJob(models.Model):
             params = sched.schedule_params(self._vals(SCHEDULE_FIELDS))
         except ValueError as e:
             raise UserError(str(e))
+        if self.ssas_enabled and not self.ssas_database:
+            raise UserError(_('Set the SSAS database, or untick '
+                              '"Process SSAS after ETL".'))
         command = self.command_preview
         database = self.step_database or self.connection_id.database
         sched_args = ', '.join('@%s = %%(%s)s' % (k, k) for k in params)
@@ -177,6 +204,7 @@ class RaesDwAgentJob(models.Model):
                     "EXEC msdb.dbo.sp_update_jobstep @job_name = %s, "
                     "@step_id = %s, @database_name = %s, @command = %s",
                     (self.job_name, self.step_id, database, command))
+            self._apply_ssas_step(cur)
             cur.execute(
                 "SELECT TOP 1 s.schedule_id FROM msdb.dbo.sysjobs j "
                 "JOIN msdb.dbo.sysjobschedules js ON js.job_id = j.job_id "
@@ -215,6 +243,49 @@ class RaesDwAgentJob(models.Model):
             "EXEC msdb.dbo.sp_start_job @job_name = %s", (self.job_name,)))
         self.message_post(body=_('Started job "%s".', self.job_name))
         return self._notify(_('Job "%s" started.', self.job_name))
+
+    def _ssas_step(self, cur):
+        cur.execute(
+            "SELECT st.step_id, st.command, st.server "
+            "FROM msdb.dbo.sysjobsteps st JOIN msdb.dbo.sysjobs j "
+            "ON j.job_id = st.job_id WHERE j.name = %s AND st.step_name = %s",
+            (self.job_name, sched.SSAS_STEP))
+        return cur.fetchone()
+
+    def _apply_ssas_step(self, cur):
+        """Add / update / remove the "Process SSAS" step, then point the ETL
+        step's on-success at it (4 = go to step) or at "quit with success"
+        (1). On ETL failure the job stops, so SSAS never processes bad data."""
+        step = self._ssas_step(cur)
+        if self.ssas_enabled:
+            args = (self.ssas_server or self.connection_id.host,
+                    sched.build_ssas_command(self.ssas_database,
+                                             self.ssas_refresh_type))
+            if step:
+                cur.execute(
+                    "EXEC msdb.dbo.sp_update_jobstep @job_name = %s, "
+                    "@step_id = %s, @server = %s, @command = %s",
+                    (self.job_name, step['step_id'], *args))
+            else:
+                cur.execute(
+                    "EXEC msdb.dbo.sp_add_jobstep @job_name = %s, "
+                    "@step_name = %s, @subsystem = 'ANALYSISCOMMAND', "
+                    "@server = %s, @command = %s, "
+                    "@on_success_action = 1, @on_fail_action = 2",
+                    (self.job_name, sched.SSAS_STEP, *args))
+                step = self._ssas_step(cur)
+            cur.execute(
+                "EXEC msdb.dbo.sp_update_jobstep @job_name = %s, "
+                "@step_id = %s, @on_success_action = 4, "
+                "@on_success_step_id = %s",
+                (self.job_name, self.step_id, step['step_id']))
+            return
+        if step:
+            cur.execute("EXEC msdb.dbo.sp_delete_jobstep @job_name = %s, "
+                        "@step_id = %s", (self.job_name, step['step_id']))
+        cur.execute(
+            "EXEC msdb.dbo.sp_update_jobstep @job_name = %s, @step_id = %s, "
+            "@on_success_action = 1", (self.job_name, self.step_id))
 
     def _last_outcome(self, cur):
         cur.execute(
