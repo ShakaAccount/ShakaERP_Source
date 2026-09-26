@@ -8,6 +8,11 @@ addons/powerbi/
 !.github
 !.mailmap
 !.weblate.json
+!/.impeccable/
+/.impeccable/*
+!/.impeccable/config.json
+!/.impeccable/design.json
+!/.impeccable/surfaces/
 # compiled python files
 *.py[co]
 __pycache__/
