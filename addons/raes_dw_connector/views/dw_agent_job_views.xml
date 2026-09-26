@@ -1,0 +1,170 @@
+<odoo>
+    <record id="view_raes_dw_agent_job_form" model="ir.ui.view">
+        <field name="name">raes.dw.agent.job.form</field>
+        <field name="model">raes.dw.agent.job</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_load" type="object"
+                            string="Load from SQL Server" class="btn-secondary"/>
+                    <button name="action_apply" type="object"
+                            string="Apply to SQL Server" class="btn-primary"/>
+                    <button name="action_run_now" type="object"
+                            string="Run now" class="btn-secondary"
+                            invisible="not job_exists"
+                            confirm="Start the job on SQL Server now?"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-info" role="status"
+                         invisible="job_exists">
+                        This job isn't on SQL Server yet (or hasn't been
+                        loaded). Apply will create it.
+                    </div>
+                    <group>
+                        <group>
+                            <field name="connection_id"/>
+                            <field name="job_name"/>
+                            <field name="step_id"/>
+                            <field name="step_database"
+                                   placeholder="connection database"/>
+                        </group>
+                        <group>
+                            <field name="job_exists"/>
+                            <field name="last_sync"/>
+                            <field name="last_run_outcome"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Schedule">
+                            <group>
+                                <group>
+                                    <field name="schedule_name"/>
+                                    <field name="schedule_type"
+                                           widget="radio"
+                                           options="{'horizontal': true}"/>
+                                    <field name="schedule_enabled"/>
+                                </group>
+                            </group>
+                            <group string="One-time occurrence"
+                                   invisible="schedule_type != 'one_time'">
+                                <field name="start_date" string="Date"/>
+                                <field name="start_time" string="Time"
+                                       widget="float_time"/>
+                            </group>
+                            <div invisible="schedule_type != 'recurring'">
+                                <group string="Frequency">
+                                    <group>
+                                        <field name="occurs"/>
+                                        <field name="recurs_every"
+                                               string="Recurs every (days)"
+                                               invisible="occurs != 'daily'"/>
+                                        <field name="recurs_every"
+                                               string="Recurs every (weeks)"
+                                               invisible="occurs != 'weekly'"/>
+                                        <field name="recurs_every"
+                                               string="Every (months)"
+                                               invisible="occurs != 'monthly'"/>
+                                        <field name="monthly_mode"
+                                               widget="radio"
+                                               invisible="occurs != 'monthly'"/>
+                                        <field name="month_day"
+                                               invisible="occurs != 'monthly' or monthly_mode != 'day'"/>
+                                        <field name="relative_week"
+                                               string="The"
+                                               invisible="occurs != 'monthly' or monthly_mode != 'relative'"/>
+                                        <field name="relative_day"
+                                               string="Day"
+                                               invisible="occurs != 'monthly' or monthly_mode != 'relative'"/>
+                                    </group>
+                                    <group invisible="occurs != 'weekly'">
+                                        <field name="mon"/>
+                                        <field name="tue"/>
+                                        <field name="wed"/>
+                                        <field name="thu"/>
+                                        <field name="fri"/>
+                                        <field name="sat"/>
+                                        <field name="sun"/>
+                                    </group>
+                                </group>
+                                <group string="Daily frequency">
+                                    <group>
+                                        <field name="subday_type"
+                                               widget="radio"/>
+                                        <field name="subday_interval"
+                                               invisible="subday_type == 'once'"/>
+                                    </group>
+                                    <group>
+                                        <field name="start_time"
+                                               string="Starting at"
+                                               widget="float_time"/>
+                                        <field name="end_time"
+                                               string="Ending at"
+                                               widget="float_time"
+                                               invisible="subday_type == 'once'"/>
+                                    </group>
+                                </group>
+                                <group string="Duration">
+                                    <group>
+                                        <field name="start_date"/>
+                                    </group>
+                                    <group>
+                                        <field name="end_date"
+                                               placeholder="No end date"/>
+                                    </group>
+                                </group>
+                            </div>
+                        </page>
+                        <page string="Procedure parameters">
+                            <group>
+                                <group>
+                                    <field name="p_company"/>
+                                    <field name="p_data_source"/>
+                                    <field name="p_module"/>
+                                </group>
+                                <group>
+                                    <field name="p_entity"/>
+                                    <field name="p_date"/>
+                                    <field name="p_label"/>
+                                </group>
+                            </group>
+                            <group string="Job step command">
+                                <field name="command_preview" nolabel="1"
+                                       colspan="2" class="font-monospace"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_raes_dw_agent_job_list" model="ir.ui.view">
+        <field name="name">raes.dw.agent.job.list</field>
+        <field name="model">raes.dw.agent.job</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="job_name"/>
+                <field name="connection_id"/>
+                <field name="schedule_name"/>
+                <field name="occurs"/>
+                <field name="schedule_enabled"/>
+                <field name="job_exists"/>
+                <field name="last_run_outcome"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_raes_dw_agent_job" model="ir.actions.act_window">
+        <field name="name">ETL Jobs (SQL Agent)</field>
+        <field name="res_model">raes.dw.agent.job</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_raes_dw_agent_job"
+              name="ETL Jobs (SQL Agent)"
+              parent="base.menu_administration"
+              action="action_raes_dw_agent_job"
+              groups="base.group_system"
+              sequence="61"/>
+</odoo>

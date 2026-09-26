@@ -21,6 +21,7 @@ details directly; every other DW-backed addon builds on it.
         'security/ir.model.access.csv',
         'views/dw_connection_views.xml',
         'views/dw_remote_table_views.xml',
+        'views/dw_agent_job_views.xml',
     ],
     'installable': True,
     'application': True,
