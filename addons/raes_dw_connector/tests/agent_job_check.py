@@ -48,4 +48,7 @@ orig = ("EXEC ETL.spGatheringData\n  @CompanyID = NULL,\n  @DataSourceID = "
         "NULL,\n  @ModuleID = NULL,\n  @EntityID = NULL,\n  @DateID = 0,\n"
         "  @Label = NULL")
 assert s.parse_command(orig)['p_label'] is False
+cmd = s.build_ssas_command('Sales', 'full')
+assert s.parse_ssas_command(cmd) == ('Sales', 'full')
+assert s.parse_ssas_command('<Process/>') == (False, 'full')
 print('ok')

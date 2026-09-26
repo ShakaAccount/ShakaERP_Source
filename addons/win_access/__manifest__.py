@@ -22,6 +22,7 @@ Management HTTP API, plus BI row-level security driven by ``MD.UserAccess``
         'security/ir.model.access.csv',
         'views/win_access_views.xml',
         'views/bi_user_access_views.xml',
+        'views/dw_agent_job_views.xml',
     ],
     'assets': {
         'web.assets_backend': [

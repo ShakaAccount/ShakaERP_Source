@@ -132,6 +132,26 @@
                                        colspan="2" class="font-monospace"/>
                             </group>
                         </page>
+                        <page string="SSAS processing">
+                            <group>
+                                <group>
+                                    <field name="ssas_enabled"/>
+                                    <field name="ssas_server"
+                                           invisible="not ssas_enabled"
+                                           placeholder="same as DW connection host"/>
+                                    <field name="ssas_database"
+                                           invisible="not ssas_enabled"
+                                           required="ssas_enabled"/>
+                                    <field name="ssas_refresh_type"
+                                           invisible="not ssas_enabled"/>
+                                </group>
+                            </group>
+                            <div class="text-muted" invisible="not ssas_enabled">
+                                Runs as a "Process SSAS" job step after the ETL
+                                step succeeds. If the ETL step fails, SSAS is
+                                not processed.
+                            </div>
+                        </page>
                     </notebook>
                 </sheet>
                 <chatter/>

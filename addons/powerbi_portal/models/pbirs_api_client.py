@@ -70,6 +70,14 @@ class PbirsApiClient:
             raise PbirsApiError(
                 "API %s %s failed: %s" % (method, url, detail or "unknown error")
             )
+        if data is None:
+            if resp.status_code == 204:
+                return {}
+            # 2xx but not JSON: usually a proxy/login page or a wrong base URL.
+            raise PbirsApiError(
+                "API %s %s returned a non-JSON response (HTTP %s): %r"
+                % (method, url, resp.status_code, resp.text[:200])
+            )
         return data
 
     # --------------------------------------------------------------- health
