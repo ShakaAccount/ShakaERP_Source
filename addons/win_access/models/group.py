@@ -289,11 +289,9 @@ class WinAccessOption(models.Model):
         last = icp.get_param("win_access.options_at")
         if last and fields.Datetime.now() - fields.Datetime.to_datetime(last) < timedelta(minutes=5):
             return
-        try:
-            self.refresh()
-            icp.set_param("win_access.options_err", "")
-        except ApiError as e:
-            icp.set_param("win_access.options_err", "Could not load lists from the API: %s %s" % (e.msg, e.hint))
+        errors = self.refresh()
+        icp.set_param("win_access.options_err",
+                      "Could not load some lists from the API: %s" % "; ".join(errors) if errors else "")
         icp.set_param("win_access.options_at", str(fields.Datetime.now()))
 
     def _ad_users(self):
@@ -314,17 +312,29 @@ class WinAccessOption(models.Model):
         return users, derive_domain(groups[0].get("dn") if groups else "")
 
     def refresh(self):
-        """Fetch everything first (an API failure keeps the old cache), then upsert and drop stale rows."""
-        env = self.env
-        inst = {i: self._names(_call(env, "GET", "/ssas/%s/databases" % _q(i)), "databases")
-                for i in self._names(_call(env, "GET", "/ssas/instances"), "instances")}
-        items = _call(env, "GET", "/pbirs/items?path=%2F&recursive=true").get("items", [])
-        ad_users, (dns, netbios) = self._ad_users()
-        local = self._names(_call(env, "GET", "/local/users"), "users")
+        """Fetch each source on its own: a failing source (SSAS, PBIRS, AD, local) keeps its old
+        cache rows and is reported, the others still refresh. Returns the list of error messages."""
+        env, errors, failed = self.env, [], set()
+
+        def fetch(tag, fn):
+            try:
+                return fn()
+            except ApiError as e:
+                failed.add(tag)
+                errors.append("%s: %s %s" % (tag.upper(), e.msg, e.hint))
+
+        inst = fetch("ssas", lambda: {
+            i: self._names(_call(env, "GET", "/ssas/%s/databases" % _q(i)), "databases")
+            for i in self._names(_call(env, "GET", "/ssas/instances"), "instances")}) or {}
+        items = fetch("pbirs", lambda: _call(env, "GET", "/pbirs/items?path=%2F&recursive=true").get("items", [])) or []
+        ad = fetch("ad", self._ad_users)
+        ad_users = ad[0] if ad else {}
+        local = fetch("local", lambda: self._names(_call(env, "GET", "/local/users"), "users")) or []
         odoo_logins = env["res.users"].search([("share", "=", False)]).mapped("login")
-        icp = env["ir.config_parameter"].sudo()
-        icp.set_param("win_access.domain_dns", dns)
-        icp.set_param("win_access.domain_netbios", netbios)
+        if ad:
+            icp = env["ir.config_parameter"].sudo()
+            icp.set_param("win_access.domain_dns", ad[1][0])
+            icp.set_param("win_access.domain_netbios", ad[1][1])
 
         # Upsert (not wipe) so groups keep their selected values across refreshes.
         keep = self.browse()
@@ -346,7 +356,9 @@ class WinAccessOption(models.Model):
             parent = upsert("ssas_instance", i)
             for d in dbs:
                 db = upsert("ssas_db", d, parent)
-                for t in self._names(_call(env, "GET", "/ssas/%s/databases/%s/tables" % (_q(i), _q(d))), "tables"):
+                tables = fetch("ssas", lambda: self._names(
+                    _call(env, "GET", "/ssas/%s/databases/%s/tables" % (_q(i), _q(d))), "tables")) or []
+                for t in tables:
                     upsert("ssas_table", t, db)
         for x in items:
             if x.get("path"):
@@ -357,12 +369,20 @@ class WinAccessOption(models.Model):
                    upn=m.get("user_principal_name"))
         for u in local:
             upsert("user", u, source="local")
-        for u in set(odoo_logins) - set(ad_users):
-            upsert("user", u, source="odoo")
-        # keep options that members still point at (typed-in names), drop other stale ones
+        if ad:  # without the AD list we can't tell which Odoo logins are AD users
+            for u in set(odoo_logins) - set(ad_users):
+                upsert("user", u, source="odoo")
+        # keep options that members still point at (typed-in names) or whose source failed,
+        # drop other stale ones
         used = self.env["win.access.member"].search([]).user_option_id
-        (self.search([("kind", "!=", "ssas_column")]) - keep - used).unlink()
-        return len(keep)
+
+        def failed_source(o):
+            tag = o.source if o.kind == "user" else o.kind.split("_")[0]
+            return tag in failed or (tag == "odoo" and "ad" in failed)
+
+        (self.search([("kind", "!=", "ssas_column")]) - keep - used).filtered(
+            lambda o: not failed_source(o)).unlink()
+        return errors
 
     def load_columns(self):
         """Fetch the columns of this SSAS table option (kind='ssas_table') on demand.

@@ -31,10 +31,7 @@ class BiUserAccessWizard(models.TransientModel):
         Option = self.env["win.access.option"]
         Option.autorefresh()
         if not Option.search_count([("kind", "=", "ssas_table")]):  # first use after an upgrade: cache is empty
-            try:
-                Option.refresh()
-            except ApiError:
-                pass  # shown by the empty table dropdown; the API error is stored by autorefresh
+            Option.refresh()  # a failing source is reported via autorefresh's stored error
         return super().default_get(fields_list)
 
     @api.depends("entity_id")
