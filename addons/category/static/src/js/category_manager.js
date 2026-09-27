@@ -1035,7 +1035,11 @@ export class CategoryManager extends Component {
     async loadEntities() {
         if (this._entitiesLoaded) return;
         try {
-            const rows = await this.orm.searchRead("raes.md.entity", [["entity_type_lu", "=", "1"]], ["id", "name", "title"], {
+            const [dimLookup] = await this.orm.searchRead(
+                "raes.gnr.lookup", [["category_code", "=", "1001"], ["value", "=", "Dimension"]], ["code"], {limit: 1}
+            );
+            const dimCode = dimLookup ? String(dimLookup.code) : "1";
+            const rows = await this.orm.searchRead("raes.md.entity", [["entity_type_lu", "=", dimCode]], ["id", "name", "title"], {
                 limit: 500, order: "name"
             });
             this.state.entities = rows.map(e => ({
