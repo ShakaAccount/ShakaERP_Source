@@ -1,0 +1,168 @@
+// Settings (MASTER.md › Components › Settings): macOS System Settings. The app
+// list is the navigator (squircle icon tiles, two-state selection); the pane
+// is the grouped background with inset surface sections, 13/600 headers above
+// them and hairline rows. The search field is the control panel's Spotlight
+// capsule (40_control_panel.scss), so nothing here.
+// Odoo's rules sit under this long prefix, so ours repeat it to win on order.
+
+$-shaka-settings: '.o_base_settings_view .o_form_renderer';
+
+#{$-shaka-settings} {
+    --settings__tab-bg: var(--shaka-bg);
+    --settings__tab-bg--active: var(--shaka-fill);
+    --settings__tab-color: var(--shaka-text);
+    --settings__title-bg: transparent;
+}
+
+// A setting reached from search: the selected-row tint (8% light / 12% dark,
+// measured in Task 8) with a link edge, instead of a 90% tint of the action.
+.o_base_settings_view .o_searchable_setting {
+    $-tint: if($o-webclient-color-scheme == dark, 12%, 8%);
+    --SearchableSetting__highlight-background: #{color-mix(in srgb, var(--shaka-primary) $-tint, var(--shaka-surface))};
+    --SearchableSetting__highlight-border: var(--shaka-link);
+}
+
+// = Navigator: 240px, 28px rows inset 8px with a 6px radius. Unfocused, the
+// selected app is gray-filled with label text; with focus in the list it is
+// action-filled with white text. Below md Odoo's horizontal tab strip stays.
+@include media-breakpoint-up(md) {
+    #{$-shaka-settings} .o_setting_container .settings_tab {
+        width: 240px;
+        padding-block: 8px;
+
+        .tab {
+            position: relative;
+            align-items: center;
+            height: 28px;
+            margin-inline: 8px;
+            padding-inline: 8px;
+            border-radius: var(--shaka-radius);
+            line-height: 28px;
+            overflow: hidden;
+
+            // Squircle tile behind the module icon: the icon's inline
+            // `background` shorthand clears any background colour on it.
+            &::before {
+                content: '';
+                position: absolute;
+                inset-block-start: 4px;
+                inset-inline-start: 8px;
+                width: 20px;
+                height: 20px;
+                border-radius: 22.5%;
+                background-color: var(--shaka-surface);
+                box-shadow: var(--shaka-shadow-card);
+
+                @supports (corner-shape: squircle) {
+                    border-radius: 33.75%;
+                    corner-shape: squircle;
+                }
+            }
+
+            .icon {
+                position: relative; // paints above the tile
+                width: 16px;
+                min-width: 16px;
+                height: 16px;
+                margin-inline: 2px 10px;
+            }
+
+            .app_name {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            &:hover {
+                background-color: var(--shaka-fill);
+                color: var(--shaka-text);
+            }
+        }
+
+        .selected {
+            box-shadow: none;
+        }
+
+        .tab.selected {
+            color: var(--shaka-text);
+        }
+
+        &:focus-within .tab.selected {
+            background-color: var(--shaka-primary);
+            color: var(--shaka-on-action);
+        }
+    }
+}
+
+// = Pane: grouped background, inset sections.
+#{$-shaka-settings} .o_setting_container .settings {
+    background-color: var(--shaka-bg);
+
+    // Headers line up with the row text: card inset + the row's gutter.
+    > .app_settings_block {
+        h2 {
+            padding-block: 16px 6px;
+            padding-inline: $o-horizontal-padding * 2;
+            color: var(--shaka-muted);
+            font-size: o-to-rem(13px);
+            font-weight: 600;
+        }
+
+        h3 {
+            padding-block: 0 6px;
+            padding-inline: $o-horizontal-padding * 2;
+        }
+
+        .o_settings_container {
+            margin-block: 0 16px;
+            margin-inline: $o-horizontal-padding;
+            padding: 0;
+            overflow: hidden; // clips the first row's hairline
+            border-radius: var(--shaka-radius-card);
+            background-color: var(--shaka-surface);
+        }
+    }
+
+    // Search results: the app name as a 17/600 headline with its tile.
+    .settingSearchHeader {
+        margin-bottom: 0;
+        padding-block: 16px 0;
+        padding-inline: $o-horizontal-padding * 2;
+        background-color: transparent;
+        font-size: o-to-rem(17px);
+        font-weight: 600;
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            margin-inline: 0 8px;
+            border-radius: 22.5%;
+            box-shadow: var(--shaka-shadow-card);
+        }
+
+        & + .app_settings_header {
+            margin-top: 0;
+        }
+    }
+
+    // Matched search text: 20% link tint, label text (help text is secondary,
+    // which drops to 3.99:1 on it in light; label stays above 9.6:1).
+    .highlighter {
+        border-radius: var(--shaka-radius-sm);
+        background: color-mix(in srgb, var(--shaka-link) 20%, var(--shaka-surface));
+        color: var(--shaka-text);
+        font-weight: 600;
+    }
+}
+
+// = Rows: hairlines between rows, 32px minimum, no vertical rule. Each row's
+// top hairline overlaps the one above (-1px); the section clips the first.
+.o_base_settings_view .o_settings_container > .o_setting_box {
+    min-height: var(--shaka-row-h);
+    margin-block: -1px 0;
+    padding-block: 12px;
+    border-block-start: 1px solid var(--shaka-separator);
+}
+
+.o_base_settings_view .o_setting_right_pane {
+    border-inline-start: 0;
+}

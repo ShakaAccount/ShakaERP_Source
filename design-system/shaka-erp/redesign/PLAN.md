@@ -171,7 +171,12 @@ Order: 0 → 1 → 2 → 3 → 4 → 5, then 6–13 in any order, then 14 → 17
   - Calendar: `--o-cw-border-color` separator; today = action circle + white number, set on the day-number elements themselves (Odoo sets `--o-cw-*` on per-view ancestors). Now line stays danger red. Activity: status cells tinted (badge tints) with status text, instead of solid fills with light text; hovers = fill.
   - Pivot in `scss/lazy_views.scss` (`web.assets_backend_lazy`; the dark twin includes it; **manifest change → restart**): surface cells via `--background-color`, separator hairlines, 13px secondary column headers, tabular numbers. Header hover stays Odoo's important gray-200. Graph untouched; **chart palette `patch()` skipped** (optional).
   - Not screenshotted; compile check + detect only.
-- [ ] [Task 12: Settings → `surfaces/90_settings.scss`](tasks/task-12-settings.md)
+- [x] [Task 12: Settings → `surfaces/90_settings.scss`](tasks/task-12-settings.md)
+  - Hooks: `--settings__tab-bg` = grouped background, `--settings__tab-bg--active` = fill, `--settings__title-bg` transparent, `--SearchableSetting__highlight-*` = selected-row tint (8%/12%) + link edge. Selectors repeat Odoo's `.o_base_settings_view .o_form_renderer …` prefix and win on load order.
+  - Navigator (≥md): 240px, 28px rows inset 8px, 6px radius, no inset bar; two-state selection via `:focus-within` (clicking a tab focuses its `<a>`). Squircle tiles are a `::before` on the tab: the icon's inline `background` shorthand blocks a background colour on the icon itself. Below md, Odoo's tab strip is left alone.
+  - Pane: grouped background; each `.o_settings_container` is an inset 10px surface card, rows get a top hairline at −1px (the card clips the first row), 32px minimum, no vertical rule in the right pane. `h2` 13/600 secondary, lined up with the row text. Search header 17/600 with a 24px rounded icon.
+  - Search highlight: 20% link tint with **label** text (measured: secondary drops to 3.99 on it in light; label ≥9.6 in both schemes). Odoo's yellow highlight left light text on yellow in dark mode.
+  - The search field needs nothing new: settings reuse `.o_cp_searchview .o_searchview`, which Task 7 already made a capsule. Not screenshotted; compile check + detect only.
 - [ ] [Task 13: Login and brand → `scss/login.scss` in `web.assets_frontend`](tasks/task-13-login-and-brand.md)
 - [ ] [Task 14: Motion pass (apple-design + `/impeccable animate`) → `transitions/*`](tasks/task-14-motion-pass.md)
 - [ ] [Task 15: Custom addon sweep (one commit per addon, each checked in the matrix)](tasks/task-15-custom-addon-sweep.md)
