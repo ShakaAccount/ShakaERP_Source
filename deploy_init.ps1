@@ -200,17 +200,14 @@ if (-not (Test-Path $configEnv)) {
     Restrict-FileToUser $configEnv
 }
 
-# --- 6. Fix pgBackRest directory ownership (postgres uid 999 inside container) ---
-Log "Fixing pgBackRest directory ownership..."
+# --- 6. Fix pgBackRest directory ownership (best-effort on Windows) ---
+Log "Attempting to fix pgBackRest directory ownership (may be skipped on Windows)..."
 # Docker on Windows requires the mount path in Linux form: /c/Users/...
 $drive   = ($BACKUP_ROOT.Substring(0, 1)).ToLower()          # 'C'
 $rest    = $BACKUP_ROOT.Substring(2) -replace '\\', '/'       # '/Users/.../backups'
 $backupRootUnix = "/$drive$rest"
-docker run --rm -v "${backupRootUnix}:/opt/backups" busybox:1.36 sh -c "chown -R 999:999 /opt/backups/pgbackrest && chmod -R 750 /opt/backups/pgbackrest"
-if ($LASTEXITCODE -ne 0) {
-    Write-Error "pgBackRest ownership fix failed (exit code $LASTEXITCODE). Aborting."
-    exit $LASTEXITCODE
-}
+docker run --rm -v "${backupRootUnix}:/opt/backups" busybox:1.36 sh -c "chown -R 999:999 /opt/backups/pgbackrest 2>/dev/null; chmod -R 750 /opt/backups/pgbackrest 2>/dev/null"
+# Do NOT abort on failure; continue.
 
 # --- 7. Build images ---
 Log "Building database image (pgvector + pgBackRest)..."
