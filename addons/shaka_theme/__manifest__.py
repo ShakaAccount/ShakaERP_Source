@@ -55,6 +55,7 @@ Addon SCSS should use the ``var(--shaka-*)`` tokens, never dark-mode selectors.
         'web.assets_frontend': [
             'shaka_theme/static/src/scss/fonts.scss',
             'shaka_theme/static/src/scss/tokens.scss',
+            'shaka_theme/static/src/scss/surfaces/30_shell.scss',  # login wallpaper
             'shaka_theme/static/src/transitions/error_shake.css',  # login error
         ],
     },

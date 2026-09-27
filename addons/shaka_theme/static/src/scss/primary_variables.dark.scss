@@ -146,6 +146,10 @@ $shaka-theme-border: #38383A !default;
 $shaka-theme-shadow-card: 0 0 0 .5px rgba(255, 255, 255, .06), 0 1px 2px rgba(0, 0, 0, .4) !default;
 $shaka-theme-shadow-pop: 0 0 0 .5px rgba(255, 255, 255, .1), 0 8px 24px rgba(0, 0, 0, .5) !default;
 $shaka-theme-shadow-dialog: 0 0 0 .5px rgba(255, 255, 255, .1), 0 24px 64px rgba(0, 0, 0, .6) !default;
+// App switcher / login wallpaper: graphite in both schemes (MASTER.md).
+$shaka-theme-wallpaper-top: #1C1C1E !default;
+$shaka-theme-wallpaper-bottom: #000000 !default;
+$shaka-theme-on-wallpaper: #FFFFFF !default;
 $shaka-theme-material-thin: rgba(44, 44, 46, .6) !default;
 $shaka-theme-material-regular: rgba(44, 44, 46, .72) !default;
 $shaka-theme-material-thick: rgba(44, 44, 46, .85) !default;

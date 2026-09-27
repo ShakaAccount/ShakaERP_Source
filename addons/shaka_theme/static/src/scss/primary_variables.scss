@@ -156,6 +156,10 @@ $shaka-theme-border: #D2D2D7 !default;
 $shaka-theme-shadow-card: 0 0 0 .5px rgba(0, 0, 0, .05), 0 1px 2px rgba(0, 0, 0, .06) !default;
 $shaka-theme-shadow-pop: 0 0 0 .5px rgba(0, 0, 0, .08), 0 8px 24px rgba(0, 0, 0, .12) !default;
 $shaka-theme-shadow-dialog: 0 0 0 .5px rgba(0, 0, 0, .08), 0 24px 64px rgba(0, 0, 0, .2) !default;
+// App switcher / login wallpaper: graphite in both schemes (MASTER.md).
+$shaka-theme-wallpaper-top: #1C1C1E !default;
+$shaka-theme-wallpaper-bottom: #000000 !default;
+$shaka-theme-on-wallpaper: #FFFFFF !default;
 // Materials (shaka-material mixin in tokens.scss)
 $shaka-theme-material-thin: rgba(255, 255, 255, .6) !default;
 $shaka-theme-material-regular: rgba(255, 255, 255, .88) !default;
@@ -180,3 +184,13 @@ $o-border-radius-lg: o-to-rem(10px) !default;
 // 21px line + 2 × 3px + 1px hairline = the 28px control height.
 $o-input-padding-y: 3px !default;
 $o-input-padding-x: 6px !default;
+
+// = App shell (surfaces/30_shell.scss). A 44px toolbar: 8px + 28px capsule
+// entries + 8px. The hairline reads the token, so it switches per scheme.
+$o-navbar-height: 44px !default;
+$o-navbar-padding-v: 8px !default;
+$o-navbar-border-bottom: 1px solid var(--shaka-border) !default;
+$o-navbar-entry-border-radius: 999px !default;
+$o-navbar-brand-font-size: o-to-rem(17px) !default;
+// White captions on the graphite wallpaper need no shadow in either scheme.
+$o-home-menu-caption-shadow: none !default;

@@ -22,9 +22,6 @@ page and the backend web client shell.
         'web.assets_frontend': [
             'my_debrand/static/src/scss/login.scss',
         ],
-        'web.assets_backend': [
-            'my_debrand/static/src/scss/debrand.scss',
-        ],
     },
     'installable': True,
     'application': False,

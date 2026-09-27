@@ -129,7 +129,12 @@ Order: 0 → 1 → 2 → 3 → 4 → 5, then 6–13 in any order, then 14 → 17
   - Selectors: regular material on `.o_popover` (menus, popovers, tooltips; the tooltip inner box goes clear) and autocomplete; accent highlight via `-webkit-text-fill-color` (inherited, beats the utilities); thick material on `.modal-content` and notifications (utilities retuned through `--border-radius`/`--border-color`/`--box-shadow-lg`); footer `row-reverse` puts the primary at the end; bottom sheet material + 14px top radius, its menu body clear (no stacking).
   - Palette: 640px via `--modal-width` on `:has()`, capsule drawn as a `::before` behind the field (the row's padding is utilities). **Rows stay 36px**, not 32: Odoo's `py-2` utility can't be beaten without `!important`.
   - Not screenshotted; compile check + detect only.
-- [ ] [Task 6: App shell → `surfaces/30_shell.scss` (+ `my_debrand` cleanup)](tasks/task-06-app-shell.md)
+- [x] [Task 6: App shell → `surfaces/30_shell.scss` (+ `my_debrand` cleanup)](tasks/task-06-app-shell.md)
+  - Variables (`primary_variables.scss`, scheme-independent): 44px navbar (8px + 28px capsule entries), capsule entry radius, 17px brand, hairline `1px solid var(--shaka-border)`, no caption shadow. Custom properties: `--shaka-fill` hover/focus/active, link-blue active text, muted systray, round avatar via the `rounded` utility's `--border-radius`.
+  - App switcher follows MASTER.md (graphite `#1C1C1E` → `#000` + gold glow in **both** schemes, white 13px/500 captions), not a per-scheme wallpaper. New tokens `--shaka-wallpaper-top|bottom`, `--shaka-on-wallpaper`. Navbar entries turn white over it. Squircle 22.5% (33.75% + `corner-shape` where supported) through `rounded-3`'s `--border-radius-lg`, surface tile, card shadow, no hover lift, press `scale(.94)`.
+  - **No material layer over the wallpaper:** nothing floats there, and blurring a gradient does nothing visible. The wallpaper rule moved out of `tokens.scss`; `30_shell.scss` is also in `web.assets_frontend`, so the login keeps sharing it.
+  - `my_debrand/debrand.scss` held only the `--NavBar-*` lines: file and manifest entry deleted (needs `-u my_debrand` wherever it's installed). Its `login.scss` is left for Task 13.
+  - Not screenshotted (burger/mobile switcher at 390 included); compile check + detect only.
 - [ ] [Task 7: Control panel, search and search panel → `surfaces/40_control_panel.scss`](tasks/task-07-control-panel-search-and-search-panel.md)
 - [ ] [Task 8: List view → `surfaces/50_list.scss`](tasks/task-08-list-view.md)
 - [ ] [Task 9: Form view → `surfaces/60_form.scss` + retune `navigation.scss`](tasks/task-09-form-view.md)

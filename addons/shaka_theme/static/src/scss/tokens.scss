@@ -20,6 +20,10 @@
     --shaka-warning: #{$o-warning};
     --shaka-danger: #{$o-danger};
     --shaka-separator: #{$shaka-theme-border};
+    // App switcher / login wallpaper (the same in both schemes).
+    --shaka-wallpaper-top: #{$shaka-theme-wallpaper-top};
+    --shaka-wallpaper-bottom: #{$shaka-theme-wallpaper-bottom};
+    --shaka-on-wallpaper: #{$shaka-theme-on-wallpaper};
     --shaka-shadow-card: #{$shaka-theme-shadow-card};
     --shaka-shadow-pop: #{$shaka-theme-shadow-pop};
     --shaka-shadow-dialog: #{$shaka-theme-shadow-dialog};
@@ -78,13 +82,4 @@ $shaka-materials: (
         outline: 1px solid var(--shaka-text);
         outline-offset: -1px;
     }
-}
-
-// Home menu / login background: flat app background instead of Enterprise's
-// artwork (Task 6 replaces this; it also paints the login until Task 13).
-// `html` bumps specificity over web_enterprise's .dark.scss, which loads after
-// this file in the dark bundle.
-html .o_home_menu_background {
-    --homeMenu-bg-color: #{$shaka-theme-bg};
-    --homeMenu-bg-image: none;
 }
