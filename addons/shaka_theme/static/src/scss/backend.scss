@@ -18,7 +18,7 @@
 }
 
 // Visible keyboard focus on controls: the link blue holds ≥4.6:1 on every
-// ground in both schemes. Inputs keep Odoo's own focus underline.
+// ground in both schemes. Inputs get the field ring in surfaces/10_controls.
 .o_web_client :is(a, button, .btn, [role="button"], [tabindex]):focus-visible {
     outline: 2px solid var(--shaka-link);
     outline-offset: 2px;

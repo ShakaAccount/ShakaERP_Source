@@ -1,0 +1,101 @@
+// Controls: buttons, inputs, checks, badges (MASTER.md › Components › Controls).
+// Colours come from the variables (the button maps in primary_variables*.scss,
+// the check and transition variables in bootstrap_overridden.scss); this file
+// adds press, shape and the gaps no variable reaches.
+
+// = Buttons
+// Press feedback (apple-design §1); the transform transition is $btn-transition.
+.btn:active {
+    transform: scale(.97);
+}
+
+// macOS push button: the map's hairline plus the card shadow.
+.btn-secondary {
+    box-shadow: var(--shaka-shadow-card);
+}
+
+// Link and icon buttons keep their tinted glyph and gain a quiet fill.
+.btn-link {
+    --btn-hover-bg: var(--shaka-fill);
+    --btn-active-bg: var(--shaka-fill);
+}
+
+// = Inputs. Odoo drives the edge through --o-input-border-color per state
+// (fields.scss: rest, required, focus = link blue, invalid); forms hide it at
+// rest. Hover adds the fill, focus the macOS field: a 1px edge in the state
+// colour (outline over the border box, so nothing shifts) and the 3px ring.
+:root {
+    --o-input-border-color: var(--shaka-border);
+    --o-caret-color: var(--shaka-muted);
+}
+
+.o_input {
+    border-radius: var(--shaka-radius);
+
+    &:hover,
+    &:focus-within {
+        --o-input-background-color: var(--shaka-fill);
+    }
+
+    &:focus-within {
+        outline: 1px solid var(--o-input-border-color);
+        outline-offset: -1px;
+        box-shadow: 0 0 0 3px rgba($shaka-theme-link, .5);
+    }
+
+    // Nested inputs (tags, many2one) ride on their wrapper's field.
+    .o_input {
+        --o-input-background-color: transparent;
+        outline: 0;
+        box-shadow: none;
+    }
+}
+
+// An invalid field keeps its danger tint (set on the field) under the pointer.
+.o_field_invalid .o_input:hover:not(:focus-within) {
+    --o-input-background-color: inherit;
+}
+
+// jalali_date draws the Persian date over a masked input, with a hard-coded
+// padding-left; line it up with the input's own text, in both directions.
+span.o_jalali_overlay {
+    padding-inline: $o-input-padding-x;
+}
+
+// = Checkbox, radio, toggle: the action fill (variables); Odoo paints checked
+// switches green by selector.
+.form-switch .form-check-input:checked {
+    background-color: var(--shaka-primary);
+    border-color: var(--shaka-primary);
+}
+
+// = Status badges (badge field, list badges): a capsule on a faint tint of the
+// status, the status colour on the text. Bootstrap's .text-bg-* hard-sets the
+// text colour as an important utility, so the text is repainted with
+// -webkit-text-fill-color (all engines) instead. Tints are measured
+// (tools/contrast.py): 8% light, 12% dark; darker tints drop the text under
+// 4.5:1, and dark blue fails on any tint, so blue badges read in label colour.
+$-shaka-badge-tint: if($o-webclient-color-scheme == dark, .12, .08);
+$-shaka-badge-blue: if($o-webclient-color-scheme == dark, var(--shaka-text), var(--shaka-link));
+$-shaka-badge-text: (
+    "success": var(--shaka-success),
+    "warning": var(--shaka-warning),
+    "danger": var(--shaka-danger),
+    "info": $-shaka-badge-blue,
+    "primary": $-shaka-badge-blue,
+);
+
+.o_field_widget .badge {
+    @each $-name, $-text in $-shaka-badge-text {
+        &.text-bg-#{$-name} {
+            --bg-opacity: #{$-shaka-badge-tint};
+            -webkit-text-fill-color: #{$-text};
+        }
+    }
+
+    // Default (muted) badge: fill and label.
+    &.text-bg-300 {
+        --background-color: var(--shaka-fill);
+        --color: var(--shaka-text);
+    }
+}

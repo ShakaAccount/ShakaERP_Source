@@ -56,9 +56,9 @@ token names keep their meaning and get new values; the tokens marked *new* are a
 | Label | `#1D1D1F` | `#F5F5F7` | `--shaka-text` |
 | Secondary label | `#6A6A6F` | `#AEAEB2` | `--shaka-muted` |
 | Separator (hairline, decorative) | `#D2D2D7` | `#38383A` | `--shaka-border`, `--shaka-separator` *(new)* |
-| Success (text) / badge tint | `#1F7F37` / 8% | `#30D158` / 12% | — (`$o-success`) |
-| Warning (text) / badge tint | `#C93400` / 8% | `#FF9F0A` / 12% | — (`$o-warning`) |
-| Danger (text) / badge tint | `#D70015` / 8% | `#FF7B73` / 12% | — (`$o-danger`) |
+| Success (text) / badge tint | `#1F7F37` / 8% | `#30D158` / 12% | `--shaka-success` *(new)* |
+| Warning (text) / badge tint | `#C93400` / 8% | `#FF9F0A` / 12% | `--shaka-warning` *(new)* |
+| Danger (text) / badge tint | `#D70015` / 8% | `#FF7B73` / 12% | `--shaka-danger` *(new)* |
 | Danger fill (destructive buttons); same in both schemes | `#D70015` | `#D70015` | — (`$o-btns-bs-override`) |
 | Info | = link | = link | — (`$o-info`) |
 | Gold, decoration only (logo, wallpaper glow, hairlines) | `#B5925F` | `#B5925F` | `--shaka-gold` *(new)* |

@@ -13,6 +13,10 @@
     --shaka-text: #{$shaka-theme-text};
     --shaka-muted: #{$shaka-theme-muted};
     --shaka-border: #{$shaka-theme-border};
+    // Status text, measured on the surface and on their badge tints.
+    --shaka-success: #{$o-success};
+    --shaka-warning: #{$o-warning};
+    --shaka-danger: #{$o-danger};
     --shaka-separator: #{$shaka-theme-border};
     --shaka-shadow-card: #{$shaka-theme-shadow-card};
     --shaka-shadow-pop: #{$shaka-theme-shadow-pop};

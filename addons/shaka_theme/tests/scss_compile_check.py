@@ -86,6 +86,8 @@ PROBES = {
     'system-fonts': '$o-system-fonts', 'radius': '$o-border-radius', 'radius-lg': '$o-border-radius-lg',
     'badge-radius': '$badge-border-radius', 'card-radius': '$card-border-radius',
     'modal-radius': '$modal-content-border-radius', 'btn-radius': '$btn-border-radius',
+    'check-bg': '$form-check-input-checked-bg-color', 'check-color': '$form-check-input-checked-color',
+    'switch-color': '$form-switch-checked-color',
 }
 
 
@@ -149,6 +151,14 @@ def main():
         assert scheme['radius'] == '0.375rem' and scheme['radius-lg'] == '0.625rem', scheme
         assert scheme['badge-radius'] == '999px' and scheme['modal-radius'] == '0.875rem', scheme
         assert scheme['card-radius'] == scheme['radius-lg'] and scheme['btn-radius'] == scheme['radius']
+
+    # Controls: action-filled checks with a white mark (dark $o-white is #000);
+    # badge tints as measured in MASTER.md.
+    for scheme in (light, dark):
+        assert scheme['check-bg'].lower() == '#0071e3', scheme
+        assert scheme['check-color'].lower() == scheme['switch-color'].lower() == '#ffffff', scheme
+    assert '--bg-opacity: 0.08' in light_css and '--bg-opacity: 0.12' in dark_css
+    assert '--shaka-danger: #D70015' in light_css and '--shaka-danger: #FF7B73' in dark_css
 
     # Tokens, per scheme; libsass passes linear() through untouched.
     assert '--shaka-surface: #FFFFFF' in light_css and '--shaka-surface: #2C2C2E' in dark_css

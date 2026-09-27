@@ -38,3 +38,18 @@ $tooltip-padding-y: o-to-rem(4px) !default;
 $tooltip-padding-x: o-to-rem(8px) !default;
 $tooltip-font-size: $o-font-size-base-smaller !default;
 $tooltip-max-width: 280px !default;
+
+// = Controls (Task 4). Press feedback: enterprise sets `none`; only the scale
+// animates, colours switch instantly as on macOS.
+$btn-transition: transform var(--shaka-spring-press-dur) var(--shaka-spring) !default;
+// Checkbox, radio and switch: the action fill with a white mark in both
+// schemes (enterprise uses $o-white, which is #000 in dark).
+$form-check-input-checked-bg-color: $o-enterprise-color !default;
+$form-check-input-checked-border-color: $o-enterprise-color !default;
+$form-check-input-checked-color: $shaka-theme-on-action !default;
+$form-check-input-indeterminate-bg-color: $o-enterprise-color !default;
+$form-check-input-indeterminate-border-color: $o-enterprise-color !default;
+$form-switch-checked-color: $shaka-theme-on-action !default;
+// The focus ring (MASTER.md): link blue at 50%, 3px, outside the control.
+$form-check-input-focus-box-shadow: 0 0 0 3px rgba($o-enterprise-action-color, .5) !default;
+$form-check-input-focus-border: $o-enterprise-action-color !default;

@@ -120,7 +120,10 @@ Order: 0 → 1 → 2 → 3 → 4 → 5, then 6–13 in any order, then 14 → 17
   - `$o-enterprise-action-color` is the **link** blue (`#0066CC`/`#2997FF`), because Odoo also uses it as link text; the `#0071E3` action fill comes through `$o-enterprise-color` and the button maps. Checkboxes therefore fill with link blue until Task 4.
   - Dark re-append verified: `navigation.scss` loads after every web/web_enterprise `.dark.scss`; apps loading after `shaka_theme` (account_reports, spreadsheet, stock_barcode) still append theirs later.
   - Squircle ×1.5 not done here (no card surface yet); left to the surface tasks. Backend matrix not screenshotted (needs your login).
-- [ ] [Task 4: Controls → `surfaces/10_controls.scss`](tasks/task-04-controls.md)
+- [x] [Task 4: Controls → `surfaces/10_controls.scss`](tasks/task-04-controls.md)
+  - Variables: `$btn-transition` (press scale), check/radio/switch action fill with a white mark (new `$shaka-theme-on-action`, since dark `$o-white` is `#000`), 3px link focus ring on checks. Selectors only for gaps: press `scale(.97)`, secondary card shadow, `.btn-link` fill hover, input fill on hover and outline+ring on focus (no layout shift), green Odoo switch → action, `span.o_jalali_overlay` `padding-inline`.
+  - **Badge tint 8% light / 12% dark, not the task's 12–15%:** measured, 12% light drops status text to 4.3:1. Dark blue fails on any tint, so blue badges use label text in dark. Bootstrap's `.text-bg-*` sets text colour as an important utility, so text is repainted with `-webkit-text-fill-color`. New tokens `--shaka-success|warning|danger` (the frontend's `--success` is stock Bootstrap). Scoped to `.o_field_widget .badge`, so counters stay solid. `.o_tag`/`.o_status` left as Odoo draws them (already capsule/dot with tint colours).
+  - Not screenshotted (login needed); compile check + detect only.
 - [ ] [Task 5: Overlays and the command palette → `surfaces/20_overlays.scss`](tasks/task-05-overlays-and-the-command-palette.md)
 - [ ] [Task 6: App shell → `surfaces/30_shell.scss` (+ `my_debrand` cleanup)](tasks/task-06-app-shell.md)
 - [ ] [Task 7: Control panel, search and search panel → `surfaces/40_control_panel.scss`](tasks/task-07-control-panel-search-and-search-panel.md)
