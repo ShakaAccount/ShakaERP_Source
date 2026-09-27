@@ -18,3 +18,4 @@ access_budget_activity_admin,budget.plan.activity.admin,model_budget_plan_activi
 access_budget_line_admin,budget.plan.budget.line.admin,model_budget_plan_budget_line,base.group_system,1,1,1,1
 access_statement_user,budget.financial.statement.user,model_budget_financial_statement,base.group_user,1,1,1,1
 access_statement_line_user,budget.financial.statement.line.user,model_budget_financial_statement_line,base.group_user,1,1,1,1
+access_statement_settings_admin,budget.financial.statement.settings.admin,model_budget_financial_statement_settings,base.group_system,1,1,1,1

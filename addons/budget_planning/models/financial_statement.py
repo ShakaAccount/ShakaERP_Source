@@ -69,7 +69,7 @@ class BudgetFinancialStatement(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': 'تنظیمات گروه‌بندی حساب',
-            'res_model': 'res.config.settings',
+            'res_model': 'budget.financial.statement.settings',
             'view_mode': 'form',
             'views': [(self.env.ref('budget_planning.view_financial_statement_settings_form').id, 'form')],
             'target': 'new',
