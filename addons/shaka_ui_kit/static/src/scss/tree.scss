@@ -10,6 +10,7 @@
   --tree-accent: #{$o-brand-primary};
   --tree-accent-soft: color-mix(in srgb, #{$o-brand-primary} 10%, transparent);
   --tree-hover: var(--shaka-muted-bg);
+  // Kept for consumers; the selected row itself is the accent fill.
   --tree-selected: color-mix(in srgb, #{$o-brand-primary} 16%, transparent);
   --tree-bg: var(--shaka-surface);
   --tree-bg-fade: color-mix(in srgb, var(--shaka-surface) 0%, transparent);
@@ -54,10 +55,22 @@
     background: var(--tree-hover);
   }
 
+  // Finder-sidebar selection: an accent-filled inset row with white text and
+  // glyphs. Re-pointing the tree tokens flips the label, the toggle and the
+  // actions' fade in one place; consumer icons should use `color: inherit`.
   &.o_tree_node_selected {
-    background: var(--tree-selected);
-    color: var(--tree-accent);
+    --tree-text: var(--shaka-on-action);
+    --tree-text-muted: var(--shaka-on-action);
+    --tree-bg: var(--tree-accent);
+    --tree-bg-fade: color-mix(in srgb, var(--tree-accent) 0%, transparent);
+    --tree-accent-soft: color-mix(in srgb, var(--shaka-on-action) 15%, transparent);
+    background: var(--tree-accent);
+    color: var(--shaka-on-action);
     font-weight: 600;
+
+    .o_tree_node_toggle:hover {
+      color: var(--shaka-on-action);
+    }
   }
 
   &.o_tree_node_disabled {
