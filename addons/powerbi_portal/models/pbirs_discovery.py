@@ -119,6 +119,12 @@ class PbirsDiscoveryConfig(models.Model):
         string="API Key",
         help="API key sent in the X-API-Key header.",
     )
+    api_root_path = fields.Char(
+        string="Catalog Folder",
+        default="/",
+        help="PBIRS folder to discover reports under (recursively), e.g. "
+             "/Finance. Use / for the whole catalog.",
+    )
 
     def _get_soap_client(self):
         self.ensure_one()
@@ -405,7 +411,8 @@ class PbirsDiscoveryConfig(models.Model):
 
         client = self._get_api_client()
         try:
-            listing = client.list_items("/", recursive=True)
+            root = "/" + (self.api_root_path or "").strip().strip("/")
+            listing = client.list_items(root, recursive=True)
         except Exception as e:
             self.write({
                 "last_run_date": fields.Datetime.now(),

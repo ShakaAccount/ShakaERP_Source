@@ -28,6 +28,7 @@
                            invisible="not use_api">
                         <field name="api_base_url" placeholder="http://192.168.2.12:8443"/>
                         <field name="api_key"/>
+                        <field name="api_root_path" placeholder="/Finance"/>
                         <field name="portal_base_url"/>
                         <field name="active"/>
                     </group>
