@@ -150,7 +150,13 @@ Order: 0 → 1 → 2 → 3 → 4 → 5, then 6–13 in any order, then 14 → 17
   - Footer numbers stay right-aligned in RTL too: Odoo's `rtl:ignore` keeps them in line with their column.
   - Empty state: Odoo's three illustrations become a 48px `fa-inbox` glyph, 17/600 title, secondary help.
   - **1,000-row scroll not profiled** (needs your login); if the header drops frames, swap `shaka-material(thin)` for `background-color: var(--shaka-surface)`. Not screenshotted; compile check + detect only.
-- [ ] [Task 9: Form view → `surfaces/60_form.scss` + retune `navigation.scss`](tasks/task-09-form-view.md)
+- [x] [Task 9: Form view → `surfaces/60_form.scss` + retune `navigation.scss`](tasks/task-09-form-view.md)
+  - Sheet through hooks only, scoped to `.o_action_manager` (dialog forms stay flat): border 0, 10px radius at ≥md, card shadow, padding 24/32 at lg, 24/24 at xxl. Odoo's 1400px max width kept (MASTER). Title 24/30/600.
+  - Stat buttons: separate 44px fill tiles (8px gap, 10px radius), value 17/600 **label colour** over a 12px secondary label; icons link blue. Measured: action blue is 4.0 on the fill and secondary is 4.66/4.83, so hover doesn't darken the tile (the label turns label-coloured). "More" dropdown and mobile grid left as Odoo draws them.
+  - Group labels 13/500 secondary (invalid keep danger); empty/readonly lose Odoo's .66 opacity (would be ~2.8:1), weight 400 instead. Separator: 13px secondary, no rule; the compiler's important `text-uppercase`/`fw-bolder` stay.
+  - Notebook: segmented control, 28px (22px links + 3px inset), 6px track / 4px pill radius, fill track, lifted fill pill in dark. Hooks untouched.
+  - Stepper: `--o-statusbar-*` tokens on `.o_statusbar_status`; upcoming = fill dot, passed = action dot + white check (was surface-coloured, wrong in dark), current = **link-blue** ring (action is 2.9 on dark surface). Card uses the shadow instead of a border.
+  - Budget Plan: its sheet is `background: transparent !important`, so the card shadow draws a faint outline around it; left for Task 15. Not screenshotted; compile check + detect only.
 - [ ] [Task 10: Mail (chatter, Discuss, systray popovers) → `surfaces/65_mail.scss`](tasks/task-10-mail.md)
 - [ ] [Task 11: Kanban and secondary views → `surfaces/70_kanban.scss`, `surfaces/80_views.scss`](tasks/task-11-kanban-and-secondary-views.md)
 - [ ] [Task 12: Settings → `surfaces/90_settings.scss`](tasks/task-12-settings.md)

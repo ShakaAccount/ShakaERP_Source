@@ -1,12 +1,15 @@
 // Tabs (notebook) and the form stage bar (statusbar field), per MASTER.md
-// §Components. Colours are --shaka-* tokens, so light and dark need no branches
-// beyond the one pill tweak below.
+// §Components › Form. Colours are --shaka-* tokens, so light and dark need no
+// branches beyond the one pill tweak below.
 
 // ---------------------------------------------------------------------------
-// Tabs: a segmented pill bar. The sliding pill behind the active tab comes from
-// transitions/tabs_sliding.* (--tabs-* tokens). Odoo reads the Notebook
+// Tabs: the macOS segmented control (as the view switcher): fill track, 3px
+// inset, a surface pill with the card shadow (a lifted fill in dark, where the
+// surface would sink below the track), 28px overall. The sliding pill comes
+// from transitions/tabs_sliding.* (--tabs-* tokens). Odoo reads the Notebook
 // variables on .nav-link; declaring them on the headers (closer than
-// .o_notebook) wins over web_enterprise's light and dark values.
+// .o_notebook) wins over web_enterprise's light and dark values. Markup and
+// the [data-name] / a[name] hooks (budget_planning_steps.js) are untouched.
 .o_notebook .o_notebook_headers {
     --Notebook__link-border-color: transparent;
     --Notebook__link-border-color--hover: transparent;
@@ -18,18 +21,18 @@
 }
 
 .o_notebook .nav-tabs {
+    --tabs-bar-bg: var(--shaka-fill);
     position: relative; // the pill's containing block
     display: inline-flex;
     width: max-content;
-    gap: 3px;
+    gap: 2px;
     padding: 3px;
     border: 0;
-    border-radius: 999px;
+    border-radius: var(--shaka-radius);
     background-color: var(--tabs-bar-bg);
 
     @if $o-webclient-color-scheme == dark {
-        // A surface-coloured pill would read darker than the bar in dark mode.
-        --tabs-pill-bg: color-mix(in srgb, var(--shaka-muted) 35%, var(--shaka-muted-bg));
+        --tabs-pill-bg: var(--shaka-fill);
     }
 
     .nav-item {
@@ -41,11 +44,11 @@
         z-index: 1; // labels above the pill
         display: flex;
         align-items: center;
-        height: 30px;
+        height: 22px;
         margin: 0;
-        padding: 4px 14px;
+        padding: 0 12px;
         border: 0;
-        border-radius: 999px;
+        border-radius: var(--shaka-radius-sm);
         font-weight: 500;
         transition: color var(--tabs-dur) var(--tabs-ease);
 
@@ -67,30 +70,36 @@
             }
         }
     }
+
+    .t-tabs-pill {
+        border-radius: var(--shaka-radius-sm);
+    }
 }
 
 .o_notebook.horizontal .o_notebook_headers {
     padding-block: 2px 8px;
 }
 
-// Vertical notebooks: a rounded column, not a pill.
+// Vertical notebooks: a rounded column.
 .o_notebook.vertical {
     .nav-tabs {
         border-radius: var(--shaka-radius-card);
     }
     .nav-link {
         height: auto;
-    }
-    .t-tabs-pill {
-        border-radius: var(--shaka-radius);
+        padding-block: 3px;
     }
 }
 
 // ---------------------------------------------------------------------------
-// Stage bar: a numbered stepper in a card (reference: shaka_theme/stepper.png).
-// Passed stages show a check, the current one an outlined number, upcoming ones
-// a muted number; a solid connector follows passed stages, a dashed one the rest.
-// statusbar_stepper.xml adds the dot/label markup and .t-step-done.
+// Stage bar: a numbered stepper in a card. Passed stages are action-filled
+// dots with a check, the current one a ring with its number, upcoming ones
+// fill dots; the connector is action-solid after a passed stage, separator-
+// dashed otherwise. statusbar_stepper.xml adds the dot/label markup and
+// .t-step-done. The look is driven by the --o-statusbar-* tokens below (Odoo
+// reads its own --o-statusbar-* names only for the arrow shape we replace).
+// The ring and its number are link blue: the action blue is 2.9:1 on the dark
+// surface (the focus-ring rule).
 //
 // Odoo renders stages in reverse DOM order (flex row-reverse): `.o_first` is the
 // visually last item. Its folding logic compares the row height with the first
@@ -101,14 +110,22 @@
     min-width: 0;
     margin-inline-start: 16px;
     padding: 6px 14px;
-    border: 1px solid var(--shaka-border);
     border-radius: var(--shaka-radius-card);
     background-color: var(--shaka-surface);
+    box-shadow: var(--shaka-shadow-card);
 }
 
 .o_field_statusbar > .o_statusbar_status {
-    --step-h: 28px; // every item, toggles included (see folding note above)
-    --step-dot: 28px;
+    --o-statusbar-step-height: 28px; // every item, toggles included (see folding note)
+    --o-statusbar-dot-size: 24px;
+    --o-statusbar-dot-border: 1.5px;
+    --o-statusbar-done-bg: var(--shaka-primary);
+    --o-statusbar-done-color: var(--shaka-on-action);
+    --o-statusbar-current-ring: var(--shaka-link);
+    --o-statusbar-upcoming-bg: var(--shaka-fill);
+    --o-statusbar-upcoming-color: var(--shaka-muted);
+    --o-statusbar-connector: var(--shaka-separator);
+    --o-statusbar-connector-done: var(--shaka-primary);
     flex: 1 1 auto;
     align-items: center;
     align-self: center;
@@ -118,7 +135,7 @@
         flex: 1 1 auto;
         align-items: center;
         gap: 8px;
-        height: var(--step-h);
+        height: var(--o-statusbar-step-height);
         margin: 0;
         padding: 0;
         border: 0;
@@ -139,7 +156,7 @@
             flex: 1 1 auto;
             min-width: 24px;
             margin-inline: 4px 12px;
-            border-top: 1.5px dashed var(--shaka-border);
+            border-top: 1.5px dashed var(--o-statusbar-connector);
         }
 
         &.o_first {
@@ -157,7 +174,7 @@
             color: var(--shaka-text);
         }
         &:not(:disabled):hover .t-step-dot {
-            border-color: var(--shaka-primary);
+            border-color: var(--o-statusbar-current-ring);
         }
     }
 
@@ -165,13 +182,13 @@
         display: grid;
         flex: none;
         place-items: center;
-        width: var(--step-dot);
-        height: var(--step-dot);
-        border: 1px solid var(--shaka-border);
+        width: var(--o-statusbar-dot-size);
+        height: var(--o-statusbar-dot-size);
+        border: var(--o-statusbar-dot-border) solid transparent;
         border-radius: 50%;
-        background-color: var(--shaka-muted-bg);
-        color: var(--shaka-muted);
-        font-size: 12px;
+        background-color: var(--o-statusbar-upcoming-bg);
+        color: var(--o-statusbar-upcoming-color);
+        font-size: $o-font-size-base-smaller;
         font-variant-numeric: tabular-nums;
         transition: border-color var(--shaka-ease), background-color var(--shaka-ease);
     }
@@ -180,31 +197,31 @@
         transition: color var(--shaka-ease);
     }
 
-    // Passed: filled primary dot with a check, solid primary connector.
+    // Passed: action-filled dot with a check, solid action connector.
     > .o_arrow_button.o_arrow_button.t-step-done:not(.d-none) {
         color: var(--shaka-text);
 
         &::after {
             border-top-style: solid;
-            border-top-color: var(--shaka-primary);
+            border-top-color: var(--o-statusbar-connector-done);
         }
         .t-step-dot {
-            border-color: var(--shaka-primary);
-            background-color: var(--shaka-primary);
-            color: var(--shaka-surface);
+            border-color: var(--o-statusbar-done-bg);
+            background-color: var(--o-statusbar-done-bg);
+            color: var(--o-statusbar-done-color);
         }
     }
 
-    // Current: outlined primary number. Matches Odoo's `.o_arrow_button_current:disabled`.
+    // Current: a ring with its number. Matches Odoo's `.o_arrow_button_current:disabled`.
     > .o_arrow_button.o_arrow_button_current:not(.d-none):disabled {
         z-index: auto;
         background-color: transparent;
         color: var(--shaka-text);
 
         .t-step-dot {
-            border: 1.5px solid var(--shaka-primary);
+            border-color: var(--o-statusbar-current-ring);
             background-color: var(--shaka-surface);
-            color: var(--shaka-primary);
+            color: var(--o-statusbar-current-ring);
             font-weight: 600;
         }
     }
@@ -213,10 +230,10 @@
     > .o_arrow_button.t-step-more:not(.d-none) {
         flex: none;
         justify-content: center;
-        width: var(--step-dot);
-        height: var(--step-h);
+        width: var(--o-statusbar-dot-size);
+        height: var(--o-statusbar-step-height);
         margin-inline-end: 12px;
-        border: 1px dashed var(--shaka-border);
+        border: 1px dashed var(--o-statusbar-connector);
         border-radius: 50%;
         color: var(--shaka-muted);
         line-height: 1;
@@ -225,13 +242,13 @@
             content: none;
         }
         &:not(:disabled):hover {
-            border-color: var(--shaka-primary);
+            border-color: var(--o-statusbar-current-ring);
             color: var(--shaka-text);
         }
         &.t-step-done {
             border-style: solid;
-            border-color: var(--shaka-primary);
-            color: var(--shaka-primary);
+            border-color: var(--o-statusbar-connector-done);
+            color: var(--shaka-link);
         }
     }
 
