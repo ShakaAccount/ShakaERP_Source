@@ -19,6 +19,9 @@ Addon SCSS should use the ``var(--shaka-*)`` tokens, never dark-mode selectors.
     'license': 'LGPL-3',
     'icon': '/shaka_theme/static/description/icon.svg',
     'depends': ['web', 'web_enterprise'],
+    'data': [
+        'views/login_templates.xml',
+    ],
     'assets': {
         # Before web_enterprise's variables: first `!default` definition wins.
         'web._assets_primary_variables': [
@@ -60,6 +63,7 @@ Addon SCSS should use the ``var(--shaka-*)`` tokens, never dark-mode selectors.
             'shaka_theme/static/src/scss/fonts.scss',
             'shaka_theme/static/src/scss/tokens.scss',
             'shaka_theme/static/src/scss/surfaces/30_shell.scss',  # login wallpaper
+            'shaka_theme/static/src/scss/login.scss',
             'shaka_theme/static/src/transitions/error_shake.css',  # login error
         ],
     },

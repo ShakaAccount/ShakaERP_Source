@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Login card: drop the !important background/radius/shadow utilities,
+         the `card` class (its .card-body is painted 90% white) and the inline
+         300px; static/src/scss/login.scss draws the card instead. -->
+    <template id="login_layout" inherit_id="web.login_layout" name="Shaka Login Card">
+        <xpath expr="//div[contains(@t-attf-class, 'o_database_list')]" position="attributes">
+            <attribute name="t-attf-class"/>
+            <attribute name="style"/>
+            <attribute name="class">mx-auto o_database_list</attribute>
+        </xpath>
+    </template>
+</odoo>
