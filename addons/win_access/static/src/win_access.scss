@@ -23,6 +23,11 @@
         font-size: 1.05em;
     }
 
+    // The selected row is shaka_ui_kit's accent fill: glyphs follow its text.
+    .o_tree_node_selected .o_wa_icon {
+        color: inherit;
+    }
+
     .o_wa_section_head {
         cursor: pointer;
     }
@@ -41,7 +46,7 @@
 
     .win_access_loading_spinner {
         margin-inline-start: 6px;
-        color: var(--wa-skip, #6c757d);
+        color: var(--shaka-muted);
         flex: none;
     }
 }
