@@ -2,9 +2,17 @@
 <templates xml:space="preserve">
 
     <t t-name="powerbi_portal.Portal">
-        <div class="o_powerbi_portal">
+        <div t-attf-class="o_powerbi_portal {{ state.sidebarCollapsed ? 'o_powerbi_sidebar_collapsed' : '' }}">
             <div class="o_powerbi_sidebar">
-                <div class="o_powerbi_sidebar_header">Power BI Reports</div>
+                <div class="o_powerbi_sidebar_header">
+                    <span class="o_powerbi_sidebar_title">Power BI Reports</span>
+                    <button type="button"
+                            class="btn o_powerbi_sidebar_toggle"
+                            t-on-click="toggleSidebar"
+                            t-att-title="state.sidebarCollapsed ? 'Expand' : 'Collapse'">
+                        <i t-attf-class="fa {{ state.sidebarCollapsed ? 'fa-angle-double-right' : 'fa-angle-double-left' }}"/>
+                    </button>
+                </div>
 
                 <div t-if="state.loading" class="o_powerbi_status">Loading reports...</div>
                 <div t-elif="state.error" class="o_powerbi_status text-danger" t-esc="state.error"/>

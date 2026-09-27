@@ -1,0 +1,28 @@
+// Pivot and graph: web.assets_backend_lazy (and its dark twin), loaded when the
+// first pivot or graph opens. Only the helpers and variables are in this
+// bundle, so it uses the runtime var(--shaka-*) tokens, not tokens.scss.
+
+// = Pivot: the list's table treatment. Surface cells with separator hairlines
+// (Odoo: gray-100 value cells); column headers 13px secondary. The cells' bg-*
+// utilities paint var(--background-color), so that hook is retuned. The
+// header hover stays Odoo's important gray-200 literal (only an important
+// rule beats it); its weight stays the important fw-normal.
+.o_pivot table {
+    --table-border-color: var(--shaka-separator);
+    font-variant-numeric: tabular-nums;
+
+    .bg-100,
+    .bg-view {
+        --background-color: var(--shaka-surface);
+    }
+
+    > thead th {
+        color: var(--shaka-muted);
+        font-size: o-to-rem(13px);
+    }
+
+    .o_pivot_header_cell_opened > .fa,
+    .o_pivot_header_cell_closed > .fa {
+        color: var(--shaka-muted);
+    }
+}

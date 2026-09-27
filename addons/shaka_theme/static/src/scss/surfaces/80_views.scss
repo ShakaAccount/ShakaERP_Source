@@ -1,0 +1,49 @@
+// Secondary views in the main backend bundle: calendar and activity.
+// Pivot and graph live in the lazy bundle (scss/lazy_views.scss).
+
+// = Calendar: separator hairlines; today is an action-filled circle. Odoo sets
+// --o-cw-bg / --o-cw-color per view on ancestors ($o-calendar-today-* isn't
+// !default); the day numbers read them on themselves, so setting them there
+// wins in every view. The now line keeps Odoo's danger red, as in Calendar.app.
+.o_calendar_renderer {
+    --o-cw-border-color: var(--shaka-separator);
+
+    .fc-day-today .o_cw_day_number,
+    .fc-day-today .fc-daygrid-day-number {
+        --o-cw-bg: var(--shaka-primary);
+        --o-cw-color: var(--shaka-on-action);
+    }
+}
+
+// = Activity: status cells become tints with status text (mail paints solid
+// fills with light text; white on warning fails). Tints as the badges
+// (Task 4, measured): 8% light / 12% dark. mail loads after shaka_theme, so
+// each rule is one class more specific than mail's.
+.o_web_client .o_activity_view {
+    $-tint: if($o-webclient-color-scheme == dark, 12%, 8%);
+
+    .o_activity_summary_cell {
+        @each $-state, $-token in (planned: success, today: warning, overdue: danger) {
+            &.#{$-state} {
+                background-color: color-mix(in srgb, var(--shaka-#{$-token}) $-tint, var(--shaka-surface));
+
+                &,
+                a {
+                    color: var(--shaka-#{$-token});
+                }
+            }
+        }
+
+        &.done {
+            background-color: var(--shaka-fill);
+        }
+
+        &.o_activity_empty_cell:hover {
+            background-color: var(--shaka-fill);
+        }
+    }
+
+    .o_activity_record:hover {
+        background-color: var(--shaka-fill);
+    }
+}

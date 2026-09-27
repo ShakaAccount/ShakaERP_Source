@@ -1,0 +1,96 @@
+// App shell: navbar, app switcher (home menu) and its wallpaper
+// (MASTER.md › Components › App shell). Height, padding, capsule radius, brand
+// size and hairline come from primary_variables.scss; this file sets Odoo's
+// --NavBar-* / --AppSwitcherIcon-* / --homeMenu-* hooks and fills the gaps.
+// Also in web.assets_frontend: the login shares the wallpaper.
+
+// = Navbar: a macOS unified toolbar. Surface-coloured with a hairline and no
+// material, since nothing scrolls under it.
+.o_main_navbar {
+    --NavBar-entry-backgroundColor--hover: var(--shaka-fill);
+    --NavBar-entry-backgroundColor--focus: var(--shaka-fill);
+    --NavBar-entry-backgroundColor--active: var(--shaka-fill);
+    --NavBar-entry-borderColor-active: transparent;
+    --NavBar-entry-color--active: var(--shaka-link);
+    --NavBar-brand-color: var(--shaka-text);
+    --NavBar-menuToggle-color: var(--shaka-text);
+
+    .o_menu_brand {
+        font-weight: 600;
+    }
+
+    // Monochrome systray in the secondary label.
+    .o_menu_systray {
+        --NavBar-entry-color: var(--shaka-muted);
+        --NavBar-entry-color--hover: var(--shaka-text);
+    }
+
+    // The template's `rounded` utility reads --border-radius.
+    .o_user_avatar {
+        --border-radius: 50%;
+    }
+}
+
+// = App switcher, a gold brand moment: Launchpad on a graphite wallpaper with
+// a faint gold glow, the same in both schemes. The gradient is the wallpaper;
+// no material over it (nothing floats there, and blurring a gradient is a
+// no-op). Odoo makes the navbar transparent while the home menu is open, so
+// its entries turn white.
+.o_home_menu_background {
+    --homeMenu-bg-color: var(--shaka-wallpaper-bottom);
+    --homeMenu-bg-image: radial-gradient(ellipse 70% 50% at 50% 0%, color-mix(in srgb, var(--shaka-gold) 22%, transparent), transparent),
+        linear-gradient(var(--shaka-wallpaper-top), var(--shaka-wallpaper-bottom));
+
+    .o_main_navbar,
+    .o_main_navbar .o_menu_systray {
+        --NavBar-entry-color: var(--shaka-on-wallpaper);
+        --NavBar-entry-color--hover: var(--shaka-on-wallpaper);
+        --NavBar-entry-backgroundColor--hover: color-mix(in srgb, var(--shaka-on-wallpaper) 12%, transparent);
+        --NavBar-entry-backgroundColor--focus: color-mix(in srgb, var(--shaka-on-wallpaper) 12%, transparent);
+        --NavBar-brand-color: var(--shaka-on-wallpaper);
+        --NavBar-menuToggle-color: var(--shaka-on-wallpaper);
+    }
+}
+
+.o_home_menu {
+    color: var(--shaka-on-wallpaper);
+    scrollbar-color: color-mix(in srgb, var(--shaka-on-wallpaper) 40%, transparent) transparent;
+
+    .o_app {
+        // Squircle surface tiles with the card shadow. The `rounded-3` utility
+        // reads --border-radius-lg; 22.5% is the macOS icon corner.
+        .o_app_icon {
+            --AppSwitcherIcon-background: var(--shaka-surface);
+            --border-radius-lg: 22.5%;
+            box-shadow: var(--shaka-shadow-card);
+            transition: transform var(--shaka-spring-press-dur) var(--shaka-spring);
+
+            @supports (corner-shape: squircle) {
+                --border-radius-lg: 33.75%;
+                corner-shape: squircle;
+            }
+        }
+
+        // No lift on hover (MASTER.md); a press scale instead.
+        &:hover .o_app_icon {
+            box-shadow: var(--shaka-shadow-card);
+            transform: none;
+        }
+
+        &:active .o_app_icon {
+            transform: scale(var(--shaka-press-scale));
+        }
+
+        .o_caption {
+            --homeMenuCaption-color: var(--shaka-on-wallpaper);
+            font-size: o-to-rem(13px);
+            font-weight: 500;
+        }
+
+        // Keyboard focus: a quiet fill and the focus ring colour.
+        &.o_focused {
+            background: color-mix(in srgb, var(--shaka-on-wallpaper) 12%, transparent);
+            outline-color: var(--shaka-link);
+        }
+    }
+}

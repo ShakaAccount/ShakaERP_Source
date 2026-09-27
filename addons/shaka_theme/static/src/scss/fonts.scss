@@ -1,10 +1,12 @@
-// Vazirmatn (OFL). The family is wired in through $o-font-family-sans-serif,
-// so no selector here forces it.
+// Vazirmatn (OFL), limited to Arabic script (plus ZWNJ and the direction
+// marks) by unicode-range: Latin falls through to the OS system font. The
+// family is wired in through $o-system-fonts, so no selector here forces it.
 @font-face {
     font-family: "Vazirmatn";
     src: url("/shaka_theme/static/src/fonts/Vazirmatn-Regular.woff2") format("woff2");
     font-weight: 100 400;
     font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F;
 }
 
 @font-face {
@@ -12,6 +14,7 @@
     src: url("/shaka_theme/static/src/fonts/Vazirmatn-Medium.woff2") format("woff2");
     font-weight: 500 600;
     font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F;
 }
 
 @font-face {
@@ -19,4 +22,5 @@
     src: url("/shaka_theme/static/src/fonts/Vazirmatn-Bold.woff2") format("woff2");
     font-weight: 700 900;
     font-display: swap;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F;
 }

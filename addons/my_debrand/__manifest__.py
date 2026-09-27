@@ -18,14 +18,6 @@ page and the backend web client shell.
     'data': [
         'views/webclient_templates.xml',
     ],
-    'assets': {
-        'web.assets_frontend': [
-            'my_debrand/static/src/scss/login.scss',
-        ],
-        'web.assets_backend': [
-            'my_debrand/static/src/scss/debrand.scss',
-        ],
-    },
     'installable': True,
     'application': False,
     'auto_install': False,

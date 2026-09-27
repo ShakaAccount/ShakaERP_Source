@@ -1,0 +1,217 @@
+// Control panel: breadcrumbs, search capsule and facets, view switcher, pager,
+// and the search panel navigator (MASTER.md › Components › Control panel).
+// Odoo already lays the row out as one toolbar at ≥lg and wraps it below, and
+// "New" is already btn-primary; this file only re-skins through Odoo's hooks
+// (--ControlPanel-*, --SearchBar-*, --breadcrumb-*, --btn-*, --list-group-*).
+
+.o_control_panel {
+    --ControlPanel-border-bottom: 1px solid var(--shaka-border);
+    --breadcrumb-divider: "›";
+}
+
+.o_rtl .o_control_panel {
+    --breadcrumb-divider: "‹";
+}
+
+// = Breadcrumbs: parents as secondary-label links, the current title 20/600.
+// The title's wrapper carries an important fs-4 when there are no parents, so
+// the size goes on its span.
+.o_control_panel .o_breadcrumb {
+    .breadcrumb-item > a {
+        color: var(--shaka-muted);
+
+        &:hover {
+            color: var(--shaka-text);
+        }
+    }
+
+    .o_last_breadcrumb_item > span {
+        font-size: o-to-rem(20px);
+        font-weight: 600;
+    }
+}
+
+// = Search: a Spotlight capsule on the fill. The menu toggler continues the
+// capsule; focus draws the input field's edge (Odoo's link-blue border) + ring.
+.o_searchview {
+    --SearchBar-background-color: var(--shaka-fill);
+    border-color: transparent;
+    border-radius: var(--shaka-radius-pill);
+
+    .o_searchview_icon {
+        color: var(--shaka-muted);
+    }
+
+    // The inner input is an .o_input: its hover fill and focus ring belong to
+    // the capsule, not the text box.
+    .o_searchview_input {
+        --o-input-background-color: transparent;
+        outline: 0;
+        box-shadow: none;
+    }
+}
+
+.o_searchview_dropdown_toggler {
+    --btn-bg: var(--shaka-fill);
+    --btn-border-color: transparent;
+    --btn-color: var(--shaka-muted);
+    --btn-hover-bg: var(--shaka-fill);
+    --btn-hover-border-color: transparent;
+    --btn-hover-color: var(--shaka-text);
+    --btn-active-bg: var(--shaka-fill);
+    --btn-active-border-color: transparent;
+    --btn-active-color: var(--shaka-text);
+    border-radius: var(--shaka-radius-pill);
+}
+
+.o_cp_searchview:focus-within {
+    border-radius: var(--shaka-radius-pill);
+    box-shadow: 0 0 0 3px rgba($shaka-theme-link, .5);
+}
+
+// = Facets: opaque link-tinted capsules (the label's pencil overlay repaints
+// with `bg-inherit`, so the tint can't be translucent). Measured
+// (tools/contrast.py): link text on 12% passes in light (4.67); dark link
+// fails on any tint, so dark facets read in label colour. Favourites keep
+// their gold label (a brand moment). The rounded-* utilities read
+// --border-radius; .bg-200 / .text-bg-action read --background-color / --color.
+$-shaka-facet-bg: color-mix(in srgb, var(--shaka-link) 12%, var(--shaka-surface));
+$-shaka-facet-text: if($o-webclient-color-scheme == dark, var(--shaka-text), var(--shaka-link));
+
+.o_searchview .o_searchview_facet {
+    --border-radius: var(--shaka-radius-pill);
+    --background-color: #{$-shaka-facet-bg};
+    color: $-shaka-facet-text;
+
+    .o_searchview_facet_label:not(.btn-favourite) {
+        --background-color: #{$-shaka-facet-bg};
+        --color: #{$-shaka-facet-text};
+        --btn-bg: #{$-shaka-facet-bg};
+        --btn-color: #{$-shaka-facet-text};
+        --btn-border-color: transparent;
+        --btn-hover-bg: #{$-shaka-facet-bg};
+        --btn-hover-color: #{$-shaka-facet-text};
+        --btn-hover-border-color: transparent;
+        --btn-active-bg: #{$-shaka-facet-bg};
+        --btn-active-color: #{$-shaka-facet-text};
+        --btn-active-border-color: transparent;
+    }
+
+    // A quiet glyph, danger only under the pointer (text-danger is important).
+    .o_facet_remove {
+        -webkit-text-fill-color: var(--shaka-muted);
+
+        &:hover {
+            -webkit-text-fill-color: var(--shaka-danger);
+        }
+    }
+}
+
+// = View switcher: a macOS segmented control. Fill track, 2px inset, a surface
+// pill with the card shadow on the active view (a lifted fill in dark, where
+// the surface would sink below the track). Buttons stay 28px overall.
+$-shaka-segment-pill: if($o-webclient-color-scheme == dark, var(--shaka-fill), var(--shaka-surface));
+
+nav.o_cp_switch_buttons {
+    gap: 2px;
+    padding: 2px;
+    background-color: var(--shaka-fill);
+    border-radius: var(--shaka-radius);
+
+    &.btn-group > .o_switch_view.btn {
+        --btn-padding-y: calc(#{$btn-padding-y} - 2px);
+        --btn-bg: transparent;
+        --btn-border-color: transparent;
+        --btn-color: var(--shaka-muted);
+        --btn-hover-bg: var(--shaka-fill);
+        --btn-hover-border-color: transparent;
+        --btn-hover-color: var(--shaka-text);
+        --btn-active-bg: #{$-shaka-segment-pill};
+        --btn-active-border-color: transparent;
+        --btn-active-color: var(--shaka-text);
+        margin: 0;
+        border-radius: var(--shaka-radius-sm);
+        box-shadow: none;
+
+        &.active {
+            box-shadow: var(--shaka-shadow-card);
+        }
+    }
+}
+
+// = Pager: compact, a secondary-label counter and bare chevrons.
+.o_pager {
+    .o_pager_counter {
+        color: var(--shaka-muted);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .btn-secondary {
+        --btn-bg: transparent;
+        --btn-border-color: transparent;
+        --btn-hover-bg: var(--shaka-fill);
+        --btn-hover-border-color: transparent;
+        --btn-active-bg: var(--shaka-fill);
+        --btn-active-border-color: transparent;
+        --btn-disabled-bg: transparent;
+        --btn-disabled-border-color: transparent;
+        border-radius: var(--shaka-radius);
+        box-shadow: none;
+    }
+}
+
+// = Search panel: the navigator, a macOS source list. Width stays Odoo's (the
+// variable isn't !default and the panel is user-resizable). Selection follows
+// the two-state rule: action fill + white while the panel has focus, fill +
+// label otherwise. The active header carries important text-black/text-muted
+// utilities, so text is repainted with -webkit-text-fill-color.
+.o_search_panel {
+    .o_search_panel_section_header {
+        color: var(--shaka-muted);
+        font-size: o-to-rem(13px);
+
+        b {
+            font-weight: 600;
+        }
+    }
+
+    .list-group {
+        --list-group-action-hover-bg: var(--shaka-fill);
+        --list-group-action-hover-color: var(--shaka-text);
+        --list-group-action-active-bg: var(--shaka-fill);
+        --list-group-action-active-color: var(--shaka-text);
+        --list-group-active-bg: var(--shaka-fill);
+        --list-group-active-color: var(--shaka-text);
+        --list-group-active-border-color: transparent;
+    }
+
+    // 28px rows: the header covers its item's important py-1.
+    .o_search_panel_category_value > header {
+        min-height: 28px;
+        margin-block: -4px;
+        border-radius: var(--shaka-radius);
+
+        + .list-group {
+            margin-top: 4px;
+        }
+
+        &.active {
+            -webkit-text-fill-color: var(--list-group-active-color);
+
+            .o_search_panel_counter {
+                -webkit-text-fill-color: var(--shaka-muted);
+            }
+        }
+    }
+
+    &:focus-within {
+        .list-group {
+            --list-group-active-bg: var(--shaka-primary);
+            --list-group-active-color: var(--shaka-on-action);
+        }
+
+        .o_search_panel_category_value > header.active .o_search_panel_counter {
+            -webkit-text-fill-color: var(--shaka-on-action);
+        }
+    }
+}

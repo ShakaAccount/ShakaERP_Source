@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Contrast: Odoo dims these muted labels with opacity-50 (2.0:1 light,
+         2.9:1 dark); secondary text alone holds ≥4.9:1 in both schemes. -->
+    <t t-inherit="mail.DateSection" t-inherit-mode="extension">
+        <xpath expr="//span[hasclass('opacity-50')]" position="attributes">
+            <attribute name="class" remove="opacity-50" separator=" "/>
+        </xpath>
+    </t>
+
+    <t t-inherit="web.CommandPalette" t-inherit-mode="extension">
+        <xpath expr="//span[@t-if='category.name']" position="attributes">
+            <attribute name="class" remove="opacity-50" separator=" "/>
+        </xpath>
+    </t>
+
+    <!-- A folded column's title: secondary text instead of 50% label (3.2:1). -->
+    <t t-inherit="web.KanbanHeader" t-inherit-mode="extension">
+        <xpath expr="//div[@t-if='group.isFolded']" position="attributes">
+            <attribute name="class" remove="opacity-50" add="text-muted" separator=" "/>
+        </xpath>
+    </t>
+
+    <!-- Names for icon-only buttons. -->
+    <t t-inherit="web.Breadcrumbs" t-inherit-mode="extension">
+        <xpath expr="//li[@t-if='collapsedBreadcrumbs.length']//button" position="attributes">
+            <attribute name="aria-label">Previous pages</attribute>
+            <attribute name="title">Previous pages</attribute>
+        </xpath>
+    </t>
+
+    <t t-inherit="web.ListRenderer" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_optional_columns_dropdown')]//button" position="attributes">
+            <attribute name="aria-label">Optional columns</attribute>
+            <attribute name="title">Optional columns</attribute>
+        </xpath>
+    </t>
+
+    <t t-inherit="web.SearchBar.Toggler" t-inherit-mode="extension">
+        <xpath expr="//button" position="attributes">
+            <attribute name="aria-label">Search</attribute>
+            <attribute name="title">Search</attribute>
+        </xpath>
+    </t>
+
+</templates>

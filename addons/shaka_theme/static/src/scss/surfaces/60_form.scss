@@ -1,0 +1,99 @@
+// Form view: the sheet is the canvas (MASTER.md › Components › Form). Sheet
+// geometry comes through Odoo's --formView-sheet-* hooks; the notebook and the
+// statusbar stepper live in navigation.scss. Selectors only for the gaps.
+
+// = Sheet: a surface card on the grouped background (the webclient background
+// is gray-100). The card shadow's hairline replaces the border; 10px radius
+// from md up, full-bleed below. Odoo's max width stays. Dialog forms set their
+// own flat values on the sheet and live outside the action manager.
+.o_action_manager .o_form_view {
+    --formView-sheet-border-width: 0;
+    --formView-sheet-border-width-md: 0;
+    --formView-sheet-border-radius-md: var(--shaka-radius-card);
+    --formView-sheet-padding-y-lg: 24px;
+    --formView-sheet-padding-x-lg: 32px;
+    --formView-sheet-padding-y-xxl: 24px;
+    --formView-sheet-padding-x-xxl: 24px;
+
+    .o_form_sheet {
+        box-shadow: var(--shaka-shadow-card);
+    }
+}
+
+// Title 1: the record name, 24/30 semibold.
+.o_form_view .oe_title > h1 {
+    font-size: o-to-rem(24px);
+    font-weight: 600;
+    line-height: 30px;
+}
+
+// = Stat buttons: compact 44px tiles on the fill, value 17/600 over a 12px
+// secondary label. Odoo joins them into one bordered strip; here they are
+// separate tiles. Measured (tools/contrast.py): secondary on the fill holds
+// 4.66 / 4.83, so hover doesn't darken the tile (it would drop below 4.5);
+// the label turns label-coloured instead, and the press scale is Task 4's.
+// The value is label text: the action blue is 4.0 on the fill. The "More"
+// dropdown and the mobile grid (.o-form-buttonbox-small) stay Odoo's.
+.o_form_sheet .o-form-buttonbox:not(.o-form-buttonbox-small) {
+    --o-stat-text-color: var(--shaka-text);
+    --o-stat-button-color: var(--shaka-link);
+    gap: 8px;
+
+    > * + * {
+        margin-inline: 0;
+    }
+
+    .oe_stat_button,
+    .oe_stat_button > .btn {
+        --btn-bg: var(--shaka-fill);
+        --btn-border-color: transparent;
+        --btn-color: var(--shaka-muted);
+        --btn-hover-bg: var(--shaka-fill);
+        --btn-hover-border-color: transparent;
+        --btn-hover-color: var(--shaka-text);
+        --btn-active-bg: var(--shaka-fill);
+        --btn-active-border-color: transparent;
+        --btn-active-color: var(--shaka-text);
+        height: 44px;
+        border-radius: var(--shaka-radius-card);
+    }
+
+    .o_stat_value,
+    .o_pie_value {
+        order: 0;
+        font-size: o-to-rem(17px);
+        font-weight: 600;
+        line-height: 22px;
+    }
+
+    .o_stat_text,
+    .o_pie_text {
+        font-size: $o-font-size-base-smaller;
+        line-height: 16px;
+    }
+}
+
+// = Groups: 13/500 secondary labels (Footnote). Invalid labels keep Odoo's
+// danger colour. Empty and readonly labels lose Odoo's .66 opacity: on the
+// secondary colour it would fall to ~2.8:1; the lighter weight still sets
+// them apart.
+.o_form_view .o_inner_group .o_form_label:not(.o_field_invalid) {
+    color: var(--shaka-muted);
+    font-size: o-to-rem(13px);
+    font-weight: 500;
+
+    &.o_form_label_empty,
+    &.o_form_label_false,
+    &.o_form_label_readonly {
+        opacity: 1;
+        font-weight: 400;
+    }
+}
+
+// Section header: 13px secondary, no rule. The view compiler's important
+// text-uppercase / fw-bolder utilities stay (as in the search panel).
+.o_form_view .o_horizontal_separator:not(:empty) {
+    box-shadow: none;
+    color: var(--shaka-muted);
+    font-size: o-to-rem(13px);
+}

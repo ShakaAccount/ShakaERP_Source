@@ -9,7 +9,7 @@
   --cat-text: var(--shaka-text);
   --cat-text-muted: var(--shaka-muted);
   --cat-accent: #{$o-brand-primary};
-  --cat-accent-text: #fff;
+  --cat-accent-text: var(--shaka-on-action);
   --cat-accent-soft: color-mix(in srgb, #{$o-brand-primary} 10%, transparent);
   --cat-hover: var(--shaka-muted-bg);
   --cat-selected: color-mix(in srgb, #{$o-brand-primary} 16%, transparent);
@@ -17,7 +17,7 @@
   --cat-success: #{$o-success};
   --cat-radius: 8px;
   --cat-bg-fade: color-mix(in srgb, var(--shaka-surface) 0%, transparent);
-  --cat-scroll-shadow: rgba(0, 0, 0, 0.2);
+  --cat-scroll-shadow: color-mix(in srgb, var(--shaka-text) 20%, transparent);
   --cat-gradient-dir: left;
   --cat-row-in-x: -6px;
 
@@ -34,7 +34,11 @@
   }
 
   // ---------- Modal wrapper: unclip so the entity dropdown can escape ----------
+  // Hand-built (not a Dialog), so it draws Bootstrap's backdrop itself; the
+  // card takes 20_overlays' dialog styling (thick material, 14px, 17px title).
   &.modal {
+    background: rgba($modal-backdrop-bg, $modal-backdrop-opacity);
+
     .modal-dialog,
     .modal-content,
     .modal-body {
@@ -42,13 +46,7 @@
     }
 
     .modal-content {
-      background: var(--cat-bg);
       color: var(--cat-text);
-    }
-
-    .modal-header {
-      background: var(--cat-bg-soft);
-      border-color: var(--cat-border);
     }
   }
 
@@ -62,7 +60,6 @@
     label {
       font-weight: 500;
       color: var(--cat-text-muted);
-      letter-spacing: 0.02em;
       text-transform: uppercase;
       font-size: 10px;
       margin-bottom: 0;
@@ -142,7 +139,7 @@
       background: var(--cat-bg);
       border: 1px solid var(--cat-border);
       border-radius: var(--cat-radius);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+      box-shadow: var(--shaka-shadow-pop);
       z-index: 50;
       padding: 4px 0;
       animation: o_cat_picker_in 120ms ease-out;
@@ -295,7 +292,7 @@
       background: var(--cat-bg);
       border: 1px solid var(--cat-border);
       border-radius: var(--cat-radius);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+      box-shadow: var(--shaka-shadow-pop);
       overflow: hidden;
       animation: o_cat_picker_in 120ms ease-out;
 
@@ -432,7 +429,7 @@
       padding: 3px 10px;
       border-radius: 12px;
       background: var(--cat-accent);
-      color: #fff;
+      color: var(--cat-accent-text);
       letter-spacing: 0;
       min-width: 30px;
       text-align: center;
@@ -445,7 +442,7 @@
       border-radius: 50%;
       border: 0;
       background: var(--cat-accent);
-      color: #fff;
+      color: var(--cat-accent-text);
       font-size: 18px;
       line-height: 1;
       font-weight: 500;
@@ -477,7 +474,7 @@
     background: var(--cat-accent);
     color: var(--cat-accent-text);
     font-size: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    box-shadow: var(--shaka-shadow-pop);
 
     opacity: 0;
     transform: translateY(-100%);
@@ -508,7 +505,7 @@
 
     &:hover {
       opacity: 1;
-      background: rgba(255, 255, 255, 0.15);
+      background: color-mix(in srgb, var(--cat-accent-text) 15%, transparent);
       text-decoration: none;
       border-radius: 4px;
     }
@@ -519,7 +516,7 @@
     border-radius: 6px;
     border: 0;
     font-weight: 500;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shaka-shadow-card);
   }
 
   // ---------- Search ----------
@@ -693,15 +690,15 @@
       }
 
       &.o_cat_row_add:hover {
-        background: var(--cat-success);
+        background: color-mix(in srgb, var(--cat-success) 12%, transparent);
         border-color: var(--cat-success);
-        color: #fff;
+        color: var(--cat-success);
       }
 
       &.o_cat_row_remove:hover {
-        background: var(--cat-danger);
+        background: color-mix(in srgb, var(--cat-danger) 12%, transparent);
         border-color: var(--cat-danger);
-        color: #fff;
+        color: var(--cat-danger);
       }
     }
   }
@@ -778,7 +775,7 @@
     &.o_cat_row_check_on {
       background: var(--cat-accent);
       border-color: var(--cat-accent);
-      color: #fff;
+      color: var(--cat-accent-text);
     }
   }
 
@@ -857,7 +854,7 @@
 
       &:hover .o_cat_node_company_icon {
         background: var(--cat-accent);
-        color: #fff;
+        color: var(--cat-accent-text);
         transform: scale(1.08);
       }
 
@@ -875,7 +872,7 @@
         border-radius: 4px;
         font-size: 11px;
         font-weight: 500;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        box-shadow: var(--shaka-shadow-pop);
         opacity: 0;
         pointer-events: none;
         transition: max-width 480ms steps(28, end),
@@ -910,6 +907,7 @@
     }
 
     .o_cat_trash_icon {
+      color: var(--cat-danger);
       width: 14px;
       height: 14px;
       display: block;
@@ -925,7 +923,7 @@
       font-size: 12px;
 
       &:hover {
-        background: rgba(220, 38, 38, 0.18);
+        background: color-mix(in srgb, var(--cat-danger) 12%, transparent);
         color: var(--cat-danger);
       }
     }

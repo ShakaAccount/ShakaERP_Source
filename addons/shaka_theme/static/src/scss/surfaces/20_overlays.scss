@@ -1,0 +1,129 @@
+// Overlays: menus, popovers, tooltips, autocomplete, dialogs, notifications,
+// bottom sheet and the command palette (MASTER.md › Components › Overlays).
+// Radii, item padding, borders, tooltip colours and the dim come from
+// bootstrap_overridden.scss; this file lays the materials over the solid
+// backgrounds (which Sass colour functions still read) and fills the gaps.
+
+// = Menus, popovers, tooltips. Every Odoo dropdown menu and tooltip is a
+// Popover (.o_popover); many2one menus are AutoComplete lists. The morph.js
+// clip-path opens at --morph-r-open, the same 10px radius.
+.o_popover,
+.o-autocomplete--dropdown-menu {
+    @include shaka-material(regular);
+    box-shadow: var(--shaka-shadow-pop);
+}
+
+// The tooltip bubble is the popover itself; its inner box stays clear.
+.o_popover .o-tooltip {
+    --tooltip-bg: transparent;
+}
+
+// Selection highlight: the action fill with white text and glyphs, as a
+// selector because $dropdown-link-hover-bg is reused by list groups and
+// autocomplete spans. -webkit-text-fill-color is inherited, so it repaints
+// muted and link-coloured children too (their colour is an important utility).
+.o-dropdown--menu {
+    .dropdown-item,
+    .dropdown-toggle {
+        &.focus,
+        &:hover:not(.disabled) {
+            background-color: var(--shaka-primary);
+            -webkit-text-fill-color: var(--shaka-on-action);
+        }
+    }
+}
+
+.o-autocomplete--dropdown-menu .ui-menu-item > a.ui-state-active {
+    background-color: var(--shaka-primary);
+    -webkit-text-fill-color: var(--shaka-on-action);
+}
+
+// = Bottom sheet: dropdowns below 768px on touch. The sheet carries the
+// material; the menu inside it stays clear so the two never stack.
+.o_bottom_sheet .o_bottom_sheet_sheet {
+    @include shaka-material(regular);
+    border-radius: var(--shaka-radius-xl) var(--shaka-radius-xl) 0 0;
+}
+
+.o_bottom_sheet .o_bottom_sheet_body.dropdown-menu {
+    --dropdown-bg: transparent;
+}
+
+// = Dialogs: thick material, dialog shadow, 17/22 semibold title. The footer
+// runs from the trailing edge, so the primary (first in Odoo's markup) sits
+// at the end, as on macOS; Odoo's justify-content-md-start then means "end".
+.modal-content {
+    @include shaka-material(thick);
+    box-shadow: var(--shaka-shadow-dialog);
+}
+
+.modal-title {
+    font-size: o-to-rem(17px);
+    font-weight: 600;
+    line-height: o-to-rem(22px);
+}
+
+.modal-footer {
+    flex-direction: row-reverse;
+}
+
+// = Notifications: a thick-material card. The template's rounded, border and
+// shadow-lg utilities read these custom properties.
+.o_notification_manager .o_notification {
+    @include shaka-material(thick);
+    --border-radius: var(--shaka-radius-xl);
+    --border-color: transparent;
+    --box-shadow-lg: var(--shaka-shadow-dialog);
+}
+
+// = Command palette (Ctrl+K, or typing on the home menu): Spotlight. The panel
+// is a dialog (thick material above); 640px wide, a 44px capsule field with
+// 17px text, inset rows with the selected one action-filled. The rows keep
+// Odoo's py-2 utility (36px): 32px would need an important override.
+.modal-dialog:has(> .o_command_palette) {
+    --modal-width: 640px;
+}
+
+.o_command_palette {
+    // Search row: its padding is utilities (py-3 px-4), so the capsule is drawn
+    // behind the field, 5px inside the 54px row.
+    .o_command_palette_search {
+        --border-width: 0;
+        isolation: isolate;
+
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 5px 8px;
+            z-index: -1;
+            border-radius: var(--shaka-radius-pill);
+            background-color: var(--shaka-fill);
+        }
+
+        .form-control {
+            font-size: o-to-rem(17px);
+            line-height: o-to-rem(22px);
+            background-color: transparent;
+            box-shadow: none;
+        }
+    }
+
+    .o_command_palette_footer {
+        --border-width: 0;
+    }
+
+    .o_command_palette_listbox .o_command {
+        margin-inline: 5px;
+        border-radius: var(--shaka-radius);
+
+        &.focused {
+            background-color: var(--shaka-primary);
+            -webkit-text-fill-color: var(--shaka-on-action);
+
+            // Keycaps keep their own text: white on the light keycap is 1.1:1.
+            kbd {
+                -webkit-text-fill-color: currentColor;
+            }
+        }
+    }
+}

@@ -1,25 +1,88 @@
 // Role tokens for addon SCSS. Compiled once per colour scheme (light bundle,
 // dark bundle), so consumers just use var(--shaka-*) — no dark-mode selectors.
+// Never rename or remove a token: other addons read them.
 :root {
     --shaka-primary: #{$shaka-theme-primary};
+    --shaka-link: #{$shaka-theme-link};
     --shaka-accent: #{$shaka-theme-accent};
+    --shaka-gold: #{$shaka-theme-gold};
     --shaka-bg: #{$shaka-theme-bg};
     --shaka-surface: #{$shaka-theme-surface};
+    --shaka-fill: #{$shaka-theme-fill};
     --shaka-muted-bg: #{$shaka-theme-muted-bg};
+    // Text and glyphs on the action fill (selection highlight), both schemes.
+    --shaka-on-action: #{$shaka-theme-on-action};
     --shaka-text: #{$shaka-theme-text};
     --shaka-muted: #{$shaka-theme-muted};
     --shaka-border: #{$shaka-theme-border};
+    // Status text, measured on the surface and on their badge tints.
+    --shaka-success: #{$o-success};
+    --shaka-warning: #{$o-warning};
+    --shaka-danger: #{$o-danger};
+    --shaka-separator: #{$shaka-theme-border};
+    // App switcher / login wallpaper (the same in both schemes).
+    --shaka-wallpaper-top: #{$shaka-theme-wallpaper-top};
+    --shaka-wallpaper-bottom: #{$shaka-theme-wallpaper-bottom};
+    --shaka-on-wallpaper: #{$shaka-theme-on-wallpaper};
     --shaka-shadow-card: #{$shaka-theme-shadow-card};
     --shaka-shadow-pop: #{$shaka-theme-shadow-pop};
+    --shaka-shadow-dialog: #{$shaka-theme-shadow-dialog};
+    --shaka-radius-sm: 4px;
     --shaka-radius: 6px;
-    --shaka-radius-card: 8px;
+    --shaka-radius-card: 10px;
+    --shaka-radius-lg: 10px;
+    --shaka-radius-xl: 14px;
+    --shaka-radius-pill: 999px;
+    --shaka-row-h: 32px;
     --shaka-ease: 150ms ease-out;
+    // One critically damped spring (tools/springs.py); the duration is the
+    // settle time per response. linear() needs Chrome 113 / Firefox 112 /
+    // Safari 17.2, so the curve below is the fallback.
+    --shaka-spring: cubic-bezier(0.22, 1, 0.36, 1);
+    --shaka-spring-press-dur: 203ms;
+    --shaka-spring-snappy-dur: 337ms;
+    --shaka-spring-dur: 472ms;
+    --shaka-spring-gentle-dur: 673ms;
+    --shaka-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+    // Press feedback: one scale on the press spring for buttons, cards and
+    // app icons alike.
+    --shaka-press-scale: .97;
 }
 
-// Home menu / login background: flat app background instead of Enterprise's
-// artwork. `html` bumps specificity over web_enterprise's .dark.scss, which
-// loads after this file in the dark bundle.
-html .o_home_menu_background {
-    --homeMenu-bg-color: #{$shaka-theme-bg};
-    --homeMenu-bg-image: none;
+@supports (transition-timing-function: linear(0, 1)) {
+    :root {
+        --shaka-spring: linear(0, 0.068, 0.209, 0.363, 0.506, 0.626, 0.722, 0.796, 0.852, 0.894, 0.925, 0.947, 0.962, 0.974, 0.982, 0.987, 0.991, 0.994, 0.996, 0.997, 1);
+    }
+}
+
+// Translucent material for floating layers only (menus, popovers, tooltips,
+// dialogs, notifications, command palette, sticky list header). Solid surface
+// without backdrop-filter support, with reduced transparency and with more
+// contrast (which also adds a label-colour hairline).
+$shaka-materials: (
+    thin: ($shaka-theme-material-thin, 20px),
+    regular: ($shaka-theme-material-regular, 30px),
+    thick: ($shaka-theme-material-thick, 40px),
+);
+
+@mixin shaka-material($level: regular) {
+    $-material: map-get($shaka-materials, $level);
+    background-color: var(--shaka-surface);
+    @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+        background-color: nth($-material, 1);
+        -webkit-backdrop-filter: blur(nth($-material, 2)) saturate(180%);
+        backdrop-filter: blur(nth($-material, 2)) saturate(180%);
+    }
+    @media (prefers-reduced-transparency: reduce) {
+        background-color: var(--shaka-surface);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+    @media (prefers-contrast: more) {
+        background-color: var(--shaka-surface);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        outline: 1px solid var(--shaka-text);
+        outline-offset: -1px;
+    }
 }

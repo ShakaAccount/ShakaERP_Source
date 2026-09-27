@@ -2,57 +2,199 @@
 /// Shaka theme — light values. Source of truth: design-system/shaka-erp/MASTER.md
 ///
 /// Loaded *before* web_enterprise's primary_variables.scss, so every `!default`
-/// here is the first definition and wins. In dark mode primary_variables.dark.scss
-/// loads before this file: every colour set here MUST also be set there, or the
-/// light value leaks into dark mode (tests/scss_compile_check.py enforces this).
+/// here is the first definition and wins. No Odoo `$o-*` exists yet at this
+/// point: literal values only. In dark mode primary_variables.dark.scss loads
+/// before this file: every colour set here (maps included) MUST also be set
+/// there, or the light value leaks into dark mode (tests/scss_compile_check.py
+/// enforces this).
 ///
 
-// = Neutrals (slate) — Odoo maps grays onto borders, muted text, backgrounds.
-$o-gray-100: #F8FAFC !default;
-$o-gray-200: #E2E8F0 !default;
-$o-gray-300: #CBD5E1 !default;
-$o-gray-400: #94A3B8 !default;
-$o-gray-500: #64748B !default;
-$o-gray-600: #475569 !default;
-$o-gray-700: #334155 !default;
-$o-gray-800: #1E293B !default;
-$o-gray-900: #0F172A !default;
+// = Neutrals (Apple system grays). Odoo maps them onto the grouped
+// background (100), fills (200), separators and borders (300), secondary
+// label (600) and label (900).
+$o-gray-100: #F5F5F7 !default;
+$o-gray-200: #EFEFF0 !default;
+$o-gray-300: #D2D2D7 !default;
+$o-gray-400: #AEAEB2 !default;
+$o-gray-500: #8E8E93 !default;
+$o-gray-600: #6A6A6F !default;
+$o-gray-700: #48484A !default;
+$o-gray-800: #2C2C2E !default;
+$o-gray-900: #1D1D1F !default;
 
-// = Brand
-$o-enterprise-color: #1E40AF !default;
-$o-enterprise-action-color: #1D4ED8 !default;
+// = Brand and action. The action colour is the link blue: Odoo also uses it
+// as text (links, $o-main-link-color), so it must hold 4.5:1.
+$o-enterprise-color: #0071E3 !default;
+$o-enterprise-action-color: #0066CC !default;
+
+// = Surfaces and text
+$o-view-background-color: #FFFFFF !default;
+$o-main-color-muted: #6A6A6F !default;
 
 // = Status
-$o-success: #15803D !default;
-$o-info: #2563EB !default;
-$o-warning: #B45309 !default;
-$o-danger: #DC2626 !default;
-$o-main-favorite-color: #D97706 !default;
+$o-success: #1F7F37 !default;
+$o-info: #0066CC !default;
+$o-warning: #C93400 !default;
+$o-danger: #D70015 !default;
+$o-main-favorite-color: #8A6A3B !default;
 $o-theme-text-colors: (
-    "primary": #1E40AF,
-    "success": #15803D,
-    "info": #1D4ED8,
-    "warning": #B45309,
-    "danger": #B91C1C,
+    "primary": #0066CC,
+    "success": #1F7F37,
+    "info": #0066CC,
+    "warning": #C93400,
+    "danger": #D70015,
+) !default;
+
+// = Buttons. Each entry is passed to Bootstrap's button-variant mixin as is:
+// all 9 states, literal values.
+$o-btns-bs-override: (
+    "primary": (
+        background: #0071E3,
+        border: #0071E3,
+        color: #FFF,
+        hover-background: #0062C4,
+        hover-border: #0062C4,
+        hover-color: #FFF,
+        active-background: #0058B0,
+        active-border: #0058B0,
+        active-color: #FFF,
+    ),
+    "secondary": (
+        background: #FFFFFF,
+        border: #D2D2D7,
+        color: #1D1D1F,
+        hover-background: #EFEFF0,
+        hover-border: #D2D2D7,
+        hover-color: #1D1D1F,
+        active-background: #E5E5EA,
+        active-border: #C7C7CC,
+        active-color: #1D1D1F,
+    ),
+    "light": (
+        background: #FFFFFF,
+        border: #FFFFFF,
+        color: #1D1D1F,
+        hover-background: #EFEFF0,
+        hover-border: #EFEFF0,
+        hover-color: #1D1D1F,
+        active-background: #E5E5EA,
+        active-border: #E5E5EA,
+        active-color: #1D1D1F,
+    ),
+    "danger": (
+        background: #D70015,
+        border: #D70015,
+        color: #FFF,
+        hover-background: #BF0013,
+        hover-border: #BF0013,
+        hover-color: #FFF,
+        active-background: #A80011,
+        active-border: #A80011,
+        active-color: #FFF,
+    ),
+) !default;
+$o-btns-bs-outline-override: (
+    "primary": (
+        background: transparent,
+        border: #0066CC,
+        color: #0066CC,
+        hover-background: #0071E3,
+        hover-border: #0071E3,
+        hover-color: #FFF,
+        active-background: #0062C4,
+        active-border: #0062C4,
+        active-color: #FFF,
+    ),
+    "secondary": (
+        background: transparent,
+        border: #D2D2D7,
+        color: #1D1D1F,
+        hover-background: #EFEFF0,
+        hover-border: #D2D2D7,
+        hover-color: #1D1D1F,
+        active-background: #E5E5EA,
+        active-border: #C7C7CC,
+        active-color: #1D1D1F,
+    ),
+    "light": (
+        background: transparent,
+        border: #D2D2D7,
+        color: #1D1D1F,
+        hover-background: #EFEFF0,
+        hover-border: #D2D2D7,
+        hover-color: #1D1D1F,
+        active-background: #E5E5EA,
+        active-border: #C7C7CC,
+        active-color: #1D1D1F,
+    ),
+    "danger": (
+        background: transparent,
+        border: #D70015,
+        color: #D70015,
+        hover-background: #D70015,
+        hover-border: #D70015,
+        hover-color: #FFF,
+        active-background: #BF0013,
+        active-border: #BF0013,
+        active-color: #FFF,
+    ),
 ) !default;
 
 // = Shaka role tokens, exported as --shaka-* by tokens.scss
-$shaka-theme-primary: #1E40AF !default;
-$shaka-theme-accent: #D97706 !default;
-$shaka-theme-bg: #F8FAFC !default;
+$shaka-theme-primary: #0071E3 !default;
+$shaka-theme-link: #0066CC !default;
+$shaka-theme-accent: #8A6A3B !default;
+$shaka-theme-gold: #B5925F !default;
+$shaka-theme-bg: #F5F5F7 !default;
 $shaka-theme-surface: #FFFFFF !default;
-$shaka-theme-muted-bg: #E9EEF6 !default;
-$shaka-theme-text: #0F172A !default;
-$shaka-theme-muted: #475569 !default;
-$shaka-theme-border: #E2E8F0 !default;
-$shaka-theme-shadow-card: 0 1px 2px rgba(15, 23, 42, .06) !default;
-$shaka-theme-shadow-pop: 0 8px 24px rgba(15, 23, 42, .12) !default;
+$shaka-theme-fill: rgba(118, 118, 128, .12) !default;
+$shaka-theme-muted-bg: #EFEFF0 !default;
+$shaka-theme-text: #1D1D1F !default;
+$shaka-theme-on-action: #FFFFFF !default;
+$shaka-theme-muted: #6A6A6F !default;
+$shaka-theme-border: #D2D2D7 !default;
+$shaka-theme-shadow-card: 0 0 0 .5px rgba(0, 0, 0, .05), 0 1px 2px rgba(0, 0, 0, .06) !default;
+$shaka-theme-shadow-pop: 0 0 0 .5px rgba(0, 0, 0, .08), 0 8px 24px rgba(0, 0, 0, .12) !default;
+$shaka-theme-shadow-dialog: 0 0 0 .5px rgba(0, 0, 0, .08), 0 24px 64px rgba(0, 0, 0, .2) !default;
+// App switcher / login wallpaper: graphite in both schemes (MASTER.md).
+$shaka-theme-wallpaper-top: #1C1C1E !default;
+$shaka-theme-wallpaper-bottom: #000000 !default;
+$shaka-theme-on-wallpaper: #FFFFFF !default;
+// Materials (shaka-material mixin in tokens.scss)
+$shaka-theme-material-thin: rgba(255, 255, 255, .6) !default;
+$shaka-theme-material-regular: rgba(255, 255, 255, .88) !default;
+$shaka-theme-material-thick: rgba(255, 255, 255, .94) !default;
 
-// = Typography (scheme-independent — not repeated in the dark file)
-$o-font-family-sans-serif: o-add-unicode-support-font(("Vazirmatn", -apple-system, "Segoe UI", Roboto, Arial, sans-serif)) !default;
+// = Typography (scheme-independent — not repeated in the dark file).
+// Vazirmatn is first but limited to Arabic script by its unicode-range
+// (fonts.scss), so Latin falls through to the OS system font. Setting
+// $o-system-fonts (not only the family) also carries it to the login page.
+$o-system-fonts: ("Vazirmatn", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji") !default;
+$o-font-family-sans-serif: o-add-unicode-support-font($o-system-fonts) !default;
 $o-headings-font-family: $o-font-family-sans-serif !default;
+$o-font-size-base: o-to-rem(14px) !default;
+$o-font-size-base-touch: o-to-rem(16px) !default;
+$o-font-size-base-small: o-to-rem(13px) !default;
+$o-font-size-base-smaller: o-to-rem(12px) !default;
 
-// = Shape (scheme-independent)
+// = Shape and density (scheme-independent)
 $o-border-radius-sm: o-to-rem(4px) !default;
 $o-border-radius: o-to-rem(6px) !default;
-$o-border-radius-lg: o-to-rem(8px) !default;
+$o-border-radius-lg: o-to-rem(10px) !default;
+// 21px line + 2 × 3px + 1px hairline = the 28px control height.
+$o-input-padding-y: 3px !default;
+$o-input-padding-x: 6px !default;
+
+// = App shell (surfaces/30_shell.scss). A 44px toolbar: 8px + 28px capsule
+// entries + 8px. The hairline reads the token, so it switches per scheme.
+$o-navbar-height: 44px !default;
+$o-navbar-padding-v: 8px !default;
+$o-navbar-border-bottom: 1px solid var(--shaka-border) !default;
+$o-navbar-entry-border-radius: 999px !default;
+$o-navbar-brand-font-size: o-to-rem(17px) !default;
+// White captions on the graphite wallpaper need no shadow in either scheme.
+$o-home-menu-caption-shadow: none !default;
+
+// = List footer (surfaces/50_list.scss): totals in label colour, semibold.
+$o-list-footer-color: var(--shaka-text) !default;
+$o-list-footer-font-weight: 600 !default;

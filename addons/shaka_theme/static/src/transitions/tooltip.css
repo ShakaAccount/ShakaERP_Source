@@ -3,36 +3,45 @@
    popover.js (.t-tt, .is-open; the exit plays on a clone). Only the appear/leave
    lanes: Odoo places one tooltip per target, so the snippet's shared-bubble
    travel (--tt-x, width, --tt-move-*) has nothing to drive, and the theme owns
-   the colours (--tt-bg/--tt-fg). */
+   the colours (--tt-bg/--tt-fg).
+   Shaka: the bubble is a material, so it materializes (opacity, scale .96,
+   blur 6px → none) on the snappy spring and leaves on the exit ease. */
 
 :root {
-  --tt-in-dur: 150ms;
-  --tt-out-dur: 100ms;
-  --tt-scale: 0.98;
+  --tt-in-dur: var(--shaka-spring-snappy-dur);
+  --tt-out-dur: 150ms;
+  --tt-scale: 0.96;
+  --tt-blur: 6px;
   --tt-delay: 80ms;
-  --tt-in-ease: ease-out;
-  --tt-out-ease: cubic-bezier(0.4, 0, 1, 1);
+  --tt-in-ease: var(--shaka-spring);
+  --tt-out-ease: var(--shaka-ease-exit);
 }
 
 /* Default rule controls the LEAVE state: no delay, so hiding plays immediately. */
 .t-tt {
   scale: var(--tt-scale);
   opacity: 0;
+  filter: blur(var(--tt-blur));
   pointer-events: none;
   transition:
     opacity var(--tt-out-dur) var(--tt-out-ease),
-    scale   var(--tt-out-dur) var(--tt-out-ease);
+    scale   var(--tt-out-dur) var(--tt-out-ease),
+    filter  var(--tt-out-dur) var(--tt-out-ease);
 }
 /* The appear delay belongs ONLY to the show rule. */
 .t-tt.is-open {
   opacity: 1;
   scale: 1;
+  filter: none;
   pointer-events: auto;
   transition:
     opacity var(--tt-in-dur) var(--tt-in-ease) var(--tt-delay),
-    scale   var(--tt-in-dur) var(--tt-in-ease) var(--tt-delay);
+    scale   var(--tt-in-dur) var(--tt-in-ease) var(--tt-delay),
+    filter  var(--tt-in-dur) var(--tt-in-ease) var(--tt-delay);
 }
 
+/* Reduced motion: a 150ms cross-fade, same delay, no scale or blur. */
 @media (prefers-reduced-motion: reduce) {
-  .t-tt { transition: none !important; }
+  .t-tt, .t-tt.is-open { scale: none; filter: none; transition: opacity 150ms ease; }
+  .t-tt.is-open { transition-delay: var(--tt-delay); }
 }

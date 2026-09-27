@@ -2,9 +2,25 @@
 // rule only for a gap seen in visual QA, and never with !important to win
 // specificity (see design-system/shaka-erp/MASTER.md).
 
-// Visible keyboard focus on controls. Inputs keep Odoo's own focus underline.
+::selection {
+    background-color: rgba($shaka-theme-link, .28);
+}
+
+.o_web_client {
+    caret-color: var(--shaka-link);
+    // Odoo has no global scrollbar style. scrollbar-color inherits,
+    // scrollbar-width doesn't, hence the descendant rule.
+    scrollbar-color: var(--shaka-muted) transparent;
+
+    &, * {
+        scrollbar-width: thin;
+    }
+}
+
+// Visible keyboard focus on controls: the link blue holds ≥4.6:1 on every
+// ground in both schemes. Inputs get the field ring in surfaces/10_controls.
 .o_web_client :is(a, button, .btn, [role="button"], [tabindex]):focus-visible {
-    outline: 2px solid var(--shaka-primary);
+    outline: 2px solid var(--shaka-link);
     outline-offset: 2px;
 }
 
@@ -18,9 +34,12 @@
 }
 
 // Reduced motion. !important is the standard pattern here: it must beat every
-// component's own transition, whatever its specificity.
+// component's own transition, whatever its specificity. Floating layers are
+// left out: their transitions/* files swap the motion for a 150ms cross-fade.
 @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *:not(.t-morph, .t-morph > *, .t-tt, .t-modal, .t-modal-backdrop, .t-acc-panel-inner, .o_loading_indicator),
+    *::before,
+    *::after {
         animation-duration: .01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: .01ms !important;

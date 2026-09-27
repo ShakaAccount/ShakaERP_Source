@@ -1,0 +1,165 @@
+// Login, database selector and 2FA (web.login_layout), the gold brand moment
+// (MASTER.md › Components › Login). The body is `o_home_menu_background`, so
+// 30_shell.scss (also in this bundle) already paints the app switcher's
+// graphite wallpaper with the gold glow, the same in both schemes. The
+// frontend is compiled once, light, so the card is always the light material.
+//
+// views/login_templates.xml strips the card's `card bg-100 bg-white rounded-0
+// shadow-sm` classes and its inline 300px: they are literal important
+// utilities, and `.card` makes Odoo paint a 90% white `.card-body`.
+
+.o_home_menu_background {
+    .container:has(> .o_database_list) {
+        display: flex;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .o_database_list {
+        @include shaka-material(thick);
+        // Seams (logo rule, footer rule, link separators) are border utilities.
+        --border-color: transparent;
+        width: 100%;
+        max-width: 360px;
+        border-radius: var(--shaka-radius-xl);
+        box-shadow: var(--shaka-shadow-dialog);
+        color: var(--shaka-text);
+
+        > .card-body {
+            padding: 32px 24px 24px;
+        }
+
+        // Logo, sized here (my_debrand's inline size is gone; Odoo's own inline
+        // max-height is larger than this).
+        > .card-body > .text-center:first-child img {
+            height: 96px;
+            width: auto;
+            max-width: 100%;
+        }
+
+        .form-label,
+        .col-form-label,
+        label {
+            color: var(--shaka-muted);
+            font-size: o-to-rem(13px);
+            font-weight: 500;
+        }
+
+        // = Capsule fields. An input group is one capsule: the group carries the
+        // fill and the focus ring, its input and button go clear.
+        .form-control,
+        .input-group {
+            min-height: 36px;
+            border: 1px solid transparent;
+            border-radius: var(--shaka-radius-pill);
+            background-color: var(--shaka-fill);
+            color: var(--shaka-text);
+            transition: border-color var(--shaka-ease), box-shadow var(--shaka-ease);
+        }
+
+        .form-control {
+            padding-inline: 14px;
+            text-align: start;
+
+            &::placeholder {
+                color: var(--shaka-muted);
+            }
+        }
+
+        .form-control:focus,
+        .input-group:focus-within {
+            border-color: var(--shaka-link);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--shaka-link) 30%, transparent);
+            background-color: var(--shaka-fill);
+            outline: 0;
+        }
+
+        .input-group {
+            flex-wrap: nowrap;
+
+            > .form-control,
+            > .btn {
+                min-height: 0;
+                border: 0;
+                border-radius: 0;
+                background-color: transparent;
+                box-shadow: none;
+            }
+
+            // Show-password eye and the database "Select" link.
+            > .btn {
+                padding-inline: 14px;
+                color: var(--shaka-muted);
+
+                &:hover {
+                    color: var(--shaka-text);
+                }
+            }
+
+            > a.btn {
+                color: var(--shaka-link);
+            }
+        }
+
+        // Autofill keeps the capsule: hold off the UA's fill instead of painting
+        // an inset shadow over the translucent fill.
+        input:-webkit-autofill {
+            -webkit-text-fill-color: var(--shaka-text);
+            caret-color: var(--shaka-text);
+            transition: background-color 100000s 0s;
+        }
+
+        // = Primary button. The frontend has its own button colours.
+        .oe_login_buttons .btn-primary {
+            --btn-bg: var(--shaka-primary);
+            --btn-border-color: var(--shaka-primary);
+            --btn-hover-bg: color-mix(in srgb, var(--shaka-primary), var(--shaka-text) 12%);
+            --btn-hover-border-color: var(--btn-hover-bg);
+            --btn-active-bg: var(--btn-hover-bg);
+            --btn-active-border-color: var(--btn-hover-bg);
+            --btn-color: var(--shaka-on-action);
+            --btn-hover-color: var(--shaka-on-action);
+            --btn-active-color: var(--shaka-on-action);
+            min-height: 36px;
+            border-radius: var(--shaka-radius-pill);
+            font-weight: 600;
+            transition: background-color var(--shaka-ease), transform var(--shaka-spring-press-dur) var(--shaka-spring);
+
+            &:active {
+                transform: scale(var(--shaka-press-scale));
+            }
+        }
+
+        // = Passkey / OAuth: secondary capsules, visible on the material.
+        .o_login_auth {
+            .list-group {
+                gap: 8px;
+            }
+
+            .list-group-item {
+                min-height: 36px;
+                border: 0;
+                border-radius: var(--shaka-radius-pill);
+                background-color: var(--shaka-fill);
+                color: var(--shaka-text);
+                font-weight: 500;
+
+                &:hover,
+                &:focus {
+                    background-color: color-mix(in srgb, var(--shaka-fill), var(--shaka-text) 6%);
+                }
+            }
+        }
+
+        a:not(.btn):not(.list-group-item) {
+            color: var(--shaka-link);
+        }
+
+        .btn:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--shaka-link);
+            outline-offset: 2px;
+            box-shadow: none;
+        }
+    }
+}

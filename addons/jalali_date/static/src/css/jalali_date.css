@@ -27,10 +27,9 @@
     display: flex;
     align-items: center;
     pointer-events: none;
-    /* Approximates the real input's own padding. Adjust if the overlay
-       text looks slightly offset from where the real input's text would
-       have sat - exact values depend on Odoo's current input styling. */
-    padding-left: 0.5rem;
+    /* The real input's own start padding (shaka_theme's $o-input-padding-x),
+       so the overlay text sits where the input's text would, LTR and RTL. */
+    padding-inline-start: 6px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

@@ -1,0 +1,79 @@
+///
+/// Bootstrap overrides, loaded in web._assets_backend_helpers before
+/// web_enterprise's bootstrap_overridden.scss, so every `!default` here wins.
+/// The `$o-*` values already exist and switch per scheme, so no dark copy.
+///
+
+// = Radii. Enterprise zeroes badges, cards, toasts, pills, checks, list
+// groups, progress bars and accordions; each is set explicitly here.
+$btn-border-radius: $o-border-radius !default;
+$btn-border-radius-sm: $o-border-radius !default;
+$btn-border-radius-lg: $o-border-radius !default;
+$dropdown-border-radius: $o-border-radius-lg !default;
+$popover-border-radius: $o-border-radius-lg !default;
+$modal-content-border-radius: o-to-rem(14px) !default;
+$toast-border-radius: o-to-rem(14px) !default;
+$card-border-radius: $o-border-radius-lg !default;
+$list-group-border-radius: $o-border-radius-lg !default;
+$accordion-border-radius: $o-border-radius-lg !default;
+$nav-pills-border-radius: $o-border-radius !default;
+$form-check-input-border-radius: $o-border-radius-sm !default;
+$badge-border-radius: 999px !default;
+$progress-border-radius: 999px !default;
+$tooltip-border-radius: $o-border-radius !default;
+
+// = Paddings. Buttons: 21px line + 2 × 2.5px + 2px border = 28px; small 24px.
+$input-btn-padding-y: o-to-rem(2.5px) !default;
+$input-btn-padding-x: o-to-rem(12px) !default;
+$input-btn-padding-y-sm: o-to-rem(1px) !default;
+$input-btn-padding-x-sm: o-to-rem(8px) !default;
+$input-btn-padding-y-lg: o-to-rem(6px) !default;
+$input-btn-padding-x-lg: o-to-rem(16px) !default;
+// Menus: a 5px inset around the items.
+$dropdown-padding-y: o-to-rem(5px) !default;
+$dropdown-padding-x: o-to-rem(5px) !default;
+$badge-padding-y: .25em !default;
+$badge-padding-x: .67em !default;
+$tooltip-padding-y: o-to-rem(4px) !default;
+$tooltip-padding-x: o-to-rem(8px) !default;
+$tooltip-font-size: $o-font-size-base-smaller !default;
+$tooltip-max-width: 280px !default;
+
+// = Overlays (Task 5). Backgrounds stay real colours (Sass colour functions
+// read them); 20_overlays.scss paints the materials over them.
+// Menus: 28px items (20px line + 2 × 4px) with the control radius; the card
+// shadow's hairline replaces the border.
+$dropdown-item-padding-y: o-to-rem(4px) !default;
+$dropdown-item-padding-x: o-to-rem(8px) !default;
+$dropdown-item-border-radius: $o-border-radius !default;
+$dropdown-border-width: 0 !default;
+$popover-border-width: 0 !default;
+// Tooltips: label text on the popover material (Odoo draws a dark bubble).
+$tooltip-bg: $o-view-background-color !default;
+$tooltip-color: $o-main-text-color !default;
+// Dialogs: no border, no header divider, a plain dim (MASTER.md: no blur).
+$modal-content-border-width: 0 !default;
+$modal-header-border-width: 0 !default;
+$modal-backdrop-opacity: if($o-webclient-color-scheme == dark, .45, .2) !default;
+
+// = Controls (Task 4). Press feedback: enterprise sets `none`; only the scale
+// animates, colours switch instantly as on macOS.
+$btn-transition: transform var(--shaka-spring-press-dur) var(--shaka-spring) !default;
+// Checkbox, radio and switch: the action fill with a white mark in both
+// schemes (enterprise uses $o-white, which is #000 in dark).
+$form-check-input-checked-bg-color: $o-enterprise-color !default;
+$form-check-input-checked-border-color: $o-enterprise-color !default;
+$form-check-input-checked-color: $shaka-theme-on-action !default;
+$form-check-input-indeterminate-bg-color: $o-enterprise-color !default;
+$form-check-input-indeterminate-border-color: $o-enterprise-color !default;
+$form-switch-checked-color: $shaka-theme-on-action !default;
+// The focus ring (MASTER.md): link blue at 50%, 3px, outside the control.
+$form-check-input-focus-box-shadow: 0 0 0 3px rgba($o-enterprise-action-color, .5) !default;
+$form-check-input-focus-border: $o-enterprise-action-color !default;
+
+// = Lists (Task 8, surfaces/50_list.scss). 32px rows: 21px line + 2 × 5px +
+// the 1px hairline (list headers use the same padding). Hairlines, no zebra,
+// the fill on hover. Reports set their own table paddings before this file.
+$table-cell-padding-y-sm: o-to-rem(5px) !default;
+$table-striped-bg: transparent !default;
+$table-hover-bg: var(--shaka-fill) !default;

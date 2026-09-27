@@ -1,0 +1,101 @@
+// Kanban (MASTER.md › Components › Kanban): cards on the grouped background.
+// The board background is already right: $o-kanban-background is $o-gray-100,
+// which the palette makes the grouped background in both schemes. This file
+// sets Odoo's --Kanban* / --KanbanColumn__* hooks and fills the gaps.
+
+.o_kanban_renderer {
+    // Drop target, selected card and the keyboard-focus ring (Odoo: literal
+    // teal/navy). Tints as for selected list rows: 8% light / 12% dark.
+    $-tint: if($o-webclient-color-scheme == dark, 12%, 8%);
+    --KanbanColumn__highlight-background: #{color-mix(in srgb, var(--shaka-primary) $-tint, var(--shaka-bg))};
+    --KanbanColumn__highlight-border: var(--shaka-primary);
+    --KanbanColumn__highlight-selected: #{color-mix(in srgb, var(--shaka-primary) $-tint, var(--shaka-surface))};
+    --KanbanColumn__highlight-selected-border: var(--shaka-link);
+}
+
+// = Cards: 10px radius, hairline plus the card shadow. Odoo stacks grouped
+// cards edge to edge (-1px margins); they get the 8px gap instead. Hover only
+// deepens the shadow (no lift); press is the shared press scale.
+.o_kanban_renderer .o_kanban_record:not(.o_kanban_ghost) {
+    overflow: hidden; // aside images and the colour stripe follow the radius
+    border-color: var(--shaka-separator);
+    border-radius: var(--shaka-radius-card);
+    box-shadow: var(--shaka-shadow-card);
+    transition: transform var(--shaka-spring-press-dur) var(--shaka-spring);
+
+    &:hover {
+        box-shadow: var(--shaka-shadow-card), var(--shaka-shadow-card);
+    }
+
+    &:active:not(.o_dragged) {
+        transform: scale(var(--shaka-press-scale));
+    }
+}
+
+.o_kanban_renderer.o_kanban_grouped .o_kanban_record:not(.o_kanban_ghost) {
+    margin-bottom: 8px;
+}
+
+// Below md, ungrouped kanban is a full-bleed list with shared hairlines: keep it.
+@include media-breakpoint-down(md) {
+    .o_kanban_renderer.o_kanban_ungrouped .o_kanban_record:not(.o_kanban_ghost) {
+        border-radius: 0;
+        box-shadow: none;
+    }
+}
+
+// The drag ghost lifts: scale(1.02) and the pop shadow, instead of Odoo's
+// -3deg tilt on a 0.6s linear transform.
+.o_kanban_renderer .o_kanban_record.o_dragged {
+    transform: scale(1.02);
+    box-shadow: var(--shaka-shadow-pop);
+    transition: transform var(--shaka-spring-snappy-dur) var(--shaka-spring);
+}
+
+// = Column header: 14/600 title with a count capsule. The title's fs-4 /
+// fw-bold are important utilities on the wrapper, so the inner spans carry the
+// type. The count's parentheses are dropped in components/kanban_header.xml.
+.o_kanban_renderer .o_kanban_header .o_column_title {
+    > .text-truncate {
+        font-size: o-to-rem(14px);
+        font-weight: 600;
+    }
+
+    > .o_shaka_kanban_count {
+        align-self: center;
+        padding-inline: 6px;
+        border-radius: var(--shaka-radius-pill);
+        background-color: var(--shaka-fill);
+        color: var(--shaka-muted);
+        font-size: $o-font-size-base-smaller;
+        font-weight: 500;
+        line-height: 18px;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+// = Progress bars: a 4px capsule on the fill, segments in the status colours.
+// The bg-* utilities paint var(--background-color), so the hook is retunable.
+.o_kanban_renderer .o_kanban_counter > .o_column_progress {
+    height: 4px;
+
+    &.bg-300 {
+        --background-color: var(--shaka-fill);
+    }
+
+    .progress-bar {
+        &.bg-success {
+            --background-color: var(--shaka-success);
+        }
+        &.bg-warning {
+            --background-color: var(--shaka-warning);
+        }
+        &.bg-danger {
+            --background-color: var(--shaka-danger);
+        }
+    }
+}
+
+.o_kanban_renderer .o_kanban_counter {
+    font-variant-numeric: tabular-nums;
+}
