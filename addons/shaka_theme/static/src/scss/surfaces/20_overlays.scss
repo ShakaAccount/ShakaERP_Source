@@ -119,6 +119,11 @@
         &.focused {
             background-color: var(--shaka-primary);
             -webkit-text-fill-color: var(--shaka-on-action);
+
+            // Keycaps keep their own text: white on the light keycap is 1.1:1.
+            kbd {
+                -webkit-text-fill-color: currentColor;
+            }
         }
     }
 }

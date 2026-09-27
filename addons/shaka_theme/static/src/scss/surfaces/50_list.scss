@@ -27,9 +27,21 @@
     }
 }
 
-.o_list_renderer .o_list_table > thead > tr > th {
+// One material layer on the sticky thead, not one backdrop per th (a wide list
+// had 10+ backdrop-filter layers re-sampling on every scroll frame). Cells go
+// clear; the horizontally sticky ones (selector, actions) keep their own, as
+// columns scroll beneath them.
+.o_list_renderer .o_list_table > thead {
     @include shaka-material(thin);
+}
+
+.o_list_renderer .o_list_table > thead > tr > th {
+    background-color: transparent;
     border-bottom-width: 0;
+
+    &.position-sticky {
+        @include shaka-material(thin);
+    }
     color: var(--shaka-muted);
     font-size: o-to-rem(13px);
     font-weight: 500;
