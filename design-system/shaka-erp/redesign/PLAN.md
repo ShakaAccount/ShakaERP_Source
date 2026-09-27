@@ -135,7 +135,13 @@ Order: 0 → 1 → 2 → 3 → 4 → 5, then 6–13 in any order, then 14 → 17
   - **No material layer over the wallpaper:** nothing floats there, and blurring a gradient does nothing visible. The wallpaper rule moved out of `tokens.scss`; `30_shell.scss` is also in `web.assets_frontend`, so the login keeps sharing it.
   - `my_debrand/debrand.scss` held only the `--NavBar-*` lines: file and manifest entry deleted (needs `-u my_debrand` wherever it's installed). Its `login.scss` is left for Task 13.
   - Not screenshotted (burger/mobile switcher at 390 included); compile check + detect only.
-- [ ] [Task 7: Control panel, search and search panel → `surfaces/40_control_panel.scss`](tasks/task-07-control-panel-search-and-search-panel.md)
+- [x] [Task 7: Control panel, search and search panel → `surfaces/40_control_panel.scss`](tasks/task-07-control-panel-search-and-search-panel.md)
+  - Hooks only: `--ControlPanel-border-bottom` hairline, `--breadcrumb-divider` `›` (`‹` under `.o_rtl`), `--SearchBar-background-color` fill on `.o_searchview`, `--btn-*` on the toggler/switcher/pager, `--list-group-*` in the search panel. Layout untouched: Odoo already makes one row at ≥lg and wraps below; "New" is already `btn-primary`.
+  - Title 20/600 on the `.o_last_breadcrumb_item > span` (its wrapper has an important `fs-4`). Parent links stay bold (important `fw-bold`).
+  - Facets: **opaque** 12% link tint (`color-mix` with the surface), since the label's pencil overlay uses `bg-inherit`. Measured: link text 4.67 in light; dark link fails on any tint → label text. Favourite labels stay gold. Remove glyph muted, danger on hover (via `-webkit-text-fill-color`).
+  - Segmented switcher scoped to `nav.o_cp_switch_buttons` (the mobile dropdown menu reuses the class); 2px inset keeps it 28px; dark pill = lifted fill.
+  - Search panel: 28px category rows (header's -4px margins cover the item's important `py-1`); section headers stay uppercase (important `text-uppercase`); two-state selection via `:focus-within`. Filter-value rows untouched (~25px).
+  - Not screenshotted; compile check + detect only.
 - [ ] [Task 8: List view → `surfaces/50_list.scss`](tasks/task-08-list-view.md)
 - [ ] [Task 9: Form view → `surfaces/60_form.scss` + retune `navigation.scss`](tasks/task-09-form-view.md)
 - [ ] [Task 10: Mail (chatter, Discuss, systray popovers) → `surfaces/65_mail.scss`](tasks/task-10-mail.md)
