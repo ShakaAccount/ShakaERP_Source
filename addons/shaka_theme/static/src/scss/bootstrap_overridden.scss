@@ -1,0 +1,40 @@
+///
+/// Bootstrap overrides, loaded in web._assets_backend_helpers before
+/// web_enterprise's bootstrap_overridden.scss, so every `!default` here wins.
+/// The `$o-*` values already exist and switch per scheme, so no dark copy.
+///
+
+// = Radii. Enterprise zeroes badges, cards, toasts, pills, checks, list
+// groups, progress bars and accordions; each is set explicitly here.
+$btn-border-radius: $o-border-radius !default;
+$btn-border-radius-sm: $o-border-radius !default;
+$btn-border-radius-lg: $o-border-radius !default;
+$dropdown-border-radius: $o-border-radius-lg !default;
+$popover-border-radius: $o-border-radius-lg !default;
+$modal-content-border-radius: o-to-rem(14px) !default;
+$toast-border-radius: o-to-rem(14px) !default;
+$card-border-radius: $o-border-radius-lg !default;
+$list-group-border-radius: $o-border-radius-lg !default;
+$accordion-border-radius: $o-border-radius-lg !default;
+$nav-pills-border-radius: $o-border-radius !default;
+$form-check-input-border-radius: $o-border-radius-sm !default;
+$badge-border-radius: 999px !default;
+$progress-border-radius: 999px !default;
+$tooltip-border-radius: $o-border-radius !default;
+
+// = Paddings. Buttons: 21px line + 2 × 2.5px + 2px border = 28px; small 24px.
+$input-btn-padding-y: o-to-rem(2.5px) !default;
+$input-btn-padding-x: o-to-rem(12px) !default;
+$input-btn-padding-y-sm: o-to-rem(1px) !default;
+$input-btn-padding-x-sm: o-to-rem(8px) !default;
+$input-btn-padding-y-lg: o-to-rem(6px) !default;
+$input-btn-padding-x-lg: o-to-rem(16px) !default;
+// Menus: a 5px inset around the items.
+$dropdown-padding-y: o-to-rem(5px) !default;
+$dropdown-padding-x: o-to-rem(5px) !default;
+$badge-padding-y: .25em !default;
+$badge-padding-x: .67em !default;
+$tooltip-padding-y: o-to-rem(4px) !default;
+$tooltip-padding-x: o-to-rem(8px) !default;
+$tooltip-font-size: $o-font-size-base-smaller !default;
+$tooltip-max-width: 280px !default;

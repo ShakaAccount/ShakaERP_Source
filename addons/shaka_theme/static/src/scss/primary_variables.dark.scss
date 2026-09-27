@@ -1,46 +1,150 @@
 ///
 /// Shaka theme — dark values. Loaded before primary_variables.scss in the dark
-/// bundle (web.dark_mode_variables), so these win. Keep every colour variable of
-/// primary_variables.scss mirrored here.
+/// bundle (web.dark_mode_variables), so these win. Keep every colour variable
+/// (and map entry) of primary_variables.scss mirrored here. Literals only; note
+/// that Odoo's dark `$o-white` is #000, so button text is written as #FFF.
 ///
 /// Odoo's dark grays run the other way: 100 is the darkest background, 900 the
-/// lightest text. Primary fills stay a mid blue so white button text keeps
-/// 4.5:1; the lighter blues are for text/links only.
+/// lightest text. The action fill stays #0071E3 so white text keeps 4.5:1; the
+/// lighter link blue is for text, links and focus only.
 ///
 
-$o-gray-100: #0B1220 !default;
-$o-gray-200: #111827 !default;
-$o-gray-300: #1F2937 !default;
-$o-gray-400: #334155 !default;
-$o-gray-500: #475569 !default;
-$o-gray-600: #64748B !default;
-$o-gray-700: #94A3B8 !default;
-$o-gray-800: #CBD5E1 !default;
-$o-gray-900: #E2E8F0 !default;
+$o-gray-100: #1C1C1E !default;
+$o-gray-200: #2C2C2E !default;
+$o-gray-300: #3A3A3C !default;
+$o-gray-400: #48484A !default;
+$o-gray-500: #636366 !default;
+$o-gray-600: #8E8E93 !default;
+$o-gray-700: #AEAEB2 !default;
+$o-gray-800: #D1D1D6 !default;
+$o-gray-900: #F5F5F7 !default;
 
-$o-enterprise-color: #2563EB !default;
-$o-enterprise-action-color: #60A5FA !default;
+$o-enterprise-color: #0071E3 !default;
+$o-enterprise-action-color: #2997FF !default;
 
-$o-success: #16A34A !default;
-$o-info: #60A5FA !default;
-$o-warning: #F59E0B !default;
-$o-danger: #DC2626 !default;
-$o-main-favorite-color: #F59E0B !default;
+$o-view-background-color: #2C2C2E !default;
+$o-main-color-muted: #AEAEB2 !default;
+
+$o-success: #30D158 !default;
+$o-info: #2997FF !default;
+$o-warning: #FF9F0A !default;
+$o-danger: #FF7B73 !default;
+$o-main-favorite-color: #C9A774 !default;
 $o-theme-text-colors: (
-    "primary": #93C5FD,
-    "success": #4ADE80,
-    "info": #93C5FD,
-    "warning": #FBBF24,
-    "danger": #F87171,
+    "primary": #2997FF,
+    "success": #30D158,
+    "info": #2997FF,
+    "warning": #FF9F0A,
+    "danger": #FF7B73,
 ) !default;
 
-$shaka-theme-primary: #60A5FA !default;
-$shaka-theme-accent: #F59E0B !default;
-$shaka-theme-bg: #0B1220 !default;
-$shaka-theme-surface: #111827 !default;
-$shaka-theme-muted-bg: #1F2937 !default;
-$shaka-theme-text: #E2E8F0 !default;
-$shaka-theme-muted: #94A3B8 !default;
-$shaka-theme-border: #1F2937 !default;
-$shaka-theme-shadow-card: 0 1px 2px rgba(0, 0, 0, .4) !default;
-$shaka-theme-shadow-pop: 0 8px 24px rgba(0, 0, 0, .5) !default;
+$o-btns-bs-override: (
+    "primary": (
+        background: #0071E3,
+        border: #0071E3,
+        color: #FFF,
+        hover-background: #0062C4,
+        hover-border: #0062C4,
+        hover-color: #FFF,
+        active-background: #0058B0,
+        active-border: #0058B0,
+        active-color: #FFF,
+    ),
+    "secondary": (
+        background: #3A3A3C,
+        border: #48484A,
+        color: #F5F5F7,
+        hover-background: #48484A,
+        hover-border: #545456,
+        hover-color: #F5F5F7,
+        active-background: #545456,
+        active-border: #636366,
+        active-color: #F5F5F7,
+    ),
+    "light": (
+        background: #2C2C2E,
+        border: #2C2C2E,
+        color: #F5F5F7,
+        hover-background: #3A3A3C,
+        hover-border: #3A3A3C,
+        hover-color: #F5F5F7,
+        active-background: #48484A,
+        active-border: #48484A,
+        active-color: #F5F5F7,
+    ),
+    "danger": (
+        background: #D70015,
+        border: #D70015,
+        color: #FFF,
+        hover-background: #BF0013,
+        hover-border: #BF0013,
+        hover-color: #FFF,
+        active-background: #A80011,
+        active-border: #A80011,
+        active-color: #FFF,
+    ),
+) !default;
+$o-btns-bs-outline-override: (
+    "primary": (
+        background: transparent,
+        border: #2997FF,
+        color: #2997FF,
+        hover-background: #0071E3,
+        hover-border: #0071E3,
+        hover-color: #FFF,
+        active-background: #0062C4,
+        active-border: #0062C4,
+        active-color: #FFF,
+    ),
+    "secondary": (
+        background: transparent,
+        border: #48484A,
+        color: #F5F5F7,
+        hover-background: #3A3A3C,
+        hover-border: #48484A,
+        hover-color: #F5F5F7,
+        active-background: #48484A,
+        active-border: #545456,
+        active-color: #F5F5F7,
+    ),
+    "light": (
+        background: transparent,
+        border: #48484A,
+        color: #F5F5F7,
+        hover-background: #3A3A3C,
+        hover-border: #48484A,
+        hover-color: #F5F5F7,
+        active-background: #48484A,
+        active-border: #545456,
+        active-color: #F5F5F7,
+    ),
+    "danger": (
+        background: transparent,
+        border: #FF7B73,
+        color: #FF7B73,
+        hover-background: #D70015,
+        hover-border: #D70015,
+        hover-color: #FFF,
+        active-background: #BF0013,
+        active-border: #BF0013,
+        active-color: #FFF,
+    ),
+) !default;
+
+$shaka-theme-primary: #0071E3 !default;
+$shaka-theme-link: #2997FF !default;
+$shaka-theme-accent: #C9A774 !default;
+$shaka-theme-gold: #B5925F !default;
+$shaka-theme-bg: #1C1C1E !default;
+$shaka-theme-surface: #2C2C2E !default;
+$shaka-theme-fill: rgba(118, 118, 128, .24) !default;
+$shaka-theme-muted-bg: #3E3E42 !default;
+$shaka-theme-text: #F5F5F7 !default;
+$shaka-theme-muted: #AEAEB2 !default;
+$shaka-theme-border: #38383A !default;
+$shaka-theme-shadow-card: 0 0 0 .5px rgba(255, 255, 255, .06), 0 1px 2px rgba(0, 0, 0, .4) !default;
+$shaka-theme-shadow-pop: 0 0 0 .5px rgba(255, 255, 255, .1), 0 8px 24px rgba(0, 0, 0, .5) !default;
+$shaka-theme-shadow-dialog: 0 0 0 .5px rgba(255, 255, 255, .1), 0 24px 64px rgba(0, 0, 0, .6) !default;
+$shaka-theme-material-thin: rgba(44, 44, 46, .6) !default;
+$shaka-theme-material-regular: rgba(44, 44, 46, .72) !default;
+$shaka-theme-material-thick: rgba(44, 44, 46, .85) !default;

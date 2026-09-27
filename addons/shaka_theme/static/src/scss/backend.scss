@@ -2,9 +2,25 @@
 // rule only for a gap seen in visual QA, and never with !important to win
 // specificity (see design-system/shaka-erp/MASTER.md).
 
-// Visible keyboard focus on controls. Inputs keep Odoo's own focus underline.
+::selection {
+    background-color: rgba($shaka-theme-link, .28);
+}
+
+.o_web_client {
+    caret-color: var(--shaka-link);
+    // Odoo has no global scrollbar style. scrollbar-color inherits,
+    // scrollbar-width doesn't, hence the descendant rule.
+    scrollbar-color: var(--shaka-muted) transparent;
+
+    &, * {
+        scrollbar-width: thin;
+    }
+}
+
+// Visible keyboard focus on controls: the link blue holds ≥4.6:1 on every
+// ground in both schemes. Inputs keep Odoo's own focus underline.
 .o_web_client :is(a, button, .btn, [role="button"], [tabindex]):focus-visible {
-    outline: 2px solid var(--shaka-primary);
+    outline: 2px solid var(--shaka-link);
     outline-offset: 2px;
 }
 

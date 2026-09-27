@@ -115,7 +115,11 @@ Order: 0 → 1 → 2 → 3 → 4 → 5, then 6–13 in any order, then 14 → 17
   - MASTER.md rewritten; every colour pair measured by `design-system/shaka-erp/tools/contrast.py`, springs from `tools/springs.py`. Measured changes from the starting palette: secondary label `#6A6A6F`/`#AEAEB2`, success `#1F7F37`, dark danger `#FF7B73`, danger fill `#D70015` in both schemes, focus ring = link blue.
   - Baseline in `.impeccable/review/baseline/{en,fa}` (light/dark × 1440/768) via `tools/capture_matrix.py`. Gaps: no fa dialog; demo DB has no CRM leads (list/kanban show sample data).
   - `/shaka/action-…` deep links don't route (core `router.js:188` still checks `"odoo"`); use `/web#action=<id>`.
-- [ ] [Task 3: Foundations (the whole app re-skins through variables)](tasks/task-03-foundations.md)
+- [x] [Task 3: Foundations (the whole app re-skins through variables)](tasks/task-03-foundations.md)
+  - Palette, button maps, type, radii and densities through variables; `bootstrap_overridden.scss` in backend helpers; new tokens + `shaka-material()` mixin; `scss_compile_check.py` compiles the full light/dark chain (component `*.variables.scss` included) and exercises the mixin.
+  - `$o-enterprise-action-color` is the **link** blue (`#0066CC`/`#2997FF`), because Odoo also uses it as link text; the `#0071E3` action fill comes through `$o-enterprise-color` and the button maps. Checkboxes therefore fill with link blue until Task 4.
+  - Dark re-append verified: `navigation.scss` loads after every web/web_enterprise `.dark.scss`; apps loading after `shaka_theme` (account_reports, spreadsheet, stock_barcode) still append theirs later.
+  - Squircle ×1.5 not done here (no card surface yet); left to the surface tasks. Backend matrix not screenshotted (needs your login).
 - [ ] [Task 4: Controls → `surfaces/10_controls.scss`](tasks/task-04-controls.md)
 - [ ] [Task 5: Overlays and the command palette → `surfaces/20_overlays.scss`](tasks/task-05-overlays-and-the-command-palette.md)
 - [ ] [Task 6: App shell → `surfaces/30_shell.scss` (+ `my_debrand` cleanup)](tasks/task-06-app-shell.md)

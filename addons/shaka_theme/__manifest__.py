@@ -1,6 +1,6 @@
 {
     'name': 'Shaka Theme',
-    'summary': 'Minimal, dense backend theme for Shaka ERP (light + dark, Persian/RTL)',
+    'summary': 'Apple-refined backend theme for Shaka ERP: system blue, system font + Vazirmatn, macOS-compact (light + dark, Persian/RTL)',
     'description': """
 Replaces the deprecated ``shaka_ui_makeover``.
 
@@ -15,7 +15,7 @@ Addon SCSS should use the ``var(--shaka-*)`` tokens, never dark-mode selectors.
     'maintainer': 'ShakaERP',
     'website': 'https://shakasystem.com',
     'category': 'Themes/Backend',
-    'version': '19.0.1.0.0',
+    'version': '19.0.2.0.0',
     'license': 'LGPL-3',
     'icon': '/shaka_theme/static/description/icon.svg',
     'depends': ['web', 'web_enterprise'],
@@ -30,13 +30,27 @@ Addon SCSS should use the ``var(--shaka-*)`` tokens, never dark-mode selectors.
             ('before', 'shaka_theme/static/src/scss/primary_variables.scss',
              'shaka_theme/static/src/scss/primary_variables.dark.scss'),
         ],
+        # Bootstrap variables, where the $o-* values already exist per scheme.
+        'web._assets_backend_helpers': [
+            ('before', 'web_enterprise/static/src/scss/bootstrap_overridden.scss',
+             'shaka_theme/static/src/scss/bootstrap_overridden.scss'),
+        ],
         'web.assets_backend': [
             'shaka_theme/static/src/scss/fonts.scss',
             'shaka_theme/static/src/scss/tokens.scss',
             'shaka_theme/static/src/scss/backend.scss',
             'shaka_theme/static/src/scss/navigation.scss',
+            'shaka_theme/static/src/scss/surfaces/*.scss',
             'shaka_theme/static/src/transitions/*',
             'shaka_theme/static/src/components/*',
+        ],
+        # Odoo appends its *.dark.scss after the backend bundle; re-append the
+        # surface files so they win at equal specificity in dark mode too.
+        'web.assets_web_dark': [
+            ('remove', 'shaka_theme/static/src/scss/navigation.scss'),
+            'shaka_theme/static/src/scss/navigation.scss',
+            ('remove', 'shaka_theme/static/src/scss/surfaces/*.scss'),
+            'shaka_theme/static/src/scss/surfaces/*.scss',
         ],
         'web.assets_frontend': [
             'shaka_theme/static/src/scss/fonts.scss',
