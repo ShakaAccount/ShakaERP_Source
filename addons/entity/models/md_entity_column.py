@@ -96,6 +96,15 @@ class RaesMdEntityColumn(models.Model):
         readonly=True,
         help='Always forced to 1 for columns created through Odoo.')
 
+    @api.depends('name', 'title')
+    def _compute_display_name(self):
+        is_persian = (self.env.lang or '').startswith('fa')
+        for rec in self:
+            if is_persian:
+                rec.display_name = rec.title or rec.name or ''
+            else:
+                rec.display_name = rec.name or rec.title or ''
+
     @api.model
     def _selection_column_type_lu(self):
         Lookup = self.env.get('raes.gnr.lookup')

@@ -1,6 +1,7 @@
 /** @odoo-module **/
 import {registry} from "@web/core/registry";
 import {useService} from "@web/core/utils/hooks";
+import {user} from "@web/core/user";
 import {
     Component, useState, onWillStart, onWillUnmount,
     useRef, useExternalListener,
@@ -403,11 +404,23 @@ export class CategoryManager extends Component {
     }
 
     async selectCategory(cat) {
+        // Remember this category's search/filter so it's restored if the
+        // user navigates away and comes back to it.
+        const prev = this.state.selectedCategory;
+        if (prev) {
+            this._paneFilterCache ??= new Map();
+            this._paneFilterCache.set(prev.id, {
+                left: {search: this.state.left.search, searchColumn: this.state.left.searchColumn},
+                right: {search: this.state.right.search, searchColumn: this.state.right.searchColumn},
+            });
+        }
+        const saved = cat ? this._paneFilterCache?.get(cat.id) : null;
+
         this.state.selectedCategory = cat;
         for (const side of ["left", "right"]) {
             this.state[side].page = 1;
-            this.state[side].search = "";
-            this.state[side].searchColumn = "";
+            this.state[side].search = saved ? saved[side].search : "";
+            this.state[side].searchColumn = saved ? saved[side].searchColumn : "";
             this.state[side].selectedIds = {};
             this.state[side].anchorIndex = null;
         }
@@ -530,8 +543,10 @@ export class CategoryManager extends Component {
     get labelPickerSummary() {
         const n = this.state.labelColumns.length;
         if (n === 0) return "Auto";
-        if (n === 1) return this.state.labelColumns[0];
-        if (n <= 3) return this.state.labelColumns.join(" · ");
+        const avail = new Map(this.state.entityColumns.map(c => [c.name, c.title]));
+        const titles = this.state.labelColumns.map(name => avail.get(name) || name);
+        if (n === 1) return titles[0];
+        if (n <= 3) return titles.join(" · ");
         return `${n} columns`;
     }
 
@@ -544,15 +559,58 @@ export class CategoryManager extends Component {
         return [{name: null, title: "Display name"}];
     }
 
-    refreshLabelOptions() {
+    // Search-by-column dropdown: once the user has picked specific label
+    // columns, only offer those for filtering too. With nothing picked
+    // (Auto mode), fall back to every available column.
+    get searchableColumns() {
+        if (!this.state.labelColumns.length) {
+            return this.state.entityColumns;
+        }
+        const avail = new Map(this.state.entityColumns.map(c => [c.name, c]));
+        return this.state.labelColumns
+            .filter(n => avail.has(n))
+            .map(n => avail.get(n));
+    }
+
+    async _getColumnTitleMap(entityId) {
+        if (this._colTitleCache && this._colTitleCache.entityId === entityId) {
+            return this._colTitleCache.map;
+        }
+        const map = new Map();
+        try {
+            const cols = await this.orm.searchRead(
+                "raes.md.entity_column",
+                [["entity_id", "=", entityId]],
+                ["name", "title"],
+            );
+            const isPersian = (user.lang || "").startsWith("fa");
+            for (const c of cols) {
+                if (!c.name) continue;
+                const label = isPersian ? (c.title || c.name) : (c.name || c.title);
+                map.set(c.name.toLowerCase(), label);
+            }
+        } catch (e) { /* fall back to raw column names */
+        }
+        this._colTitleCache = {entityId, map};
+        return map;
+    }
+
+    async refreshLabelOptions() {
         const rec = this.state.right.records[0] || this.state.left.records[0];
         if (!rec) {
             return;
         }
         const skip = new Set(["id", "_pk", "label", "_auto_label"]);
-        this.state.entityColumns = Object.keys(rec)
-            .filter(k => !skip.has(k))
-            .map(k => ({name: k, title: k}));
+        const keys = Object.keys(rec).filter(k => !skip.has(k));
+
+        const cat = this.state.selectedCategory;
+        const entityId = cat && cat.entity_id ? cat.entity_id[0] : null;
+        const titleMap = entityId ? await this._getColumnTitleMap(entityId) : new Map();
+
+        this.state.entityColumns = keys.map(k => ({
+            name: k,
+            title: titleMap.get(k.toLowerCase()) || k,
+        }));
     }
 
     cellValue(rec, colName) {
@@ -717,7 +775,7 @@ export class CategoryManager extends Component {
             side.records = res.records || [];
             side.total = res.total || 0;
             side.reason = res.reason || null;
-            this.refreshLabelOptions();
+            await this.refreshLabelOptions();
         } catch (e) {
             console.error(`${method} failed`, e);
             side.records = [];
