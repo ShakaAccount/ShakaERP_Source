@@ -110,7 +110,11 @@ Order: 0 → 1 → 2 → 3 → 4 → 5, then 6–13 in any order, then 14 → 17
   - PRODUCT.md written through `/impeccable init` (schema 1), with context read by hand.
 
 **Notes: skipped modules** (not installed in `shaka_design`; any task touching them is checked only in code): `daily_sales_performance`, `sales_analysis`, `my_debrand` (see Task 0).
-- [ ] [Task 2: Direction and spec (no theme code)](tasks/task-02-direction-and-spec.md)
+- [x] [Task 2: Direction and spec (no theme code)](tasks/task-02-direction-and-spec.md)
+  - Direction: **Inspector Workbench** (navigator | canvas | chatter as trailing inspector; two-state pane-focus selection). Contract in `.impeccable/surfaces/addons-shaka-theme.md`, seed `f6570b8f`. The roll ran degraded (no challengers).
+  - MASTER.md rewritten; every colour pair measured by `design-system/shaka-erp/tools/contrast.py`, springs from `tools/springs.py`. Measured changes from the starting palette: secondary label `#6A6A6F`/`#AEAEB2`, success `#1F7F37`, dark danger `#FF7B73`, danger fill `#D70015` in both schemes, focus ring = link blue.
+  - Baseline in `.impeccable/review/baseline/{en,fa}` (light/dark × 1440/768) via `tools/capture_matrix.py`. Gaps: no fa dialog; demo DB has no CRM leads (list/kanban show sample data).
+  - `/shaka/action-…` deep links don't route (core `router.js:188` still checks `"odoo"`); use `/web#action=<id>`.
 - [ ] [Task 3: Foundations (the whole app re-skins through variables)](tasks/task-03-foundations.md)
 - [ ] [Task 4: Controls → `surfaces/10_controls.scss`](tasks/task-04-controls.md)
 - [ ] [Task 5: Overlays and the command palette → `surfaces/20_overlays.scss`](tasks/task-05-overlays-and-the-command-palette.md)
