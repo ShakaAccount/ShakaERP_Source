@@ -2,11 +2,12 @@
    Vendored tokens; tune below. Applied to dialogs by dialog_card_resize.js,
    which tweens the height with the Web Animations API from these tokens (the
    snippet's CSS transition can't go auto → auto, and a WAAPI tween can be
-   retargeted mid-flight). */
+   retargeted mid-flight). The JS parses --resize-dur, so it stays in ms;
+   --resize-ease reaches WAAPI already resolved (the gentle spring). */
 
 :root {
-  --resize-dur: 300ms;
-  --resize-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --resize-dur: 673ms; /* --shaka-spring-gentle-dur */
+  --resize-ease: var(--shaka-spring);
 }
 
 /* Shaka: hide overflow only while tweening, so growing content doesn't spill

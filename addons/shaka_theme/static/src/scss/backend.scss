@@ -34,9 +34,12 @@
 }
 
 // Reduced motion. !important is the standard pattern here: it must beat every
-// component's own transition, whatever its specificity.
+// component's own transition, whatever its specificity. Floating layers are
+// left out: their transitions/* files swap the motion for a 150ms cross-fade.
 @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *:not(.t-morph, .t-morph > *, .t-tt, .t-modal, .t-modal-backdrop, .t-acc-panel-inner, .o_loading_indicator),
+    *::before,
+    *::after {
         animation-duration: .01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: .01ms !important;

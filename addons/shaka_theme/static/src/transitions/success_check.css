@@ -1,5 +1,6 @@
 /* Transitions.dev — Success check (https://transitions.dev/detail.html?t=success-check)
-   Vendored as-is; tune the motion tokens below. success_check.xml puts it on
+   Vendored; tune the motion tokens below. Shaka: every lane is the critically
+   damped spring (the snippet's bob overshot). success_check.xml puts it on
    every success notification, mounted with data-state="in" so it plays once on
    appear. stroke-dasharray is calibrated to its path (m6 10 3 3 6-6 = 9√2 ≈ 12.73). */
 
@@ -13,11 +14,11 @@
   --check-blur-from: 10px;
   --check-path-dur: 500ms;
   --check-path-delay: 80ms;
-  --check-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --check-ease-opacity: cubic-bezier(0.22, 1, 0.36, 1);
-  --check-ease-rotate: cubic-bezier(0.22, 1, 0.36, 1);
-  --check-ease-bob: cubic-bezier(0.34, 1.35, 0.64, 1);
-  --check-ease-path: cubic-bezier(0.22, 1, 0.36, 1);
+  --check-ease-out: var(--shaka-spring);
+  --check-ease-opacity: var(--shaka-spring);
+  --check-ease-rotate: var(--shaka-spring);
+  --check-ease-bob: var(--shaka-spring);
+  --check-ease-path: var(--shaka-spring);
 }
 
 /* Wrapper drives the appear animation; it doesn't own any sizing or color. */

@@ -3,7 +3,6 @@ import { onMounted, onWillUnmount } from "@odoo/owl";
 import { Dialog } from "@web/core/dialog/dialog";
 import { patch } from "@web/core/utils/patch";
 
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 // What modal.css tweens, per element of a dialog (.o_dialog root).
 const PARTS = [
     [":scope > .modal", ["background-color"]],
@@ -38,7 +37,8 @@ patch(Dialog.prototype, {
         });
         onWillUnmount(() => {
             const root = this.modalRef.el?.parentElement;
-            if (!root?.querySelector(":scope > .modal.is-open") || reducedMotion.matches) {
+            // Reduced motion too: modal.css turns the close into a cross-fade.
+            if (!root?.querySelector(":scope > .modal.is-open")) {
                 return;
             }
             // Odoo removes the dialog now; play the close on an inert clone.

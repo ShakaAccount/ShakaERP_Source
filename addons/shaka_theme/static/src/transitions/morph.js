@@ -10,7 +10,6 @@ import { clamp } from "@web/core/utils/numbers";
 // ghost still plays, starts from the other element's *current* values instead
 // of the end state of its class.
 
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 // What dropdown_menu_morph.css / tooltip.css tween, on the menu and its children.
 const TWEENED = ["clip-path", "opacity", "scale", "translate", "filter"];
 const ghosts = new Map(); // key (the menu's target) -> exit ghost still playing
@@ -72,7 +71,7 @@ export function openMenu(el, target, kind) {
     }
     el.classList.add(kind);
     const ghost = ghosts.get(target);
-    if (ghost && !reducedMotion.matches) {
+    if (ghost) {
         // Reopened while its exit is still playing: continue from the ghost.
         const snap = snapshot(ghost);
         ghost.remove();
@@ -86,7 +85,7 @@ export function openMenu(el, target, kind) {
 
 /** Play the close of `el`, which the caller is about to remove from the DOM. */
 export function closeMenu(el, target) {
-    if (!el?.classList.contains("is-open") || reducedMotion.matches) {
+    if (!el?.classList.contains("is-open")) {
         return;
     }
     const snap = snapshot(el); // mid-open if closed while still opening

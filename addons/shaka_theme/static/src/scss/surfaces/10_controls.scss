@@ -6,7 +6,7 @@
 // = Buttons
 // Press feedback (apple-design §1); the transform transition is $btn-transition.
 .btn:active {
-    transform: scale(.97);
+    transform: scale(var(--shaka-press-scale));
 }
 
 // macOS push button: the map's hairline plus the card shadow.

@@ -219,32 +219,42 @@ secondary label instead.
   fallback. Task 3's compile check proves libsass passes `linear()` through untouched.
 - **Exits accelerate** on `--shaka-ease-exit`, at about 65% of the enter's visible time: 150ms for menus and
   tooltips, 200ms for dialogs.
-- **Existing token names stay** (other addons and the theme's JS read them); Task 14 retargets their values:
+- **Existing token names stay** (other addons and the theme's JS read them). Their values (Task 14):
 
   | Token | New value |
   |-------|-----------|
   | `--morph-ease`, `--morph-close-ease` | `var(--shaka-spring)`: the overshoot curve is removed |
-  | `--morph-open-dur` | 337ms (snappy) |
+  | `--morph-open-dur`, `--morph-fade-dur` | `var(--shaka-spring-snappy-dur)` |
   | `--morph-close-dur` | 150ms |
+  | `--morph-scale` / `--morph-blur` / `--morph-slide` | .96 / 6px / 8px (the clip carries the growth) |
   | `--morph-exit-ease` | `var(--shaka-ease-exit)` |
   | `--morph-r-closed` / `--morph-r-open` | `var(--shaka-radius)` / `var(--shaka-radius-card)` |
   | `--modal-ease` | `var(--shaka-spring)` |
-  | `--modal-open-dur` | 472ms |
+  | `--modal-open-dur` | `var(--shaka-spring-dur)` |
   | `--modal-close-dur` | 200ms |
   | `--modal-exit-ease` | exit ease |
-  | `--modal-scale` | .96 |
+  | `--modal-scale`, new `--modal-blur` | .96, 6px |
+  | `--tt-in-dur` / `--tt-in-ease` | snappy spring |
+  | `--tt-out-dur` / `--tt-out-ease` | 150ms, exit ease |
+  | `--tt-scale`, new `--tt-blur` | .96, 6px |
   | `--tabs-ease` | `var(--shaka-spring)` |
-  | `--tabs-dur` | 472ms |
+  | `--tabs-dur` | `var(--shaka-spring-dur)` |
   | `--acc-ease` | `var(--shaka-spring)` |
-  | `--acc-expand` | 472ms |
-  | `--acc-collapse` | 250ms, **stays in ms**: three addons parse it in JS |
+  | `--acc-expand` / `--acc-chevron` | 472ms / 337ms |
+  | `--acc-collapse` | 250ms. **All `--acc-*` durations stay literal ms**: three addons parse `--acc-collapse` in JS |
   | `--acc-exit-ease` | exit ease |
+  | `--toggle-ease` / `--toggle-dur` | spring / press duration (the snippet's overshoot is gone) |
+  | `--check-ease`, `--check-ease-*` | `var(--shaka-spring)` (the success check's bob overshot) |
+  | `--resize-dur` / `--resize-ease` | 673ms, **literal ms** (`dialog_card_resize.js` parses it) / spring |
 
-- **Press feedback** (§1): `:active { transform: scale(.97) }` on buttons and app icons, `.99` on kanban cards, over
-  `--shaka-spring-press`. It fires on pointer-down and is the same everywhere.
+- **Press feedback** (§1): `:active { transform: scale(var(--shaka-press-scale)) }` (.97) on buttons, kanban cards,
+  app icons and the login button, over `--shaka-spring-press`. It fires on pointer-down and is the same everywhere.
 - **Menus grow from their trigger** (§7): `transform-origin` and the `morph.js` clip-path start at the toggler, and
   the exit returns along the same path. Dialogs scale from .96 at the centre, because they have no trigger in view.
-- **Materials materialize** (§12): opacity, scale from .96 and blur 6px → 0 together, never a bare fade.
+- **Materials materialize** (§12): opacity, scale from .96 and blur 6px → 0 together, never a bare fade. Menus
+  (the content inside the growing clip), tooltips and dialogs. The resting value is `filter: none`, never
+  `blur(0)`: any filter traps fixed descendants, and a filter or `will-change` on `.modal-dialog` makes it a
+  backdrop root, which flattens the card's material.
 - Only transform, opacity, filter (blur) and clip-path animate. Height is the one exception: `.t-resize` card
   resize and the `grid-template-rows` accordion.
 - **Every animation is interruptible.** Toggling mid-motion continues from the value on screen. State changes use
@@ -252,11 +262,14 @@ secondary label instead.
   dialog resize retargets (`dialog_card_resize.js`). Delayed unmounts cancel on reopen. Only one-shot feedback
   (success check, error shake, loading orbit) uses keyframes.
 - **Reduced motion** (§14): `prefers-reduced-motion: reduce` replaces every slide, scale and spring with a 150ms
-  opacity cross-fade and keeps colour changes. **Reduced transparency** makes materials solid. **More contrast**
+  opacity cross-fade and keeps colour changes. `backend.scss` cuts every transition to .01ms except the floating
+  layers (`.t-morph` and its content, `.t-tt`, `.t-modal`, `.t-modal-backdrop`, `.t-acc-panel-inner`, the loading
+  pill), whose own files swap their motion for the cross-fade; exit ghosts still play so the close fades too. **Reduced transparency** makes materials solid. **More contrast**
   gives solid surfaces and defined borders.
 - The transitions.dev snippets stay, one file each in `transitions/`, each with its own tokens and guard: dropdown
   morph, modal, tooltip, checkbox check, toggle, success check, error shake, tabs sliding, accordion, card resize,
-  loading indicator. Their overshoots go in Task 14.
+  loading indicator. No overshoot is left in any of them; the error shake is the one keyframe that swings past
+  zero, by design.
 - No scroll-reveal, stagger or GSAP: that is marketing-page motion, not ERP motion.
 
 ## Components

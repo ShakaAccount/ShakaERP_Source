@@ -27,7 +27,14 @@
   font-size: 15px;
   font-weight: 500;
 
-  transition: opacity 200ms ease-out, transform 200ms ease-out;
+  transition:
+    opacity var(--shaka-spring-snappy-dur) var(--shaka-spring),
+    transform var(--shaka-spring-snappy-dur) var(--shaka-spring);
+  &.o-fade-leave {
+    transition:
+      opacity 150ms var(--shaka-ease-exit),
+      transform 150ms var(--shaka-ease-exit);
+  }
   &.o-fade-enter, &.o-fade-leave {
     opacity: 0;
     transform: translateY(-6px) scale(0.96);
@@ -64,6 +71,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .o_loading_indicator, .o_loading_indicator.o-fade-leave { transition: opacity 150ms ease; }
   .o_loading_indicator.o-fade-enter, .o_loading_indicator.o-fade-leave { transform: none; }
   .t-orbit > span { animation: none; }
   .t-orbit > span:last-child { transform: rotate(180deg) translate(155%); }

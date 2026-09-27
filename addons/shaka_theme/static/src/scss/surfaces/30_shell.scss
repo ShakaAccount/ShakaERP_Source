@@ -78,8 +78,7 @@
         }
 
         &:active .o_app_icon {
-            transform: scale(.94);
-            transition: transform var(--shaka-spring-press-dur) var(--shaka-spring);
+            transform: scale(var(--shaka-press-scale));
         }
 
         .o_caption {

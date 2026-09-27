@@ -44,6 +44,9 @@
     --shaka-spring-dur: 472ms;
     --shaka-spring-gentle-dur: 673ms;
     --shaka-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+    // Press feedback: one scale on the press spring for buttons, cards and
+    // app icons alike.
+    --shaka-press-scale: .97;
 }
 
 @supports (transition-timing-function: linear(0, 1)) {

@@ -15,7 +15,7 @@
 
 // = Cards: 10px radius, hairline plus the card shadow. Odoo stacks grouped
 // cards edge to edge (-1px margins); they get the 8px gap instead. Hover only
-// deepens the shadow (no lift); press is scale(.99) on the press spring.
+// deepens the shadow (no lift); press is the shared press scale.
 .o_kanban_renderer .o_kanban_record:not(.o_kanban_ghost) {
     overflow: hidden; // aside images and the colour stripe follow the radius
     border-color: var(--shaka-separator);
@@ -28,7 +28,7 @@
     }
 
     &:active:not(.o_dragged) {
-        transform: scale(.99);
+        transform: scale(var(--shaka-press-scale));
     }
 }
 

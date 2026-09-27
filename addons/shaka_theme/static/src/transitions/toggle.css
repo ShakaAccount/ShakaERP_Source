@@ -4,13 +4,13 @@
    mirrored by rtlcss for RTL) instead of translating a thumb element.
    Shaka: a transition, not the snippet's keyframes, so flipping the switch
    mid-travel reverses from where the thumb is (the keyframes restarted from the
-   far end). The overshoot lives in the easing (y > 1) instead of the
-   --toggle-ov* keyframe stops, and nothing plays on load (no change to tween). */
+   far end), and nothing plays on load (no change to tween). The snippet's
+   overshoot is gone: the thumb travels on the press spring, critically damped. */
 
 :root {
-  --toggle-dur: 350ms;
+  --toggle-dur: var(--shaka-spring-press-dur);
   --toggle-track: 0ms;
-  --toggle-ease: cubic-bezier(0.34, 1.35, 0.64, 1);
+  --toggle-ease: var(--shaka-spring);
 }
 
 .form-switch .form-check-input {

@@ -5,8 +5,8 @@
    colours (navigation.scss), so --tabs-text-* / --tabs-*-bg are Shaka tokens. */
 
 :root {
-  --tabs-dur: 250ms;
-  --tabs-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tabs-dur: var(--shaka-spring-dur);
+  --tabs-ease: var(--shaka-spring);
   --tabs-text-muted: var(--shaka-muted);
   --tabs-text-active: var(--shaka-text);
   --tabs-bar-bg: var(--shaka-muted-bg);

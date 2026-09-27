@@ -10,7 +10,7 @@
     --check-draw: 350ms;
     --check-delay: 0ms;
     --check-uncheck: 150ms;
-    --check-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --check-ease: var(--shaka-spring);
 }
 
 $shaka-check-draw-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' preserveAspectRatio='xMinYMid slice'><path fill='none' stroke='#{$form-check-input-checked-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/></svg>");

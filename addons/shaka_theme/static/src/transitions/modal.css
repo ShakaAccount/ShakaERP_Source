@@ -5,36 +5,44 @@
    (.t-modal-backdrop). Odoo removes a dialog at once on close, so .is-closing
    plays on an inert clone. Shaka: the close accelerates out (--modal-exit-ease,
    MASTER.md §Motion), and the snippet's pointer-events are dropped — Bootstrap
-   keeps .modal-dialog click-through so a click beside the card reaches the dim. */
+   keeps .modal-dialog click-through so a click beside the card reaches the dim.
+   The card materializes: opacity, scale .96 and blur 6px → none together, on
+   the critically damped spring. No will-change and no resting filter: either
+   would make .modal-dialog a backdrop root and flatten the card's material. */
 
 :root {
-  --modal-open-dur: 250ms;
-  --modal-close-dur: 150ms;
+  --modal-open-dur: var(--shaka-spring-dur);
+  --modal-close-dur: 200ms;
   --modal-scale: 0.96;
   --modal-scale-close: 0.96;
-  --modal-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --modal-exit-ease: cubic-bezier(0.4, 0, 1, 1);
+  --modal-blur: 6px;
+  --modal-ease: var(--shaka-spring);
+  --modal-exit-ease: var(--shaka-ease-exit);
 }
 
 .t-modal {
   transform-origin: center;
   transform: scale(var(--modal-scale));
   opacity: 0;
+  filter: blur(var(--modal-blur));
   transition:
     transform var(--modal-open-dur) var(--modal-ease),
-    opacity   var(--modal-open-dur) var(--modal-ease);
-  will-change: transform, opacity;
+    opacity   var(--modal-open-dur) var(--modal-ease),
+    filter    var(--modal-open-dur) var(--modal-ease);
 }
 .t-modal.is-open {
   transform: scale(1);
   opacity: 1;
+  filter: none;
 }
 .t-modal.is-closing {
   transform: scale(var(--modal-scale-close));
   opacity: 0;
+  filter: blur(var(--modal-blur));
   transition:
     transform var(--modal-close-dur) var(--modal-exit-ease),
-    opacity   var(--modal-close-dur) var(--modal-exit-ease);
+    opacity   var(--modal-close-dur) var(--modal-exit-ease),
+    filter    var(--modal-close-dur) var(--modal-exit-ease);
 }
 
 /* Shaka: the dim fades on the same clock. */
@@ -48,6 +56,14 @@
   transition: background-color var(--modal-close-dur) var(--modal-exit-ease);
 }
 
+/* Reduced motion: card and dim cross-fade in 150ms, no scale or blur. */
 @media (prefers-reduced-motion: reduce) {
-  .t-modal, .t-modal-backdrop { transition: none !important; }
+  .t-modal, .t-modal.is-open, .t-modal.is-closing {
+    transform: none;
+    filter: none;
+    transition: opacity 150ms ease;
+  }
+  .t-modal-backdrop, .t-modal-backdrop.is-closing {
+    transition: background-color 150ms ease;
+  }
 }

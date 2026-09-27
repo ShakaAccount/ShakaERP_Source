@@ -126,7 +126,7 @@
             transition: background-color var(--shaka-ease), transform var(--shaka-spring-press-dur) var(--shaka-spring);
 
             &:active {
-                transform: scale(.97);
+                transform: scale(var(--shaka-press-scale));
             }
         }
 
