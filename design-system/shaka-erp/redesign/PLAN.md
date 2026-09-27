@@ -187,7 +187,13 @@ Order: 0 → 1 → 2 → 3 → 4 → 5, then 6–13 in any order, then 14 → 17
   - Press: new `--shaka-press-scale` (.97) on buttons, login button, kanban cards and app icons (were .97/.99/.94).
   - Reduced motion: the global cut in `backend.scss` skips the floating layers, which cross-fade in 150ms; `morph.js`/`modal.js` no longer skip the exit ghost under reduced motion, so closes fade too.
   - **Not verified in the browser** (interruptibility, reduced motion/transparency emulation): needs your login. Compile check + detect only.
-- [ ] [Task 15: Custom addon sweep (one commit per addon, each checked in the matrix)](tasks/task-15-custom-addon-sweep.md)
+- [x] [Task 15: Custom addon sweep (one commit per addon, each checked in the matrix)](tasks/task-15-custom-addon-sweep.md)
+  - `daily_sales_performance` / `sales_analysis` (same classes, either installs alone, so both draw the same thing): `--sales-*` custom props / `$sa-*` Sass vars mapped to tokens; the dark block is gone. Hero and "dark" KPI card = wallpaper gradient with on-wallpaper text; green/amber KPI cards = surface cards with a status-coloured figure (dark status colours can't carry white text). Sheet, list header, statusbar and input overrides dropped: shaka_theme owns them. Hint side-stripe removed (detect).
+  - `budget_planning`: fallbacks gone; header = wallpaper, primary button = action fill; sheet `box-shadow: none` (the Task 9 outline). Step rail = Finder rows (fill hover/active, action-filled number on the active step, no `translateX` nudge). Steps are plain divs, so no focus-within state.
+  - `category`: `#fff` → `--cat-accent-text` (on-action), shadows → tokens, row add/remove hover = status tint + status text. Modal: inline backdrop/radius removed, `.modal-content` bg/header overrides dropped so `20_overlays` styles it; backdrop drawn from `$modal-backdrop-*`. Trash glyph `currentColor` + `--cat-danger`. Detect's drag-over stripe and tooltip `max-width` transition are pre-existing and kept.
+  - `shaka_ui_kit` tree: selected node = accent fill + on-action text, done by re-pointing `--tree-*` on the node; `win_access`/`powerbi_portal` icons inherit. Nodes aren't focusable, so one state.
+  - `jalali_date.css`: `padding-inline-start: 6px` (= `$o-input-padding-x`).
+  - `daily_sales_performance` / `sales_analysis` aren't installed in `shaka_design`; nothing screenshotted. Every file compiled through the light and dark chains + detect.
 - [ ] [Task 16: QA (`/impeccable audit` + `/impeccable critique`)](tasks/task-16-qa.md)
 - [ ] [Task 17: Finish, document, ship](tasks/task-17-finish-document-ship.md)
 
