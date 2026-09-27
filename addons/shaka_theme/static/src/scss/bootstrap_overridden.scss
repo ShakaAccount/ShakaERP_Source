@@ -70,3 +70,10 @@ $form-switch-checked-color: $shaka-theme-on-action !default;
 // The focus ring (MASTER.md): link blue at 50%, 3px, outside the control.
 $form-check-input-focus-box-shadow: 0 0 0 3px rgba($o-enterprise-action-color, .5) !default;
 $form-check-input-focus-border: $o-enterprise-action-color !default;
+
+// = Lists (Task 8, surfaces/50_list.scss). 32px rows: 21px line + 2 × 5px +
+// the 1px hairline (list headers use the same padding). Hairlines, no zebra,
+// the fill on hover. Reports set their own table paddings before this file.
+$table-cell-padding-y-sm: o-to-rem(5px) !default;
+$table-striped-bg: transparent !default;
+$table-hover-bg: var(--shaka-fill) !default;

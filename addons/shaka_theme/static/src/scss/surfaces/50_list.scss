@@ -1,0 +1,123 @@
+// List view: the canvas, a Finder table (MASTER.md › Components › List).
+// Row height, hairlines (no zebra) and the fill hover come through the table
+// variables in bootstrap_overridden.scss; the footer through $o-list-footer-*.
+// This file sets Odoo's --ListRenderer-* / --table-* hooks and fills the gaps.
+// The scroll container is .o_list_renderer; its thead is sticky at ≥md.
+
+.o_list_renderer {
+    --ListRenderer-thead-bg-color: var(--shaka-surface);
+
+    .o_list_table {
+        --table-bg: var(--shaka-surface);
+        --table-border-color: var(--shaka-separator);
+    }
+}
+
+// = Header: thin material, 13/500 secondary label, no rules. The hairline
+// under it only fades in once rows scroll beneath (a scroll-driven animation
+// over the first 16px); without support there is no edge at all, as at the
+// top of the list. Sorted columns carry .table-active, which Odoo strips of
+// its box-shadow, hence both selectors.
+@keyframes shaka-list-scroll-edge {
+    from {
+        box-shadow: 0 4px 6px -4px transparent;
+    }
+    to {
+        box-shadow: 0 4px 6px -4px var(--shaka-separator);
+    }
+}
+
+.o_list_renderer .o_list_table > thead > tr > th {
+    @include shaka-material(thin);
+    border-bottom-width: 0;
+    color: var(--shaka-muted);
+    font-size: o-to-rem(13px);
+    font-weight: 500;
+
+    &,
+    &.table-active {
+        box-shadow: none;
+
+        @supports (animation-timeline: scroll()) {
+            animation: shaka-list-scroll-edge linear both;
+            animation-timeline: scroll(nearest block);
+            animation-range: 0 16px;
+        }
+    }
+}
+
+// = Selection. Checked records: an action tint, since several rows may be
+// selected at once (Odoo paints them .table-info). Measured
+// (tools/contrast.py): 8% light keeps secondary, link and status text ≥4.5;
+// 12% dark does too, except link blue (4.19), which fails on any tint. The
+// fill hover would drop them below 4.5, so a selected row doesn't hover.
+.o_list_renderer .o_list_table .o_data_row_selected.table-info {
+    --table-bg: color-mix(in srgb, var(--shaka-primary) #{if($o-webclient-color-scheme == dark, 12%, 8%)}, var(--shaka-surface));
+    --table-color: var(--shaka-text);
+    --table-border-color: var(--shaka-separator);
+    --table-hover-bg: transparent;
+    --table-striped-bg: transparent;
+}
+
+// The row being edited: a 1px link-blue outline around the whole row.
+.o_list_renderer .o_list_table .o_data_row.o_selected_row {
+    outline: 1px solid var(--shaka-link);
+    outline-offset: -1px;
+}
+
+// = Group rows: section headers with a chevron that turns on open. Odoo swaps
+// fa-caret-right / fa-caret-down on the same element, so one chevron glyph
+// rotated by class animates. The name cell's fw-bold / fs-6 are important
+// utilities and stay; its important text-black is repainted as label text.
+.o_list_renderer .o_list_table tbody > tr.o_group_header {
+    > th.o_group_name {
+        -webkit-text-fill-color: var(--shaka-text);
+    }
+
+    .o_group_caret::before {
+        display: inline-block;
+        content: "\f078"; // fa-chevron-down
+        -webkit-text-fill-color: var(--shaka-muted);
+        font-size: o-to-rem(10px);
+        transition: transform var(--shaka-spring-snappy-dur) var(--shaka-spring);
+    }
+
+    &:not(.o_group_open) .o_group_caret::before {
+        /*rtl:ignore*/
+        transform: rotate(-90deg);
+    }
+}
+
+.o_rtl .o_list_renderer .o_list_table tbody > tr.o_group_header:not(.o_group_open) .o_group_caret::before {
+    /*rtl:ignore*/
+    transform: rotate(90deg);
+}
+
+// = Empty state: a glyph, a 17/600 title and one line of secondary help.
+// Odoo's illustrations (smiling face, neutral face, empty folder) become one
+// quiet tray glyph.
+.o_view_nocontent .o_nocontent_help {
+    max-width: 420px;
+    color: var(--shaka-muted);
+    font-size: $o-font-size-base;
+
+    > p:first-of-type {
+        color: var(--shaka-text);
+        font-size: o-to-rem(17px);
+        font-weight: 600;
+    }
+
+    .o_view_nocontent_smiling_face,
+    .o_view_nocontent_neutral_face,
+    .o_view_nocontent_empty_folder {
+        &::before {
+            width: auto;
+            height: auto;
+            margin-block: 0 16px;
+            background: none;
+            color: var(--shaka-muted);
+            content: "\f01c"; // fa-inbox
+            font: normal 48px/1 FontAwesome;
+        }
+    }
+}

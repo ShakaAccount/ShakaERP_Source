@@ -194,3 +194,7 @@ $o-navbar-entry-border-radius: 999px !default;
 $o-navbar-brand-font-size: o-to-rem(17px) !default;
 // White captions on the graphite wallpaper need no shadow in either scheme.
 $o-home-menu-caption-shadow: none !default;
+
+// = List footer (surfaces/50_list.scss): totals in label colour, semibold.
+$o-list-footer-color: var(--shaka-text) !default;
+$o-list-footer-font-weight: 600 !default;

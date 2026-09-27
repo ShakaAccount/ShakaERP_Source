@@ -142,7 +142,14 @@ Order: 0 → 1 → 2 → 3 → 4 → 5, then 6–13 in any order, then 14 → 17
   - Segmented switcher scoped to `nav.o_cp_switch_buttons` (the mobile dropdown menu reuses the class); 2px inset keeps it 28px; dark pill = lifted fill.
   - Search panel: 28px category rows (header's -4px margins cover the item's important `py-1`); section headers stay uppercase (important `text-uppercase`); two-state selection via `:focus-within`. Filter-value rows untouched (~25px).
   - Not screenshotted; compile check + detect only.
-- [ ] [Task 8: List view → `surfaces/50_list.scss`](tasks/task-08-list-view.md)
+- [x] [Task 8: List view → `surfaces/50_list.scss`](tasks/task-08-list-view.md)
+  - Variables: 32px rows via `$table-cell-padding-y-sm` 5px (headers too; reports set their own first), `$table-striped-bg: transparent` (hairlines, no zebra), `$table-hover-bg` = fill; footer `$o-list-footer-color` label, weight 600. Hooks: `--ListRenderer-thead-bg-color` and `.o_list_table { --table-bg, --table-border-color }`.
+  - Header: thin material per `th`, 13/500 secondary. The edge under it is a separator-coloured fade driven by `animation-timeline: scroll()` over the first 16px, so it shows only once rows are beneath; no edge where unsupported.
+  - Selected records: **8% action tint light / 12% dark**, measured: 12% light drops success to 4.29. Dark link blue fails on any tint (4.19), as with facets. Selected rows don't hover (fill over the tint drops secondary to ~4.0). Editing row: 1px link outline on the `tr`.
+  - Group rows: one `fa-chevron-down` rotated −90° when folded (+90° under `.o_rtl`, `rtl:ignore`), snappy spring. The name's important `fw-bold`/`fs-6` stay (700, not 600); `text-black` repainted via `-webkit-text-fill-color`.
+  - Footer numbers stay right-aligned in RTL too: Odoo's `rtl:ignore` keeps them in line with their column.
+  - Empty state: Odoo's three illustrations become a 48px `fa-inbox` glyph, 17/600 title, secondary help.
+  - **1,000-row scroll not profiled** (needs your login); if the header drops frames, swap `shaka-material(thin)` for `background-color: var(--shaka-surface)`. Not screenshotted; compile check + detect only.
 - [ ] [Task 9: Form view → `surfaces/60_form.scss` + retune `navigation.scss`](tasks/task-09-form-view.md)
 - [ ] [Task 10: Mail (chatter, Discuss, systray popovers) → `surfaces/65_mail.scss`](tasks/task-10-mail.md)
 - [ ] [Task 11: Kanban and secondary views → `surfaces/70_kanban.scss`, `surfaces/80_views.scss`](tasks/task-11-kanban-and-secondary-views.md)
