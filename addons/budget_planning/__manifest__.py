@@ -1,7 +1,7 @@
 {
     'name': 'برنامه و بودجه',
     'version': '19.0.1.0.0',
-    'category': 'Accounting/Budget',
+    'category': 'Shaka ERP',
     'summary': 'مدیریت برنامه‌ریزی، بودجه و زنجیره اجرای اهداف',
     'description': """
 Budget Planning
@@ -15,7 +15,7 @@ and form-level access through ``shaka_security``.
     'website': 'https://shakasystem.com',
     'license': 'LGPL-3',
     'icon': '/budget_planning/static/description/icon.svg',
-    'depends': ['base', 'generic_lookup', 'company_base_info', 'shaka_theme', 'jalali_date', 'holding_budget', 'category'],
+    'depends': ['base', 'generic_lookup', 'company_base_info', 'shaka_theme', 'shaka_ui_kit', 'jalali_date', 'holding_budget', 'category'],
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',

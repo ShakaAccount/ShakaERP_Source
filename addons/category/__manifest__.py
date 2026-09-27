@@ -1,7 +1,7 @@
 {
     'name': 'Category',
     'version': '19.0.1.0.0',
-    'category': 'Technical/Shaka DW',
+    'category': 'Shaka ERP',
     'summary': 'Standalone 3-pane Category Manager over md.category / '
                'md.category_member (Shaka DW).',
     'description': """

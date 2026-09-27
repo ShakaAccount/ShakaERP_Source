@@ -148,7 +148,7 @@ def refresh_writable_view(env, view, schema, table, columns):
     def ref(col):
         return f'{src}.{col}' if (src and col in src_cols) else f'NULL'
 
-    select = ', '.join(f'{ref(c)} AS {c}' for c in columns)
+    select = ', '.join(f'CAST({ref(c)} AS {sqltype}) AS {c}' for c, sqltype in columns.items())
 
     # 4. (Re)create the view
     cr.execute(f'DROP VIEW IF EXISTS public.{view} CASCADE')

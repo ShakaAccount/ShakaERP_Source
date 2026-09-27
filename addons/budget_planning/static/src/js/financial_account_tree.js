@@ -81,7 +81,7 @@ export class FinancialAccountTree extends Component {
         this.state.loading = true;
         try {
             this.state.nodes = await this.orm.call(
-                "budget.financial.statement.line", "account_tree", [this.companyId]);
+                "budget.financial.statement.line", "account_tree", [this.companyId, this.props.record.data.section]);
         } catch (error) {
             this.notification.add("بارگذاری گروه‌بندی حساب معین ممکن نشد.", {type: "danger"});
             this.state.open = false;
@@ -96,7 +96,7 @@ export class FinancialAccountTree extends Component {
         if (!this.state.expanded[id] || this.state.members[id]) return;
         try {
             this.state.members[id] = await this.orm.call(
-                "budget.financial.statement.line", "account_members", [id, node.company_id]);
+                "budget.financial.statement.line", "account_members", [id, node.company_id, this.props.record.data.section]);
         } catch (error) {
             this.notification.add("دریافت حساب‌های زیرگروه ممکن نشد.", {type: "danger"});
             this.state.expanded[id] = false;

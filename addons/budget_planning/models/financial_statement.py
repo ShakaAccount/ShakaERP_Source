@@ -1,5 +1,5 @@
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError, UserError
+from odoo.exceptions import AccessError, ValidationError, UserError
 
 
 class BudgetFinancialStatement(models.Model):
@@ -20,10 +20,6 @@ class BudgetFinancialStatement(models.Model):
     entry_mode = fields.Selection([('monthly', 'ورود ماهانه'), ('annual', 'ورود جمع کل')],
                                   string='شیوهٔ ورود جزئیات', copy=False)
     name = fields.Char(compute='_compute_name')
-    balance_root_id = fields.Many2one('raes.md.category', string='گروه‌بندی حساب معین ترازنامه',
-                                      domain="[('company_id', '=', company_id), ('parent_id', '=', False)]")
-    income_root_id = fields.Many2one('raes.md.category', string='گروه‌بندی حساب معین سود و زیان',
-                                     domain="[('company_id', '=', company_id), ('parent_id', '=', False)]")
     balance_line_ids = fields.One2many('budget.financial.statement.line', 'statement_id',
                                        string='ترازنامه', domain=[('section', '=', 'balance')])
     income_line_ids = fields.One2many('budget.financial.statement.line', 'statement_id',
@@ -53,14 +49,12 @@ class BudgetFinancialStatement(models.Model):
     def _onchange_company(self):
         self.fiscal_year_id = False
         self.scenario_id = False
-        self.balance_root_id = False
-        self.income_root_id = False
 
     @api.onchange('fiscal_year_id')
     def _onchange_year(self):
         self.scenario_id = False
 
-    @api.constrains('company_id', 'fiscal_year_id', 'scenario_id', 'balance_root_id', 'income_root_id')
+    @api.constrains('company_id', 'fiscal_year_id', 'scenario_id')
     def _check_relations(self):
         for record in self:
             if record.fiscal_year_id.company_id != record.company_id:
@@ -68,9 +62,18 @@ class BudgetFinancialStatement(models.Model):
             scenario = record.scenario_id.scenario_id
             if scenario.company_id != record.company_id or scenario.fiscal_year_id != record.fiscal_year_id:
                 raise ValidationError('سناریو باید متعلق به شرکت و سال مالی انتخاب‌شده باشد.')
-            for root in (record.balance_root_id, record.income_root_id):
-                if root and (root.company_id != record.company_id or root.parent_id):
-                    raise ValidationError('ریشهٔ گروه‌بندی باید متعلق به همین شرکت باشد.')
+    @api.model
+    def action_open_settings(self):
+        if not self.env.user.has_group('base.group_system'):
+            raise AccessError('فقط مدیر سیستم می‌تواند تنظیمات گروه‌بندی را باز کند.')
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'تنظیمات گروه‌بندی حساب',
+            'res_model': 'res.config.settings',
+            'view_mode': 'form',
+            'views': [(self.env.ref('budget_planning.view_financial_statement_settings_form').id, 'form')],
+            'target': 'new',
+        }
 
     def write(self, vals):
         if 'entry_mode' in vals:
@@ -79,13 +82,6 @@ class BudgetFinancialStatement(models.Model):
                     record.balance_line_ids | record.income_line_ids
                 ).filtered(lambda line: line.total):
                     raise ValidationError('پس از ثبت مبلغ در جزئیات، شیوهٔ ورود قابل تغییر نیست.')
-        for field_name, lines_name in (('balance_root_id', 'balance_line_ids'),
-                                       ('income_root_id', 'income_line_ids')):
-            if field_name in vals:
-                for record in self:
-                    if record[field_name].id != vals[field_name] and record[lines_name].filtered(
-                            lambda line: line.total):
-                        raise ValidationError('برای تغییر گروه‌بندی، ابتدا مقادیر ثبت‌شدهٔ تب را بررسی کنید.')
         return super().write(vals)
 
 
@@ -126,19 +122,32 @@ class BudgetFinancialStatementLine(models.Model):
     total = fields.Float(string='جمع کل', compute='_compute_total', digits='Account')
 
     @api.model
-    def account_tree(self, company_id):
+    def account_tree(self, company_id, section):
         """Category nodes for the account dropdown; members load on expansion."""
         company = self.env['res.company'].browse(int(company_id or self.env.company.id))
         if company not in self.env.companies:
             raise ValidationError('به شرکت انتخاب‌شده دسترسی ندارید.')
-        categories = self.env['raes.md.category'].search([
-            ('company_id', '=', company.id),
-            ('entity_id.name', '=', 'DimSubsidiaryLedger'),
-        ], order='code, title, id')
-        roots = categories.filtered(lambda c: not c.parent_id and 'گروه بندی حساب معین' in
-                                    (c.title or '').replace('‌', ' '))
-        if not roots:
-            roots = categories.filtered(lambda c: not c.parent_id)
+        if section not in ('balance', 'income'):
+            raise ValidationError('بخش صورت مالی نامعتبر است.')
+        root_id = self.env['ir.config_parameter'].sudo().get_param(
+            'budget_planning.%s_root_id' % section)
+        selected_root = self.env['raes.md.category'].browse(int(root_id or 0)).exists()
+        if selected_root:
+            if selected_root.parent_id or selected_root.entity_id.name != 'DimSubsidiaryLedger':
+                raise ValidationError('گروه‌بندی سراسری معتبر نیست؛ مدیر سیستم باید آن را اصلاح کند.')
+            categories = self.env['raes.md.category'].search([
+                ('id', 'child_of', selected_root.id),
+            ], order='code, title, id')
+            roots = selected_root
+        else:
+            categories = self.env['raes.md.category'].search([
+                ('company_id', '=', company.id),
+                ('entity_id.name', '=', 'DimSubsidiaryLedger'),
+            ], order='code, title, id')
+            roots = categories.filtered(lambda c: not c.parent_id and 'گروه بندی حساب معین' in
+                                        (c.title or '').replace('‌', ' '))
+            if not roots:
+                roots = categories.filtered(lambda c: not c.parent_id)
         allowed = set()
         def visit(node):
             if node.id in allowed:
@@ -148,18 +157,25 @@ class BudgetFinancialStatementLine(models.Model):
                 visit(child)
         for root in roots:
             visit(root)
-        return [{'id': c.id, 'company_id': company.id,
+        return [{'id': c.id, 'company_id': c.company_id.id,
                  'parent_id': c.parent_id.id if c.parent_id.id in allowed else False,
                  'title': c.title} for c in categories if c.id in allowed]
 
     @api.model
-    def account_members(self, category_id, company_id):
+    def account_members(self, category_id, company_id, section):
         category = self.env['raes.md.category'].browse(int(category_id)).exists()
         if not category or category.company_id.id != int(company_id):
-            raise ValidationError('زیرگروه متعلق به شرکت انتخاب‌شده نیست.')
-        if category.company_id not in self.env.companies:
+            raise ValidationError('زیرگروه نامعتبر است.')
+        if section not in ('balance', 'income'):
+            raise ValidationError('بخش صورت مالی نامعتبر است.')
+        root_id = int(self.env['ir.config_parameter'].sudo().get_param(
+            'budget_planning.%s_root_id' % section) or 0)
+        if root_id:
+            if category.id != root_id and category.root_id.id != root_id:
+                raise ValidationError('زیرگروه خارج از گروه‌بندی تنظیم‌شده است.')
+        elif category.company_id not in self.env.companies:
             raise ValidationError('به شرکت انتخاب‌شده دسترسی ندارید.')
-        result = self.env['raes.md.entity'].get_items_in_category(
+        result = self.env['raes.md.entity'].sudo().with_company(category.company_id).get_items_in_category(
             category.entity_id.id, category.id, 0, 10000)
         if result.get('reason'):
             raise UserError('دریافت حساب‌های زیرگروه ممکن نشد: %s' % result['reason'])

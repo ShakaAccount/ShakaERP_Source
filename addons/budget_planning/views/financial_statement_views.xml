@@ -26,8 +26,8 @@
                     <section class="bp-card bp-header">
                         <div class="bp-header-grid">
                             <div class="bp-field"><label for="company_id"/><field name="company_id" required="1"/></div>
-                            <div class="bp-field"><label for="fiscal_year_id"/><field name="fiscal_year_id" required="1" options="{'no_create': True}"/></div>
-                            <div class="bp-field"><label for="scenario_id"/><field name="scenario_id" required="1" options="{'no_create': True}"/></div>
+                            <div class="bp-field"><label for="fiscal_year_id"/><field name="fiscal_year_id" required="1" options="{'no_create': True}" context="{'allowed_company_ids': []}"/></div>
+                            <div class="bp-field"><label for="scenario_id"/><field name="scenario_id" required="1" options="{'no_create': True}" context="{'allowed_company_ids': []}"/></div>
                             <div class="bp-field"><label for="description"/><field name="description"/></div>
                         </div>
                     </section>
@@ -92,6 +92,33 @@
                 </sheet>
             </form>
         </field>
+    </record>
+    <record id="view_financial_statement_settings_form" model="ir.ui.view">
+        <field name="name">budget.financial.statement.settings.form</field>
+        <field name="model">res.config.settings</field>
+        <field name="arch" type="xml">
+            <form string="تنظیمات گروه‌بندی حساب">
+                <sheet>
+                    <group>
+                        <field name="budget_balance_root_id" options="{'no_create': True}" context="{'allowed_company_ids': []}"/>
+                        <field name="budget_income_root_id" options="{'no_create': True}" context="{'allowed_company_ids': []}"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_save" type="object" string="ذخیره" class="btn-primary"/>
+                    <button string="انصراف" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_financial_statement_settings_menu" model="ir.actions.server">
+        <field name="name">تنظیمات گروه‌بندی حساب</field>
+        <field name="model_id" ref="model_budget_financial_statement"/>
+        <field name="binding_model_id" ref="model_budget_financial_statement"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">action = records.action_open_settings()</field>
     </record>
     <record id="action_financial_statement" model="ir.actions.act_window">
         <field name="name">بودجه ترازنامه و سود و زیان</field>

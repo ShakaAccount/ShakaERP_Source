@@ -1,7 +1,7 @@
 {
     'name': 'Sales Analysis',
     'version': '19.0.1.0.0',
-    'category': 'Accounting/Accounting',
+    'category': 'Shaka ERP',
     'summary': 'Manual allocation of receipts to sales invoices',
     'description': """
 Sales Analysis

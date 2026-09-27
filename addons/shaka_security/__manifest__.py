@@ -1,7 +1,7 @@
 {
     'name': 'Shaka Security',
     'version': '19.0.1.0.0',
-    'category': 'Administration',
+    'category': 'Shaka ERP',
     'summary': 'Central roles and access levels for Shaka modules',
     'description': """
 Shaka Security

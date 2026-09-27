@@ -14,7 +14,7 @@ Addon SCSS should use the ``var(--shaka-*)`` tokens, never dark-mode selectors.
     'author': 'ShakaERP',
     'maintainer': 'ShakaERP',
     'website': 'https://shakasystem.com',
-    'category': 'Themes/Backend',
+    'category': 'Shaka ERP',
     'version': '19.0.1.0.0',
     'license': 'LGPL-3',
     'icon': '/shaka_theme/static/description/icon.svg',

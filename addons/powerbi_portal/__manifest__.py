@@ -42,7 +42,7 @@ Cross-platform notes:
   check with 'Get-OdbcDriver | Where-Object {$_.Name -like "*SQL Server*"}'
   in PowerShell on Windows, or 'odbcinst -q -d | grep -i sql' on Linux.
 """,
-    "category": "Productivity/Business Intelligence",
+    "category": 'Shaka ERP',
     "author": "ShakaERP",
     "maintainer": "ShakaERP",
     "website": "https://shakasystem.com",

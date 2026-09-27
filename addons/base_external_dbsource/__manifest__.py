@@ -4,7 +4,7 @@
 {
     "name": "External Database Sources",
     "version": "19.0.1.0.0",
-    "category": "Tools",
+    "category": 'Shaka ERP',
     "author": "Daniel Reis, LasLabs, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/server-backend",
     "license": "LGPL-3",

@@ -121,7 +121,7 @@
 .bp-account-picker { min-width: 220px; }
 .bp-account-trigger { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 9px; border: 1px solid #cbd5e1; border-radius: 8px; background: var(--shaka-surface, #fff); color: var(--shaka-text, #0f172a); text-align: start; }
 .bp-account-dropdown.o_category_manager { z-index: 1200; width: 370px; max-width: calc(100vw - 16px); max-height: 330px; overflow: auto; border: 1px solid var(--cat-border); border-radius: var(--cat-radius); box-shadow: 0 12px 30px rgba(15,23,42,.18); }
-.bp-account-dropdown .bp-account-member .o_cat_node_toggle { font-size: 8px; opacity: .6; }
+.bp-account-dropdown .bp-account-member .o_tree_node_toggle { font-size: 8px; opacity: .6; }
 .bp-account-search { width: 100%; margin-bottom: 8px; padding: 7px 9px; border: 1px solid var(--cat-border); border-radius: 6px; background: var(--cat-bg); color: var(--cat-text); }
 
 .bp-entry-question { padding: 12px; max-width: 720px; }

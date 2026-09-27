@@ -1,7 +1,7 @@
 {
     'name': 'POS Employee Free Items',
     'version': '19.0.3.0.0',
-    'category': 'Sales/Point of Sale',
+    'category': 'Shaka ERP',
     'summary': 'Allow POS employees to claim a limited number of free catalogue items each day.',
     'description': """
 POS Employee Free Items

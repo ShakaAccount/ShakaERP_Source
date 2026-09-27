@@ -1,7 +1,7 @@
 {
     'name': 'RAES DW Connector',
     'version': '19.0.1.0.0',
-    'category': 'Technical/Shaka DW',
+    'category': 'Shaka ERP',
     'summary': 'MSSQL data-warehouse foreign tables exposed as Odoo views',
     'description': """
 RAES DW Connector

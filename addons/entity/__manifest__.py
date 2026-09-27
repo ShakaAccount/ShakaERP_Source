@@ -1,7 +1,7 @@
 {
     'name': 'RAES — MD Entity / Module (Shaka DW)',
     'version': '19.0.1.0.0',
-    'category': 'Technical/Shaka DW',
+    'category': 'Shaka ERP',
     'summary': 'Direct Odoo models over md.entity and gnr.module.',
     'description': """
 MD Entity / Module

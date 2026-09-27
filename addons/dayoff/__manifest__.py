@@ -1,7 +1,7 @@
 {
     'name': 'Leave Request Workflow',
     'version': '19.0.1.0.0',
-    'category': 'Human Resources/Time Off',
+    'category': 'Shaka ERP',
     'summary': 'Leave requests with submit/approve/reject workflow and audit log',
     'description': """
 Leave Request Workflow
