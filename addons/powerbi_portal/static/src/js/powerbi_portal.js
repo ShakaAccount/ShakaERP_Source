@@ -21,6 +21,7 @@ export class PowerBIPortal extends Component {
             pendingReport: null, // report selected but iframe held back during auth warm-up
             loading: true,
             error: null,
+            sidebarCollapsed: false,
         });
         this.closeTimers = {};
 
@@ -82,6 +83,10 @@ export class PowerBIPortal extends Component {
         } else {
             this.selectReport(node.report);
         }
+    };
+
+    toggleSidebar = () => {
+        this.state.sidebarCollapsed = !this.state.sidebarCollapsed;
     };
 
     toggleFolder = (id) => {
