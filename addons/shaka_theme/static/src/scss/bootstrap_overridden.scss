@@ -39,6 +39,23 @@ $tooltip-padding-x: o-to-rem(8px) !default;
 $tooltip-font-size: $o-font-size-base-smaller !default;
 $tooltip-max-width: 280px !default;
 
+// = Overlays (Task 5). Backgrounds stay real colours (Sass colour functions
+// read them); 20_overlays.scss paints the materials over them.
+// Menus: 28px items (20px line + 2 × 4px) with the control radius; the card
+// shadow's hairline replaces the border.
+$dropdown-item-padding-y: o-to-rem(4px) !default;
+$dropdown-item-padding-x: o-to-rem(8px) !default;
+$dropdown-item-border-radius: $o-border-radius !default;
+$dropdown-border-width: 0 !default;
+$popover-border-width: 0 !default;
+// Tooltips: label text on the popover material (Odoo draws a dark bubble).
+$tooltip-bg: $o-view-background-color !default;
+$tooltip-color: $o-main-text-color !default;
+// Dialogs: no border, no header divider, a plain dim (MASTER.md: no blur).
+$modal-content-border-width: 0 !default;
+$modal-header-border-width: 0 !default;
+$modal-backdrop-opacity: if($o-webclient-color-scheme == dark, .45, .2) !default;
+
 // = Controls (Task 4). Press feedback: enterprise sets `none`; only the scale
 // animates, colours switch instantly as on macOS.
 $btn-transition: transform var(--shaka-spring-press-dur) var(--shaka-spring) !default;

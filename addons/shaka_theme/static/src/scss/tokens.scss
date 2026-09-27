@@ -10,6 +10,8 @@
     --shaka-surface: #{$shaka-theme-surface};
     --shaka-fill: #{$shaka-theme-fill};
     --shaka-muted-bg: #{$shaka-theme-muted-bg};
+    // Text and glyphs on the action fill (selection highlight), both schemes.
+    --shaka-on-action: #{$shaka-theme-on-action};
     --shaka-text: #{$shaka-theme-text};
     --shaka-muted: #{$shaka-theme-muted};
     --shaka-border: #{$shaka-theme-border};

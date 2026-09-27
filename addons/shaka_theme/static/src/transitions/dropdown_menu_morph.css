@@ -13,7 +13,7 @@
   --morph-close-ease: cubic-bezier(0.22, 1, 0.36, 1); /* content reveal on open */
   --morph-exit-ease: cubic-bezier(0.4, 0, 1, 1);      /* accelerate out: the close stays visible */
   --morph-r-closed: var(--shaka-radius);
-  --morph-r-open: var(--shaka-radius);
+  --morph-r-open: var(--shaka-radius-card); /* menus and popovers are 10px ($dropdown-border-radius) */
   --morph-fade-dur: 200ms;
   --morph-slide: 40px;
   --morph-scale: 0.97;
