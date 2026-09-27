@@ -1,0 +1,140 @@
+// Mail: chatter, Discuss, chat windows and the systray popovers (MASTER.md ›
+// Components › Mail). Driven through mail's own hooks (--mail-*,
+// --o-message-bubble-*). mail loads after shaka_theme in both bundles, so
+// every rule here is one class more specific than the mail rule it retunes.
+// mail's *.dark.scss paint bubbles, the Discuss sidebar and its hover with
+// important literals; those stay (they mix our own $gray-* and status colours).
+
+// = Chatter: the inspector, a calm thread on the grouped background (the
+// container already uses $o-webclient-background-color). Aside, a leading
+// hairline sets it apart from the sheet.
+.o-mail-Form-chatter.o-aside {
+    border-inline-start: 1px solid var(--shaka-separator);
+}
+
+// No bubbles in the chatter: hairlines between authors instead. `display`
+// beats the dark bubble colours, which are important. A message without a
+// bubble is a note (notifications are a separate component): faint warning tint.
+.o-mail-Chatter .o-mail-Message {
+    .o-mail-Message-bubble,
+    .o-mail-Message-bubbleTail {
+        display: none;
+    }
+
+    &:not(.o-squashed):not(.o-card) {
+        border-top: 1px solid var(--shaka-separator);
+    }
+
+    &:not(:has(.o-mail-Message-bubble)):not(.o-card) {
+        background-color: color-mix(in srgb, var(--shaka-warning) 6%, transparent);
+    }
+}
+
+// Author 14/600 in label colour (dark mail halves its opacity), time 12px
+// secondary. Pending messages keep their important opacity-50 utility.
+.o-mail-Message .o-mail-Message-author {
+    font-size: o-to-rem(14px);
+    font-weight: 600;
+    opacity: 1;
+}
+
+.o-mail-Message .o-mail-Message-date {
+    color: var(--shaka-muted);
+    font-size: $o-font-size-base-smaller;
+}
+
+.o-mail-Message .o-mail-Message-actions {
+    --mail-Message-actionIconHoveredColor: var(--shaka-text);
+}
+
+// = Composer: a capsule field on the fill. The field's radius is an important
+// utility (o-rounded-bubble, 12px), so the capsule is drawn as a ::before
+// behind it (as the command palette does); the field and its inner parts go
+// clear. Focus is the macOS field: link edge and the 3px ring.
+.o-mail-Composer {
+    .o-mail-Composer-bg {
+        --mail-Composer-bg: transparent;
+    }
+
+    .o-mail-Composer-actions {
+        --mail-Composer-actionHoverColor: var(--shaka-text);
+    }
+
+    .o-mail-Composer-inputContainer {
+        --border-color: transparent;
+        position: relative;
+        isolation: isolate;
+
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            border-radius: 20px; // half the 40px single-line field
+            background-color: var(--shaka-fill);
+            pointer-events: none;
+        }
+
+        &:focus-within::before {
+            outline: 1px solid var(--shaka-link);
+            outline-offset: -1px;
+            box-shadow: 0 0 0 3px rgba($shaka-theme-link, .5);
+        }
+    }
+}
+
+// = Message bubbles (Discuss, chat windows): Messages-like. Others on the
+// fill, own messages on an 8% action tint, mentions on an 8% warning tint;
+// no edge. 8%, as for selected list rows: 12% drops status text below 4.5
+// in light. Light only: dark mail sets the bubble colours as important
+// literals, and the in-reply edge reads the same custom properties.
+@if $o-webclient-color-scheme != dark {
+    .o-mail-Message {
+        .o-mail-Message-bubble,
+        .o-mail-Message-bubbleTail {
+            &.o-blue {
+                --o-message-bubble-bg: var(--shaka-fill);
+            }
+            &.o-green {
+                --o-message-bubble-bg: #{color-mix(in srgb, var(--shaka-primary) 8%, var(--shaka-surface))};
+            }
+            &.o-orange {
+                --o-message-bubble-bg: #{color-mix(in srgb, var(--shaka-warning) 8%, var(--shaka-surface))};
+            }
+            &.o-blue,
+            &.o-green,
+            &.o-orange {
+                --o-message-bubble-border-color: transparent;
+            }
+        }
+    }
+}
+
+// = Discuss sidebar: the navigator, with the two-state selection. Hover and
+// the sidebar background are mail's (important).
+.o-mail-DiscussSidebar .o-mail-DiscussSidebar-item {
+    --mail-DiscussSidebar-itemActiveBgColor: var(--shaka-fill);
+    --mail-DiscussSidebar-itemActiveOutlineColor: transparent;
+}
+
+.o-mail-DiscussSidebar:focus-within .o-mail-DiscussSidebar-item.o-active {
+    --mail-DiscussSidebar-itemActiveBgColor: var(--shaka-primary);
+    -webkit-text-fill-color: var(--shaka-on-action);
+}
+
+// = Chat windows: opaque (bg-100 is an important utility), with the pop
+// shadow through the shadow utility's custom property.
+.o-mail-ChatWindow:not(.o-mobile) {
+    --box-shadow: var(--shaka-shadow-pop);
+}
+
+// = Systray popovers: the regular material (20_overlays) shows through the
+// messaging menu; mail paints it opaque and gives it a secondary edge.
+.o_popover .o-mail-MessagingMenu {
+    --mail-MessagingMenu-bg: transparent;
+    --mail-MessagingMenu-listBorderColor: var(--shaka-separator);
+}
+
+.o_popover.o-dropdown--menu:has(.o-mail-MessagingMenu) {
+    --popover-border-color: transparent;
+}

@@ -157,7 +157,13 @@ Order: 0 → 1 → 2 → 3 → 4 → 5, then 6–13 in any order, then 14 → 17
   - Notebook: segmented control, 28px (22px links + 3px inset), 6px track / 4px pill radius, fill track, lifted fill pill in dark. Hooks untouched.
   - Stepper: `--o-statusbar-*` tokens on `.o_statusbar_status`; upcoming = fill dot, passed = action dot + white check (was surface-coloured, wrong in dark), current = **link-blue** ring (action is 2.9 on dark surface). Card uses the shadow instead of a border.
   - Budget Plan: its sheet is `background: transparent !important`, so the card shadow draws a faint outline around it; left for Task 15. Not screenshotted; compile check + detect only.
-- [ ] [Task 10: Mail (chatter, Discuss, systray popovers) → `surfaces/65_mail.scss`](tasks/task-10-mail.md)
+- [x] [Task 10: Mail (chatter, Discuss, systray popovers) → `surfaces/65_mail.scss`](tasks/task-10-mail.md)
+  - All through mail's hooks. `mail` loads after `shaka_theme` in both bundles, so each rule is one class more specific than the mail rule it retunes.
+  - Chatter: no bubbles (`display: none`, the only way past dark's important bubble colours), hairline above each non-squashed message, notes (messages without a bubble) on a 6% warning tint, leading hairline on the aside chatter. Author 14/600 at full opacity (dark mail halves it), time 12px secondary.
+  - Composer capsule drawn as a `::before` on the fill (20px radius): the field's radius is mail's important `o-rounded-bubble` utility (12px). Focus = link edge + 3px ring. `--mail-Composer-bg` transparent, action hover = label.
+  - Bubbles (Discuss, chat windows), **light only**: others on the fill, own on 8% action tint, mentions on 8% warning tint, no edge. Dark keeps mail's important literals (mixes of our `$gray-*`/status colours).
+  - Discuss sidebar: active item fill, action fill + white text under `:focus-within`. Hover and sidebar background stay mail's (important). Chat window: pop shadow via `--box-shadow` (its `bg-100` is important, so it stays opaque). Messaging menu: transparent `--mail-MessagingMenu-bg` so the popover material shows, separator list lines, no popover edge. Activity menu already gets the material.
+  - Not screenshotted; compile check + detect only.
 - [ ] [Task 11: Kanban and secondary views → `surfaces/70_kanban.scss`, `surfaces/80_views.scss`](tasks/task-11-kanban-and-secondary-views.md)
 - [ ] [Task 12: Settings → `surfaces/90_settings.scss`](tasks/task-12-settings.md)
 - [ ] [Task 13: Login and brand → `scss/login.scss` in `web.assets_frontend`](tasks/task-13-login-and-brand.md)
