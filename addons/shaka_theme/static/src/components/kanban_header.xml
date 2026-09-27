@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Column count as a bare number in a capsule (styles: surfaces/70_kanban.scss). -->
+    <t t-inherit="web.KanbanHeader" t-inherit-mode="extension">
+        <xpath expr="//span[@t-if='!progressBar and !props.list.model.useSampleModel']" position="attributes">
+            <attribute name="t-esc">group.count</attribute>
+            <attribute name="class">o_shaka_kanban_count</attribute>
+        </xpath>
+    </t>
+
+</templates>

@@ -52,6 +52,10 @@ Addon SCSS should use the ``var(--shaka-*)`` tokens, never dark-mode selectors.
             ('remove', 'shaka_theme/static/src/scss/surfaces/*.scss'),
             'shaka_theme/static/src/scss/surfaces/*.scss',
         ],
+        # Pivot and graph (the dark twin includes this bundle).
+        'web.assets_backend_lazy': [
+            'shaka_theme/static/src/scss/lazy_views.scss',
+        ],
         'web.assets_frontend': [
             'shaka_theme/static/src/scss/fonts.scss',
             'shaka_theme/static/src/scss/tokens.scss',
