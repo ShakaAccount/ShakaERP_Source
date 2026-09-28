@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+export TZ=Asia/Tehran  # log/target times in the same zone as the containers
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
@@ -41,7 +42,7 @@ Usage:
       data volume. Use for disaster recovery / new host.
 
 Options:
-  --target TS   point-in-time: state of the data at TS (db server time zone,
+  --target TS   point-in-time: state of the data at TS (Tehran time,
                 or add an offset: '2026-08-18 14:30:00+03:30').
                 Omit for the latest data available.
   --yes         don't ask for confirmation.
@@ -70,7 +71,7 @@ confirm() {
 
 # pgbackrest against the host repo, independent of the live db container
 pgbr() {
-    docker run --rm --user postgres \
+    docker run --rm --user postgres -e TZ \
         -v "$BACKUP_ROOT/pgbackrest":/var/lib/pgbackrest \
         -v "$REPO_DIR/pgbackrest.conf":/etc/pgbackrest/pgbackrest.conf:ro \
         "$@"

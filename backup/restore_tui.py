@@ -10,6 +10,7 @@ import os
 import subprocess
 import sys
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_DIR = os.path.dirname(SCRIPT_DIR)
@@ -18,6 +19,7 @@ STANZA = "shaka_db"
 DB_IMAGE = "odoo_19_db:pg16"
 SYSTEM_DBS = {"postgres", "template0", "template1"}
 STEPS = [(1, "1s"), (10, "10s"), (60, "1m"), (600, "10m"), (3600, "1h"), (86400, "1d")]
+TZ = ZoneInfo("Asia/Tehran")  # same zone as the containers (docker-compose.yml)
 MODES = ["replace", "side-by-side", "whole cluster"]
 
 
@@ -52,7 +54,7 @@ def load_backups():
 
 
 def fmt(ts):
-    return datetime.fromtimestamp(ts).astimezone().strftime("%Y-%m-%d %H:%M:%S")
+    return datetime.fromtimestamp(ts, TZ).strftime("%Y-%m-%d %H:%M:%S")
 
 
 def ui(scr, backups):
@@ -86,7 +88,7 @@ def ui(scr, backups):
         put(1, 2, "←/→ move  +/- step  [/] prev/next backup  t type time  e latest", curses.A_DIM)
         put(2, 2, "↑/↓ database  m mode  Enter restore  q quit", curses.A_DIM)
 
-        put(4, 2, f"Restorable range: {fmt(tmin)}  →  now", CYAN)
+        put(4, 2, f"Restorable range: {fmt(tmin)}  →  now   (Tehran time)", CYAN)
         put(6, 2, "─" * width, CYAN)
         for b in backups:
             put(6, pos(b["stop"]), b["type"][0].upper(), GREEN | curses.A_BOLD)
@@ -147,12 +149,12 @@ def ui(scr, backups):
             mode = (mode + 1) % len(MODES)
         elif k == "t":
             curses.echo(); curses.curs_set(1)
-            put(h - 1, 2, "time (YYYY-MM-DD HH:MM[:SS]): ", curses.A_BOLD)
-            raw = scr.getstr(h - 1, 33, 19).decode().strip()
+            put(h - 1, 2, "Tehran time (YYYY-MM-DD HH:MM[:SS]): ", curses.A_BOLD)
+            raw = scr.getstr(h - 1, 40, 19).decode().strip()
             curses.noecho(); curses.curs_set(0)
             for f in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M"):
                 try:
-                    ts = int(datetime.strptime(raw, f).timestamp())
+                    ts = int(datetime.strptime(raw, f).replace(tzinfo=TZ).timestamp())
                     break
                 except ValueError:
                     ts = None
@@ -172,11 +174,11 @@ def ui(scr, backups):
             else:
                 args += ["--db", dbs[sel]]
                 if mode == 1:
-                    args += ["--as", f"{dbs[sel]}_{datetime.fromtimestamp(t):%Y%m%d_%H%M}"]
+                    args += ["--as", f"{dbs[sel]}_{datetime.fromtimestamp(t, TZ):%Y%m%d_%H%M}"]
             if not latest:
                 # explicit UTC offset: the host and the db container may be in different time zones
-                z = datetime.fromtimestamp(t).astimezone().strftime("%z")
-                args += ["--target", datetime.fromtimestamp(t).strftime("%Y-%m-%d %H:%M:%S") + z[:3] + ":" + z[3:]]
+                z = datetime.fromtimestamp(t, TZ).strftime("%z")
+                args += ["--target", fmt(t) + z[:3] + ":" + z[3:]]
             return args
 
 
