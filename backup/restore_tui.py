@@ -42,7 +42,8 @@ def load_backups():
         backups.append({
             "label": b["label"],
             "type": b["type"],
-            "stop": b["timestamp"]["stop"],
+            # pgbackrest needs a backup whose stop time is strictly before the target
+            "stop": b["timestamp"]["stop"] + 1,
             "dbs": dbs,
         })
     if not backups:

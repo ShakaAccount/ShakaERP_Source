@@ -248,7 +248,7 @@ side_restore() {
         -c 'chown -R postgres:postgres /var/lib/postgresql/data'
     pgbr -v "$TMP_VOL":/var/lib/postgresql/data --entrypoint pgbackrest "$DB_IMAGE" \
         "$@" --db-include="$DB" \
-        || die "pgbackrest restore failed. Does '$DB' exist in that backup? Check with --list. Live server untouched."
+        || die "pgbackrest restore failed (see ERROR above). Usual causes: target is not after the oldest backup's stop time, or '$DB' isn't in that backup. Check with --list. Live server untouched."
 
     log "step 2/5: starting temporary postgres and replaying WAL (can take minutes) ..."
     # archive_mode off: the side cluster must never push WAL into the real repo
