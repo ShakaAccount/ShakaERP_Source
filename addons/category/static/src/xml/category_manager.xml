@@ -76,7 +76,7 @@
                      t-att-style="'width: ' + state.treeWidth + 'px;'">
                     <div class="o_cat_pane_head">
                         <button class="o_cat_pane_head_btn"
-                                t-on-click="openNewCategory"
+                                t-on-click="() => this.openNewCategory()"
                                 title="New root category">+</button>
                         <span>دسته بندی ها</span>
                         <span class="badge" t-esc="state.tree.length"/>
