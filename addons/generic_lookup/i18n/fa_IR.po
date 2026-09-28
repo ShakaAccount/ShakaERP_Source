@@ -71,8 +71,8 @@ msgstr "تاریخ آخرین ویرایش"
 
 #. module: generic_lookup
 #: model:ir.ui.menu,name:generic_lookup.menu_lookup_root
-msgid "Lookup Data"
-msgstr "داده‌های مرجع"
+msgid "اطلاعات Lookup"
+msgstr "اطلاعات Lookup"
 
 #. module: generic_lookup
 #: model:ir.model,name:generic_lookup.model_lookup_type

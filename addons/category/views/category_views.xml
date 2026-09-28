@@ -10,7 +10,8 @@
     </record>
 
     <menuitem id="menu_category_root"
-              name="Categories"
+              name="گروه بندی"
+              web_icon="category,static/description/icon.svg"
               sequence="10"/>
 
     <menuitem id="menu_category_manager"

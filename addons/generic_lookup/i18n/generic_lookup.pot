@@ -70,7 +70,7 @@ msgstr ""
 
 #. module: generic_lookup
 #: model:ir.ui.menu,name:generic_lookup.menu_lookup_root
-msgid "Lookup Data"
+msgid "اطلاعات Lookup"
 msgstr ""
 
 #. module: generic_lookup

@@ -1,5 +1,5 @@
 {
-    'name': 'Generic Lookup Tables',
+    'name': 'اطلاعات Lookup',
     'version': '19.0.1.0.0',
     'category': 'Shaka ERP',
     'summary': 'Generic key-value lookup types and values for use across custom modules',

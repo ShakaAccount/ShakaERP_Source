@@ -69,7 +69,7 @@ msgstr ""
 
 #. module: category
 #: model:ir.ui.menu,name:category.menu_category_root
-msgid "Categories"
+msgid "گروه بندی"
 msgstr ""
 
 #. module: category

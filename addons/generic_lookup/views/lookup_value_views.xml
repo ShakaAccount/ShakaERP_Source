@@ -37,7 +37,10 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_lookup_root" name="Lookup Data" sequence="150"/>
+    <menuitem id="menu_lookup_root"
+              name="اطلاعات Lookup"
+              web_icon="generic_lookup,static/description/icon.svg"
+              sequence="150"/>
     <menuitem id="menu_lookup_type" name="Lookup Types" action="action_lookup_type" parent="menu_lookup_root"/>
     <menuitem id="menu_lookup_value" name="Lookup Values" action="action_lookup_value" parent="menu_lookup_root"/>
 </odoo>

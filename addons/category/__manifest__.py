@@ -1,5 +1,5 @@
 {
-    'name': 'Category',
+    'name': 'گروه بندی',
     'version': '19.0.1.0.0',
     'category': 'Shaka ERP',
     'summary': 'Standalone 3-pane Category Manager over md.category / '

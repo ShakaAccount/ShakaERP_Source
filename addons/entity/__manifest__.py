@@ -26,6 +26,6 @@ by ``category``, ``win_access`` and other DW-backed addons.
     'post_init_hook': 'post_init_hook',
     'uninstall_hook': 'uninstall_hook',
     'installable': True,
-    'application': True,
+    'application': False,
     'auto_install': False,
 }

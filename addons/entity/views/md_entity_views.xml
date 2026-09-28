@@ -212,9 +212,9 @@
     </record>
 
     <menuitem id="menu_raes_md_root"
-              name="MD Data"
-              web_icon="entity,static/description/icon.png"
-              sequence="90"/>
+              name="MD_Module"
+              parent="raes_dw_connector.menu_warehouse_information"
+              sequence="20"/>
 
     <menuitem id="menu_raes_gnr_module"
               name="Modules"
