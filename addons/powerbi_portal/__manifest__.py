@@ -47,7 +47,7 @@ Cross-platform notes:
     "maintainer": "ShakaERP",
     "website": "https://shakasystem.com",
     "license": "LGPL-3",
-    "icon": "/powerbi_portal/static/description/icon.png",
+    "icon": "/powerbi_portal/static/description/icon.svg",
     "depends": ["base", "web", "shaka_ui_kit"],
     "external_dependencies": {
         # ldap3: AD Group Sync LDAP bind (pure Python, no C extension - avoids

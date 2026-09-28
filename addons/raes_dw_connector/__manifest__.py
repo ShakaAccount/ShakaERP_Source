@@ -15,7 +15,7 @@ details directly; every other DW-backed addon builds on it.
     'maintainer': 'ShakaERP',
     'website': 'https://shakasystem.com',
     'license': 'LGPL-3',
-    'icon': '/raes_dw_connector/static/description/icon.svg',
+    'icon': '/raes_dw_connector/static/description/database-cog.svg',
     'depends': ['base', 'mail'],
     'data': [
         'security/ir.model.access.csv',

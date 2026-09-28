@@ -68,7 +68,7 @@
     </record>
 
     <menuitem id="menu_powerbi_portal_root" name="Power BI" sequence="90"
-              web_icon="powerbi_portal,static/description/icon.png"
+              web_icon="powerbi_portal,static/description/icon.svg"
               action="action_powerbi_portal"/>
     <menuitem id="menu_powerbi_portal_manage" name="Manage Reports"
               parent="menu_powerbi_portal_root"

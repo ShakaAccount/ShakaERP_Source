@@ -81,9 +81,19 @@
         <field name="view_mode">list,form</field>
     </record>
 
+    <menuitem id="menu_warehouse_information"
+              name="اطلاعات انبار داده"
+              web_icon="raes_dw_connector,static/description/database-cog.svg"
+              sequence="90"/>
+
+    <menuitem id="menu_dw_connector"
+              name="DW Connector"
+              parent="menu_warehouse_information"
+              sequence="10"/>
+
     <menuitem id="menu_raes_dw_connection"
               name="اتصال به انبار داده (DW)"
-              parent="base.menu_administration"
+              parent="menu_dw_connector"
               action="action_raes_dw_connection"
               groups="base.group_system"
               sequence="60"/>

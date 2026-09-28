@@ -69,8 +69,8 @@ msgstr "امکان جابجایی «%(title)s» زیر فرزند خودش «%(p
 
 #. module: category
 #: model:ir.ui.menu,name:category.menu_category_root
-msgid "Categories"
-msgstr "دسته‌بندی‌ها"
+msgid "گروه بندی"
+msgstr "گروه بندی"
 
 #. module: category
 #: model:ir.model.fields,field_description:category.field_raes_md_category_member__category_id
