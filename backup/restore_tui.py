@@ -17,7 +17,7 @@ BACKUP_ROOT = os.path.join(os.path.dirname(REPO_DIR), "backups")
 STANZA = "shaka_db"
 DB_IMAGE = "odoo_19_db:pg16"
 SYSTEM_DBS = {"postgres", "template0", "template1"}
-STEPS = [(60, "1m"), (600, "10m"), (3600, "1h"), (86400, "1d")]
+STEPS = [(1, "1s"), (10, "10s"), (60, "1m"), (600, "10m"), (3600, "1h"), (86400, "1d")]
 MODES = ["replace", "side-by-side", "whole cluster"]
 
 
@@ -63,7 +63,7 @@ def ui(scr, backups):
 
     tmin = backups[0]["stop"]
     tmax = int(datetime.now().timestamp())  # WAL is archived every <=30s, so "now" is reachable
-    t, step, mode, sel, msg = tmax, 1, 0, 0, ""
+    t, step, mode, sel, msg = tmax, 2, 0, 0, ""
 
     def put(y, x, s, attr=0):
         h, w = scr.getmaxyx()
