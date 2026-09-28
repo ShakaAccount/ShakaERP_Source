@@ -183,7 +183,7 @@
 
     <menuitem id="menu_raes_dw_agent_job"
               name="ETL Jobs (SQL Agent)"
-              parent="base.menu_administration"
+              parent="menu_dw_connector"
               action="action_raes_dw_agent_job"
               groups="base.group_system"
               sequence="61"/>

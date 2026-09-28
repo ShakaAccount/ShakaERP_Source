@@ -76,6 +76,8 @@
     // the list past the step rail and the sheet edge.
     margin-inline:0 !important;
     overflow:hidden;
+    border:1px solid var(--shaka-border);
+    border-radius:var(--shaka-radius-card);
     padding-bottom:0 !important;
     // Keep the panel full-height, but render normal-height guide rows instead
     // of stretching the few real Odoo rows to fill all available space.
@@ -106,7 +108,7 @@
   .bp-financial-toolbar .bp-note { margin: 0; }
   .bp-main, .bp-main .o_notebook, .bp-main .o_notebook_content,
   .bp-main .tab-content, .bp-main .o_field_x2many { min-width: 0; max-width: 100%; overflow: hidden; }
-  .o_list_renderer { width: calc(100% - 2px) !important; max-width: calc(100% - 2px); margin-inline-start: 2px; overflow-x: auto !important; overflow-y: auto; scrollbar-gutter: stable; }
+  .o_list_renderer { width: calc(100% - 2px) !important; max-width: calc(100% - 2px); margin-inline-start: 2px; overflow-x: auto !important; overflow-y: auto; scrollbar-gutter: stable; border: 1px solid var(--shaka-border); border-radius: var(--shaka-radius-card); background: var(--shaka-surface); }
   .o_list_renderer > .o_list_table { width: max-content !important; min-width: 2100px !important; table-layout: fixed; }
   .o_list_table thead th { position: sticky; top: 0; z-index: 3; min-width: 105px; height: 42px; padding-inline: 10px !important; white-space: nowrap; background: var(--shaka-surface) !important; border-inline-end: 1px solid var(--shaka-separator); }
   .o_list_table tbody td { min-width: 105px; padding-inline: 10px !important; white-space: nowrap; border-inline-end: 1px solid var(--shaka-separator); }

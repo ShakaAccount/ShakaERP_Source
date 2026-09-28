@@ -1,13 +1,27 @@
 <svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1E3A8A"/><stop offset="100%" stop-color="#38BDF8"/></linearGradient>
-    <linearGradient id="card" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity=".98"/><stop offset="100%" stop-color="#E0F2FE" stop-opacity=".92"/></linearGradient>
-    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="9" stdDeviation="8" flood-color="#0C4A6E" flood-opacity=".30"/></filter>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E3A8A"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity=".98"/>
+      <stop offset="100%" stop-color="#E0F2FE" stop-opacity=".92"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="9" stdDeviation="8" flood-color="#0C4A6E" flood-opacity=".30"/>
+    </filter>
   </defs>
   <rect x="8" y="8" width="240" height="240" rx="48" fill="url(#bg)"/>
   <g filter="url(#shadow)">
-    <rect x="45" y="43" width="166" height="170" rx="20" fill="url(#card)"/><rect x="65" y="65" width="70" height="12" rx="6" fill="#0F172A" opacity=".88"/><rect x="65" y="86" width="43" height="7" rx="3.5" fill="#94A3B8"/>
-    <rect x="65" y="163" width="20" height="29" rx="5" fill="#38BDF8"/><rect x="94" y="143" width="20" height="49" rx="5" fill="#2563EB"/><rect x="123" y="126" width="20" height="66" rx="5" fill="#1D4ED8"/><rect x="152" y="105" width="20" height="87" rx="5" fill="#0F3D99"/>
-    <path d="M64 148 L101 129 L130 138 L169 104" fill="none" stroke="#F97316" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M159 104h10v10" fill="none" stroke="#F97316" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="45" y="43" width="166" height="170" rx="20" fill="url(#card)"/>
+    <rect x="65" y="65" width="70" height="12" rx="6" fill="#0F172A" opacity=".88"/>
+    <rect x="65" y="86" width="43" height="7" rx="3.5" fill="#94A3B8"/>
+    <rect x="65" y="163" width="20" height="29" rx="5" fill="#38BDF8"/>
+    <rect x="94" y="143" width="20" height="49" rx="5" fill="#2563EB"/>
+    <rect x="123" y="126" width="20" height="66" rx="5" fill="#1D4ED8"/>
+    <rect x="152" y="105" width="20" height="87" rx="5" fill="#0F3D99"/>
+    <path d="M64 148 L101 129 L130 138 L169 104" fill="none" stroke="#F97316" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M159 104h10v10" fill="none" stroke="#F97316" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>

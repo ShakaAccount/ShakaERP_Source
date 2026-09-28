@@ -68,8 +68,8 @@
 
     <menuitem id="menu_company_board_role"
               name="نقش‌های هیئت‌مدیره"
-              parent="base.menu_users"
+              parent="menu_company_base_info_root"
               action="action_company_board_role"
               groups="base.group_system"
-              sequence="36"/>
+              sequence="50"/>
 </odoo>

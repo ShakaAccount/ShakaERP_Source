@@ -16,7 +16,7 @@ Management HTTP API, plus BI row-level security driven by ``MD.UserAccess``
     'website': 'https://shakasystem.com',
     'license': 'LGPL-3',
     'icon': '/win_access/static/description/icon.svg',
-    'depends': ['base', 'web', 'entity', 'shaka_ui_kit'],
+    'depends': ['base', 'web', 'entity', 'shaka_ui_kit', 'powerbi_portal'],
     'external_dependencies': {'python': ['requests', 'pymssql']},
     'data': [
         'security/ir.model.access.csv',

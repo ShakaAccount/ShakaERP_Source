@@ -86,6 +86,8 @@
             </xpath>
         </field>
     </record>
-    <menuitem id="menu_win_access" name="Windows Access" sequence="90" groups="base.group_system"/>
+    <menuitem id="menu_win_access" name="دسترسی ویندوز"
+              parent="powerbi_portal.menu_reports_and_access_root"
+              sequence="20" groups="base.group_system"/>
     <menuitem id="menu_win_access_group" name="Groups" parent="menu_win_access" action="action_win_access_group"/>
 </odoo>

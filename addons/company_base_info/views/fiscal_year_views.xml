@@ -48,7 +48,8 @@
 
     <menuitem id="menu_company_fiscal_year"
               name="سال‌های مالی"
-              parent="base.menu_users"
+              parent="menu_company_base_info_root"
               action="action_company_fiscal_year"
-              sequence="35"/>
+              groups="base.group_system"
+              sequence="40"/>
 </odoo>

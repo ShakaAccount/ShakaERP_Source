@@ -96,8 +96,8 @@ msgstr "این عنوان سناریو قبلاً در همین فرم ثبت ش
 
 #. module: holding_budget
 #: model:ir.ui.menu,name:holding_budget.menu_holding_budget_root
-msgid "بودجه هلدینگ"
-msgstr "بودجه هلدینگ"
+msgid "اطلاعات پایه بودجه"
+msgstr "اطلاعات پایه بودجه"
 
 #. module: holding_budget
 #: model:ir.model.fields,field_description:holding_budget.field_holding_budget_assumption__registration_date
