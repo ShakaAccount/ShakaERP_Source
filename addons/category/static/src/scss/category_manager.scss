@@ -848,8 +848,8 @@
         width: 16px;
         height: 16px;
         border-radius: 50%;
-        background: var(--cat-border-soft);
-        color: var(--cat-text-muted);
+        background: color-mix(in srgb, var(--tree-text) 18%, transparent);
+        color: var(--tree-text);
         font-family: Georgia, serif;
         font-style: italic;
         font-weight: 700;
@@ -862,8 +862,8 @@
       }
 
       &:hover .o_cat_node_company_icon {
-        background: var(--cat-accent);
-        color: var(--cat-accent-text);
+        background: var(--tree-text);
+        color: var(--tree-bg);
         transform: scale(1.08);
       }
 
@@ -904,7 +904,7 @@
       border: 0;
       background: transparent;
       border-radius: 4px;
-      color: var(--cat-text-muted);
+      color: var(--tree-text-muted);
       font-size: 14px;
       line-height: 1;
       cursor: pointer;
@@ -913,6 +913,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    // Room for the +, edit and delete buttons so the info pill isn't
+    // covered by the actions overlay.
+    .o_tree_node.o_tree_node_has_actions {
+      padding-inline-end: 88px;
+    }
+
+    .o_tree_node_selected .o_cat_trash_icon {
+      color: var(--tree-text);
     }
 
     .o_cat_trash_icon {
@@ -924,8 +934,8 @@
     }
 
     .o_cat_node_add:hover {
-      background: var(--cat-accent-soft);
-      color: var(--cat-accent);
+      background: var(--tree-accent-soft);
+      color: var(--tree-text);
     }
 
     .o_cat_node_remove {
