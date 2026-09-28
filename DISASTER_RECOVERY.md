@@ -300,7 +300,7 @@ LOG=~/backups/logs/health_check.log
 ### Rotate / Expire Old Backups Manually
 
 ```bash
-# pgBackRest handles retention automatically (repo1-retention-full=2)
+# pgBackRest handles retention automatically (repo1-retention-full=8)
 # To force expire now:
 docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db expire
 ```

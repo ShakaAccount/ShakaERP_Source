@@ -99,7 +99,7 @@ The script performs, in order:
 | Schedule | Command | Purpose |
 |----------|---------|---------|
 | `*/15 * * * *` | `~/Shaka/backup/filestore_sync.sh` | Incremental rsync mirror of the filestore (RPO ≤ 15 min). |
-| `15 2 * * *` | `~/Shaka/backup/pgbackrest_full.sh` | Daily full base backup at 02:15 (retention: 2 full + 7 days WAL). |
+| `15 2 * * *` | `~/Shaka/backup/pgbackrest_full.sh` | Daily full base backup at 02:15 (retention: 8 full + their WAL = any second of the last 7 days restorable). |
 
 Both write logs to `~/backups/logs/`.
 
