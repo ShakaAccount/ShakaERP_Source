@@ -34,11 +34,20 @@ docker compose -f $REPO/docker-compose.yml exec -T -u postgres db pgbackrest --s
 # List available backups
 docker compose -f $REPO/docker-compose.yml exec -T -u postgres db pgbackrest --stanza=shaka_db info
 
-# Full database restore (latest or point-in-time)
-$REPO/backup/restore.sh [--target 'YYYY-MM-DD HH:MM:SS'] [--yes]
+# Interactive: pick database + time on a backup timeline (runs restore.sh for you)
+$REPO/backup/restore_tui.py
 
-# Manual full backup (run before maintenance)
-$REPO/backup/pgbackrest_full.sh
+# List backups, databases in them, and the PITR window
+$REPO/backup/restore.sh --list
+
+# Restore ONE database (others untouched; old copy kept as <db>_before_restore_<ts>)
+$REPO/backup/restore.sh --db <name> [--as <newname>] [--target 'YYYY-MM-DD HH:MM:SS'] [--yes]
+
+# Restore the WHOLE cluster (all databases; disaster recovery)
+$REPO/backup/restore.sh --all [--target 'YYYY-MM-DD HH:MM:SS'] [--yes]
+
+# Manual backup (run before maintenance); --type diff|incr for faster ones
+$REPO/backup/pgbackrest_full.sh [--type full|diff|incr]
 
 # Manual filestore sync
 $REPO/backup/filestore_sync.sh
@@ -59,12 +68,15 @@ $REPO/backup/filestore_sync.sh
 ```bash
 cd ~/Shaka
 
-# Use the automated restore script (handles preflight, confirmation, readiness wait)
-# Latest backup:
-./backup/restore.sh --yes
+# Only one database affected? Restore just that one (others and the server stay up):
+./backup/restore.sh --db <name> --target '2026-08-18 14:30:00'
 
-# Point-in-time (replace timestamp):
-./backup/restore.sh --target '2026-08-18 14:30:00' --yes
+# Or restore it side by side to compare / copy data back by hand:
+./backup/restore.sh --db <name> --as <name>_check --target '2026-08-18 14:30:00'
+
+# Whole cluster (all databases) — latest, or point-in-time:
+./backup/restore.sh --all --yes
+./backup/restore.sh --all --target '2026-08-18 14:30:00' --yes
 
 # Or without --yes for interactive confirmation
 ```
@@ -174,7 +186,7 @@ docker compose build db
 docker build -f filestore-sync.Dockerfile -t odoo_filestore_sync .
 
 # 5. Restore database (uses the automated script with all safety checks)
-./backup/restore.sh --yes
+./backup/restore.sh --all --yes
 
 # 6. Restore filestore
 docker run --rm \
@@ -217,10 +229,10 @@ curl -I http://localhost
 
 ```bash
 # Find the timestamp before migration started
-docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db info
+./backup/restore.sh --list
 
-# Restore to that timestamp using the automated script
-./backup/restore.sh --target '2026-08-18 10:00:00' --yes
+# Restore that database to that timestamp (other databases untouched)
+./backup/restore.sh --db <name> --target '2026-08-18 10:00:00' --yes
 ```
 
 ---
@@ -234,8 +246,9 @@ docker compose exec -T -u postgres db pgbackrest --stanza=shaka_db info
 **Option A — Restore to a temporary database and extract the table** (requires a spare server or extra disk):
 
 ```bash
-# This is complex with physical-only backups. Recommended: add a weekly logical backup cron.
-# See "Add a Logical Backup (pg_dump) for Table-Level Recovery" in Maintenance Operations.
+# Restore the database side by side at a time before the mistake, then copy the rows back:
+./backup/restore.sh --db <name> --as <name>_recover --target '2026-08-18 10:00:00'
+# (the script also leaves a pg_dump of it in ~/backups/restore_dumps/ for pg_restore -t <table>)
 ```
 
 **Option B — If you have a weekly logical backup (pg_dump)**, restore that dump to a temporary DB, extract the table, and copy back.
@@ -400,7 +413,8 @@ tail -f ~/backups/logs/filestore_sync.log
 │   ├── install_cron.sh         # Installs 15-min filestore + daily full backup cron
 │   ├── filestore_sync.sh       # Incremental rsync mirror (RPO 15min)
 │   ├── pgbackrest_full.sh      # Daily full backup trigger
-│   └── restore.sh              # Full disaster restore (database only, with preflight, PITR, wait)
+│   ├── restore_tui.py          # Interactive timeline picker for restore.sh
+│   └── restore.sh              # Single-db or full-cluster restore (--list / --db / --all, PITR)
 ├── .env                        # Credentials (NOT in git)
 └── odoo.conf                   # Odoo config (NOT in git, generated from template)
 ```
