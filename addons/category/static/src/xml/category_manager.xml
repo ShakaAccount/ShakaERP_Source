@@ -482,12 +482,40 @@
                                     <small class="text-muted">Follows the tree root's companies.</small>
                                 </t>
                                 <t t-else="">
-                                    <SelectMenu multiSelect="true"
-                                                searchable="true"
-                                                choices="companyChoices"
-                                                value="state.newCategory.companies.picked"
-                                                placeholder="companiesPlaceholder"
-                                                onSelect.bind="onCompaniesSelect"/>
+                                    <div class="o_cat_entity_picker" t-ref="companyPicker">
+                                        <div class="o_cat_entity_trigger"
+                                             t-att-class="{ 'o_cat_entity_trigger_open': state.companyPickerOpen }"
+                                             t-on-click="toggleCompanyPicker">
+                                            <div class="o_cat_entity_trigger_label o_cat_company_tags">
+                                                <TagsList tags="pickedCompanyTags"/>
+                                            </div>
+                                            <span class="o_cat_entity_caret">&#9662;</span>
+                                        </div>
+                                        <div class="o_cat_entity_dropdown"
+                                             t-if="state.companyPickerOpen">
+                                            <div class="o_cat_entity_search_wrap">
+                                                <input type="text"
+                                                       class="o_cat_entity_search"
+                                                       t-att-placeholder="companySearchPlaceholder"
+                                                       autocomplete="off"
+                                                       t-att-value="state.companySearch"
+                                                       t-on-input="(ev) => { this.state.companySearch = ev.target.value; }"
+                                                       t-on-keydown="onCompanyKeydown"/>
+                                            </div>
+                                            <div class="o_cat_entity_list">
+                                                <t t-if="filteredCompanies.length === 0">
+                                                    <div class="o_cat_entity_empty">No matching companies</div>
+                                                </t>
+                                                <t t-foreach="filteredCompanies" t-as="co" t-key="co.id">
+                                                    <div class="o_cat_entity_option"
+                                                         t-att-class="{ 'o_cat_entity_option_active': state.newCategory.companies.picked.includes(co.id) }"
+                                                         t-on-click="() => this.toggleCompany(co.id)">
+                                                        <span class="o_cat_entity_option_title" t-esc="co.title"/>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <small class="text-muted">The active company always owns and sees it.</small>
                                 </t>
                             </div>

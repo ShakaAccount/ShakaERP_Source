@@ -8,7 +8,7 @@ import {
     useRef, useExternalListener,
 } from "@odoo/owl";
 import {ConfirmationDialog} from "@web/core/confirmation_dialog/confirmation_dialog";
-import {SelectMenu} from "@web/core/select_menu/select_menu";
+import {TagsList} from "@web/core/tags_list/tags_list";
 import {TreeNode} from "@shaka_ui_kit/js/tree_node";
 
 const TREE_WIDTH_KEY = "category_manager.tree_width";
@@ -71,6 +71,7 @@ export class CategoryManager extends Component {
 
         this.labelPickerRef = useRef("labelPicker");
         this.entityPickerRef = useRef("entityPicker");
+        this.companyPickerRef = useRef("companyPicker");
         this._drag = null;
         this._entitiesLoaded = false;
         this._filterCacheKey = null;
@@ -99,6 +100,12 @@ export class CategoryManager extends Component {
                     this.state.showLabelPicker = false;
                 }
             }
+            if (this.state.companyPickerOpen) {
+                const el = this.companyPickerRef.el;
+                if (el && !el.contains(ev.target)) {
+                    this.closeCompanyPicker();
+                }
+            }
             if (this.state.entityPickerOpen) {
                 const el = this.entityPickerRef.el;
                 if (el && !el.contains(ev.target)) {
@@ -119,6 +126,8 @@ export class CategoryManager extends Component {
             treeSearch: "",
             entities: [],
             entityPickerOpen: false,
+            companyPickerOpen: false,
+            companySearch: "",
             entitySearch: "",
             entityHighlightIdx: 0,
             left: this._blankSide(),
@@ -1195,23 +1204,62 @@ export class CategoryManager extends Component {
         }
     }
 
-    get companiesPlaceholder() {
-        return _t("Select companies\u2026");
+    get companySearchPlaceholder() {
+        return _t("Search companies\u2026");
     }
 
-    get companyChoices() {
-        return this.state.newCategory.companies.choices.map(c => ({value: c.id, label: c.title}));
-    }
-
-    onCompaniesSelect(values) {
-        // The owner (active company) always keeps the category visible.
+    get pickedCompanyTags() {
         const c = this.state.newCategory.companies;
-        const picked = values || [];
-        c.picked = c.default && !picked.includes(c.default) ? [c.default, ...picked] : picked;
+        return c.choices.filter(x => c.picked.includes(x.id)).map(x => ({
+            id: x.id,
+            text: x.title,
+            // The owner (active company) always keeps the category visible.
+            onDelete: x.id === c.default ? undefined : () => this.toggleCompany(x.id),
+        }));
+    }
+
+    get filteredCompanies() {
+        const term = (this.state.companySearch || "").trim().toLowerCase();
+        const list = this.state.newCategory.companies.choices;
+        return term ? list.filter(x => (x.title || "").toLowerCase().includes(term)) : list;
+    }
+
+    toggleCompany(id) {
+        const c = this.state.newCategory.companies;
+        if (id === c.default) return;
+        c.picked = c.picked.includes(id) ? c.picked.filter(i => i !== id) : [...c.picked, id];
+    }
+
+    async toggleCompanyPicker(ev) {
+        if (ev) ev.stopPropagation();
+        if (this.state.companyPickerOpen) {
+            this.closeCompanyPicker();
+            return;
+        }
+        this.state.companyPickerOpen = true;
+        this.state.companySearch = "";
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        const el = this.companyPickerRef.el;
+        const input = el && el.querySelector(".o_cat_entity_search");
+        if (input) input.focus();
+    }
+
+    closeCompanyPicker() {
+        this.state.companyPickerOpen = false;
+        this.state.companySearch = "";
+    }
+
+    onCompanyKeydown(ev) {
+        if (ev.key === "Escape") {
+            this.closeCompanyPicker();
+            ev.preventDefault();
+            ev.stopPropagation();
+        }
     }
 
     cancelNewCategory() {
         this.closeEntityPicker();
+        this.closeCompanyPicker();
         this.state.showNewCategory = false;
     }
 
@@ -1289,7 +1337,7 @@ export class CategoryManager extends Component {
 }
 
 CategoryManager.template = "category.CategoryManager";
-CategoryManager.components = {TreeNode, SelectMenu};
+CategoryManager.components = {TreeNode, TagsList};
 CategoryManager.props = {
     "*": true,
 };

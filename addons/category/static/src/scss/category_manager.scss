@@ -246,6 +246,15 @@
         }
       }
 
+      .o_cat_company_tags {
+        white-space: normal;
+        overflow: visible;
+
+        .o_tag {
+          margin: 1px 2px 1px 0;
+        }
+      }
+
       .o_cat_entity_clear {
         flex: 0 0 auto;
         width: 22px;

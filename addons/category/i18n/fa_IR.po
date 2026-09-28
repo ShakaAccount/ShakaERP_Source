@@ -495,3 +495,13 @@ msgstr "ایجاد دسته‌بندی ممکن نشد."
 #. odoo-python
 msgid "Shared with"
 msgstr "به اشتراک گذاشته‌شده با"
+
+#. module: category
+#. odoo-javascript
+msgid "Search companies…"
+msgstr "جستجوی شرکت‌ها…"
+
+#. module: category
+#. odoo-xml
+msgid "No matching companies"
+msgstr "شرکتی یافت نشد"

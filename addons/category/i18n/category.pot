@@ -495,3 +495,13 @@ msgstr ""
 #. odoo-python
 msgid "Shared with"
 msgstr ""
+
+#. module: category
+#. odoo-javascript
+msgid "Search companies…"
+msgstr ""
+
+#. module: category
+#. odoo-xml
+msgid "No matching companies"
+msgstr ""
