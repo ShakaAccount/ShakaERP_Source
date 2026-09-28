@@ -1,0 +1,757 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* telegram
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e-20260223\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-28 08:37+0000\n"
+"PO-Revision-Date: 2026-09-28 08:37+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_bot__active
+msgid "Active"
+msgstr "فعال"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_template_view_form
+msgid "Add a 'Send Telegram' entry to the Actions menu of this model"
+msgstr "افزودن گزینه «ارسال تلگرام» به منوی اقدامات این مدل"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_template_view_form
+msgid "Add to Actions Menu"
+msgstr "افزودن به منوی اقدامات"
+
+#. module: telegram
+#: model:res.groups,name:telegram.group_telegram_admin
+msgid "Administrator"
+msgstr "مدیر"
+
+#. module: telegram
+#: model:ir.model.fields,help:telegram.field_res_users__telegram_notify
+msgid "Also send my Odoo notifications to my Telegram."
+msgstr "اعلان‌های من در سیستم به تلگرام من هم ارسال شود."
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__model_id
+msgid "Applies to"
+msgstr "مربوط به"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_bot_view_form
+msgid "Archived"
+msgstr "بایگانی‌شده"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__report_id
+msgid "Attach Report"
+msgstr "پیوست گزارش"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__attachment_ids
+msgid "Attachments"
+msgstr "پیوست‌ها"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_composer__body
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__body
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__body
+msgid "Body"
+msgstr "متن"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__bot_id
+msgid "Bot"
+msgstr "ربات"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_bot__token
+msgid "Bot Token"
+msgstr "توکن ربات"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_bot__bot_username
+msgid "Bot Username"
+msgstr "نام کاربری ربات"
+
+#. module: telegram
+#: model:ir.ui.menu,name:telegram.telegram_bot_menu
+msgid "Bots"
+msgstr "ربات‌ها"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_discuss_channel__channel_type
+msgid "Channel Type"
+msgstr "نوع کانال"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__chat_id
+msgid "Chat ID"
+msgstr "شناسه گفتگو"
+
+#. module: telegram
+#: model:ir.model.fields,help:telegram.field_discuss_channel__channel_type
+msgid ""
+"Chat is private and unique between 2 persons. Group is private among invited"
+" persons. Channel can be freely joined (depending on its configuration)."
+msgstr ""
+"گفتگو خصوصی و منحصر به 2 نفر است. گروه مختص چند عضو دعوت شده است. می‌توان "
+"آزادانه به کانال ملحق شد (بسته به پیکربندی آن)."
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.ir_actions_server_view_form_telegram
+msgid "Choose a template..."
+msgstr "یک قالب انتخاب کنید..."
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_bot__company_ids
+msgid "Companies"
+msgstr "شرکت‌ها"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__company_id
+msgid "Company"
+msgstr "شرکت"
+
+#. module: telegram
+#: model:ir.model,name:telegram.model_res_config_settings
+msgid "Config Settings"
+msgstr "تنظیمات پیکربندی"
+
+#. module: telegram
+#: model:ir.ui.menu,name:telegram.telegram_configuration_menu
+msgid "Configuration"
+msgstr "پیکربندی"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.res_config_settings_view_form
+msgid "Configure Bots"
+msgstr "پیکربندی ربات‌ها"
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/models/res_partner.py:0
+msgid "Configure a Telegram bot and click 'Test Connection' first."
+msgstr "ابتدا یک ربات تلگرام پیکربندی کرده و روی «آزمایش اتصال» کلیک کنید."
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.res_users_view_form_preferences_telegram
+msgid "Connect Telegram"
+msgstr "اتصال به تلگرام"
+
+#. module: telegram
+#: model_terms:ir.actions.act_window,help:telegram.telegram_bot_action
+msgid "Connect a Telegram bot"
+msgstr "یک ربات تلگرام متصل کنید"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.res_partner_view_form_telegram
+msgid "Connected Chat"
+msgstr "گفتگوی متصل"
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/models/telegram_bot.py:0
+msgid "Connected to %(company)s as %(name)s."
+msgstr "به عنوان %(name)s به %(company)s متصل شدید."
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/models/telegram_bot.py:0
+msgid "Connected to @%s"
+msgstr "به ‎@%s متصل شد"
+
+#. module: telegram
+#: model:ir.model,name:telegram.model_res_partner
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__partner_id
+msgid "Contact"
+msgstr "مخاطب"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.res_partner_view_form_telegram
+msgid "Create Connect Link"
+msgstr "ایجاد لینک اتصال"
+
+#. module: telegram
+#: model_terms:ir.actions.act_window,help:telegram.telegram_bot_action
+msgid "Create a bot with @BotFather in Telegram and paste its token here."
+msgstr "با ‎@BotFather در تلگرام یک ربات بسازید و توکن آن را اینجا وارد کنید."
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_bot__create_uid
+#: model:ir.model.fields,field_description:telegram.field_telegram_composer__create_uid
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__create_uid
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__create_uid
+msgid "Created by"
+msgstr "ایجاد شده توسط"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_bot__create_date
+#: model:ir.model.fields,field_description:telegram.field_telegram_composer__create_date
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__create_date
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__create_date
+msgid "Created on"
+msgstr "ایجاد شده در"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_composer_view_form
+msgid "Discard"
+msgstr "انصراف"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.res_partner_view_form_telegram
+#: model_terms:ir.ui.view,arch_db:telegram.res_users_view_form_preferences_telegram
+msgid "Disconnect"
+msgstr "قطع اتصال"
+
+#. module: telegram
+#: model:ir.model,name:telegram.model_discuss_channel
+msgid "Discussion Channel"
+msgstr "کانال گفتگو"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_discuss_channel__display_name
+#: model:ir.model.fields,field_description:telegram.field_ir_actions_server__display_name
+#: model:ir.model.fields,field_description:telegram.field_mail_thread__display_name
+#: model:ir.model.fields,field_description:telegram.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:telegram.field_res_partner__display_name
+#: model:ir.model.fields,field_description:telegram.field_res_users__display_name
+#: model:ir.model.fields,field_description:telegram.field_res_users_settings__display_name
+#: model:ir.model.fields,field_description:telegram.field_telegram_bot__display_name
+#: model:ir.model.fields,field_description:telegram.field_telegram_composer__display_name
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__display_name
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__display_name
+msgid "Display Name"
+msgstr "نام نمایشی"
+
+#. module: telegram
+#: model:ir.model,name:telegram.model_mail_thread
+msgid "Email Thread"
+msgstr "موضوع ایمیل"
+
+#. module: telegram
+#: model:ir.model.fields.selection,name:telegram.selection__telegram_message__state__error
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_message_view_search
+msgid "Failed"
+msgstr "ناموفق"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__failure_reason
+msgid "Failure Reason"
+msgstr "علت خطا"
+
+#. module: telegram
+#: model:ir.model.fields,help:telegram.field_telegram_bot__bot_username
+msgid "Filled by 'Test Connection'. Needed for the connect links."
+msgstr "با «آزمایش اتصال» پر می‌شود. برای لینک‌های اتصال لازم است."
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_template_view_form
+msgid "Hello {{ object.partner_id.name }}, ..."
+msgstr "سلام {{ object.partner_id.name }}، ..."
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/models/telegram_bot.py:0
+msgid "Hello! Send a message here and our team will answer you."
+msgstr "سلام! پیام خود را اینجا بفرستید تا همکاران ما پاسخ دهند."
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_discuss_channel__id
+#: model:ir.model.fields,field_description:telegram.field_ir_actions_server__id
+#: model:ir.model.fields,field_description:telegram.field_mail_thread__id
+#: model:ir.model.fields,field_description:telegram.field_res_config_settings__id
+#: model:ir.model.fields,field_description:telegram.field_res_partner__id
+#: model:ir.model.fields,field_description:telegram.field_res_users__id
+#: model:ir.model.fields,field_description:telegram.field_res_users_settings__id
+#: model:ir.model.fields,field_description:telegram.field_telegram_bot__id
+#: model:ir.model.fields,field_description:telegram.field_telegram_composer__id
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__id
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__id
+msgid "ID"
+msgstr "شناسه"
+
+#. module: telegram
+#: model:ir.model.fields,help:telegram.field_res_users_settings__is_discuss_sidebar_category_telegram_open
+msgid "If checked, the Telegram category is open in the discuss sidebar"
+msgstr "در صورت انتخاب، دسته تلگرام در نوار کناری گفتگو باز است"
+
+#. module: telegram
+#: model:ir.model.fields.selection,name:telegram.selection__telegram_message__state__outgoing
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_message_view_search
+msgid "In Queue"
+msgstr "در صف"
+
+#. module: telegram
+#: model:ir.model.fields.selection,name:telegram.selection__telegram_message__message_type__inbound
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_message_view_search
+msgid "Inbound"
+msgstr "دریافتی"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_composer__is_single
+msgid "Is Single"
+msgstr "تکی"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__lang
+msgid "Language"
+msgstr "زبان"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_bot__update_offset
+msgid "Last Update ID"
+msgstr "شناسه آخرین به‌روزرسانی"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_bot__write_uid
+#: model:ir.model.fields,field_description:telegram.field_telegram_composer__write_uid
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__write_uid
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__write_uid
+msgid "Last Updated by"
+msgstr "آخرین به‌روزرسانی توسط"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_bot__write_date
+#: model:ir.model.fields,field_description:telegram.field_telegram_composer__write_date
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__write_date
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__write_date
+msgid "Last Updated on"
+msgstr "آخرین به‌روزرسانی در"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__mail_message_id
+msgid "Mail Message"
+msgstr "پیام"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__message_type
+msgid "Message Type"
+msgstr "نوع پیام"
+
+#. module: telegram
+#: model:ir.ui.menu,name:telegram.telegram_message_menu
+msgid "Messages"
+msgstr "پیام‌ها"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__model
+msgid "Model"
+msgstr "مدل"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_bot__name
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__name
+msgid "Name"
+msgstr "نام"
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/wizard/telegram_composer.py:0
+msgid "No Telegram bot is configured."
+msgstr "هیچ ربات تلگرامی پیکربندی نشده است."
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/wizard/telegram_composer.py:0
+msgid "None of the recipients is connected to Telegram."
+msgstr "هیچ‌یک از گیرندگان به تلگرام متصل نیستند."
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_composer__unlinked_partner_ids
+msgid "Not connected to Telegram"
+msgstr "متصل نشده به تلگرام"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_composer_view_form
+msgid "Not connected to Telegram (skipped):"
+msgstr "متصل نشده به تلگرام (ارسال نمی‌شود):"
+
+#. module: telegram
+#: model:ir.model.fields,help:telegram.field_telegram_template__lang
+msgid ""
+"Optional translation language (ISO code) to select when sending out an "
+"email. If not set, the main partner's language will be used. This should "
+"usually be a placeholder expression that provides the appropriate language, "
+"e.g. {{ object.partner_id.lang }}."
+msgstr ""
+
+#. module: telegram
+#: model:ir.model.fields.selection,name:telegram.selection__telegram_message__message_type__outbound
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_message_view_search
+msgid "Outbound"
+msgstr "ارسالی"
+
+#. module: telegram
+#: model:ir.model.fields,help:telegram.field_telegram_template__body
+msgid "Placeholders like {{ object.name }} are replaced for each record."
+msgstr "عبارت‌هایی مانند {{ object.name }} برای هر رکورد جایگزین می‌شوند."
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.res_config_settings_view_form
+msgid ""
+"Proxy for all calls to api.telegram.org (leave empty for a direct "
+"connection)."
+msgstr "پروکسی برای همه درخواست‌ها به api.telegram.org (برای اتصال مستقیم خالی بگذارید)."
+
+#. module: telegram
+#: model:ir.model.fields.selection,name:telegram.selection__telegram_message__state__received
+msgid "Received"
+msgstr "دریافت شد"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_composer__partner_ids
+msgid "Recipients"
+msgstr "گیرندگان"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_template_view_form
+msgid "Remove from Actions Menu"
+msgstr "حذف از منوی اقدامات"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__render_model
+msgid "Rendering Model"
+msgstr "مدل رندر"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_composer__res_ids
+msgid "Res"
+msgstr "شناسه‌ها"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_composer__res_model
+msgid "Res Model"
+msgstr "مدل رکورد"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_message_view_form
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_message_view_list
+msgid "Retry"
+msgstr "تلاش مجدد"
+
+#. module: telegram
+#. odoo-javascript
+#: code:addons/telegram/static/src/discuss/discuss_app_model_patch.js:0
+msgid "Search Telegram Chat"
+msgstr "جستجوی گفتگوی تلگرام"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_composer_view_form
+msgid "Send"
+msgstr "ارسال"
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/models/ir_actions_server.py:0
+msgid "Send %(template_name)s"
+msgstr "ارسال %(template_name)s"
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/models/res_partner.py:0
+#: model:ir.model.fields.selection,name:telegram.selection__ir_actions_server__state__telegram
+#: model_terms:ir.ui.view,arch_db:telegram.res_partner_view_form_telegram
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_composer_view_form
+msgid "Send Telegram"
+msgstr "ارسال تلگرام"
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/models/telegram_template.py:0
+msgid "Send Telegram (%s)"
+msgstr "ارسال تلگرام (%s)"
+
+#. module: telegram
+#: model:ir.model,name:telegram.model_telegram_composer
+msgid "Send Telegram Message"
+msgstr "ارسال پیام تلگرام"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.res_partner_view_form_telegram
+msgid ""
+"Send this link to the contact: opening it in Telegram connects them to the "
+"bot."
+msgstr "این لینک را برای مخاطب بفرستید: با باز کردن آن در تلگرام به ربات متصل می‌شود."
+
+#. module: telegram
+#: model:ir.model.fields.selection,name:telegram.selection__telegram_message__state__sent
+msgid "Sent"
+msgstr "ارسال شد"
+
+#. module: telegram
+#: model:ir.model,name:telegram.model_ir_actions_server
+msgid "Server Action"
+msgstr "کنش کارپذیر"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_template__sidebar_action_id
+msgid "Sidebar Action"
+msgstr "اقدام منو"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__state
+msgid "State"
+msgstr "وضعیت"
+
+#. module: telegram
+#. odoo-javascript
+#: code:addons/telegram/static/src/discuss/discuss_app_model_patch.js:0
+#: model:ir.ui.menu,name:telegram.telegram_menu_main
+#: model:res.groups.privilege,name:telegram.res_groups_privilege_telegram
+#: model_terms:ir.ui.view,arch_db:telegram.res_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:telegram.res_partner_view_form_telegram
+msgid "Telegram"
+msgstr "تلگرام"
+
+#. module: telegram
+#: model:ir.model,name:telegram.model_telegram_bot
+#: model:ir.model.fields,field_description:telegram.field_discuss_channel__telegram_bot_id
+msgid "Telegram Bot"
+msgstr "ربات تلگرام"
+
+#. module: telegram
+#: model:ir.actions.act_window,name:telegram.telegram_bot_action
+msgid "Telegram Bots"
+msgstr "ربات‌های تلگرام"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_res_users_settings__is_discuss_sidebar_category_telegram_open
+msgid "Telegram Category Open"
+msgstr "دسته تلگرام باز است"
+
+#. module: telegram
+#: model:ir.model.fields.selection,name:telegram.selection__discuss_channel__channel_type__telegram
+msgid "Telegram Chat"
+msgstr "گفتگوی تلگرام"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_discuss_channel__telegram_chat_id
+#: model:ir.model.fields,field_description:telegram.field_res_partner__telegram_chat_id
+#: model:ir.model.fields,field_description:telegram.field_res_users__telegram_chat_id
+msgid "Telegram Chat ID"
+msgstr "شناسه گفتگوی تلگرام"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_res_partner__telegram_connect_url
+#: model:ir.model.fields,field_description:telegram.field_res_users__telegram_connect_url
+msgid "Telegram Connect Link"
+msgstr "لینک اتصال تلگرام"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_discuss_channel__telegram_partner_id
+msgid "Telegram Contact"
+msgstr "مخاطب تلگرام"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_res_partner__telegram_link_token
+#: model:ir.model.fields,field_description:telegram.field_res_users__telegram_link_token
+msgid "Telegram Link Token"
+msgstr "توکن اتصال تلگرام"
+
+#. module: telegram
+#: model:ir.model,name:telegram.model_telegram_message
+msgid "Telegram Message"
+msgstr "پیام تلگرام"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_message__tg_message_id
+msgid "Telegram Message ID"
+msgstr "شناسه پیام تلگرام"
+
+#. module: telegram
+#: model:ir.actions.act_window,name:telegram.telegram_message_action
+msgid "Telegram Messages"
+msgstr "پیام‌های تلگرام"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_res_users__telegram_notify
+msgid "Telegram Notifications"
+msgstr "اعلان‌های تلگرام"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_res_config_settings__telegram_proxy_url
+msgid "Telegram Proxy"
+msgstr "پروکسی تلگرام"
+
+#. module: telegram
+#: model:ir.model,name:telegram.model_telegram_template
+#: model:ir.model.fields,field_description:telegram.field_ir_actions_server__telegram_template_id
+#: model:ir.model.fields,field_description:telegram.field_ir_cron__telegram_template_id
+msgid "Telegram Template"
+msgstr "قالب تلگرام"
+
+#. module: telegram
+#: model:ir.actions.act_window,name:telegram.telegram_template_action
+msgid "Telegram Templates"
+msgstr "قالب‌های تلگرام"
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/models/telegram_bot.py:0
+msgid "Telegram connection failed: %s"
+msgstr "اتصال به تلگرام ناموفق بود: %s"
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/wizard/telegram_composer.py:0
+msgid "Telegram sent to %s:"
+msgstr "تلگرام ارسال شد به %s:"
+
+#. module: telegram
+#: model:ir.actions.server,name:telegram.ir_cron_poll_updates_ir_actions_server
+msgid "Telegram: Fetch Incoming Messages"
+msgstr "تلگرام: دریافت پیام‌های ورودی"
+
+#. module: telegram
+#: model:ir.actions.server,name:telegram.ir_cron_send_queue_ir_actions_server
+msgid "Telegram: Send Queued Messages"
+msgstr "تلگرام: ارسال پیام‌های صف"
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_composer__template_id
+msgid "Template"
+msgstr "قالب"
+
+#. module: telegram
+#: model:ir.ui.menu,name:telegram.telegram_template_menu
+msgid "Templates"
+msgstr "قالب‌ها"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_bot_view_form
+msgid "Test Connection"
+msgstr "آزمایش اتصال"
+
+#. module: telegram
+#: model:ir.model.fields,help:telegram.field_telegram_bot__token
+msgid "Token given by @BotFather."
+msgstr "توکنی که ‎@BotFather داده است."
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_ir_actions_server__state
+#: model:ir.model.fields,field_description:telegram.field_ir_cron__state
+msgid "Type"
+msgstr "نوع"
+
+#. module: telegram
+#: model:ir.model.fields,help:telegram.field_ir_actions_server__state
+#: model:ir.model.fields,help:telegram.field_ir_cron__state
+msgid ""
+"Type of server action. The following values are available:\n"
+"- 'Update a Record': update the values of a record\n"
+"- 'Create Activity': create an activity (Discuss)\n"
+"- 'Send Email': post a message, a note or send an email (Discuss)\n"
+"- 'Send SMS': send SMS, log them on documents (SMS)- 'Add/Remove Followers': add or remove followers to a record (Discuss)\n"
+"- 'Create Record': create a new record with new values\n"
+"- 'Execute Code': a block of Python code that will be executed\n"
+"- 'Send Webhook Notification': send a POST request to an external system, also known as a Webhook\n"
+"- 'Multi Actions': define an action that triggers several other server actions\n"
+msgstr ""
+
+#. module: telegram
+#: model:ir.model,name:telegram.model_res_users
+msgid "User"
+msgstr "کاربر"
+
+#. module: telegram
+#: model:ir.model,name:telegram.model_res_users_settings
+msgid "User Settings"
+msgstr "تنظیمات کاربر"
+
+#. module: telegram
+#: model:ir.model.fields,help:telegram.field_telegram_bot__notify_user_ids
+msgid "Users added to the Discuss channel when a contact writes to the bot."
+msgstr "کاربرانی که وقتی مخاطبی به ربات پیام می‌دهد، به کانال گفتگو اضافه می‌شوند."
+
+#. module: telegram
+#: model:ir.model.fields,field_description:telegram.field_telegram_bot__notify_user_ids
+msgid "Users to Notify"
+msgstr "کاربران مطلع‌شونده"
+
+#. module: telegram
+#: model:ir.model.fields,help:telegram.field_telegram_composer__body
+msgid ""
+"With several records, the template is rendered for each record instead."
+msgstr "با چند رکورد، قالب برای هر رکورد جداگانه ساخته می‌شود."
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_composer_view_form
+msgid "Write a message..."
+msgstr "پیامی بنویسید..."
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/models/res_partner.py:0
+msgid "You can only connect your own Telegram account."
+msgstr "فقط می‌توانید حساب تلگرام خودتان را متصل کنید."
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_template_view_form
+msgid "e.g. Order confirmation"
+msgstr "مثلاً تأیید سفارش"
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.telegram_bot_view_form
+msgid "e.g. Shaka Bot"
+msgstr "مثلاً ربات شاکا"
+
+#. module: telegram
+#: model:ir.model.fields,help:telegram.field_res_config_settings__telegram_proxy_url
+msgid ""
+"e.g. http://host:3128 or socks5h://host:1080 (SOCKS needs the PySocks "
+"package)."
+msgstr "مثلاً http://host:3128 یا socks5h://host:1080 (برای SOCKS بسته PySocks لازم است)."
+
+#. module: telegram
+#: model_terms:ir.ui.view,arch_db:telegram.res_config_settings_view_form
+msgid "socks5h://host:1080"
+msgstr ""
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/models/res_users.py:0
+msgid "Overdue (%s):"
+msgstr "عقب‌افتاده (%s):"
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/models/res_users.py:0
+msgid "Due today (%s):"
+msgstr "موعد امروز (%s):"
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/models/res_users.py:0
+msgid "Your activities"
+msgstr "فعالیت‌های شما"
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/models/res_users.py:0
+msgid "To-Do"
+msgstr "کار"
+
+#. module: telegram
+#. odoo-python
+#: code:addons/telegram/models/calendar_event.py:0
+msgid "Reminder: %(name)s, %(time)s"
+msgstr "یادآوری: %(name)s، %(time)s"
+
+#. module: telegram
+#: model:calendar.alarm,name:telegram.alarm_telegram_15_minutes
+msgid "Telegram - 15 Minutes"
+msgstr "تلگرام - ۱۵ دقیقه"
+
+#. module: telegram
+#: model:ir.actions.server,name:telegram.ir_cron_activity_digest_ir_actions_server
+msgid "Telegram: Daily Activity Digest"
+msgstr "تلگرام: خلاصه روزانه فعالیت‌ها"

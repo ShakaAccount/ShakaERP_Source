@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="alarm_telegram_15_minutes" model="calendar.alarm">
+        <field name="name">Telegram - 15 Minutes</field>
+        <field name="alarm_type">telegram</field>
+        <field name="duration">15</field>
+        <field name="interval">minutes</field>
+    </record>
+</odoo>

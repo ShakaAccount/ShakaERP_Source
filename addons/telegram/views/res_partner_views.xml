@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_partner_view_form_telegram" model="ir.ui.view">
+        <field name="name">res.partner.form.telegram</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <page name="internal_notes" position="after">
+                <page name="telegram" string="Telegram" groups="base.group_user">
+                    <group>
+                        <group>
+                            <field name="telegram_chat_id" readonly="1" string="Connected Chat"/>
+                            <field name="telegram_connect_url" widget="CopyClipboardChar"
+                                   invisible="not telegram_connect_url or telegram_chat_id"/>
+                        </group>
+                        <div class="d-flex gap-2 align-items-start">
+                            <button name="action_telegram_send" type="object" string="Send Telegram"
+                                    class="btn-primary" icon="fa-paper-plane" invisible="not telegram_chat_id"/>
+                            <button name="action_telegram_generate_link" type="object" string="Create Connect Link"
+                                    class="btn-secondary" invisible="telegram_chat_id"
+                                    help="Send this link to the contact: opening it in Telegram connects them to the bot."/>
+                            <button name="action_telegram_disconnect" type="object" string="Disconnect"
+                                    class="btn-secondary" invisible="not telegram_chat_id"/>
+                        </div>
+                    </group>
+                </page>
+            </page>
+        </field>
+    </record>
+</odoo>

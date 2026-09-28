@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_cron_send_queue" model="ir.cron">
+        <field name="name">Telegram: Send Queued Messages</field>
+        <field name="model_id" ref="model_telegram_message"/>
+        <field name="state">code</field>
+        <field name="code">model._send_cron()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+    </record>
+    <record id="ir_cron_poll_updates" model="ir.cron">
+        <field name="name">Telegram: Fetch Incoming Messages</field>
+        <field name="model_id" ref="model_telegram_bot"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_poll_updates()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minutes</field>
+    </record>
+    <record id="ir_cron_activity_digest" model="ir.cron">
+        <field name="name">Telegram: Daily Activity Digest</field>
+        <field name="model_id" ref="base.model_res_users"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_telegram_activity_digest()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <!-- 04:30 UTC = 08:00 Tehran -->
+        <field name="nextcall" eval="(DateTime.now() + relativedelta(days=1)).strftime('%Y-%m-%d 04:30:00')"/>
+    </record>
+</odoo>

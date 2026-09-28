@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_telegram_bot_admin,telegram.bot.admin,model_telegram_bot,group_telegram_admin,1,1,1,1
+access_telegram_message_admin,telegram.message.admin,model_telegram_message,group_telegram_admin,1,1,1,1
+access_telegram_template_user,telegram.template.user,model_telegram_template,base.group_user,1,0,0,0
+access_telegram_template_admin,telegram.template.admin,model_telegram_template,group_telegram_admin,1,1,1,1
+access_telegram_composer_user,telegram.composer.user,model_telegram_composer,base.group_user,1,1,1,1

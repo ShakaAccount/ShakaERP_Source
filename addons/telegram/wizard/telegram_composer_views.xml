@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="telegram_composer_view_form" model="ir.ui.view">
+        <field name="name">telegram.composer.form</field>
+        <field name="model">telegram.composer</field>
+        <field name="arch" type="xml">
+            <form string="Send Telegram">
+                <field name="res_model" invisible="1"/>
+                <field name="res_ids" invisible="1"/>
+                <field name="is_single" invisible="1"/>
+                <div class="alert alert-warning" role="alert" invisible="not unlinked_partner_ids">
+                    Not connected to Telegram (skipped):
+                    <field name="unlinked_partner_ids" widget="many2many_tags" readonly="1" class="d-inline"/>
+                </div>
+                <group>
+                    <field name="partner_ids" widget="many2many_tags" invisible="not is_single"/>
+                    <field name="template_id" options="{'no_create': True}"/>
+                </group>
+                <field name="body" placeholder="Write a message..." readonly="not is_single and template_id"/>
+                <footer>
+                    <button name="action_send" type="object" string="Send" class="btn-primary" data-hotkey="q"/>
+                    <button string="Discard" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

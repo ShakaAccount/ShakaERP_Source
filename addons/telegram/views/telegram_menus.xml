@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="telegram_menu_main" name="Telegram" web_icon="telegram,static/description/icon.svg"
+              sequence="261" groups="telegram.group_telegram_admin"/>
+    <menuitem id="telegram_message_menu" name="Messages" parent="telegram_menu_main" sequence="1"
+              action="telegram_message_action"/>
+    <menuitem id="telegram_template_menu" name="Templates" parent="telegram_menu_main" sequence="2"
+              action="telegram_template_action"/>
+    <menuitem id="telegram_configuration_menu" name="Configuration" parent="telegram_menu_main" sequence="10"/>
+    <menuitem id="telegram_bot_menu" name="Bots" parent="telegram_configuration_menu"
+              action="telegram_bot_action"/>
+</odoo>

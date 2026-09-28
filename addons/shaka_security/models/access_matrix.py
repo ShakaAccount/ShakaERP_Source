@@ -51,6 +51,44 @@ class ShakaAccessMixin(models.AbstractModel):
             raise AccessError(_('Access to workflow stage "%s" on form "%s" is not allowed.') % (stage_config.name, form.name))
         return True
 
+    def write(self, vals):
+        if 'state' not in vals or not hasattr(self, 'message_notify'):
+            return super().write(vals)
+        old_states = {record.id: record.state for record in self}
+        result = super().write(vals)
+        for record in self:
+            if record.state != old_states[record.id]:
+                record._shaka_notify_stage_change(old_states[record.id])
+        return result
+
+    def _shaka_notify_stage_change(self, old_state):
+        """ Tell the users who can act on the new stage, and the creator, that the
+        record moved (inbox, email or Telegram, per their preferences). """
+        self.ensure_one()
+        form = self.env['shaka.access.form'].sudo().search([
+            ('model_name', '=', self._name), ('active', '=', True), ('has_workflow', '=', True),
+        ], limit=1)
+        if not form:
+            return
+        stage = form.stage_ids.filtered(lambda s: s.code == self.state)[:1]
+        stage_users = self.env['shaka.user.workflow.access'].sudo().search([
+            ('stage_id', '=', stage.id), ('can_write', '=', True),
+        ]).access_id.user_id if stage else self.env['res.users']
+        creator = getattr(self, 'created_by', False) or self.create_uid
+        partners = (stage_users | creator).filtered('active').partner_id - self.env.user.partner_id
+        if not partners:
+            return
+        labels = dict(self._fields['state']._description_selection(self.env))
+        old_name = form.stage_ids.filtered(lambda s: s.code == old_state)[:1].name or labels.get(old_state, old_state)
+        new_name = stage.name or labels.get(self.state, self.state)
+        self.sudo().message_notify(
+            partner_ids=partners.ids,
+            body=_('%(form)s %(record)s: %(old)s → %(new)s (%(user)s)',
+                   form=form.name, record=self.display_name, old=old_name, new=new_name,
+                   user=self.env.user.name),
+            subject=_('%(form)s %(record)s: %(new)s', form=form.name, record=self.display_name, new=new_name),
+        )
+
     def read(self, fields=None, load='_classic_read'):
         for record in self:
             stage = getattr(record, 'state', False)
