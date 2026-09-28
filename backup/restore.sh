@@ -130,11 +130,34 @@ INFO=$(pgbr --entrypoint pgbackrest "$DB_IMAGE" --stanza="$STANZA" info 2>&1) \
 grep -q "full backup" <<<"$INFO" || { echo "$INFO"; die "no complete full backup in repo. Nothing was changed."; }
 ok "repo readable, full backup present"
 
-RESTORE_ARGS=(--stanza="$STANZA" restore)
+LATEST_ARGS=(--stanza="$STANZA" restore)
+RESTORE_ARGS=("${LATEST_ARGS[@]}")
 if [[ -n "$TARGET" ]]; then
     # target-action=promote: auto-promote at target instead of pausing in recovery
     RESTORE_ARGS+=(--type=time --target="$TARGET" --target-action=promote)
 fi
+
+# Postgres refuses a --target later than the last archived transaction
+# ("recovery ended before configured recovery target was reached"), e.g. when
+# nothing happened since. So: push the live server's current WAL into the repo
+# first; then, if the target is still past the end, nothing changed between the
+# last transaction and the target and restoring to the end IS the target state.
+TARGET_PAST_END="recovery ended before configured recovery target was reached"
+flush_wal() {
+    [[ -n "$TARGET" ]] || return 0
+    if docker compose exec -T db pg_isready >/dev/null 2>&1; then
+        log "archiving the live server's latest WAL so the target is covered ..."
+        docker compose exec -T -u postgres db pgbackrest --stanza="$STANZA" check >/dev/null \
+            || warn "could not flush WAL; changes from the last ~30s may be missing"
+    else
+        warn "live db is down, restoring from what's already archived"
+    fi
+}
+past_end_note() {
+    warn "no transactions between the last archived one and $TARGET"
+    [[ -n "$1" ]] && log "  (last transaction: $1)"
+    log "  restoring to the end of the archive instead, which is the same data"
+}
 
 # ======================================================================
 # --all: whole-cluster restore (disaster recovery)
@@ -143,6 +166,8 @@ if [[ "$MODE" == all ]]; then
     confirm "This WIPES the live database volume \"$PG_DATA_VOL\" (ALL databases) and restores it from backup (${TARGET:-latest})."
 
     # ponytail: DB-only restore; the filestore mirror is handled separately (filestore_sync.sh / DR guide scenario 2)
+
+    flush_wal
 
     log "step 1/5: stopping web + db containers"
     docker compose stop web db || true
@@ -156,10 +181,21 @@ if [[ "$MODE" == all ]]; then
     pgbr -v "$PG_DATA_VOL":/var/lib/postgresql/data --entrypoint pgbackrest "$DB_IMAGE" "${RESTORE_ARGS[@]}"
 
     log "step 4/5: starting stack"
+    SINCE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
     docker compose up -d
 
     log "step 5/5: waiting for postgres (WAL replay can take minutes) ..."
     for _ in $(seq 1 60); do
+        DBLOG=$(docker compose logs --since "$SINCE" db 2>&1 || true)
+        if [[ -n "$TARGET" ]] && grep -q "$TARGET_PAST_END" <<<"$DBLOG"; then
+            past_end_note "$(sed -n 's/.*last completed transaction was at log time //p' <<<"$DBLOG" | tail -1)"
+            docker compose stop web db
+            pgbr -v "$PG_DATA_VOL":/var/lib/postgresql/data --entrypoint pgbackrest "$DB_IMAGE" "${LATEST_ARGS[@]}" --delta
+            TARGET=""
+            SINCE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+            docker compose up -d
+            continue
+        fi
         if docker compose exec -T db pg_isready >/dev/null 2>&1; then
             ok "postgres accepting connections. Total restore time: $(( $(date +%s) - START_TS ))s"
             log "next: check your data; new host? re-install cron via ./backup/install_cron.sh"
@@ -202,32 +238,47 @@ cleanup() {
     docker volume rm "$TMP_VOL" >/dev/null 2>&1 || true
 }
 trap cleanup EXIT
-cleanup  # leftovers from an interrupted run
+
+# restore into the side volume and replay WAL; returns 1 if recovery failed
+side_restore() {
+    cleanup
+    log "step 1/5: restoring backup into a temporary volume (only '$DB' gets real data)"
+    docker volume create "$TMP_VOL" >/dev/null
+    docker run --rm -v "$TMP_VOL":/var/lib/postgresql/data --entrypoint sh "$DB_IMAGE" \
+        -c 'chown -R postgres:postgres /var/lib/postgresql/data'
+    pgbr -v "$TMP_VOL":/var/lib/postgresql/data --entrypoint pgbackrest "$DB_IMAGE" \
+        "$@" --db-include="$DB" \
+        || die "pgbackrest restore failed. Does '$DB' exist in that backup? Check with --list. Live server untouched."
+
+    log "step 2/5: starting temporary postgres and replaying WAL (can take minutes) ..."
+    # archive_mode off: the side cluster must never push WAL into the real repo
+    docker run -d --name "$TMP_CT" --user postgres \
+        -v "$TMP_VOL":/var/lib/postgresql/data \
+        -v "$BACKUP_ROOT/pgbackrest":/var/lib/pgbackrest \
+        -v "$REPO_DIR/pgbackrest.conf":/etc/pgbackrest/pgbackrest.conf:ro \
+        "$DB_IMAGE" postgres -c archive_mode=off -c listen_addresses='' \
+        -c unix_socket_directories=/var/run/postgresql >/dev/null
+    for _ in $(seq 1 300); do
+        [[ "$(tmp_psql -c 'SELECT pg_is_in_recovery()' 2>/dev/null)" == "f" ]] && return 0
+        docker ps -q -f name="^${TMP_CT}$" | grep -q . || return 1
+        sleep 2
+    done
+    return 1
+}
 
 START_TS=$(date +%s)
-log "step 1/5: restoring backup into a temporary volume (only '$DB' gets real data)"
-docker volume create "$TMP_VOL" >/dev/null
-docker run --rm -v "$TMP_VOL":/var/lib/postgresql/data --entrypoint sh "$DB_IMAGE" \
-    -c 'chown -R postgres:postgres /var/lib/postgresql/data'
-pgbr -v "$TMP_VOL":/var/lib/postgresql/data --entrypoint pgbackrest "$DB_IMAGE" \
-    "${RESTORE_ARGS[@]}" --db-include="$DB" \
-    || die "pgbackrest restore failed. Does '$DB' exist in that backup? Check with --list. Live server untouched."
-
-log "step 2/5: starting temporary postgres and replaying WAL (can take minutes) ..."
-# archive_mode off: the side cluster must never push WAL into the real repo
-docker run -d --name "$TMP_CT" --user postgres \
-    -v "$TMP_VOL":/var/lib/postgresql/data \
-    -v "$BACKUP_ROOT/pgbackrest":/var/lib/pgbackrest \
-    -v "$REPO_DIR/pgbackrest.conf":/etc/pgbackrest/pgbackrest.conf:ro \
-    "$DB_IMAGE" postgres -c archive_mode=off -c listen_addresses='' \
-    -c unix_socket_directories=/var/run/postgresql >/dev/null
-READY=""
-for _ in $(seq 1 300); do
-    if [[ "$(tmp_psql -c 'SELECT pg_is_in_recovery()' 2>/dev/null)" == "f" ]]; then READY=1; break; fi
-    docker ps -q -f name="^${TMP_CT}$" | grep -q . || break
-    sleep 2
-done
-[[ -n "$READY" ]] || { docker logs --tail 30 "$TMP_CT" || true; die "temporary postgres did not finish recovery. Live server untouched."; }
+flush_wal
+if ! side_restore "${RESTORE_ARGS[@]}"; then
+    TMPLOG=$(docker logs "$TMP_CT" 2>&1 || true)
+    if [[ -n "$TARGET" ]] && grep -q "$TARGET_PAST_END" <<<"$TMPLOG"; then
+        past_end_note "$(sed -n 's/.*last completed transaction was at log time //p' <<<"$TMPLOG" | tail -1)"
+        side_restore "${LATEST_ARGS[@]}" \
+            || { docker logs --tail 30 "$TMP_CT" || true; die "temporary postgres did not finish recovery. Live server untouched."; }
+    else
+        tail -30 <<<"$TMPLOG"
+        die "temporary postgres did not finish recovery. Live server untouched."
+    fi
+fi
 ok "temporary copy of '$DB' is up"
 
 log "step 3/5: dumping '$DB' from the temporary copy"
