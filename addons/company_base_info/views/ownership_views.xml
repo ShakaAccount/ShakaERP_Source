@@ -56,6 +56,11 @@
               web_icon="company_base_info,static/description/icon.svg"
               groups="base.group_system"/>
 
+    <record id="base.menu_action_res_company_form" model="ir.ui.menu">
+        <field name="parent_id" ref="menu_company_base_info_root"/>
+        <field name="sequence">5</field>
+    </record>
+
     <menuitem id="menu_company_ownership"
               name="درصد مالکیت سهام"
               parent="menu_company_base_info_root"

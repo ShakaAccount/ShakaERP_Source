@@ -43,7 +43,7 @@
         <field name="name">company.currency.introduction.list</field>
         <field name="model">company.currency.introduction</field>
         <field name="arch" type="xml">
-            <list string="معرفی ارز">
+            <list string="معرفی ارز شرکت‌ها">
                 <field name="company_id"/>
                 <field name="fiscal_year_id"/>
                 <field name="registration_date"/>
@@ -55,7 +55,7 @@
         <field name="name">company.currency.introduction.form</field>
         <field name="model">company.currency.introduction</field>
         <field name="arch" type="xml">
-            <form string="معرفی ارز">
+            <form string="معرفی ارز شرکت‌ها">
                 <sheet>
                     <group>
                         <field name="company_id"/>
@@ -71,14 +71,14 @@
                             <field name="rial_value_per_unit" string="ارزش ریالی هر واحد ارز" width="180px"/>
                         </list>
                     </field>
-                    <field name="note" placeholder="توضیحات معرفی ارز..."/>
+                    <field name="note" placeholder="توضیحات معرفی ارز شرکت‌ها..."/>
                 </sheet>
             </form>
         </field>
     </record>
 
     <record id="action_company_currency_introduction" model="ir.actions.act_window">
-        <field name="name">معرفی ارز</field>
+        <field name="name">معرفی ارز شرکت‌ها</field>
         <field name="res_model">company.currency.introduction</field>
         <field name="view_mode">list,form</field>
     </record>
@@ -90,7 +90,7 @@
               groups="base.group_system"
               sequence="20"/>
     <menuitem id="menu_company_currency_introduction"
-              name="معرفی ارز"
+              name="معرفی ارز شرکت‌ها"
               parent="menu_company_base_info_root"
               action="action_company_currency_introduction"
               groups="base.group_system"

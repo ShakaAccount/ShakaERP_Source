@@ -103,8 +103,9 @@
             <form string="تنظیمات گروه‌بندی حساب">
                 <sheet>
                     <group>
-                        <field name="budget_balance_root_id" options="{'no_create': True}" context="{'allowed_company_ids': []}"/>
-                        <field name="budget_income_root_id" options="{'no_create': True}" context="{'allowed_company_ids': []}"/>
+                        <field name="company_id" options="{'no_create': True}"/>
+                        <field name="budget_balance_root_id" options="{'no_create': True}"/>
+                        <field name="budget_income_root_id" options="{'no_create': True}"/>
                     </group>
                     <div class="mt-3">
                         <button name="action_save" type="object" string="ذخیره تنظیمات" class="btn btn-primary"/>

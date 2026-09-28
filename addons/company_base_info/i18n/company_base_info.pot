@@ -391,7 +391,7 @@ msgstr ""
 #: model:ir.ui.menu,name:company_base_info.menu_company_currency_introduction
 #: model_terms:ir.ui.view,arch_db:company_base_info.view_company_currency_introduction_form
 #: model_terms:ir.ui.view,arch_db:company_base_info.view_company_currency_introduction_list
-msgid "معرفی ارز"
+msgid "معرفی ارز شرکت‌ها"
 msgstr ""
 
 #. module: company_base_info

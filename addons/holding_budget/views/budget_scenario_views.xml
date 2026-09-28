@@ -42,7 +42,7 @@
     </record>
 
     <menuitem id="menu_holding_budget_root"
-              name="بودجه هلدینگ"
+              name="اطلاعات پایه بودجه"
               sequence="80"
               web_icon="holding_budget,static/description/icon.svg"
               groups="base.group_user"/>

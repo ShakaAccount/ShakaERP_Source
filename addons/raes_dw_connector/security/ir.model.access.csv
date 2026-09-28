@@ -3,3 +3,4 @@ access_raes_dw_connection_system,raes.dw.connection.system,model_raes_dw_connect
 access_raes_dw_table_map_system,raes.dw.table_map.system,model_raes_dw_table_map,base.group_system,1,1,1,1
 access_raes_dw_remote_table_system,raes.dw.remote_table.system,model_raes_dw_remote_table,base.group_system,1,1,1,1
 access_raes_dw_catalog_system,raes.dw.catalog.system,model_raes_dw_catalog,base.group_system,1,1,1,1
+access_raes_dw_agent_job_system,raes.dw.agent.job.system,model_raes_dw_agent_job,base.group_system,1,1,1,1

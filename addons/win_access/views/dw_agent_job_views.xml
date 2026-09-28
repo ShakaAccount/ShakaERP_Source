@@ -1,0 +1,26 @@
+<odoo>
+    <record id="view_raes_dw_agent_job_form_ssas_pickers" model="ir.ui.view">
+        <field name="name">raes.dw.agent.job.form.ssas.pickers</field>
+        <field name="model">raes.dw.agent.job</field>
+        <field name="inherit_id" ref="raes_dw_connector.view_raes_dw_agent_job_form"/>
+        <field name="arch" type="xml">
+            <field name="ssas_server" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="ssas_database" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="ssas_server" position="before">
+                <field name="ssas_instance_id" options="{'no_create': True}"
+                       invisible="not ssas_enabled" required="ssas_enabled"/>
+                <field name="ssas_database_id" options="{'no_create': True}"
+                       invisible="not ssas_enabled" required="ssas_enabled"
+                       domain="[('kind', '=', 'ssas_db'), ('parent_id', '=', ssas_instance_id)]"/>
+            </field>
+            <field name="ssas_refresh_type" position="after">
+                <field name="options_error" invisible="not options_error"
+                       readonly="1" class="text-danger"/>
+            </field>
+        </field>
+    </record>
+</odoo>

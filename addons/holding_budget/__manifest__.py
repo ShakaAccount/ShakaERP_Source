@@ -1,8 +1,8 @@
 {
-    'name': 'بودجه هلدینگ',
+    'name': 'اطلاعات پایه بودجه',
     'version': '19.0.1.0.0',
     'category': 'Shaka ERP',
-    'summary': 'مدیریت سناریوهای بودجه هلدینگ',
+    'summary': 'مدیریت اطلاعات پایه بودجه',
     'description': """
 Holding Budget
 ==============

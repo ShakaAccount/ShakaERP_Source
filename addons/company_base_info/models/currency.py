@@ -58,7 +58,7 @@ class CompanyCurrencyIntroductionLine(models.Model):
     sequence = fields.Integer(string='ترتیب', default=10)
     introduction_id = fields.Many2one(
         'company.currency.introduction',
-        string='معرفی ارز',
+        string='معرفی ارز شرکت‌ها',
         required=True,
         ondelete='cascade',
     )

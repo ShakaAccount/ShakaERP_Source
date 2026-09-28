@@ -95,7 +95,7 @@ msgstr ""
 
 #. module: holding_budget
 #: model:ir.ui.menu,name:holding_budget.menu_holding_budget_root
-msgid "بودجه هلدینگ"
+msgid "اطلاعات پایه بودجه"
 msgstr ""
 
 #. module: holding_budget

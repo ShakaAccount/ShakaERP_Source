@@ -1,7 +1,7 @@
 {
-    "name": "Power BI Portal",
+    "name": "گزارشات",
     "version": "19.0.1.0.0",
-    "summary": "Power BI reports sidebar + AD-driven access, with two-way sync to PBIRS",
+    "summary": "نمایش گزارش‌ها و داشبوردهای Power BI",
     "description": """Power BI Portal
 ================
 Shows a side navigation list of Power BI Report Server reports the current
