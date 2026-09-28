@@ -809,3 +809,28 @@ msgstr "مقدار"
 #: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__varchar
 msgid "VarChar"
 msgstr "VarChar"
+
+#. module: entity
+#. odoo-python
+msgid "DW Company"
+msgstr "شرکت DW"
+
+#. module: entity
+#. odoo-python
+msgid "The Shaka DW company (md.company) this Odoo company maps to."
+msgstr "شرکت DW شاکا (md.company) که این شرکت اودو به آن نگاشت می‌شود."
+
+#. module: entity
+#. odoo-python
+msgid "DW Company (md.company)"
+msgstr "شرکت DW (md.company)"
+
+#. module: entity
+#. odoo-python
+msgid "Parent"
+msgstr "والد"
+
+#. module: entity
+#. odoo-python
+msgid "Title (EN)"
+msgstr "عنوان (انگلیسی)"

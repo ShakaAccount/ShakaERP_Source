@@ -482,15 +482,12 @@
                                     <small class="text-muted">Follows the tree root's companies.</small>
                                 </t>
                                 <t t-else="">
-                                    <t t-foreach="state.newCategory.companies.choices" t-as="co" t-key="co.id">
-                                        <label class="d-block small">
-                                            <input type="checkbox"
-                                                   t-att-checked="state.newCategory.companies.picked.includes(co.id)"
-                                                   t-att-disabled="co.id === state.newCategory.companies.default"
-                                                   t-on-change="() => this.toggleCompany(co.id)"/>
-                                            <t t-esc="co.title"/>
-                                        </label>
-                                    </t>
+                                    <SelectMenu multiSelect="true"
+                                                searchable="true"
+                                                choices="companyChoices"
+                                                value="state.newCategory.companies.picked"
+                                                placeholder="companiesPlaceholder"
+                                                onSelect.bind="onCompaniesSelect"/>
                                     <small class="text-muted">The active company always owns and sees it.</small>
                                 </t>
                             </div>

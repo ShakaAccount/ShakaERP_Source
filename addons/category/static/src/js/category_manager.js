@@ -2,11 +2,13 @@
 import {registry} from "@web/core/registry";
 import {useService} from "@web/core/utils/hooks";
 import {user} from "@web/core/user";
+import {_t} from "@web/core/l10n/translation";
 import {
     Component, useState, onWillStart, onWillUnmount,
     useRef, useExternalListener,
 } from "@odoo/owl";
 import {ConfirmationDialog} from "@web/core/confirmation_dialog/confirmation_dialog";
+import {SelectMenu} from "@web/core/select_menu/select_menu";
 import {TreeNode} from "@shaka_ui_kit/js/tree_node";
 
 const TREE_WIDTH_KEY = "category_manager.tree_width";
@@ -1193,10 +1195,19 @@ export class CategoryManager extends Component {
         }
     }
 
-    toggleCompany(id) {
+    get companiesPlaceholder() {
+        return _t("Select companies\u2026");
+    }
+
+    get companyChoices() {
+        return this.state.newCategory.companies.choices.map(c => ({value: c.id, label: c.title}));
+    }
+
+    onCompaniesSelect(values) {
+        // The owner (active company) always keeps the category visible.
         const c = this.state.newCategory.companies;
-        if (id === c.default) return;
-        c.picked = c.picked.includes(id) ? c.picked.filter(i => i !== id) : [...c.picked, id];
+        const picked = values || [];
+        c.picked = c.default && !picked.includes(c.default) ? [c.default, ...picked] : picked;
     }
 
     cancelNewCategory() {
@@ -1235,7 +1246,7 @@ export class CategoryManager extends Component {
             this.notification.add(nc.parent_id ? `Sub-category created under "${nc.parent_title}".` : "Root category created.", {type: "success"});
         } catch (e) {
             console.error("create category failed", e);
-            this.notification.add(e.data?.message || e.message || "Could not create the category.", {type: "danger"});
+            this.notification.add(e.data?.message || e.message || _t("Could not create the category."), {type: "danger"});
         } finally {
             this.state.saving = false;
         }
@@ -1278,7 +1289,7 @@ export class CategoryManager extends Component {
 }
 
 CategoryManager.template = "category.CategoryManager";
-CategoryManager.components = {TreeNode};
+CategoryManager.components = {TreeNode, SelectMenu};
 CategoryManager.props = {
     "*": true,
 };

@@ -450,3 +450,48 @@ msgstr "دسته بندی ها"
 #: code:addons/category/static/src/xml/category_manager.xml:0
 msgid "← Remove"
 msgstr "→ حذف"
+
+#. module: category
+#. odoo-python
+msgid "Company \"%s\" has no DW Company set."
+msgstr "برای شرکت «%s» هیچ شرکت DW تنظیم نشده است."
+
+#. module: category
+#. odoo-python
+msgid "You can only share a category with companies you belong to."
+msgstr "فقط می‌توانید دسته‌بندی را با شرکت‌هایی که عضو آن‌ها هستید به اشتراک بگذارید."
+
+#. module: category
+#. odoo-python
+msgid "Only company \"%s\" (the owner) can delete this category."
+msgstr "فقط شرکت «%s» (مالک) می‌تواند این دسته‌بندی را حذف کند."
+
+#. module: category
+#. odoo-xml
+msgid "Visible to companies"
+msgstr "قابل مشاهده برای شرکت‌ها"
+
+#. module: category
+#. odoo-xml
+msgid "Follows the tree root's companies."
+msgstr "از شرکت‌های ریشه درخت پیروی می‌کند."
+
+#. module: category
+#. odoo-xml
+msgid "The active company always owns and sees it."
+msgstr "شرکت فعال همیشه مالک آن است و آن را می‌بیند."
+
+#. module: category
+#. odoo-javascript
+msgid "Select companies…"
+msgstr "انتخاب شرکت‌ها…"
+
+#. module: category
+#. odoo-javascript
+msgid "Could not create the category."
+msgstr "ایجاد دسته‌بندی ممکن نشد."
+
+#. module: category
+#. odoo-python
+msgid "Shared with"
+msgstr "به اشتراک گذاشته‌شده با"

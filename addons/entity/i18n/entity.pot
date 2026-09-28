@@ -765,3 +765,28 @@ msgstr ""
 #: model:ir.model.fields.selection,name:entity.selection__raes_md_entity_column__data_type__varchar
 msgid "VarChar"
 msgstr ""
+
+#. module: entity
+#. odoo-python
+msgid "DW Company"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+msgid "The Shaka DW company (md.company) this Odoo company maps to."
+msgstr ""
+
+#. module: entity
+#. odoo-python
+msgid "DW Company (md.company)"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+msgid "Parent"
+msgstr ""
+
+#. module: entity
+#. odoo-python
+msgid "Title (EN)"
+msgstr ""

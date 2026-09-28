@@ -450,3 +450,48 @@ msgstr ""
 #: code:addons/category/static/src/xml/category_manager.xml:0
 msgid "← Remove"
 msgstr ""
+
+#. module: category
+#. odoo-python
+msgid "Company \"%s\" has no DW Company set."
+msgstr ""
+
+#. module: category
+#. odoo-python
+msgid "You can only share a category with companies you belong to."
+msgstr ""
+
+#. module: category
+#. odoo-python
+msgid "Only company \"%s\" (the owner) can delete this category."
+msgstr ""
+
+#. module: category
+#. odoo-xml
+msgid "Visible to companies"
+msgstr ""
+
+#. module: category
+#. odoo-xml
+msgid "Follows the tree root's companies."
+msgstr ""
+
+#. module: category
+#. odoo-xml
+msgid "The active company always owns and sees it."
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+msgid "Select companies…"
+msgstr ""
+
+#. module: category
+#. odoo-javascript
+msgid "Could not create the category."
+msgstr ""
+
+#. module: category
+#. odoo-python
+msgid "Shared with"
+msgstr ""
