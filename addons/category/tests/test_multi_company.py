@@ -59,3 +59,14 @@ class TestMultiCompanyCategory(TransactionCase):
             as_shared.unlink()
         as_owner.unlink()
         self.assertFalse(root.exists())
+
+    def test_new_company_gets_dw_company(self):
+        co = self.env['res.company'].create({'name': 'Auto DW co'})
+        self.assertEqual(co.dw_company_id.title, 'Auto DW co')
+        self.assertTrue(co.dw_company_id.code)
+
+    def test_child_company_gets_dw_parent(self):
+        parent = self.env['res.company'].create({'name': 'DW parent'})
+        child = self.env['res.company'].create(
+            {'name': 'DW child', 'parent_id': parent.id})
+        self.assertEqual(child.dw_company_id.parent_id, parent.dw_company_id)

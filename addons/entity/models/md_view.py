@@ -68,6 +68,8 @@ _GNR_LOOKUP_COLUMNS = {
 _MD_COMPANY_COLUMNS = {
     'id': 'integer', 'parent_id': 'integer', 'title': 'varchar',
     'en_title': 'varchar', 'code': 'integer', 'is_active': 'boolean',
+    'creator_user_id': 'integer', 'creation_date': 'timestamp',
+    'editor_user_id': 'integer', 'modification_date': 'timestamp',
 }
 
 # (public view, source schema, source table, columns)
@@ -118,7 +120,9 @@ def refresh_md_view(env, view, schema, table, columns):
 def refresh_all(env):
     """Rebuild every mirror view; used by post_init_hook."""
     for spec in VIEW_SPECS:
-        refresh_md_view(env, *spec)
+        # raes_md_company is writable (Odoo creates DW companies).
+        (refresh_writable_view if spec[0] == MD_COMPANY_VIEW[0]
+         else refresh_md_view)(env, *spec)
 
 # In entity_addon/models/md_view.py  (append at the end)
 
