@@ -140,8 +140,10 @@ class BudgetFinancialStatementLine(models.Model):
             ], order='code, title, id')
             roots = selected_root
         else:
+            dw = company.dw_company_id.ids
             categories = self.env['raes.md.category'].search([
-                ('company_id', '=', company.id),
+                '|', '|', ('company_id', 'in', dw), ('company_ids', 'in', dw),
+                ('root_id.company_ids', 'in', dw),
                 ('entity_id.name', '=', 'DimSubsidiaryLedger'),
             ], order='code, title, id')
             roots = categories.filtered(lambda c: not c.parent_id and 'گروه بندی حساب معین' in
@@ -157,14 +159,16 @@ class BudgetFinancialStatementLine(models.Model):
                 visit(child)
         for root in roots:
             visit(root)
-        return [{'id': c.id, 'company_id': c.company_id.id,
+        return [{'id': c.id, 'company_id': company.id,
                  'parent_id': c.parent_id.id if c.parent_id.id in allowed else False,
                  'title': c.title} for c in categories if c.id in allowed]
 
     @api.model
     def account_members(self, category_id, company_id, section):
         category = self.env['raes.md.category'].browse(int(category_id)).exists()
-        if not category or category.company_id.id != int(company_id):
+        company = self.env['res.company'].browse(int(company_id))
+        if (not category or not company.dw_company_id
+                or company.dw_company_id not in category._dw_companies()):
             raise ValidationError('زیرگروه نامعتبر است.')
         if section not in ('balance', 'income'):
             raise ValidationError('بخش صورت مالی نامعتبر است.')
@@ -173,9 +177,9 @@ class BudgetFinancialStatementLine(models.Model):
         if root_id:
             if category.id != root_id and category.root_id.id != root_id:
                 raise ValidationError('زیرگروه خارج از گروه‌بندی تنظیم‌شده است.')
-        elif category.company_id not in self.env.companies:
+        elif company not in self.env.companies:
             raise ValidationError('به شرکت انتخاب‌شده دسترسی ندارید.')
-        result = self.env['raes.md.entity'].sudo().with_company(category.company_id).get_items_in_category(
+        result = self.env['raes.md.entity'].sudo().with_company(company).get_items_in_category(
             category.entity_id.id, category.id, 0, 10000)
         if result.get('reason'):
             raise UserError('دریافت حساب‌های زیرگروه ممکن نشد: %s' % result['reason'])

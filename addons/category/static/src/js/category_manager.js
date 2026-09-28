@@ -1138,7 +1138,15 @@ export class CategoryManager extends Component {
         await this.loadEntities();
         const parent = parentCat || this.state.selectedCategory;
         const nested = !!parentCat;
+        let companies = {default: false, choices: [], picked: [], titles: []};
+        if (nested) {
+            companies.titles = parentCat.company_titles || [];
+        } else {
+            const res = await this.orm.call("raes.md.entity", "get_category_company_choices", []);
+            companies = {default: res.default, choices: res.choices, picked: [res.default], titles: []};
+        }
         this.state.newCategory = {
+            companies,
             title: "",
             code: "",
             parent_id: nested ? parent.id : null,
@@ -1185,6 +1193,12 @@ export class CategoryManager extends Component {
         }
     }
 
+    toggleCompany(id) {
+        const c = this.state.newCategory.companies;
+        if (id === c.default) return;
+        c.picked = c.picked.includes(id) ? c.picked.filter(i => i !== id) : [...c.picked, id];
+    }
+
     cancelNewCategory() {
         this.closeEntityPicker();
         this.state.showNewCategory = false;
@@ -1207,6 +1221,10 @@ export class CategoryManager extends Component {
             };
             if (nc.parent_id) {
                 vals.parent_id = nc.parent_id;
+            } else {
+                // The owner is implicit (server-side); only extras are sent.
+                const extra = nc.companies.picked.filter(id => id !== nc.companies.default);
+                vals.company_ids = [[6, 0, extra]];
             }
             await this.orm.create("raes.md.category", [vals]);
             this.state.showNewCategory = false;
@@ -1217,7 +1235,7 @@ export class CategoryManager extends Component {
             this.notification.add(nc.parent_id ? `Sub-category created under "${nc.parent_title}".` : "Root category created.", {type: "success"});
         } catch (e) {
             console.error("create category failed", e);
-            this.notification.add("Could not create the category. A sub-category must belong " + "to the same entity as its tree root.", {type: "danger"});
+            this.notification.add(e.data?.message || e.message || "Could not create the category.", {type: "danger"});
         } finally {
             this.state.saving = false;
         }

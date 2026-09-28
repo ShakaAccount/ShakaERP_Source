@@ -65,12 +65,18 @@ _GNR_LOOKUP_COLUMNS = {
     'modification_date': 'timestamp',
 }
 
+_MD_COMPANY_COLUMNS = {
+    'id': 'integer', 'parent_id': 'integer', 'title': 'varchar',
+    'en_title': 'varchar', 'code': 'integer', 'is_active': 'boolean',
+}
+
 # (public view, source schema, source table, columns)
 VIEW_SPECS = [
     ('raes_md_entity', 'md', 'entity', _ENTITY_COLUMNS),
     ('raes_md_entity_column', 'md', 'entity_column', _ENTITY_COLUMN_COLUMNS),
     ('raes_gnr_module', 'gnr', 'module', _GNR_MODULE_COLUMNS),
     ('raes_gnr_lookup', 'gnr', 'look_up', _GNR_LOOKUP_COLUMNS),
+    ('raes_md_company', 'md', 'company', _MD_COMPANY_COLUMNS),
 ]
 
 
@@ -78,6 +84,7 @@ MD_ENTITY_VIEW = VIEW_SPECS[0]
 MD_ENTITY_COLUMN_VIEW = VIEW_SPECS[1]
 GNR_MODULE_VIEW = VIEW_SPECS[2]
 GNR_LOOKUP_VIEW = VIEW_SPECS[3]
+MD_COMPANY_VIEW = VIEW_SPECS[4]
 
 
 def refresh_md_view(env, view, schema, table, columns):

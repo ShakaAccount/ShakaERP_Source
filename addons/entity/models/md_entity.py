@@ -615,17 +615,32 @@ class RaesMdEntity(models.Model):
         one — so checking two companies shows both companies' trees.
         Orphans (parent in an unselected company) are promoted to roots.
         """
-        allowed_ids = self.env.companies.ids
-        if not allowed_ids:
+        Category = self.env['raes.md.category']
+        dw = Category._allowed_dw_companies().ids
+        if not dw:
             return []
 
-        cats = self.env['raes.md.category'].search_read(
-            [('company_id', 'in', allowed_ids)],
-            ['id', 'title', 'parent_id', 'entity_id', 'code', 'company_id'],
+        cats = Category.search_read(
+            ['|', '|', ('company_id', 'in', dw), ('company_ids', 'in', dw),
+             ('root_id.company_ids', 'in', dw)],
+            ['id', 'title', 'parent_id', 'root_id', 'entity_id', 'code',
+             'company_id', 'company_ids'],
             order='title',
         )
         if not cats:
             return []
+
+        Company = self.env['raes.md.company']
+        titles = {c.id: c.title for c in Company.search([])}
+        mine = self.env.company.dw_company_id.id
+        roots = {c['id']: c for c in cats}
+        for c in cats:
+            root = roots.get(c['root_id'][0]) if c.get('root_id') else c
+            root = root or c
+            c['company_titles'] = [
+                titles.get(i, str(i)) for i in dict.fromkeys(
+                    [root['company_id'][0]] + list(root['company_ids']))]
+            c['can_delete'] = root['company_id'][0] == mine
 
         visible_ids = {c['id'] for c in cats}
         for c in cats:
@@ -633,6 +648,16 @@ class RaesMdEntity(models.Model):
                 c['parent_id'] = False
                 c['_orphan'] = True
         return cats
+
+    @api.model
+    def get_category_company_choices(self):
+        """DW companies the user may share a new root category with."""
+        return {
+            'default': self.env.company.dw_company_id.id or False,
+            'choices': [
+                {'id': c.id, 'title': c.title}
+                for c in self.env.user.company_ids.dw_company_id],
+        }
 
     # ------------------------------------------------------------------
     # DW relation resolution (pluggable seam)
@@ -921,16 +946,11 @@ class RaesMdEntity(models.Model):
             return dict(empty, reason='no-table')
 
         # --- Company scope -------------------------------------------
-        allowed = set(self.env.companies.ids)
-        if category.company_id and category.company_id.id in allowed:
-            company_id = category.company_id.id
-        elif category.company_id:
-            _logger.info(
-                "Category %s belongs to company %s which is not in %s",
-                category_id, category.company_id.id, allowed)
+        scope = (category._dw_companies()
+                 & self.env['raes.md.category']._allowed_dw_companies())
+        if not scope:
             return dict(empty, reason='company-mismatch')
-        else:
-            company_id = self.env.company.id
+        company_ids = scope.ids
 
         # 1. Members from the LOCAL postgres side -------------------------
         # The "not in category" pane also excludes items already claimed
@@ -980,15 +1000,17 @@ class RaesMdEntity(models.Model):
                 (c.name for c in entity.column_ids
                  if c.name and c.name.lower() in ('companyid', 'company_id')),
                 None,
-            ) or 'CompanyID'
-            company_q = ddl_builder._q(company_col)
+            )
 
             # 3. Build the WHERE clause (pymssql: %s placeholders) --------
             where_parts = []
             params = []
 
-            where_parts.append(f'CAST({company_q} AS INT) = %s')
-            params.append(company_id)
+            if company_col:
+                where_parts.append(
+                    f'CAST({ddl_builder._q(company_col)} AS INT) IN ('
+                    + ','.join(['%s'] * len(company_ids)) + ')')
+                params.extend(company_ids)
 
             if search_term and search_cols:
                 normalized_term = _persian_normalize(search_term)

@@ -1,6 +1,6 @@
 import logging
 from odoo import _, api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import AccessError, UserError, ValidationError
 from .category_view import (
     CATEGORY_VIEW, CATEGORY_MEMBER_VIEW, refresh_writable_view,
 )
@@ -36,9 +36,13 @@ class RaesMdCategory(models.Model):
     editor_user_id = fields.Integer()
     modification_date = fields.Datetime()
 
-    company_id = fields.Many2one('res.company',
-                                 default=lambda self: self.env.company,
-                                 required=True)
+    # Owner company. md.category.company_id is a FK to the DW table
+    # md.company, NOT to Odoo's res_company.
+    company_id = fields.Many2one('raes.md.company', 'Company', required=True)
+    # Extra companies that can see a root category (children follow it).
+    company_ids = fields.Many2many(
+        'raes.md.company', 'raes_md_category_company_rel',
+        'category_id', 'company_id', string='Shared with')
     entity_id = fields.Many2one('raes.md.entity', 'Entity', required=True,
                                 ondelete='cascade')
 
@@ -54,6 +58,24 @@ class RaesMdCategory(models.Model):
         except Exception:
             _logger.exception("Could not (re)build view raes_md_category")
             raise
+        # Odoo does not build m2m tables for _auto=False models. No FKs:
+        # a DW reload drops md.* and would cascade them away.
+        self.env.cr.execute("""
+            CREATE TABLE IF NOT EXISTS raes_md_category_company_rel (
+                category_id bigint NOT NULL,
+                company_id integer NOT NULL,
+                PRIMARY KEY (category_id, company_id))
+        """)
+
+    @api.model
+    def _allowed_dw_companies(self):
+        return self.env.companies.dw_company_id
+
+    def _dw_companies(self):
+        """Owner + shared companies of this category's tree root."""
+        self.ensure_one()
+        root = self.root_id or self
+        return root.company_id | root.company_ids
 
     @api.constrains('parent_id', 'entity_id')
     def _check_same_entity_as_root(self):
@@ -96,9 +118,27 @@ class RaesMdCategory(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            # Row-level security: the category's company is whatever the
-            # user has active in Odoo, unless a parent dictates otherwise.
-            vals.setdefault('company_id', self.env.company.id)
+            if not vals.get('parent_id') and not vals.get('company_id'):
+                company = self.env.company
+                if not company.dw_company_id:
+                    raise UserError(_(
+                        'Company "%s" has no DW Company set.',
+                        company.name))
+                vals['company_id'] = company.dw_company_id.id
+            if not self.env.su:
+                # Trust boundary: only companies the user belongs to.
+                extra = set()
+                for cmd in vals.get('company_ids') or []:
+                    if cmd[0] == 6:
+                        extra.update(cmd[2])
+                    elif cmd[0] == 4:
+                        extra.add(cmd[1])
+                allowed = set(
+                    self.env.user.company_ids.dw_company_id.ids)
+                if extra - allowed:
+                    raise AccessError(_(
+                        'You can only share a category with companies '
+                        'you belong to.'))
             vals.setdefault('creator_user_id', self.env.uid)
             vals.setdefault('creation_date', fields.Datetime.now())
             vals.setdefault('is_user_defined', True)
@@ -107,8 +147,8 @@ class RaesMdCategory(models.Model):
             if not vals.get('root_id') and parent_id:
                 parent = self.browse(parent_id)
                 # A child must share its tree root's company AND entity.
-                if parent.company_id:
-                    vals['company_id'] = parent.company_id.id
+                vals['company_id'] = parent.company_id.id
+                vals.pop('company_ids', None)
                 if not vals.get('entity_id') and parent.entity_id:
                     vals['entity_id'] = parent.entity_id.id
                 vals['root_id'] = parent.root_id.id or parent.id
@@ -177,22 +217,25 @@ class RaesMdCategory(models.Model):
 
         vals.setdefault('editor_user_id', self.env.uid)
         vals.setdefault('modification_date', fields.Datetime.now())
+        moved = self if 'parent_id' in vals else self.browse()
         result = super().write(vals)
         # A node that became a root must point at itself.
         if 'parent_id' in vals and not vals['parent_id']:
             for rec in self.filtered(lambda r: r.root_id.id != r.id):
                 rec.sudo().write({'root_id': rec.id})
+        # The whole moved subtree follows the new root (root_id + company).
+        for rec in moved:
+            root = rec.root_id
+            for lyr in rec._subtree_layers()[1:]:
+                super(RaesMdCategory, lyr).write({
+                    'root_id': root.id, 'company_id': root.company_id.id})
+            if rec.company_id != root.company_id:
+                super(RaesMdCategory, rec).write(
+                    {'company_id': root.company_id.id})
         return result
 
-    def unlink(self):
-        """Delete this category, every descendant, and all member links.
-
-        The legacy ``md.category.parent_id`` FK is ON DELETE RESTRICT, so
-        children must go before their parents. ``md.category_member`` has
-        no ON DELETE CASCADE toward ``md.category``, so its rows are
-        removed explicitly for every node in the subtree.
-        """
-        # 1. Collect every layer of the subtree, top-down (BFS).
+    def _subtree_layers(self):
+        """This recordset followed by its descendants, layer by layer."""
         layers = [self]
         seen = set(self.ids)
         layer = self
@@ -204,11 +247,34 @@ class RaesMdCategory(models.Model):
             seen.update(children.ids)
             layers.append(children)
             layer = children
+        return layers
+
+    def unlink(self):
+        """Delete this category, every descendant, and all member links.
+
+        The legacy ``md.category.parent_id`` FK is ON DELETE RESTRICT, so
+        children must go before their parents. ``md.category_member`` has
+        no ON DELETE CASCADE toward ``md.category``, so its rows are
+        removed explicitly for every node in the subtree.
+        """
+        if not self.env.su:
+            mine = self.env.company.dw_company_id
+            for rec in self:
+                owner = (rec.root_id or rec).company_id
+                if owner != mine:
+                    raise AccessError(_(
+                        'Only company "%s" (the owner) can delete this '
+                        'category.', owner.display_name))
+
+        layers = self._subtree_layers()
 
         # 2. Delete member rows for every node in the subtree.
         all_ids = [i for lyr in layers for i in lyr.ids]
         self.env['raes.md.category.member'].sudo().search(
             [('category_id', 'in', all_ids)]).unlink()
+        self.env.cr.execute(
+            "DELETE FROM raes_md_category_company_rel "
+            "WHERE category_id = ANY(%s)", (all_ids,))
 
         # 3. Delete categories deepest-first so the RESTRICT on
         #    parent_id never blocks a parent that still has children.

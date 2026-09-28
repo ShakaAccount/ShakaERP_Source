@@ -2,6 +2,7 @@ from . import md_view
 from . import ddl_builder
 from . import gnr_module
 from . import gnr_lookup
+from . import md_company
 from . import dw_schema
 from . import md_entity_config
 from . import md_entity

@@ -11,3 +11,5 @@ access_raes_md_entity_config_user,raes.md.entity.config.user,model_raes_md_entit
 access_raes_md_entity_config_manager,raes.md.entity.config.manager,model_raes_md_entity_config,base.group_system,1,1,1,1
 access_raes_dw_schema_user,raes.dw.schema.user,model_raes_dw_schema,base.group_user,1,1,1,1
 access_raes_dw_schema_manager,raes.dw.schema.manager,model_raes_dw_schema,base.group_system,1,1,1,1
+access_raes_md_company_user,raes.md.company.user,model_raes_md_company,base.group_user,1,0,0,0
+access_raes_md_company_manager,raes.md.company.manager,model_raes_md_company,base.group_system,1,1,1,1
