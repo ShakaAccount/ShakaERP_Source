@@ -147,6 +147,9 @@
                                             <button class="o_cat_node_add"
                                                     t-on-click="(ev) => { ev.stopPropagation(); this.onAddChild(ctx.node); }"
                                                     title="Add a sub-category here">+</button>
+                                            <button class="o_cat_node_add" t-if="ctx.node.can_delete"
+                                                    t-on-click="(ev) => { ev.stopPropagation(); this.openEditCategory(ctx.node); }"
+                                                    title="Edit this category">&#9998;</button>
                                             <button class="o_cat_node_remove" t-if="ctx.node.can_delete"
                                                     t-on-click="(ev) => { ev.stopPropagation(); this.onDelete(ctx.node); }"
                                                     title="Delete this category and all its sub-categories">
@@ -451,13 +454,14 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">
-                                <t t-if="state.newCategory.parent_id">New Sub-category</t>
+                                <t t-if="state.newCategory.id">Edit Category</t>
+                                <t t-elif="state.newCategory.parent_id">New Sub-category</t>
                                 <t t-else="">New Root Category</t>
                             </h5>
                             <button class="btn-close" t-on-click="cancelNewCategory"/>
                         </div>
                         <div class="modal-body">
-                            <t t-if="state.newCategory.parent_id">
+                            <t t-if="state.newCategory.parent_id and !state.newCategory.id">
                                 <div class="alert alert-light border py-1 px-2 small mb-2">
                                     Nested under:
                                     <b t-esc="state.newCategory.parent_title"/>
@@ -521,13 +525,14 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label small fw-semibold">Entity</label>
-                                <t t-if="state.newCategory.parent_id">
+                                <t t-if="state.newCategory.parent_id or state.newCategory.id">
                                     <input type="text"
                                            class="form-control"
                                            disabled="disabled"
                                            t-att-value="selectedEntity ? (selectedEntity.title || selectedEntity.name) : ''"/>
                                     <small class="text-muted">
-                                        Locked to the tree root's entity.
+                                        <t t-if="state.newCategory.id">The entity cannot be changed.</t>
+                                        <t t-else="">Locked to the tree root's entity.</t>
                                     </small>
                                 </t>
                                 <t t-else="">
@@ -593,7 +598,7 @@
                             <button class="btn btn-primary"
                                     t-att-disabled="state.saving"
                                     t-on-click="saveNewCategory">
-                                Create
+                                <t t-esc="state.newCategory.id ? 'Save' : 'Create'"/>
                             </button>
                         </div>
                     </div>

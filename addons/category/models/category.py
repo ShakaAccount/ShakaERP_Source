@@ -179,6 +179,9 @@ class RaesMdCategory(models.Model):
 
     def write(self, vals):
         vals = dict(vals)
+        if 'entity_id' in vals and any(
+                rec.entity_id.id != vals['entity_id'] for rec in self):
+            raise UserError(_('The entity of a category cannot be changed.'))
         # Re-parenting must keep root_id in sync and must not create a
         # cycle (a node cannot become its own ancestor).
         if 'parent_id' in vals:

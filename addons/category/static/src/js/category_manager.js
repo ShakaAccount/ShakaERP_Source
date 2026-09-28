@@ -1171,6 +1171,26 @@ export class CategoryManager extends Component {
         this.state.showNewCategory = true;
     }
 
+    async openEditCategory(cat) {
+        await this.loadEntities();
+        const isRoot = !cat.parent_id;
+        let companies = {default: false, choices: [], picked: [], titles: cat.company_titles || []};
+        if (isRoot) {
+            const res = await this.orm.call("raes.md.entity", "get_category_company_choices", []);
+            companies = {default: res.default, choices: res.choices, picked: [res.default, ...cat.company_ids], titles: []};
+        }
+        this.state.newCategory = {
+            id: cat.id,
+            companies,
+            title: cat.title,
+            code: cat.code || "",
+            parent_id: cat.parent_id ? cat.parent_id[0] : null,
+            entity_id: cat.entity_id ? cat.entity_id[0] : null,
+        };
+        this.closeEntityPicker();
+        this.state.showNewCategory = true;
+    }
+
     confirmDeleteCategory(cat) {
         this.dialog.add(ConfirmationDialog, {
             title: "Delete category",
@@ -1275,6 +1295,19 @@ export class CategoryManager extends Component {
         }
         this.state.saving = true;
         try {
+            if (nc.id) {
+                // The entity is never sent: it is immutable after creation.
+                const upd = {title: nc.title, code: nc.code || false};
+                if (!nc.parent_id) {
+                    const extra = nc.companies.picked.filter(id => id !== nc.companies.default);
+                    upd.company_ids = [[6, 0, extra]];
+                }
+                await this.orm.write("raes.md.category", [nc.id], upd);
+                this.state.showNewCategory = false;
+                await this.reloadTree();
+                this.notification.add(_t("Category updated."), {type: "success"});
+                return;
+            }
             const vals = {
                 title: nc.title, code: nc.code || false, entity_id: nc.entity_id ? parseInt(nc.entity_id, 10) : false,
             };
