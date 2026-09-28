@@ -62,7 +62,6 @@ class BudgetFinancialStatement(models.Model):
             scenario = record.scenario_id.scenario_id
             if scenario.company_id != record.company_id or scenario.fiscal_year_id != record.fiscal_year_id:
                 raise ValidationError('سناریو باید متعلق به شرکت و سال مالی انتخاب‌شده باشد.')
-    @api.model
     def action_open_settings(self):
         if not self.env.user.has_group('base.group_system'):
             raise AccessError('فقط مدیر سیستم می‌تواند تنظیمات گروه‌بندی را باز کند.')
@@ -122,20 +121,19 @@ class BudgetFinancialStatementLine(models.Model):
     total = fields.Float(string='جمع کل', compute='_compute_total', digits='Account')
 
     @api.model
-    def _configured_account_root(self, section, company):
-        """Return the configured root only when it belongs to ``company``.
-
-        Category trees are company-owned.  A legacy global parameter may still
-        exist, but it is never allowed to expose another company's tree.
-        """
+    def _configured_root(self, section):
+        """Return the global root selected for a financial-statement section."""
         params = self.env['ir.config_parameter'].sudo()
-        root_id = int(params.get_param(
-            'budget_planning.%s_root_id.%s' % (section, company.id)) or 0)
-        if not root_id:
-            root_id = int(params.get_param(
-                'budget_planning.%s_root_id' % section) or 0)
-        root = self.env['raes.md.category'].browse(root_id).exists()
-        return root if root and root.company_id == company else self.env['raes.md.category']
+        root_id = int(params.get_param('budget_planning.%s_root_id' % section) or 0)
+        return self.env['raes.md.category'].browse(root_id).exists()
+
+    @api.model
+    def _configured_account_root(self, section, company):
+        """Return the global root only when the statement company can use it."""
+        root = self._configured_root(section)
+        if root and company.dw_company_id and company.dw_company_id in root._dw_companies():
+            return root
+        return self.env['raes.md.category']
 
     @api.model
     def account_tree(self, company_id, section):
@@ -145,13 +143,17 @@ class BudgetFinancialStatementLine(models.Model):
             raise ValidationError('به شرکت انتخاب‌شده دسترسی ندارید.')
         if section not in ('balance', 'income'):
             raise ValidationError('بخش صورت مالی نامعتبر است.')
+        configured_root = self._configured_root(section)
         selected_root = self._configured_account_root(section, company)
+        # A configured tree is not visible to companies that have not been
+        # granted access through its owner/shared-company configuration.
+        if configured_root and not selected_root:
+            return []
         if selected_root:
             if selected_root.parent_id or selected_root.entity_id.name != 'DimSubsidiaryLedger':
                 raise ValidationError('گروه‌بندی سراسری معتبر نیست؛ مدیر سیستم باید آن را اصلاح کند.')
             categories = self.env['raes.md.category'].search([
                 ('id', 'child_of', selected_root.id),
-                ('company_id', '=', company.id),
             ], order='code, title, id')
             roots = selected_root
         else:
@@ -159,10 +161,7 @@ class BudgetFinancialStatementLine(models.Model):
                 ('company_id', '=', company.id),
                 ('entity_id.name', '=', 'DimSubsidiaryLedger'),
             ], order='code, title, id')
-            roots = categories.filtered(lambda c: not c.parent_id and 'گروه بندی حساب معین' in
-                                        (c.title or '').replace('‌', ' '))
-            if not roots:
-                roots = categories.filtered(lambda c: not c.parent_id)
+            roots = categories.filtered(lambda c: not c.parent_id)
         allowed = set()
         def visit(node):
             if node.id in allowed:
@@ -182,12 +181,16 @@ class BudgetFinancialStatementLine(models.Model):
         company = self.env['res.company'].browse(int(company_id)).exists()
         if not company or company not in self.env.companies:
             raise ValidationError('به شرکت انتخاب‌شده دسترسی ندارید.')
-        if not category or category.company_id != company:
+        if (not category or not company.dw_company_id
+                or company.dw_company_id not in category._dw_companies()):
             raise ValidationError('زیرگروه نامعتبر است.')
         if section not in ('balance', 'income'):
             raise ValidationError('بخش صورت مالی نامعتبر است.')
+        configured_root = self._configured_root(section)
         selected_root = self._configured_account_root(section, company)
-        if selected_root:
+        if configured_root:
+            if not selected_root:
+                raise ValidationError('به این گروه‌بندی حساب دسترسی ندارید.')
             if category.id != selected_root.id and category.root_id.id != selected_root.id:
                 raise ValidationError('زیرگروه خارج از گروه‌بندی تنظیم‌شده است.')
         result = self.env['raes.md.entity'].with_company(company).get_items_in_category(
