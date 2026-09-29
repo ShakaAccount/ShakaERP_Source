@@ -990,7 +990,16 @@ class RaesMdEntity(models.Model):
                 ) or search_column
                 search_cols = [real]
             else:
-                search_cols = self._dw_remote_search_columns(entity)
+                # Metadata may list columns the real table lacks (stale
+                # catalog) — keep only those that actually exist.
+                cur.execute(
+                    "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS "
+                    "WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s",
+                    (entity.schema_name, entity.name))
+                real_cols = {r[0].lower() for r in cur.fetchall()}
+                search_cols = [
+                    c for c in self._dw_remote_search_columns(entity)
+                    if c.lower() in real_cols]
 
             table = ddl_builder._qfull(connection.database,
                                        entity.schema_name, entity.name)
