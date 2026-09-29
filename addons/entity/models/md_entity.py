@@ -910,13 +910,12 @@ class RaesMdEntity(models.Model):
         return row[0] if row else None
 
     def _dw_remote_search_columns(self, entity):
-        """Text-like, non-PK columns that are safe to ILIKE-search."""
-        text_types = {'varchar', 'nvarchar', 'char', 'nchar'}
+        """Every column that can be CAST to text for the "all columns" search."""
+        skip = {'binary', 'varbinary', 'image', 'xml', 'geography',
+                'geometry', 'hierarchyid', 'timestamp', 'rowversion'}
         return [
             c.name for c in entity.column_ids
-            if c.name
-               and (c.data_type or '').lower() in text_types
-               and not c.is_primary_key
+            if c.name and (c.data_type or '').lower() not in skip
         ]
 
     def _dw_category_pane(self, entity_id, category_id, offset, limit,
@@ -954,13 +953,14 @@ class RaesMdEntity(models.Model):
 
         # 1. Members from the LOCAL postgres side -------------------------
         # The "not in category" pane also excludes items already claimed
-        # by a sibling category (same parent) — a member can only sit in
-        # one sub-category among brothers, so it must not still look
-        # "uncategorized" under the others.
+        # by ANY category in the same tree (siblings, cousins, ancestors…):
+        # an item lives in at most one category per tree.
         category_ids = [category_id]
-        if not in_category and category.parent_id:
-            category_ids = self.env['raes.md.category'].search(
-                [('parent_id', '=', category.parent_id.id)]).ids
+        if not in_category:
+            root = category._get_tree_root()
+            if root:
+                category_ids = [
+                    c.id for layer in root._subtree_layers() for c in layer]
 
         self.env.cr.execute(
             "SELECT member_id FROM md.category_member "
@@ -1024,10 +1024,11 @@ class RaesMdEntity(models.Model):
                 where_parts.append('(' + ' OR '.join(likes) + ')')
 
             if member_ids:
-                placeholders = ','.join(['%s'] * len(member_ids))
                 op = 'IN' if in_category else 'NOT IN'
-                where_parts.append(f'{pk_q} {op} ({placeholders})')
-                params.extend(member_ids)
+                # ints only (Integer column) — inlined to dodge MSSQL's
+                # 2100-parameter cap on large trees.
+                ids_sql = ','.join(str(int(i)) for i in member_ids)
+                where_parts.append(f'CAST({pk_q} AS BIGINT) {op} ({ids_sql})')
 
             where_sql = ('WHERE ' + ' AND '.join(where_parts)) if where_parts \
                 else ''
