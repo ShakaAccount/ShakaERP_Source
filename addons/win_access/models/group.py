@@ -216,9 +216,10 @@ class WinAccessGroup(models.Model):
         run.step("SSAS role '%s' in %s" % (n, self.ssas_database_id.name), lambda: _ensure(
             env, "%s/%s" % (base, _q(n)), base,
             {"name": n, "description": self.description or None}), "ssas", ("local",))
-        run.step("SSAS role permission = %s" % self.ssas_permission, lambda: _call(
+        perm = self.ssas_permission or "Read"  # a role with no permission can't read the database
+        run.step("SSAS role permission = %s" % perm, lambda: _call(
             env, "PATCH", "%s/%s/permission" % (base, _q(n)),
-            {"permission": self.ssas_permission}) and "Set", "ssas", ("local",))
+            {"permission": perm}) and "Set", "ssas", ("local",))
         run.step("Add %s to SSAS role" % self._principal(), lambda: self._ssas_member(base), "ssas", ("local",))
 
     def _ssas_member(self, base):
