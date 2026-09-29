@@ -20,6 +20,7 @@ Management HTTP API, plus BI row-level security driven by ``MD.UserAccess``
     'external_dependencies': {'python': ['requests', 'pymssql']},
     'data': [
         'security/ir.model.access.csv',
+        'data/roles.xml',
         'views/win_access_views.xml',
         'views/bi_user_access_views.xml',
         'views/dw_agent_job_views.xml',

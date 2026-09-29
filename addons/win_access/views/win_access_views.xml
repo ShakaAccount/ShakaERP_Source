@@ -23,8 +23,8 @@
                             <field name="ssas_instance_id" options="{'no_create': True}"/>
                             <field name="ssas_database_id" options="{'no_create': True}"
                                    domain="[('kind', '=', 'ssas_db'), ('parent_id', '=', ssas_instance_id)]"/>
-                            <field name="ssas_permission"/>
-                            <field name="pbirs_role"/>
+                            <field name="ssas_permission_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                            <field name="pbirs_role_ids" widget="many2many_tags" options="{'no_create': True}"/>
                         </group>
                     </group>
                     <notebook>

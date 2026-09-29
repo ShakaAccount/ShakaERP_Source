@@ -6,3 +6,4 @@ access_bi_user_access,bi.user.access,model_bi_user_access,base.group_system,1,1,
 access_bi_user_access_line,bi.user.access.line,model_bi_user_access_line,base.group_system,1,1,1,1
 access_bi_user_access_wizard,bi.user.access.wizard,model_bi_user_access_wizard,base.group_system,1,1,1,1
 access_bi_user_access_line_wizard,bi.user.access.line.wizard,model_bi_user_access_line_wizard,base.group_system,1,1,1,1
+access_win_access_role,win.access.role,model_win_access_role,base.group_system,1,1,1,1

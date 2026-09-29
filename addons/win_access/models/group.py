@@ -140,19 +140,24 @@ class WinAccessGroup(models.Model):
     ssas_database_id = fields.Many2one(
         "win.access.option", "SSAS database", domain=[("kind", "=", "ssas_db")],
         help="Blank = no SSAS role.")
-    ssas_permission = fields.Selection(
-        [("Read", "Read"), ("ReadWrite", "ReadWrite"), ("Administrator", "Administrator")],
-        default="Read")
+    ssas_permission_ids = fields.Many2many(
+        "win.access.role", "win_access_group_ssas_role_rel", string="SSAS permissions",
+        domain=[("kind", "=", "ssas")], default=lambda s: s._default_roles("ssas", "Read"))
     pbirs_path_ids = fields.Many2many(
         "win.access.option", string="PBIRS items", domain=[("kind", "=", "pbirs")],
         help="Empty = no PBIRS policy. The group gets the role on each selected item.")
     options_error = fields.Char(compute="_compute_options_error")
-    pbirs_role = fields.Char("PBIRS role", default="Browser")
+    pbirs_role_ids = fields.Many2many(
+        "win.access.role", "win_access_group_pbirs_role_rel", string="PBIRS roles",
+        domain=[("kind", "=", "pbirs")], default=lambda s: s._default_roles("pbirs", "Browser"))
     member_ids = fields.One2many("win.access.member", "group_id")
     state = fields.Selection([("draft", "Draft"), ("synced", "Synced"), ("error", "Errors")],
                              default="draft", readonly=True)
     sync_result = fields.Json(readonly=True)
     synced_at = fields.Datetime(readonly=True)
+
+    def _default_roles(self, kind, name):
+        return self.env["win.access.role"].search([("kind", "=", kind), ("name", "=", name)])
 
     @api.onchange("ssas_instance_id")
     def _onchange_ssas_instance(self):
@@ -216,10 +221,12 @@ class WinAccessGroup(models.Model):
         run.step("SSAS role '%s' in %s" % (n, self.ssas_database_id.name), lambda: _ensure(
             env, "%s/%s" % (base, _q(n)), base,
             {"name": n, "description": self.description or None}), "ssas", ("local",))
-        perm = self.ssas_permission or "Read"  # a role with no permission can't read the database
-        run.step("SSAS role permission = %s" % perm, lambda: _call(
-            env, "PATCH", "%s/%s/permission" % (base, _q(n)),
-            {"permission": perm}) and "Set", "ssas", ("local",))
+        # a role with no permission can't read the database
+        # ponytail: the API holds one permission per role; each PATCH overwrites, so the last selected wins.
+        for perm in self.ssas_permission_ids.mapped("name") or ["Read"]:
+            run.step("SSAS role permission = %s" % perm, lambda perm=perm: _call(
+                env, "PATCH", "%s/%s/permission" % (base, _q(n)),
+                {"permission": perm}) and "Set", "ssas", ("local",))
         run.step("Add %s to SSAS role" % self._principal(), lambda: self._ssas_member(base), "ssas", ("local",))
 
     def _ssas_member(self, base):
@@ -233,11 +240,11 @@ class WinAccessGroup(models.Model):
 
     def _sync_pbirs(self, run):
         for opt in self.pbirs_path_ids:
-            self._sync_pbirs_item(run, opt.path)
+            for role in self.pbirs_role_ids.mapped("name") or ["Browser"]:
+                self._sync_pbirs_item(run, opt.path, role)
 
-    def _sync_pbirs_item(self, run, path):
+    def _sync_pbirs_item(self, run, path, role):
         env, me = self.env, self._principal()
-        role = self.pbirs_role or "Browser"
 
         def push():
             cur = _call(env, "GET", "/pbirs/items/policies?path=" + requests.utils.quote(path, safe="/"))
@@ -265,6 +272,14 @@ class WinAccessGroup(models.Model):
         return {"type": "ir.actions.client", "tag": "display_notification", "params": {
             "title": "Windows Access API", "message": msg,
             "type": "success" if ok else "danger", "sticky": not ok}}
+
+
+class WinAccessRole(models.Model):
+    _name = "win.access.role"
+    _description = "Windows Access Role"
+
+    name = fields.Char(required=True)
+    kind = fields.Selection([("ssas", "SSAS"), ("pbirs", "PBIRS")], required=True)
 
 
 class WinAccessOption(models.Model):

@@ -1,0 +1,11 @@
+<odoo noupdate="1">
+    <record id="role_ssas_read" model="win.access.role"><field name="kind">ssas</field><field name="name">Read</field></record>
+    <record id="role_ssas_readwrite" model="win.access.role"><field name="kind">ssas</field><field name="name">ReadWrite</field></record>
+    <record id="role_ssas_administrator" model="win.access.role"><field name="kind">ssas</field><field name="name">Administrator</field></record>
+    <record id="role_pbirs_browser" model="win.access.role"><field name="kind">pbirs</field><field name="name">Browser</field></record>
+    <record id="role_pbirs_content_manager" model="win.access.role"><field name="kind">pbirs</field><field name="name">Content Manager</field></record>
+    <record id="role_pbirs_publisher" model="win.access.role"><field name="kind">pbirs</field><field name="name">Publisher</field></record>
+    <record id="role_pbirs_report_builder" model="win.access.role"><field name="kind">pbirs</field><field name="name">Report Builder</field></record>
+    <record id="role_pbirs_my_reports" model="win.access.role"><field name="kind">pbirs</field><field name="name">My Reports</field></record>
+    <record id="role_pbirs_system_administrator" model="win.access.role"><field name="kind">pbirs</field><field name="name">System Administrator</field></record>
+</odoo>
