@@ -1028,7 +1028,7 @@ class RaesMdEntity(models.Model):
                 # ints only (Integer column) — inlined to dodge MSSQL's
                 # 2100-parameter cap on large trees.
                 ids_sql = ','.join(str(int(i)) for i in member_ids)
-                where_parts.append(f'CAST({pk_q} AS BIGINT) {op} ({ids_sql})')
+                where_parts.append(f'{pk_q} {op} ({ids_sql})')
 
             where_sql = ('WHERE ' + ' AND '.join(where_parts)) if where_parts \
                 else ''
