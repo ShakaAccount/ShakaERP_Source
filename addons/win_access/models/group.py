@@ -195,8 +195,20 @@ class WinAccessGroup(models.Model):
             if g.pbirs_path_ids:
                 g._sync_pbirs(run)
             g.member_ids._sync(run)
+            g._grant_reports()
             g.write({"state": "error" if run.failed else "synced", "sync_result": run.data(),
                      "synced_at": fields.Datetime.now()})
+
+    def _grant_reports(self):
+        """Let the group's local members (that have an Odoo user) see the selected PBIRS reports in the portal."""
+        self.ensure_one()
+        logins = self.member_ids.filtered(lambda m: m.kind == "local" and m.state == "added").mapped("name")
+        users = self.env["res.users"].sudo().search([("login", "in", logins)])
+        if not users:
+            return
+        reports = self.env["powerbi.report"].sudo().search([("catalog_path", "in", self.pbirs_path_ids.mapped("path"))])
+        # skip_auto_push: PBIRS access for local users already comes from the group policy above.
+        reports.with_context(skip_auto_push=True).write({"allowed_user_ids": [(4, u.id) for u in users]})
 
     def _sync_ssas(self, run):
         env, n = self.env, self.name
@@ -429,6 +441,8 @@ class WinAccessMember(models.Model):
             if not m.account_created:
                 run.step("Check %s user '%s'" % (k, m.name), m._ensure_account, blk, ("local",))
             run.step("Add '%s' to local group" % m.principal, m._add, blk, ("local",))
+            if k == "local" and blk not in run.failed:
+                run.step("Odoo user '%s'" % m.name, m._ensure_odoo_user, blk)
             ok = blk not in run.failed
             done = ok and not m.account_created
             m.write({"state": "added" if ok else "error", "log": run.errors.get(blk, False),
@@ -473,6 +487,21 @@ class WinAccessMember(models.Model):
             "username": self.name, "password": self.password,
             "full_name": self.full_name or None, "active": True})
         return "Created"
+
+    def _ensure_odoo_user(self):
+        """Local Windows accounts also get an Odoo login (internal user) so they can open the portal reports."""
+        self.ensure_one()
+        Users = self.env["res.users"].sudo()
+        if Users.with_context(active_test=False).search_count([("login", "=", self.name)]):
+            return "Already exists"
+        try:
+            with self.env.cr.savepoint():
+                Users.create({"login": self.name, "name": self.full_name or self.name,
+                              "password": self.password or False,
+                              "group_ids": [(6, 0, [self.env.ref("base.group_user").id])]})
+        except Exception as e:  # Runner only records ApiError; keep one bad user from aborting the sync
+            raise ApiError("Could not create the Odoo user: %s" % e, "Check the username and password policy.")
+        return "Created" if self.password else "Created without a password (set one in Odoo)"
 
     def _add(self):
         self.ensure_one()
