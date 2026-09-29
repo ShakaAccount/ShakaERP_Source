@@ -49,6 +49,10 @@ class CompanyCurrencyIntroduction(models.Model):
     )
     note = fields.Text(string='توضیحات')
 
+    def _compute_display_name(self):
+        for record in self:
+            record.display_name = '\u00a0'
+
 
 class CompanyCurrencyIntroductionLine(models.Model):
     _name = 'company.currency.introduction.line'
