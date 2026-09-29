@@ -137,6 +137,9 @@ class StrSelection(fields.Selection):
         return str(value)
 
 
+_DW_SHAPE_CACHE = {}  # (connection, schema, table) -> (pk, lowercase columns)
+
+
 class RaesMdEntity(models.Model):
     _name = 'raes.md.entity'
     _table = 'raes_md_entity'
@@ -911,11 +914,11 @@ class RaesMdEntity(models.Model):
 
     def _dw_remote_search_columns(self, entity):
         """Every column that can be CAST to text for the "all columns" search."""
-        skip = {'binary', 'varbinary', 'image', 'xml', 'geography',
-                'geometry', 'hierarchyid', 'timestamp', 'rowversion'}
+        text = {'char', 'varchar', 'nchar', 'nvarchar', 'text', 'ntext'}
         return [
             c.name for c in entity.column_ids
-            if c.name and (c.data_type or '').lower() not in skip
+            if c.name and ((c.data_type or '').lower() in text
+                           or c.is_primary_key)
         ]
 
     def _dw_category_pane(self, entity_id, category_id, offset, limit,
@@ -981,9 +984,22 @@ class RaesMdEntity(models.Model):
             ms = self._dw_mssql_open(connection)
             cur = ms.cursor()
 
-            pk = self._dw_remote_pk(cur, entity)
-            if not pk:
-                return dict(empty, reason='no-pk')
+            # ponytail: process-local cache, stale until restart if the
+            # remote table's PK/columns change; add TTL if that happens.
+            key = (connection.id, entity.schema_name, entity.name)
+            cached = _DW_SHAPE_CACHE.get(key)
+            if cached:
+                pk, real_cols = cached
+            else:
+                pk = self._dw_remote_pk(cur, entity)
+                if not pk:
+                    return dict(empty, reason='no-pk')
+                cur.execute(
+                    "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS "
+                    "WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s",
+                    (entity.schema_name, entity.name))
+                real_cols = {r[0].lower() for r in cur.fetchall()}
+                _DW_SHAPE_CACHE[key] = (pk, real_cols)
 
             if search_column:
                 wanted = search_column.lower()
@@ -996,11 +1012,6 @@ class RaesMdEntity(models.Model):
             else:
                 # Metadata may list columns the real table lacks (stale
                 # catalog) — keep only those that actually exist.
-                cur.execute(
-                    "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS "
-                    "WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s",
-                    (entity.schema_name, entity.name))
-                real_cols = {r[0].lower() for r in cur.fetchall()}
                 search_cols = [
                     c for c in self._dw_remote_search_columns(entity)
                     if c.lower() in real_cols]
@@ -1018,6 +1029,7 @@ class RaesMdEntity(models.Model):
             # 3. Build the WHERE clause (pymssql: %s placeholders) --------
             where_parts = []
             params = []
+            total = None  # set early by the in-category fast path
 
             if company_col:
                 where_parts.append(
@@ -1038,10 +1050,33 @@ class RaesMdEntity(models.Model):
 
             if member_ids:
                 op = 'IN' if in_category else 'NOT IN'
-                # ints only (Integer column) — inlined to dodge MSSQL's
-                # 2100-parameter cap on large trees.
-                ids_sql = ','.join(str(int(i)) for i in member_ids)
-                where_parts.append(f'{pk_q} {op} ({ids_sql})')
+                if in_category and not search_term:
+                    # Fast path: page the member ids locally, ask MSSQL
+                    # only for this page's rows.
+                    member_ids.sort()
+                    total = len(member_ids)
+                    ids_sql = ','.join(
+                        str(int(i)) for i in member_ids[offset:offset + limit])
+                    if not ids_sql:
+                        return dict(empty, total=total)
+                    where_parts.append(f'{pk_q} IN ({ids_sql})')
+                    offset = 0
+                elif len(member_ids) <= 1000:
+                    # ints only — inlined to dodge the 2100-parameter cap.
+                    ids_sql = ','.join(str(int(i)) for i in member_ids)
+                    where_parts.append(f'{pk_q} {op} ({ids_sql})')
+                else:
+                    # Big trees: ship ids to a session temp table instead
+                    # of one giant IN (...) literal.
+                    cur.execute('CREATE TABLE #members (id BIGINT PRIMARY KEY)')
+                    for i in range(0, len(member_ids), 1000):
+                        chunk = ','.join(
+                            f'({int(m)})' for m in member_ids[i:i + 1000])
+                        cur.execute(f'INSERT INTO #members VALUES {chunk}')
+                    neg = '' if in_category else 'NOT '
+                    where_parts.append(
+                        f'{neg}EXISTS (SELECT 1 FROM #members m '
+                        f'WHERE m.id = {pk_q})')
 
             where_sql = ('WHERE ' + ' AND '.join(where_parts)) if where_parts \
                 else ''
@@ -1051,10 +1086,11 @@ class RaesMdEntity(models.Model):
                 f'SELECT COUNT_BIG(*) FROM {table} {where_sql}',
                 tuple(params))
             row = cur.fetchone()
-            total = int(row[0] or 0) if row else 0
-
-            if total == 0:
+            counted = int(row[0] or 0) if row else 0
+            if counted == 0:
                 return empty
+            if total is None:
+                total = counted
 
             # 5. Page ----------------------------------------------------
             cur.execute(

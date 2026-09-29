@@ -2,6 +2,7 @@
 import {registry} from "@web/core/registry";
 import {useService} from "@web/core/utils/hooks";
 import {user} from "@web/core/user";
+import {debounce} from "@web/core/utils/timing";
 import {_t} from "@web/core/l10n/translation";
 import {
     Component, useState, onWillStart, onWillUnmount,
@@ -775,6 +776,9 @@ export class CategoryManager extends Component {
             return;
         }
         const entityId = cat.entity_id[0];
+        // Drop out-of-order responses: only the latest request per side wins.
+        this._paneSeq = this._paneSeq || {};
+        const seq = this._paneSeq[sideName] = (this._paneSeq[sideName] || 0) + 1;
         try {
             const res = await this.orm.call("raes.md.entity", method, [
                 entityId, cat.id,
@@ -783,11 +787,13 @@ export class CategoryManager extends Component {
                 side.search || "",
                 side.searchColumn || false,
             ]);
+            if (seq !== this._paneSeq[sideName]) return;
             side.records = res.records || [];
             side.total = res.total || 0;
             side.reason = res.reason || null;
             await this.refreshLabelOptions();
         } catch (e) {
+            if (seq !== this._paneSeq[sideName]) return;
             console.error(`${method} failed`, e);
             side.records = [];
             side.total = 0;
@@ -975,18 +981,28 @@ export class CategoryManager extends Component {
     // ---------- Search + pagination ----------
     onSearchLeft(ev) {
         this.state.left.search = ev.target.value;
-        this.state.left.page = 1;
-        this.state.left.selectedIds = {};
-        this.state.left.anchorIndex = null;
-        this.loadLeft();
+        this._debouncedSearch("left");
     }
 
     onSearchRight(ev) {
         this.state.right.search = ev.target.value;
-        this.state.right.page = 1;
-        this.state.right.selectedIds = {};
-        this.state.right.anchorIndex = null;
-        this.loadRight();
+        this._debouncedSearch("right");
+    }
+
+    _debouncedSearch(sideName) {
+        this._searchDebounced = this._searchDebounced || {
+            left: debounce(() => this._runSearch("left"), 350),
+            right: debounce(() => this._runSearch("right"), 350),
+        };
+        this._searchDebounced[sideName]();
+    }
+
+    _runSearch(sideName) {
+        const side = this.state[sideName];
+        side.page = 1;
+        side.selectedIds = {};
+        side.anchorIndex = null;
+        return sideName === "left" ? this.loadLeft() : this.loadRight();
     }
 
     onSearchColumnChange(sideName, ev) {
