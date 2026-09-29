@@ -315,7 +315,7 @@ class WinAccessOption(models.Model):
         """Refresh the picker cache at most every 5 minutes; never blocks opening a form."""
         icp = self.env["ir.config_parameter"].sudo()
         last = icp.get_param("win_access.options_at")
-        if last and fields.Datetime.now() - fields.Datetime.to_datetime(last) < timedelta(minutes=5):
+        if last and not icp.get_param("win_access.options_err") and fields.Datetime.now() - fields.Datetime.to_datetime(last) < timedelta(minutes=5):
             return
         errors = self.refresh()
         icp.set_param("win_access.options_err",
