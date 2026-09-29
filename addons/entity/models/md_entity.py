@@ -945,8 +945,12 @@ class RaesMdEntity(models.Model):
             return dict(empty, reason='no-table')
 
         # --- Company scope -------------------------------------------
-        scope = (category._dw_companies()
-                 & self.env['raes.md.category']._allowed_dw_companies())
+        # Active company + all its descendants: a parent sees its child
+        # companies' DW rows too.
+        Company = self.env['raes.md.company']
+        tree = lambda cs: Company.search([('id', 'child_of', cs.ids)])
+        scope = (tree(category._dw_companies())
+                 & tree(self.env['raes.md.category']._allowed_dw_companies()))
         if not scope:
             return dict(empty, reason='company-mismatch')
         company_ids = scope.ids
