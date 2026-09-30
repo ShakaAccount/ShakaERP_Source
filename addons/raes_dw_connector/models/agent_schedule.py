@@ -169,6 +169,16 @@ def parse_exec(cmd):
     return m.group(1), out
 
 
+# what a new ETL step starts from (overridable per DW connection)
+DEFAULT_ETL_COMMAND = """EXEC ETL.spGatheringData
+  @CompanyID = NULL,
+  @DataSourceID = NULL,
+  @ModuleID = NULL,
+  @EntityID = NULL,
+  @DateID = 0,
+  @Label = NULL"""
+
+
 SSAS_REFRESH = ('full', 'automatic', 'dataOnly', 'calculate', 'clearValues')
 
 

@@ -46,6 +46,14 @@
                                 view ها تغذیه می‌شوند (raes_dim_*_view).
                             </div>
                         </page>
+                        <page string="ETL پیش‌فرض">
+                            <field name="default_etl_command"
+                                   class="font-monospace"/>
+                            <div class="text-muted">
+                                گام‌های ETL جدید با همین رویه و پارامترها ساخته
+                                می‌شوند.
+                            </div>
+                        </page>
                         <page string="وضعیت">
                             <group>
                                 <field name="last_test"/>

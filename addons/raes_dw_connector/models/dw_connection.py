@@ -1,6 +1,8 @@
 from odoo import api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools.translate import _
+
+from . import agent_schedule as sched
 
 
 def _ident(name):
@@ -29,6 +31,9 @@ class RaesDwConnection(models.Model):
                                string='Odoo View Mapping',
                                help='Maps each imported foreign table to the '
                                     'public view the dim models read from.')
+    default_etl_command = fields.Text(
+        'Default ETL command', default=sched.DEFAULT_ETL_COMMAND,
+        help='New ETL job steps start with this procedure and parameters.')
     active = fields.Boolean(default=True)
     last_test = fields.Datetime(readonly=True)
     last_test_result = fields.Text(readonly=True)
@@ -59,6 +64,15 @@ class RaesDwConnection(models.Model):
         }
 
     # ------------------------------------------------------------------
+    @api.constrains('default_etl_command')
+    def _check_default_etl_command(self):
+        for rec in self:
+            if rec.default_etl_command and not sched.parse_exec(
+                    rec.default_etl_command):
+                raise ValidationError(_(
+                    'The default ETL command must be a single EXEC of a '
+                    'procedure with literal arguments.'))
+
     def _server_name(self):
         return f"raes_dw_{self.id}"
 

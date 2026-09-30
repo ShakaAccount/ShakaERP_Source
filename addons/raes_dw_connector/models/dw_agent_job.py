@@ -9,11 +9,6 @@ SCHEDULE_FIELDS = [
     'recurs_every', 'monthly_mode', 'month_day', 'relative_week',
     'relative_day', 'subday_type', 'subday_interval', 'start_time',
     'end_time', 'start_date', 'end_date', *sched.WEEKDAYS]
-# ETL.spGatheringData's signature, pre-filled on a new job's ETL step
-# (empty value = NULL); Fetch parameters re-reads it from SQL Server.
-ETL_DEFAULT_PARAMS = [('CompanyID', 'int', False), ('DataSourceID', 'int', False),
-                      ('ModuleID', 'int', False), ('EntityID', 'int', False),
-                      ('DateID', 'int', '0'), ('Label', 'nvarchar', False)]
 # every SQL Agent subsystem, so any loaded step fits a "Custom" step
 SUBSYSTEMS = ['TSQL', 'CmdExec', 'PowerShell', 'SSIS', 'ANALYSISQUERY',
               'ANALYSISCOMMAND', 'Distribution', 'Snapshot', 'LogReader',
@@ -34,7 +29,9 @@ class RaesDwAgentJob(models.Model):
     _inherit = ['mail.thread']
     _rec_name = 'job_name'
     connection_id = fields.Many2one(
-        'raes.dw.connection', required=True, ondelete='cascade')
+        'raes.dw.connection', required=True, ondelete='cascade',
+        default=lambda self: self.env['raes.dw.connection'].search([],
+                                                                   limit=1))
     job_name = fields.Char(required=True, tracking=True)
     job_exists = fields.Boolean(readonly=True)
     last_sync = fields.Datetime(readonly=True)
@@ -42,12 +39,10 @@ class RaesDwAgentJob(models.Model):
     step_ids = fields.One2many(
         'raes.dw.agent.job.step', 'job_id', copy=True,
         default=lambda self: [
-            Command.create({'name': 'Run ETL', 'step_type': 'etl',
-                            'param_ids': [Command.create(
-                                {'sequence': i, 'name': n, 'sql_type': t,
-                                 'value': v})
-                                for i, (n, t, v) in enumerate(
-                                    ETL_DEFAULT_PARAMS)]}),
+            Command.create(dict(
+                self.env['raes.dw.agent.job.step']._etl_defaults(
+                    self.env['raes.dw.connection'].search([], limit=1)),
+                name='Run ETL', step_type='etl')),
             Command.create({'name': 'Process SSAS', 'step_type': 'ssas'})])
 
     # --- schedule, mirrors the SSMS "Job Schedule Properties" dialog -----
@@ -272,7 +267,7 @@ class RaesDwAgentJobStep(models.Model):
     # --- ETL -------------------------------------------------------------
     database = fields.Char(
         help='Database the step runs in. Empty = the connection database.')
-    procedure = fields.Char(default='ETL.spGatheringData')
+    procedure = fields.Char()
     param_ids = fields.One2many('raes.dw.agent.job.param', 'step_id',
                                 'Parameters', copy=True)
     command_preview = fields.Text(compute='_compute_command_preview')
@@ -293,6 +288,21 @@ class RaesDwAgentJobStep(models.Model):
     ssas_refresh_type = fields.Selection(
         [(t, t) for t in sched.SSAS_REFRESH], string='Refresh type',
         default='full', required=True)
+
+    @api.model
+    def _etl_defaults(self, connection):
+        """procedure + parameter rows from the connection's default ETL
+        command (the built-in one when there's no connection yet)."""
+        proc, args = sched.parse_exec(
+            connection.default_etl_command or sched.DEFAULT_ETL_COMMAND)
+        return {'procedure': proc, 'param_ids': [Command.create(
+            {'sequence': i, 'name': n, 'sql_type': t, 'value': v})
+            for i, (n, t, v) in enumerate(args)]}
+
+    @api.onchange('step_type')
+    def _onchange_step_type(self):
+        if self.step_type == 'etl' and not self.param_ids:
+            self.update(self._etl_defaults(self.job_id.connection_id))
 
     @api.depends('step_type', 'command', 'procedure', 'param_ids.value',
                  'param_ids.name', 'param_ids.sql_type', 'ssas_database',
