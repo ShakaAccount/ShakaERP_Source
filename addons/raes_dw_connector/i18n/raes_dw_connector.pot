@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e-20260223\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-23 08:30+0000\n"
-"PO-Revision-Date: 2026-09-23 08:30+0000\n"
+"POT-Creation-Date: 2026-09-30 09:15+0000\n"
+"PO-Revision-Date: 2026-09-30 09:15+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,6 +21,17 @@ msgid "A table is catalogued once per connection."
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__analysiscommand
+msgid "ANALYSISCOMMAND"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__analysisquery
+msgid "ANALYSISQUERY"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_needaction
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_needaction
 msgid "Action Needed"
 msgstr ""
@@ -32,6 +43,25 @@ msgid "Active"
 msgstr ""
 
 #. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Add at least one step."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job_step__server
+msgid ""
+"Analysis Services server, for ANALYSIS* subsystems. Empty = the DW "
+"connection host."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Apply to SQL Server"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_attachment_count
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_attachment_count
 msgid "Attachment Count"
 msgstr ""
@@ -66,6 +96,11 @@ msgid "Catalogued Tables"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__cmdexec
+msgid "CmdExec"
+msgstr ""
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__column_count
 msgid "Column Count"
 msgstr ""
@@ -76,6 +111,23 @@ msgid "Comma-separated MSSQL table names imported as foreign tables."
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__command
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Command"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__command_preview
+msgid "Command Preview"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Command, sent to SQL Agent as typed"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__connection_id
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__connection_id
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__connection_id
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_table_map__connection_id
@@ -91,6 +143,15 @@ msgid ""
 msgstr ""
 
 #. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Created SQL Agent job \"%s\"."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__create_uid
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__create_uid
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__create_uid
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__create_uid
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__create_uid
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__create_uid
@@ -99,6 +160,9 @@ msgid "Created by"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__create_date
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__create_date
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__create_date
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__create_date
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__create_date
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__create_date
@@ -107,8 +171,18 @@ msgid "Created on"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__step_type__custom
+msgid "Custom"
+msgstr ""
+
+#. module: raes_dw_connector
 #: model:ir.actions.act_window,name:raes_dw_connector.action_raes_dw_connection
 msgid "DW Connections"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.ui.menu,name:raes_dw_connector.menu_dw_connector
+msgid "DW Connector"
 msgstr ""
 
 #. module: raes_dw_connector
@@ -122,8 +196,71 @@ msgid "DW Independent Database Catalog"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model,name:raes_dw_connector.model_raes_dw_agent_job
+msgid "DW SQL Agent Job"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model,name:raes_dw_connector.model_raes_dw_agent_job_step
+msgid "DW SQL Agent Job Step"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model,name:raes_dw_connector.model_raes_dw_agent_job_param
+msgid "DW SQL Agent Job Step Parameter"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__occurs__daily
+msgid "Daily"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__subday_type
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Daily frequency"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__database
+msgid "Database"
+msgstr ""
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__catalog_ids
 msgid "Database Catalog"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job_step__database
+msgid "Database the step runs in. Empty = the connection database."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Date"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__month_day
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__8
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Day"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__monthly_mode__day
+msgid "Day of month"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job__recurs_every
+msgid "Days (daily), weeks (weekly) or months (monthly)."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__default_etl_command
+msgid "Default ETL command"
 msgstr ""
 
 #. module: raes_dw_connector
@@ -132,11 +269,77 @@ msgid "DimCompany, DimParty, DimCostCenter"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__display_name
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__display_name
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__display_name
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__display_name
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__display_name
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__display_name
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_table_map__display_name
 msgid "Display Name"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__distribution
+msgid "Distribution"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Duration"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__step_type__etl
+msgid "ETL (stored procedure)"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
+msgid "ETL پیش‌فرض"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job_param__value
+msgid "Empty = NULL."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job__end_date
+msgid "Empty = no end date."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job_step__ssas_server
+msgid ""
+"Empty = the DW connection host. Set only for a named instance, e.g. "
+"HOST\\TABULAR. The SQL Agent service account needs admin rights on the SSAS "
+"database."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__schedule_enabled
+msgid "Enabled"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__end_date
+msgid "End Date"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__end_time
+msgid "End Time"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Ending at"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Every (months)"
 msgstr ""
 
 #. module: raes_dw_connector
@@ -146,16 +349,45 @@ msgid "FAIL — %s"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Fetch parameters"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_week__first
+msgid "First"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_follower_ids
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_follower_ids
 msgid "Followers"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_partner_ids
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_partner_ids
 msgid "Followers (Partners)"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_week__fourth
+msgid "Fourth"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Frequency"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__fri
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__6
+msgid "Friday"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__has_message
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__has_message
 msgid "Has Message"
 msgstr ""
@@ -167,6 +399,14 @@ msgid "Host"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__subday_type__hours
+msgid "Hour(s)"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__id
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__id
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__id
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__id
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__id
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__id
@@ -175,23 +415,73 @@ msgid "ID"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job__message_needaction
 #: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__message_needaction
 msgid "If checked, new messages require your attention."
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job__message_has_error
 #: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__message_has_error
 msgid "If checked, some messages have a delivery error."
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_is_follower
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_is_follower
 msgid "Is Follower"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__job_id
+msgid "Job"
+msgstr ""
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Job \"%s\" not found on SQL Server — Apply will create it."
+msgstr ""
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Job \"%s\" started."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__job_exists
+msgid "Job Exists"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__job_name
+msgid "Job Name"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Job step command"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_week__last
+msgid "Last"
+msgstr ""
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__last_bootstrap
 msgid "Last Bootstrap"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__last_run_outcome
+msgid "Last Run Outcome"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__last_sync
+msgid "Last Sync"
 msgstr ""
 
 #. module: raes_dw_connector
@@ -205,6 +495,9 @@ msgid "Last Test Result"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__write_uid
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__write_uid
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__write_uid
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__write_uid
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__write_uid
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__write_uid
@@ -213,6 +506,9 @@ msgid "Last Updated by"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__write_date
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__write_date
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__write_date
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__write_date
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__write_date
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__write_date
@@ -221,8 +517,24 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Load from SQL Server"
+msgstr ""
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Loaded \"%s\" from SQL Server."
+msgstr ""
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_table_map__local_view_name
 msgid "Local View"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__logreader
+msgid "LogReader"
 msgstr ""
 
 #. module: raes_dw_connector
@@ -265,36 +577,84 @@ msgid ""
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__merge
+msgid "Merge"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_has_error
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_has_error
 msgid "Message Delivery error"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_ids
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_ids
 msgid "Messages"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__subday_type__minutes
+msgid "Minute(s)"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__mon
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__2
+msgid "Monday"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__occurs__monthly
+msgid "Monthly"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__monthly_mode
+msgid "Monthly Mode"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "NULL"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__name
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__name
 msgid "Name"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__default_etl_command
+msgid "New ETL job steps start with this procedure and parameters."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "No end date"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_needaction_counter
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_needaction_counter
 msgid "Number of Actions"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_has_error_counter
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_has_error_counter
 msgid "Number of errors"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job__message_needaction_counter
 #: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__message_needaction_counter
 msgid "Number of messages requiring action"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job__message_has_error_counter
 #: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__message_has_error_counter
 msgid "Number of messages with delivery error"
 msgstr ""
@@ -306,8 +666,33 @@ msgid "OK — '%s' reachable, %s rows"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__occurs
+msgid "Occurs"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__subday_interval
+msgid "Occurs every"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__subday_type__once
+msgid "Occurs once at"
+msgstr ""
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__line_ids
 msgid "Odoo View Mapping"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__schedule_type__one_time
+msgid "One time"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "One-time occurrence"
 msgstr ""
 
 #. module: raes_dw_connector
@@ -316,8 +701,74 @@ msgid "Only filled when the sync is asked to count rows (slow)."
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__param_ids
+msgid "Parameters"
+msgstr ""
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__port
 msgid "Port"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__powershell
+msgid "PowerShell"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__procedure
+msgid "Procedure"
+msgstr ""
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Procedure %(proc)s not found in %(db)s, or it has no parameters."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__queuereader
+msgid "QueueReader"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Read the parameter list from the procedure on SQL Server."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__schedule_type__recurring
+msgid "Recurring"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__recurs_every
+msgid "Recurs Every"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Recurs every (days)"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Recurs every (weeks)"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__ssas_refresh_type
+msgid "Refresh type"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__relative_day
+msgid "Relative Day"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__relative_week
+msgid "Relative Week"
 msgstr ""
 
 #. module: raes_dw_connector
@@ -351,6 +802,66 @@ msgid "Rows"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Run now"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.actions.act_window,name:raes_dw_connector.action_raes_dw_agent_job
+#: model:ir.ui.menu,name:raes_dw_connector.menu_raes_dw_agent_job
+msgid "SQL Agent Jobs"
+msgstr ""
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid ""
+"SQL Server Agent error:\n"
+"%s"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__ssas_database
+msgid "SSAS database name"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__step_type__ssas
+msgid "SSAS process"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__ssas_server
+msgid "SSAS server"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__ssis
+msgid "SSIS"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__sat
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__7
+msgid "Saturday"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Schedule"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__schedule_name
+msgid "Schedule Name"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__schedule_type
+msgid "Schedule Type"
+msgstr ""
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__remote_schema
 #: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_remote_table_search
 msgid "Schema"
@@ -362,13 +873,105 @@ msgid "Schema Name"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_week__second
+msgid "Second"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__subday_type__seconds
+msgid "Second(s)"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__sequence
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__server
+msgid "Server"
+msgstr ""
+
+#. module: raes_dw_connector
 #: model:ir.model,name:raes_dw_connector.model_raes_dw_connection
 msgid "Shaka_DW Foreign Data Connection (tds_fdw)"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__snapshot
+msgid "Snapshot"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__start_date
+msgid "Start Date"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__start_time
+msgid "Start Time"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Start the job on SQL Server now?"
+msgstr ""
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Started job \"%s\"."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Starting at"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__step_ids
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__step_id
+msgid "Step"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__name
+msgid "Step name"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Steps"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid ""
+"Steps run top to bottom — drag to reorder. When\n"
+"                                a step fails the job stops, so later steps\n"
+"                                never run on bad data."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__subsystem
+msgid "Subsystem"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__sun
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__1
+msgid "Sunday"
+msgstr ""
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__synced_on
 msgid "Synced On"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__tsql
+msgid "TSQL"
 msgstr ""
 
 #. module: raes_dw_connector
@@ -392,12 +995,137 @@ msgid "Table listed once per connection"
 msgstr ""
 
 #. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "The"
+msgstr ""
+
+#. module: raes_dw_connector
 #. odoo-python
 #: code:addons/raes_dw_connector/models/dw_connection.py:0
 msgid ""
 "The Python package 'pymssql' is required to build the catalog. Install it on the Odoo server:\n"
 "\n"
 "    pip install pymssql"
+msgstr ""
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_connection.py:0
+msgid ""
+"The default ETL command must be a single EXEC of a procedure with literal "
+"arguments."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__monthly_mode__relative
+msgid "The …"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_week__third
+msgid "Third"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid ""
+"This job isn't on SQL Server yet (or hasn't been\n"
+"                        loaded). Apply will create it."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__thu
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__5
+msgid "Thursday"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Time"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__tue
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__3
+msgid "Tuesday"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__sql_type
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__step_type
+msgid "Type"
+msgstr ""
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Updated SQL Agent job \"%s\"."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__value
+msgid "Value"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__wed
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__4
+msgid "Wednesday"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__9
+msgid "Weekday"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__10
+msgid "Weekend day"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__occurs__weekly
+msgid "Weekly"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job_param__name
+msgid "Without the leading @."
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__ssas_refresh_type__automatic
+msgid "automatic"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__ssas_refresh_type__calculate
+msgid "calculate"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__ssas_refresh_type__clearvalues
+msgid "clearValues"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "connection database"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__ssas_refresh_type__dataonly
+msgid "dataOnly"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__ssas_refresh_type__full
+msgid "full"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "same as DW connection host"
 msgstr ""
 
 #. module: raes_dw_connector
@@ -411,6 +1139,11 @@ msgstr ""
 #. module: raes_dw_connector
 #: model:ir.ui.menu,name:raes_dw_connector.menu_raes_dw_connection
 msgid "اتصال به انبار داده (DW)"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.ui.menu,name:raes_dw_connector.menu_warehouse_information
+msgid "اطلاعات انبار داده"
 msgstr ""
 
 #. module: raes_dw_connector
@@ -465,4 +1198,11 @@ msgstr ""
 #. module: raes_dw_connector
 #: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
 msgid "وضعیت"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
+msgid ""
+"گام‌های ETL جدید با همین رویه و پارامترها ساخته\n"
+"                                می‌شوند."
 msgstr ""

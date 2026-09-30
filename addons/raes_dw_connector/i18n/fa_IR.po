@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-23 08:30+0000\n"
+"POT-Creation-Date: 2026-09-30 09:15+0000\n"
 "PO-Revision-Date: 2026-09-23 08:30+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -22,6 +22,17 @@ msgid "A table is catalogued once per connection."
 msgstr "هر جدول یک‌بار به ازای هر اتصال در فهرست ثبت می‌شود."
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__analysiscommand
+msgid "ANALYSISCOMMAND"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__analysisquery
+msgid "ANALYSISQUERY"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_needaction
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_needaction
 msgid "Action Needed"
 msgstr "نیاز به اقدام"
@@ -33,6 +44,27 @@ msgid "Active"
 msgstr "فعال"
 
 #. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Add at least one step."
+msgstr "حداقل یک گام اضافه کنید."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job_step__server
+msgid ""
+"Analysis Services server, for ANALYSIS* subsystems. Empty = the DW "
+"connection host."
+msgstr ""
+"سرور Analysis Services، برای زیرسیستم‌های ANALYSIS*. خالی = میزبان اتصال "
+"انبار داده."
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Apply to SQL Server"
+msgstr "اعمال روی SQL Server"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_attachment_count
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_attachment_count
 msgid "Attachment Count"
 msgstr "تعداد پیوست‌ها"
@@ -40,7 +72,8 @@ msgstr "تعداد پیوست‌ها"
 #. module: raes_dw_connector
 #: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_catalog__table_type
 msgid "BASE TABLE or VIEW, as reported by INFORMATION_SCHEMA.TABLES."
-msgstr "نوع BASE TABLE یا VIEW، همان‌طور که INFORMATION_SCHEMA.TABLES گزارش می‌دهد."
+msgstr ""
+"نوع BASE TABLE یا VIEW، همان‌طور که INFORMATION_SCHEMA.TABLES گزارش می‌دهد."
 
 #. module: raes_dw_connector
 #. odoo-python
@@ -69,6 +102,11 @@ msgid "Catalogued Tables"
 msgstr "جداول فهرست‌شده"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__cmdexec
+msgid "CmdExec"
+msgstr ""
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__column_count
 msgid "Column Count"
 msgstr "تعداد ستون‌ها"
@@ -79,6 +117,23 @@ msgid "Comma-separated MSSQL table names imported as foreign tables."
 msgstr "نام جداول MSSQL جدا شده با کاما که به عنوان جدول خارجی وارد می‌شوند."
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__command
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Command"
+msgstr "دستور"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__command_preview
+msgid "Command Preview"
+msgstr "پیش‌نمایش دستور"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Command, sent to SQL Agent as typed"
+msgstr "دستور، همان‌طور که نوشته شود به SQL Agent ارسال می‌شود"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__connection_id
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__connection_id
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__connection_id
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_table_map__connection_id
@@ -96,6 +151,15 @@ msgstr ""
 "%(e)s"
 
 #. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Created SQL Agent job \"%s\"."
+msgstr "جاب SQL Agent «%s» ایجاد شد."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__create_uid
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__create_uid
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__create_uid
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__create_uid
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__create_uid
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__create_uid
@@ -104,6 +168,9 @@ msgid "Created by"
 msgstr "ایجاد شده توسط"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__create_date
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__create_date
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__create_date
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__create_date
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__create_date
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__create_date
@@ -112,9 +179,19 @@ msgid "Created on"
 msgstr "ایجاد شده در تاریخ"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__step_type__custom
+msgid "Custom"
+msgstr "سفارشی"
+
+#. module: raes_dw_connector
 #: model:ir.actions.act_window,name:raes_dw_connector.action_raes_dw_connection
 msgid "DW Connections"
 msgstr "اتصالات انبار داده"
+
+#. module: raes_dw_connector
+#: model:ir.ui.menu,name:raes_dw_connector.menu_dw_connector
+msgid "DW Connector"
+msgstr ""
 
 #. module: raes_dw_connector
 #: model:ir.model,name:raes_dw_connector.model_raes_dw_table_map
@@ -127,9 +204,72 @@ msgid "DW Independent Database Catalog"
 msgstr "فهرست مستقل پایگاه داده انبار داده"
 
 #. module: raes_dw_connector
+#: model:ir.model,name:raes_dw_connector.model_raes_dw_agent_job
+msgid "DW SQL Agent Job"
+msgstr "جاب SQL Agent انبار داده"
+
+#. module: raes_dw_connector
+#: model:ir.model,name:raes_dw_connector.model_raes_dw_agent_job_step
+msgid "DW SQL Agent Job Step"
+msgstr "گام جاب SQL Agent انبار داده"
+
+#. module: raes_dw_connector
+#: model:ir.model,name:raes_dw_connector.model_raes_dw_agent_job_param
+msgid "DW SQL Agent Job Step Parameter"
+msgstr "پارامتر گام جاب SQL Agent انبار داده"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__occurs__daily
+msgid "Daily"
+msgstr "روزانه"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__subday_type
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Daily frequency"
+msgstr "تکرار در طول روز"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__database
+msgid "Database"
+msgstr "پایگاه داده"
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__catalog_ids
 msgid "Database Catalog"
 msgstr "فهرست پایگاه داده"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job_step__database
+msgid "Database the step runs in. Empty = the connection database."
+msgstr "پایگاه داده‌ای که گام در آن اجرا می‌شود. خالی = پایگاه داده اتصال."
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Date"
+msgstr "تاریخ"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__month_day
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__8
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Day"
+msgstr "روز"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__monthly_mode__day
+msgid "Day of month"
+msgstr "روز ماه"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job__recurs_every
+msgid "Days (daily), weeks (weekly) or months (monthly)."
+msgstr "روز (روزانه)، هفته (هفتگی) یا ماه (ماهانه)."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__default_etl_command
+msgid "Default ETL command"
+msgstr "دستور پیش‌فرض ETL"
 
 #. module: raes_dw_connector
 #: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
@@ -137,6 +277,9 @@ msgid "DimCompany, DimParty, DimCostCenter"
 msgstr "DimCompany، DimParty، DimCostCenter"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__display_name
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__display_name
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__display_name
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__display_name
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__display_name
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__display_name
@@ -145,22 +288,117 @@ msgid "Display Name"
 msgstr "نام نمایشی"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__distribution
+msgid "Distribution"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Duration"
+msgstr "بازه زمانی"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__step_type__etl
+msgid "ETL (stored procedure)"
+msgstr "ETL (رویه ذخیره‌شده)"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
+msgid "ETL پیش‌فرض"
+msgstr "ETL پیش‌فرض"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job_param__value
+msgid "Empty = NULL."
+msgstr "خالی = NULL."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job__end_date
+msgid "Empty = no end date."
+msgstr "خالی = بدون تاریخ پایان."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job_step__ssas_server
+msgid ""
+"Empty = the DW connection host. Set only for a named instance, e.g. "
+"HOST\\TABULAR. The SQL Agent service account needs admin rights on the SSAS "
+"database."
+msgstr ""
+"خالی = میزبان اتصال انبار داده. فقط برای نمونهٔ نام‌دار پر شود، مثلاً "
+"HOST\\TABULAR. حساب سرویس SQL Agent باید روی پایگاه داده SSAS دسترسی مدیر "
+"داشته باشد."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__schedule_enabled
+msgid "Enabled"
+msgstr "فعال"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__end_date
+msgid "End Date"
+msgstr "تاریخ پایان"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__end_time
+msgid "End Time"
+msgstr "ساعت پایان"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Ending at"
+msgstr "پایان در"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Every (months)"
+msgstr "هر (ماه)"
+
+#. module: raes_dw_connector
 #. odoo-python
 #: code:addons/raes_dw_connector/models/dw_connection.py:0
 msgid "FAIL — %s"
 msgstr "ناموفق — %s"
 
 #. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Fetch parameters"
+msgstr "دریافت پارامترها"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_week__first
+msgid "First"
+msgstr "اول"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_follower_ids
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_follower_ids
 msgid "Followers"
 msgstr "دنبال‌کنندگان"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_partner_ids
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_partner_ids
 msgid "Followers (Partners)"
 msgstr "دنبال‌کنندگان (طرف‌های حساب)"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_week__fourth
+msgid "Fourth"
+msgstr "چهارم"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Frequency"
+msgstr "تکرار"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__fri
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__6
+msgid "Friday"
+msgstr "جمعه"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__has_message
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__has_message
 msgid "Has Message"
 msgstr "دارای پیام"
@@ -172,6 +410,14 @@ msgid "Host"
 msgstr "میزبان"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__subday_type__hours
+msgid "Hour(s)"
+msgstr "ساعت"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__id
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__id
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__id
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__id
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__id
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__id
@@ -180,24 +426,74 @@ msgid "ID"
 msgstr "شناسه"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job__message_needaction
 #: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__message_needaction
 msgid "If checked, new messages require your attention."
 msgstr "در صورت انتخاب، پیام‌های جدید نیاز به توجه شما دارند."
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job__message_has_error
 #: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__message_has_error
 msgid "If checked, some messages have a delivery error."
 msgstr "در صورت انتخاب، برخی پیام‌ها خطای ارسال دارند."
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_is_follower
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_is_follower
 msgid "Is Follower"
 msgstr "دنبال‌کننده است"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__job_id
+msgid "Job"
+msgstr "جاب"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Job \"%s\" not found on SQL Server — Apply will create it."
+msgstr "جاب «%s» روی SQL Server پیدا نشد — «اعمال» آن را ایجاد می‌کند."
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Job \"%s\" started."
+msgstr "جاب «%s» اجرا شد."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__job_exists
+msgid "Job Exists"
+msgstr "جاب موجود است"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__job_name
+msgid "Job Name"
+msgstr "نام جاب"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Job step command"
+msgstr "دستور گام جاب"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_week__last
+msgid "Last"
+msgstr "آخر"
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__last_bootstrap
 msgid "Last Bootstrap"
 msgstr "آخرین راه‌اندازی اولیه"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__last_run_outcome
+msgid "Last Run Outcome"
+msgstr "نتیجه آخرین اجرا"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__last_sync
+msgid "Last Sync"
+msgstr "آخرین همگام‌سازی"
 
 #. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__last_test
@@ -210,6 +506,9 @@ msgid "Last Test Result"
 msgstr "نتیجه آخرین آزمایش"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__write_uid
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__write_uid
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__write_uid
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__write_uid
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__write_uid
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__write_uid
@@ -218,6 +517,9 @@ msgid "Last Updated by"
 msgstr "آخرین به‌روزرسانی توسط"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__write_date
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__write_date
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__write_date
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__write_date
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__write_date
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__write_date
@@ -226,9 +528,25 @@ msgid "Last Updated on"
 msgstr "آخرین به‌روزرسانی در تاریخ"
 
 #. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Load from SQL Server"
+msgstr "بارگذاری از SQL Server"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Loaded \"%s\" from SQL Server."
+msgstr "«%s» از SQL Server بارگذاری شد."
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_table_map__local_view_name
 msgid "Local View"
 msgstr "ویوی محلی"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__logreader
+msgid "LogReader"
+msgstr ""
 
 #. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__database
@@ -272,36 +590,84 @@ msgstr ""
 "نگاشت می‌دهد."
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__merge
+msgid "Merge"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_has_error
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_has_error
 msgid "Message Delivery error"
 msgstr "خطای ارسال پیام"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_ids
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_ids
 msgid "Messages"
 msgstr "پیام‌ها"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__subday_type__minutes
+msgid "Minute(s)"
+msgstr "دقیقه"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__mon
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__2
+msgid "Monday"
+msgstr "دوشنبه"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__occurs__monthly
+msgid "Monthly"
+msgstr "ماهانه"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__monthly_mode
+msgid "Monthly Mode"
+msgstr "حالت ماهانه"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "NULL"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__name
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__name
 msgid "Name"
 msgstr "نام"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__default_etl_command
+msgid "New ETL job steps start with this procedure and parameters."
+msgstr "گام‌های ETL جدید با همین رویه و پارامترها ساخته می‌شوند."
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "No end date"
+msgstr "بدون تاریخ پایان"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_needaction_counter
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_needaction_counter
 msgid "Number of Actions"
 msgstr "تعداد اقدامات"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__message_has_error_counter
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__message_has_error_counter
 msgid "Number of errors"
 msgstr "تعداد خطاها"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job__message_needaction_counter
 #: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__message_needaction_counter
 msgid "Number of messages requiring action"
 msgstr "تعداد پیام‌های نیازمند اقدام"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job__message_has_error_counter
 #: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_connection__message_has_error_counter
 msgid "Number of messages with delivery error"
 msgstr "تعداد پیام‌های دارای خطای ارسال"
@@ -313,9 +679,34 @@ msgid "OK — '%s' reachable, %s rows"
 msgstr "موفق — '%s' در دسترس است، %s سطر"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__occurs
+msgid "Occurs"
+msgstr "تکرار"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__subday_interval
+msgid "Occurs every"
+msgstr "هر"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__subday_type__once
+msgid "Occurs once at"
+msgstr "یک بار در ساعت"
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__line_ids
 msgid "Odoo View Mapping"
 msgstr "نگاشت ویوی اودو"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__schedule_type__one_time
+msgid "One time"
+msgstr "یک‌باره"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "One-time occurrence"
+msgstr "اجرای یک‌باره"
 
 #. module: raes_dw_connector
 #: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_catalog__row_count
@@ -323,9 +714,75 @@ msgid "Only filled when the sync is asked to count rows (slow)."
 msgstr "فقط زمانی پر می‌شود که از همگام‌سازی درخواست شمارش سطرها شود (کند)."
 
 #. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__param_ids
+msgid "Parameters"
+msgstr "پارامترها"
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_connection__port
 msgid "Port"
 msgstr "پورت"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__powershell
+msgid "PowerShell"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__procedure
+msgid "Procedure"
+msgstr "رویه"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Procedure %(proc)s not found in %(db)s, or it has no parameters."
+msgstr "رویه %(proc)s در %(db)s پیدا نشد یا پارامتری ندارد."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__queuereader
+msgid "QueueReader"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Read the parameter list from the procedure on SQL Server."
+msgstr "فهرست پارامترها را از رویه روی SQL Server می‌خواند."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__schedule_type__recurring
+msgid "Recurring"
+msgstr "تکرارشونده"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__recurs_every
+msgid "Recurs Every"
+msgstr "تکرار هر"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Recurs every (days)"
+msgstr "تکرار هر (روز)"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Recurs every (weeks)"
+msgstr "تکرار هر (هفته)"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__ssas_refresh_type
+msgid "Refresh type"
+msgstr "نوع پردازش"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__relative_day
+msgid "Relative Day"
+msgstr "روز نسبی"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__relative_week
+msgid "Relative Week"
+msgstr "هفته نسبی"
 
 #. module: raes_dw_connector
 #: model:ir.model,name:raes_dw_connector.model_raes_dw_remote_table
@@ -358,6 +815,68 @@ msgid "Rows"
 msgstr "سطرها"
 
 #. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Run now"
+msgstr "اجرای فوری"
+
+#. module: raes_dw_connector
+#: model:ir.actions.act_window,name:raes_dw_connector.action_raes_dw_agent_job
+#: model:ir.ui.menu,name:raes_dw_connector.menu_raes_dw_agent_job
+msgid "SQL Agent Jobs"
+msgstr "جاب‌های SQL Agent"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid ""
+"SQL Server Agent error:\n"
+"%s"
+msgstr ""
+"خطای SQL Server Agent:\n"
+"%s"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__ssas_database
+msgid "SSAS database name"
+msgstr "نام پایگاه داده SSAS"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__step_type__ssas
+msgid "SSAS process"
+msgstr "پردازش SSAS"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__ssas_server
+msgid "SSAS server"
+msgstr "سرور SSAS"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__ssis
+msgid "SSIS"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__sat
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__7
+msgid "Saturday"
+msgstr "شنبه"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Schedule"
+msgstr "زمان‌بندی"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__schedule_name
+msgid "Schedule Name"
+msgstr "نام زمان‌بندی"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__schedule_type
+msgid "Schedule Type"
+msgstr "نوع زمان‌بندی"
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__remote_schema
 #: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_remote_table_search
 msgid "Schema"
@@ -369,14 +888,108 @@ msgid "Schema Name"
 msgstr "نام اسکیما"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_week__second
+msgid "Second"
+msgstr "دوم"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__subday_type__seconds
+msgid "Second(s)"
+msgstr "ثانیه"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__sequence
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__sequence
+msgid "Sequence"
+msgstr "ترتیب"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__server
+msgid "Server"
+msgstr "سرور"
+
+#. module: raes_dw_connector
 #: model:ir.model,name:raes_dw_connector.model_raes_dw_connection
 msgid "Shaka_DW Foreign Data Connection (tds_fdw)"
 msgstr "اتصال داده خارجی Shaka_DW (tds_fdw)"
 
 #. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__snapshot
+msgid "Snapshot"
+msgstr ""
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__start_date
+msgid "Start Date"
+msgstr "تاریخ شروع"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__start_time
+msgid "Start Time"
+msgstr "ساعت شروع"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Start the job on SQL Server now?"
+msgstr "جاب همین حالا روی SQL Server اجرا شود؟"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Started job \"%s\"."
+msgstr "جاب «%s» اجرا شد."
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Starting at"
+msgstr "شروع از"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__step_ids
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__step_id
+msgid "Step"
+msgstr "گام"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__name
+msgid "Step name"
+msgstr "نام گام"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Steps"
+msgstr "گام‌ها"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid ""
+"Steps run top to bottom — drag to reorder. When\n"
+"                                a step fails the job stops, so later steps\n"
+"                                never run on bad data."
+msgstr ""
+"گام‌ها از بالا به پایین اجرا می‌شوند — برای تغییر ترتیب بکشید. اگر گامی "
+"ناموفق شود جاب متوقف می‌شود، پس گام‌های بعدی روی داده نادرست اجرا نمی‌شوند."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__subsystem
+msgid "Subsystem"
+msgstr "زیرسیستم"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__sun
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__1
+msgid "Sunday"
+msgstr "یکشنبه"
+
+#. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_catalog__synced_on
 msgid "Synced On"
 msgstr "همگام‌سازی شده در تاریخ"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__subsystem__tsql
+msgid "TSQL"
+msgstr ""
 
 #. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__remote_table
@@ -399,6 +1012,11 @@ msgid "Table listed once per connection"
 msgstr "هر جدول یک‌بار به ازای هر اتصال فهرست می‌شود"
 
 #. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "The"
+msgstr "در"
+
+#. module: raes_dw_connector
 #. odoo-python
 #: code:addons/raes_dw_connector/models/dw_connection.py:0
 msgid ""
@@ -406,10 +1024,132 @@ msgid ""
 "\n"
 "    pip install pymssql"
 msgstr ""
-"برای ساخت فهرست جداول، بسته پایتون 'pymssql' لازم است. آن را روی سرور "
-"اودو نصب کنید:\n"
+"برای ساخت فهرست جداول، بسته پایتون 'pymssql' لازم است. آن را روی سرور اودو نصب کنید:\n"
 "\n"
 "    pip install pymssql"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_connection.py:0
+msgid ""
+"The default ETL command must be a single EXEC of a procedure with literal "
+"arguments."
+msgstr ""
+"دستور پیش‌فرض ETL باید تنها یک EXEC از یک رویه با آرگومان‌های ثابت باشد."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__monthly_mode__relative
+msgid "The …"
+msgstr "در …"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_week__third
+msgid "Third"
+msgstr "سوم"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid ""
+"This job isn't on SQL Server yet (or hasn't been\n"
+"                        loaded). Apply will create it."
+msgstr ""
+"این جاب هنوز روی SQL Server نیست (یا بارگذاری نشده است). «اعمال» آن را ایجاد"
+" می‌کند."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__thu
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__5
+msgid "Thursday"
+msgstr "پنجشنبه"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "Time"
+msgstr "ساعت"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__tue
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__3
+msgid "Tuesday"
+msgstr "سه‌شنبه"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__sql_type
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_step__step_type
+msgid "Type"
+msgstr "نوع"
+
+#. module: raes_dw_connector
+#. odoo-python
+#: code:addons/raes_dw_connector/models/dw_agent_job.py:0
+msgid "Updated SQL Agent job \"%s\"."
+msgstr "جاب SQL Agent «%s» به‌روزرسانی شد."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job_param__value
+msgid "Value"
+msgstr "مقدار"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_agent_job__wed
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__4
+msgid "Wednesday"
+msgstr "چهارشنبه"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__9
+msgid "Weekday"
+msgstr "روز کاری"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__relative_day__10
+msgid "Weekend day"
+msgstr "روز تعطیل"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job__occurs__weekly
+msgid "Weekly"
+msgstr "هفتگی"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields,help:raes_dw_connector.field_raes_dw_agent_job_param__name
+msgid "Without the leading @."
+msgstr "بدون @ در ابتدا."
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__ssas_refresh_type__automatic
+msgid "automatic"
+msgstr "خودکار (automatic)"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__ssas_refresh_type__calculate
+msgid "calculate"
+msgstr "محاسبه (calculate)"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__ssas_refresh_type__clearvalues
+msgid "clearValues"
+msgstr "پاک‌کردن مقادیر (clearValues)"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "connection database"
+msgstr "پایگاه داده اتصال"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__ssas_refresh_type__dataonly
+msgid "dataOnly"
+msgstr "فقط داده (dataOnly)"
+
+#. module: raes_dw_connector
+#: model:ir.model.fields.selection,name:raes_dw_connector.selection__raes_dw_agent_job_step__ssas_refresh_type__full
+msgid "full"
+msgstr "کامل (full)"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_agent_job_form
+msgid "same as DW connection host"
+msgstr "همان میزبان اتصال انبار داده"
 
 #. module: raes_dw_connector
 #. odoo-python
@@ -425,6 +1165,11 @@ msgstr ""
 #: model:ir.ui.menu,name:raes_dw_connector.menu_raes_dw_connection
 msgid "اتصال به انبار داده (DW)"
 msgstr "اتصال به انبار داده (DW)"
+
+#. module: raes_dw_connector
+#: model:ir.ui.menu,name:raes_dw_connector.menu_warehouse_information
+msgid "اطلاعات انبار داده"
+msgstr ""
 
 #. module: raes_dw_connector
 #: model:ir.model.fields,field_description:raes_dw_connector.field_raes_dw_remote_table__selected
@@ -481,3 +1226,10 @@ msgstr "نگاشت به View اودو"
 #: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
 msgid "وضعیت"
 msgstr "وضعیت"
+
+#. module: raes_dw_connector
+#: model_terms:ir.ui.view,arch_db:raes_dw_connector.view_raes_dw_connection_form
+msgid ""
+"گام‌های ETL جدید با همین رویه و پارامترها ساخته\n"
+"                                می‌شوند."
+msgstr ""

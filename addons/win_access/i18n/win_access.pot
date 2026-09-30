@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e-20260223\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-23 08:40+0000\n"
-"PO-Revision-Date: 2026-09-23 08:40+0000\n"
+"POT-Creation-Date: 2026-09-30 09:15+0000\n"
+"PO-Revision-Date: 2026-09-30 09:15+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -92,11 +92,6 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/win_access/static/src/member_list.xml:0
 msgid "Add member"
-msgstr ""
-
-#. module: win_access
-#: model:ir.model.fields.selection,name:win_access.selection__win_access_group__ssas_permission__administrator
-msgid "Administrator"
 msgstr ""
 
 #. module: win_access
@@ -205,6 +200,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:win_access.field_win_access_group__create_uid
 #: model:ir.model.fields,field_description:win_access.field_win_access_member__create_uid
 #: model:ir.model.fields,field_description:win_access.field_win_access_option__create_uid
+#: model:ir.model.fields,field_description:win_access.field_win_access_role__create_uid
 msgid "Created by"
 msgstr ""
 
@@ -216,7 +212,18 @@ msgstr ""
 #: model:ir.model.fields,field_description:win_access.field_win_access_group__create_date
 #: model:ir.model.fields,field_description:win_access.field_win_access_member__create_date
 #: model:ir.model.fields,field_description:win_access.field_win_access_option__create_date
+#: model:ir.model.fields,field_description:win_access.field_win_access_role__create_date
 msgid "Created on"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model,name:win_access.model_raes_dw_agent_job
+msgid "DW SQL Agent Job"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model,name:win_access.model_raes_dw_agent_job_step
+msgid "DW SQL Agent Job Step"
 msgstr ""
 
 #. module: win_access
@@ -235,11 +242,14 @@ msgstr ""
 #: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__display_name
 #: model:ir.model.fields,field_description:win_access.field_bi_user_access_line_wizard__display_name
 #: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__display_name
+#: model:ir.model.fields,field_description:win_access.field_raes_dw_agent_job__display_name
+#: model:ir.model.fields,field_description:win_access.field_raes_dw_agent_job_step__display_name
 #: model:ir.model.fields,field_description:win_access.field_res_config_settings__display_name
 #: model:ir.model.fields,field_description:win_access.field_res_users__display_name
 #: model:ir.model.fields,field_description:win_access.field_win_access_group__display_name
 #: model:ir.model.fields,field_description:win_access.field_win_access_member__display_name
 #: model:ir.model.fields,field_description:win_access.field_win_access_option__display_name
+#: model:ir.model.fields,field_description:win_access.field_win_access_role__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -311,11 +321,14 @@ msgstr ""
 #: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__id
 #: model:ir.model.fields,field_description:win_access.field_bi_user_access_line_wizard__id
 #: model:ir.model.fields,field_description:win_access.field_bi_user_access_wizard__id
+#: model:ir.model.fields,field_description:win_access.field_raes_dw_agent_job__id
+#: model:ir.model.fields,field_description:win_access.field_raes_dw_agent_job_step__id
 #: model:ir.model.fields,field_description:win_access.field_res_config_settings__id
 #: model:ir.model.fields,field_description:win_access.field_res_users__id
 #: model:ir.model.fields,field_description:win_access.field_win_access_group__id
 #: model:ir.model.fields,field_description:win_access.field_win_access_member__id
 #: model:ir.model.fields,field_description:win_access.field_win_access_option__id
+#: model:ir.model.fields,field_description:win_access.field_win_access_role__id
 msgid "ID"
 msgstr ""
 
@@ -347,6 +360,7 @@ msgstr ""
 #. module: win_access
 #: model:ir.model.fields,field_description:win_access.field_win_access_member__kind
 #: model:ir.model.fields,field_description:win_access.field_win_access_option__kind
+#: model:ir.model.fields,field_description:win_access.field_win_access_role__kind
 msgid "Kind"
 msgstr ""
 
@@ -358,6 +372,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:win_access.field_win_access_group__write_uid
 #: model:ir.model.fields,field_description:win_access.field_win_access_member__write_uid
 #: model:ir.model.fields,field_description:win_access.field_win_access_option__write_uid
+#: model:ir.model.fields,field_description:win_access.field_win_access_role__write_uid
 msgid "Last Updated by"
 msgstr ""
 
@@ -369,6 +384,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:win_access.field_win_access_group__write_date
 #: model:ir.model.fields,field_description:win_access.field_win_access_member__write_date
 #: model:ir.model.fields,field_description:win_access.field_win_access_option__write_date
+#: model:ir.model.fields,field_description:win_access.field_win_access_role__write_date
 msgid "Last Updated on"
 msgstr ""
 
@@ -428,6 +444,7 @@ msgstr ""
 #. module: win_access
 #: model:ir.model.fields,field_description:win_access.field_win_access_group__name
 #: model:ir.model.fields,field_description:win_access.field_win_access_option__name
+#: model:ir.model.fields,field_description:win_access.field_win_access_role__name
 msgid "Name"
 msgstr ""
 
@@ -514,8 +531,14 @@ msgid ""
 msgstr ""
 
 #. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_raes_dw_agent_job_step__options_error
 #: model:ir.model.fields,field_description:win_access.field_win_access_group__options_error
 msgid "Options Error"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_role__kind__pbirs
+msgid "PBIRS"
 msgstr ""
 
 #. module: win_access
@@ -530,8 +553,8 @@ msgid "PBIRS items"
 msgstr ""
 
 #. module: win_access
-#: model:ir.model.fields,field_description:win_access.field_win_access_group__pbirs_role
-msgid "PBIRS role"
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__pbirs_role_ids
+msgid "PBIRS roles"
 msgstr ""
 
 #. module: win_access
@@ -565,13 +588,7 @@ msgstr ""
 #. module: win_access
 #: model:ir.model.fields.selection,name:win_access.selection__bi_user_access__ols__read
 #: model:ir.model.fields.selection,name:win_access.selection__bi_user_access_wizard__ols__read
-#: model:ir.model.fields.selection,name:win_access.selection__win_access_group__ssas_permission__read
 msgid "Read"
-msgstr ""
-
-#. module: win_access
-#: model:ir.model.fields.selection,name:win_access.selection__win_access_group__ssas_permission__readwrite
-msgid "ReadWrite"
 msgstr ""
 
 #. module: win_access
@@ -586,6 +603,11 @@ msgid "SHAKA"
 msgstr ""
 
 #. module: win_access
+#: model:ir.model.fields.selection,name:win_access.selection__win_access_role__kind__ssas
+msgid "SSAS"
+msgstr ""
+
+#. module: win_access
 #: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__column_id
 #: model:ir.model.fields,field_description:win_access.field_bi_user_access_line__column_name
 #: model:ir.model.fields,field_description:win_access.field_bi_user_access_line_wizard__column_id
@@ -595,15 +617,22 @@ msgid "SSAS column"
 msgstr ""
 
 #. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_raes_dw_agent_job_step__ssas_database_id
 #: model:ir.model.fields,field_description:win_access.field_win_access_group__ssas_database_id
 #: model:ir.model.fields.selection,name:win_access.selection__win_access_option__kind__ssas_db
 msgid "SSAS database"
 msgstr ""
 
 #. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_raes_dw_agent_job_step__ssas_instance_id
 #: model:ir.model.fields,field_description:win_access.field_win_access_group__ssas_instance_id
 #: model:ir.model.fields.selection,name:win_access.selection__win_access_option__kind__ssas_instance
 msgid "SSAS instance"
+msgstr ""
+
+#. module: win_access
+#: model:ir.model.fields,field_description:win_access.field_win_access_group__ssas_permission_ids
+msgid "SSAS permissions"
 msgstr ""
 
 #. module: win_access
@@ -653,11 +682,6 @@ msgstr ""
 #. module: win_access
 #: model:ir.model.fields,field_description:win_access.field_win_access_option__source
 msgid "Source"
-msgstr ""
-
-#. module: win_access
-#: model:ir.model.fields,field_description:win_access.field_win_access_group__ssas_permission
-msgid "Ssas Permission"
 msgstr ""
 
 #. module: win_access
@@ -810,7 +834,6 @@ msgid ""
 msgstr ""
 
 #. module: win_access
-#: model:ir.ui.menu,name:win_access.menu_win_access
 #: model_terms:ir.ui.view,arch_db:win_access.view_res_config_win_access
 msgid "Windows Access"
 msgstr ""
@@ -836,8 +859,8 @@ msgid "Windows Access Group Member"
 msgstr ""
 
 #. module: win_access
-#: model:ir.actions.server,name:win_access.cron_win_access_sync_dw_ir_actions_server
-msgid "Windows Access: warm SSAS/warehouse pick-list cache"
+#: model:ir.model,name:win_access.model_win_access_role
+msgid "Windows Access Role"
 msgstr ""
 
 #. module: win_access
@@ -891,4 +914,9 @@ msgstr ""
 #: model:ir.model.fields,help:win_access.field_bi_user_access__available_group_ids
 msgid ""
 "win_access groups (= SSAS roles) user_id's Windows account is a member of."
+msgstr ""
+
+#. module: win_access
+#: model:ir.ui.menu,name:win_access.menu_win_access
+msgid "دسترسی ویندوز"
 msgstr ""
