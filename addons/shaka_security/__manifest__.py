@@ -8,20 +8,22 @@ Shaka Security
 ==============
 Provides ``shaka.access.mixin``: form-level access control keyed by
 ``shaka.access.form`` and per-user ``shaka.user.form.access`` records, plus
-a workflow-stage access check. Superusers and Settings administrators
-always bypass it.
+central CRUD checks for synchronized window-action models, stage-level access,
+and per-form Excel import/export permissions. Superusers and Settings
+administrators always bypass the matrix.
 """,
     'author': 'ShakaERP',
     'maintainer': 'ShakaERP',
     'website': 'https://shakasystem.com',
     'license': 'LGPL-3',
     'icon': '/shaka_security/static/description/icon.svg',
-    'depends': ['base', 'raes_dw_connector'],
+    'depends': ['base', 'web', 'base_import', 'raes_dw_connector'],
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
         'data/access_forms.xml',
         'data/cleanup_legacy_access.xml',
+        'views/access_forms_views.xml',
         'views/users_views.xml',
     ],
     'installable': True,

@@ -113,7 +113,7 @@ class BudgetPlan(BudgetPlanningNumberMixin, models.Model):
 
     def action_submit(self):
         self._shaka_check_workflow_access('draft', 'write')
-        self.write({'state': 'submitted'})
+        self._shaka_workflow_write({'state': 'submitted'}, expected_state='draft')
 
     def action_unlock_next_step(self):
         self._shaka_check_workflow_access('draft', 'write')
@@ -124,15 +124,16 @@ class BudgetPlan(BudgetPlanningNumberMixin, models.Model):
 
     def action_approve(self):
         self._shaka_check_workflow_access('submitted', 'write')
-        self.write({'state': 'approved'})
+        self._shaka_workflow_write({'state': 'approved'}, expected_state='submitted')
 
     def action_reject(self):
         self._shaka_check_workflow_access('submitted', 'write')
-        self.write({'state': 'rejected'})
+        self._shaka_workflow_write({'state': 'rejected'}, expected_state='submitted')
 
     def action_reset_draft(self):
-        self._shaka_check_workflow_access(self[:1].state, 'write')
-        self.write({'state': 'draft'})
+        for record in self:
+            record._shaka_check_workflow_access(record.state, 'write')
+            record._shaka_workflow_write({'state': 'draft'}, expected_state=record.state)
 
 
 class BudgetPlanChildMixin(BudgetPlanningNumberMixin):

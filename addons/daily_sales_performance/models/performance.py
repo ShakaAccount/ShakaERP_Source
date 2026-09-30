@@ -146,11 +146,10 @@ class DailySalesPerformance(models.Model):
     def write(self, vals):
         if self:
             self._shaka_check_workflow_access(self[:1].state, 'write')
-        workflow_write = self.env.context.get('daily_sales_workflow')
         protected = {'number', 'sequence_no', 'jalali_year', 'created_by', 'state',
                      'submitted_by', 'submitted_date', 'approved_by',
                      'approved_date', 'rejected_by', 'rejected_date'}
-        if protected & set(vals) and not workflow_write \
+        if protected & set(vals) and not self._shaka_is_internal_workflow_write() \
                 and not self.env.user.has_group('base.group_system'):
             raise AccessError(_('این فیلدها فقط توسط عملیات گردش‌کار قابل تغییر هستند.'))
         return super().write(vals)
@@ -167,11 +166,11 @@ class DailySalesPerformance(models.Model):
                 raise UserError(_('فقط عملکردهای پیش‌نویس قابل ارسال هستند.'))
             if len(record.revenue_line_ids) != 1:
                 raise UserError(_('باید دقیقاً یک ردیف درآمد برای فرم ثبت شود.'))
-            record.with_context(daily_sales_workflow=True).write({
+            record._shaka_workflow_write({
                 'state': 'submitted',
                 'submitted_by': self.env.user.id,
                 'submitted_date': fields.Datetime.now(),
-            })
+            }, expected_state='draft')
             record.message_post(body=_('عملکرد برای بررسی تأمین ارسال شد.'))
 
     def action_approve(self):
@@ -179,12 +178,12 @@ class DailySalesPerformance(models.Model):
         for record in self:
             if record.state != 'submitted':
                 raise UserError(_('فقط عملکردهای ارسال‌شده قابل تأیید هستند.'))
-            record.with_context(daily_sales_workflow=True).write({
+            record._shaka_workflow_write({
                 'state': 'approved',
                 'approved_by': self.env.user.id,
                 'approved_date': fields.Datetime.now(),
                 'reject_reason': False,
-            })
+            }, expected_state='submitted')
             record.message_post(body=_('عملکرد توسط %s تأیید شد.') % self.env.user.name)
 
     def action_reject(self):
@@ -207,20 +206,20 @@ class DailySalesPerformance(models.Model):
         if not reason or not reason.strip():
             raise UserError(_('برای رد کردن عملکرد، دلیل رد را وارد کنید.'))
         self.ensure_one()
-        self.with_context(daily_sales_workflow=True).write({
+        self._shaka_workflow_write({
             'state': 'rejected',
             'reject_reason': reason.strip(),
             'rejected_by': self.env.user.id,
             'rejected_date': fields.Datetime.now(),
-        })
+        }, expected_state='submitted')
         self.message_post(body=_('عملکرد توسط %s رد شد.') % self.env.user.name)
 
     def action_reset_to_draft(self):
         for record in self:
             record._shaka_check_workflow_access(record.state, 'write')
-            record.with_context(daily_sales_workflow=True).write({
+            record._shaka_workflow_write({
                 'state': 'draft', 'reject_reason': False,
-            })
+            }, expected_state=record.state)
 
     @api.constrains('date', 'branch_id')
     def _check_date_branch(self):

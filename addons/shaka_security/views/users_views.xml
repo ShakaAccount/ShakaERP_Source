@@ -6,15 +6,18 @@
         <field name="arch" type="xml">
             <xpath expr="//notebook" position="inside">
                 <page string="دسترسی فرم‌ها" groups="base.group_system">
-                    <div class="alert alert-info" role="alert">برای تنظیم مراحل گردش‌کار، روی سطر فرم دوبارکلیک کنید.</div>
-                    <button name="action_prepare_shaka_access" type="object" string="بارگذاری فرم‌های موجود" class="btn-secondary"/>
+                    <div class="alert alert-info" role="alert">برای همگام‌سازی فرم‌های ماژول‌های نصب‌شده و تنظیم مراحل گردش‌کار، روی دکمه بزنید یا سطر فرم را دوبارکلیک کنید.</div>
+                    <button name="action_prepare_shaka_access" type="object" string="همگام‌سازی فرم‌ها و دسترسی‌ها" class="btn-secondary"/>
                     <field name="shaka_form_access_ids" nolabel="1">
                         <list open_form_view="1" create="0" delete="0">
                             <field name="form_id" string="نام فرم" readonly="1"/>
-                            <field name="can_read" string="نمایش" widget="boolean_toggle"/>
-                            <field name="can_create" string="ایجاد" widget="boolean_toggle"/>
-                            <field name="can_write" string="ویرایش" widget="boolean_toggle"/>
-                            <field name="can_unlink" string="حذف" widget="boolean_toggle"/>
+                            <field name="has_workflow" column_invisible="True"/>
+                            <field name="can_read" string="نمایش" widget="boolean_toggle" readonly="has_workflow"/>
+                            <field name="can_create" string="ایجاد" widget="boolean_toggle" readonly="has_workflow"/>
+                            <field name="can_write" string="ویرایش" widget="boolean_toggle" readonly="has_workflow"/>
+                            <field name="can_unlink" string="حذف" widget="boolean_toggle" readonly="has_workflow"/>
+                            <field name="can_import" string="ورود اکسل" widget="boolean_toggle"/>
+                            <field name="can_export" string="خروجی اکسل" widget="boolean_toggle"/>
                         </list>
                         <form string="تنظیم دسترسی فرم"><sheet>
                             <field name="has_workflow" invisible="1"/>
@@ -25,6 +28,11 @@
                                 <field name="can_create" string="ایجاد" widget="boolean_toggle"/>
                                 <field name="can_write" string="ویرایش" widget="boolean_toggle"/>
                                 <field name="can_unlink" string="حذف" widget="boolean_toggle"/>
+                            </group>
+                            <group string="عملیات اکسل" col="2">
+                                <field name="can_import" string="ورود از اکسل" widget="boolean_toggle"/>
+                                <field name="can_export" string="خروجی به اکسل" widget="boolean_toggle"/>
+                                <div class="text-muted">مجوز ورود اکسل جایگزین مجوز ایجاد یا ویرایش نیست؛ هر دو کنترل اعمال می‌شوند.</div>
                             </group>
                             <separator string="دسترسی مرحله‌های گردش‌کار" invisible="not has_workflow"/>
                             <field name="workflow_access_ids" nolabel="1" invisible="not has_workflow">

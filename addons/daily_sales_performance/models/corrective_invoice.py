@@ -50,7 +50,9 @@ class DailySalesCorrectiveInvoice(models.Model):
     def write(self, vals):
         if self:
             self._shaka_check_workflow_access(self[:1].state, 'write')
-        if not self.env.user.has_group('base.group_system') and {'state', 'name', 'created_by'} & set(vals):
+        if not self.env.user.has_group('base.group_system') \
+                and {'state', 'name', 'created_by'} & set(vals) \
+                and not self._shaka_is_internal_workflow_write():
             raise UserError(_('این فیلدها فقط از طریق گردش‌کار قابل تغییر هستند.'))
         return super().write(vals)
 
@@ -66,11 +68,11 @@ class DailySalesCorrectiveInvoice(models.Model):
                 raise UserError(_('فقط فرم‌های پیش‌نویس قابل ارسال هستند.'))
             if not record.line_ids:
                 raise UserError(_('حداقل یک فاکتور اصلاحی باید ثبت شود.'))
-            record.with_context(daily_sales_workflow=True).write({'state': 'submitted'})
+            record._shaka_workflow_write({'state': 'submitted'}, expected_state='draft')
 
     def action_approve(self):
         self._shaka_check_workflow_access('submitted', 'write')
-        self.with_context(daily_sales_workflow=True).write({'state': 'approved', 'reject_reason': False})
+        self._shaka_workflow_write({'state': 'approved', 'reject_reason': False}, expected_state='submitted')
 
     def action_reject(self):
         self._shaka_check_workflow_access('submitted', 'write')
@@ -89,14 +91,14 @@ class DailySalesCorrectiveInvoice(models.Model):
         if not reason or not reason.strip():
             raise UserError(_('برای رد کردن، دلیل رد را وارد کنید.'))
         self.ensure_one()
-        self.with_context(daily_sales_workflow=True).write({
+        self._shaka_workflow_write({
             'state': 'rejected', 'reject_reason': reason.strip(),
-        })
+        }, expected_state='submitted')
 
     def action_reset_to_draft(self):
         for record in self:
             record._shaka_check_workflow_access(record.state, 'write')
-            record.with_context(daily_sales_workflow=True).write({'state': 'draft', 'reject_reason': False})
+            record._shaka_workflow_write({'state': 'draft', 'reject_reason': False}, expected_state=record.state)
 
 
 class DailySalesCorrectiveInvoiceLine(models.Model):

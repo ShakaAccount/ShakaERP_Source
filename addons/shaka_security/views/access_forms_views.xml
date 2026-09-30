@@ -1,0 +1,65 @@
+<odoo>
+    <record id="view_shaka_access_form_list" model="ir.ui.view">
+        <field name="name">shaka.access.form.list</field>
+        <field name="model">shaka.access.form</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0">
+                <header>
+                    <button name="action_sync_registry_models" type="object" string="همگام‌سازی مدل‌های ماژول‌ها" class="btn-primary" display="always"/>
+                </header>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="model_name"/>
+                <field name="has_workflow" widget="boolean_toggle"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_shaka_access_form_form" model="ir.ui.view">
+        <field name="name">shaka.access.form.form</field>
+        <field name="model">shaka.access.form</field>
+        <field name="arch" type="xml">
+            <form string="تعریف دسترسی فرم">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <field name="model_name"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                        <field name="has_workflow"/>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        کد مرحله باید دقیقاً با مقدار state در مدل مطابقت داشته باشد. اضافه‌کردن مرحله، ردیف دسترسی آن را برای کاربران موجود نیز ایجاد می‌کند.
+                    </div>
+                    <field name="stage_ids" invisible="not has_workflow">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_shaka_access_forms" model="ir.actions.act_window">
+        <field name="name">تعریف فرم‌های دسترسی</field>
+        <field name="res_model">shaka.access.form</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_shaka_access_forms" name="فرم‌های تحت کنترل Shaka Security"
+              parent="base.menu_users" action="action_shaka_access_forms"
+              groups="base.group_system" sequence="12"/>
+    <record id="view_shaka_access_form_search" model="ir.ui.view">
+        <field name="name">shaka.access.form.search</field>
+        <field name="model">shaka.access.form</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="model_name"/>
+                <filter name="workflow" string="دارای گردش‌کار" domain="[('has_workflow', '=', True)]"/>
+                <filter name="inactive" string="بایگانی‌شده" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+</odoo>

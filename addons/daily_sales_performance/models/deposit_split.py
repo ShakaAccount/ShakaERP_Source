@@ -116,11 +116,11 @@ class DailySalesDepositSplit(models.Model):
                 raise UserError(_('حداقل یک پوز باید وجود داشته باشد.'))
             if record.state != 'draft':
                 raise UserError(_('فقط فرم پیش‌نویس قابل ارسال است.'))
-            record.write({'state': 'submitted'})
+            record._shaka_workflow_write({'state': 'submitted'}, expected_state='draft')
 
     def action_approve(self):
         self._shaka_check_workflow_access('submitted', 'write')
-        self.write({'state': 'approved'})
+        self._shaka_workflow_write({'state': 'approved'}, expected_state='submitted')
 
     def action_reject(self):
         self._shaka_check_workflow_access('submitted', 'write')
@@ -142,12 +142,11 @@ class DailySalesDepositSplit(models.Model):
         if not reason or not reason.strip():
             raise UserError(_('برای رد کردن تفکیک واریزی، دلیل رد را وارد کنید.'))
         self.ensure_one()
-        self.with_context(daily_sales_workflow=True).write({
+        self._shaka_workflow_write({
             'state': 'rejected',
             'reject_reason': reason.strip(),
-        })
+        }, expected_state='submitted')
         self.message_post(body=_('تفکیک واریزی توسط %s رد شد.') % self.env.user.name)
-        self.write({'state': 'rejected'})
 
 
 class DailySalesDepositSplitPos(models.Model):
