@@ -24,9 +24,6 @@
                         <group>
                             <field name="connection_id"/>
                             <field name="job_name"/>
-                            <field name="step_id"/>
-                            <field name="step_database"
-                                   placeholder="connection database"/>
                         </group>
                         <group>
                             <field name="job_exists"/>
@@ -35,6 +32,22 @@
                         </group>
                     </group>
                     <notebook>
+                        <page string="Steps">
+                            <field name="step_ids">
+                                <list>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="step_type"/>
+                                    <field name="command_preview"
+                                           string="Command" optional="hide"/>
+                                </list>
+                            </field>
+                            <div class="text-muted">
+                                Steps run top to bottom — drag to reorder. When
+                                a step fails the job stops, so later steps
+                                never run on bad data.
+                            </div>
+                        </page>
                         <page string="Schedule">
                             <group>
                                 <group>
@@ -114,47 +127,64 @@
                                 </group>
                             </div>
                         </page>
-                        <page string="Procedure parameters">
-                            <group>
-                                <group>
-                                    <field name="p_company"/>
-                                    <field name="p_data_source"/>
-                                    <field name="p_module"/>
-                                </group>
-                                <group>
-                                    <field name="p_entity"/>
-                                    <field name="p_date"/>
-                                    <field name="p_label"/>
-                                </group>
-                            </group>
-                            <group string="Job step command">
-                                <field name="command_preview" nolabel="1"
-                                       colspan="2" class="font-monospace"/>
-                            </group>
-                        </page>
-                        <page string="SSAS processing">
-                            <group>
-                                <group>
-                                    <field name="ssas_enabled"/>
-                                    <field name="ssas_server"
-                                           invisible="not ssas_enabled"
-                                           placeholder="same as DW connection host"/>
-                                    <field name="ssas_database"
-                                           invisible="not ssas_enabled"
-                                           required="ssas_enabled"/>
-                                    <field name="ssas_refresh_type"
-                                           invisible="not ssas_enabled"/>
-                                </group>
-                            </group>
-                            <div class="text-muted" invisible="not ssas_enabled">
-                                Runs as a "Process SSAS" job step after the ETL
-                                step succeeds. If the ETL step fails, SSAS is
-                                not processed.
-                            </div>
-                        </page>
                     </notebook>
                 </sheet>
                 <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_raes_dw_agent_job_step_form" model="ir.ui.view">
+        <field name="name">raes.dw.agent.job.step.form</field>
+        <field name="model">raes.dw.agent.job.step</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="step_type" widget="radio"
+                                   options="{'horizontal': true}"/>
+                        </group>
+                    </group>
+                    <div invisible="step_type != 'etl'">
+                        <group>
+                            <group>
+                                <field name="database"
+                                       placeholder="connection database"/>
+                                <field name="procedure"
+                                       required="step_type == 'etl'"/>
+                            </group>
+                            <group>
+                                <button name="action_fetch_params"
+                                        type="object" string="Fetch parameters"
+                                        class="btn-secondary"
+                                        help="Read the parameter list from the procedure on SQL Server."/>
+                            </group>
+                        </group>
+                        <field name="param_ids">
+                            <list editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="name"/>
+                                <field name="sql_type"/>
+                                <field name="value" placeholder="NULL"/>
+                            </list>
+                        </field>
+                    </div>
+                    <group invisible="step_type != 'ssas'">
+                        <group>
+                            <field name="ssas_server"
+                                   placeholder="same as DW connection host"/>
+                            <field name="ssas_database"
+                                   required="step_type == 'ssas'"/>
+                            <field name="ssas_refresh_type"/>
+                        </group>
+                    </group>
+                    <group string="Job step command">
+                        <field name="command_preview" nolabel="1"
+                               colspan="2" class="font-monospace"/>
+                    </group>
+                </sheet>
             </form>
         </field>
     </record>
@@ -176,13 +206,13 @@
     </record>
 
     <record id="action_raes_dw_agent_job" model="ir.actions.act_window">
-        <field name="name">ETL Jobs (SQL Agent)</field>
+        <field name="name">SQL Agent Jobs</field>
         <field name="res_model">raes.dw.agent.job</field>
         <field name="view_mode">list,form</field>
     </record>
 
     <menuitem id="menu_raes_dw_agent_job"
-              name="ETL Jobs (SQL Agent)"
+              name="SQL Agent Jobs"
               parent="menu_dw_connector"
               action="action_raes_dw_agent_job"
               groups="base.group_system"

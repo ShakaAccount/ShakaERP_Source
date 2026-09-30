@@ -1,16 +1,10 @@
 """Pure conversions between raes.dw.agent.job field values and SQL Server
 Agent's msdb encoding (sysschedules columns / sp_add_schedule arguments) and
-the ETL.spGatheringData step command. No Odoo import, so
+the ETL (EXEC procedure) / SSAS (TMSL) step commands. No Odoo import, so
 tests/agent_job_check.py can run it standalone."""
 import json
 import re
 from datetime import date
-
-PROCEDURE = 'ETL.spGatheringData'
-# (proc parameter, field) — p_date is always emitted, the rest NULL when empty
-PARAMS = [('CompanyID', 'p_company'), ('DataSourceID', 'p_data_source'),
-          ('ModuleID', 'p_module'), ('EntityID', 'p_entity'),
-          ('DateID', 'p_date'), ('Label', 'p_label')]
 
 SUBDAY = {'once': 1, 'seconds': 2, 'minutes': 4, 'hours': 8}
 WEEKDAYS = ('sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat')  # bit i = 1 << i
@@ -115,41 +109,66 @@ def schedule_values(row):
     return v
 
 
-def build_command(v):
-    lines = []
-    for name, field in PARAMS:
-        val = v[field]
-        if field == 'p_label':
-            # trust boundary: free text into T-SQL -> quote strictly
-            lit = "N'%s'" % val.replace("'", "''") if val else 'NULL'
-        elif field == 'p_date':
-            lit = str(int(val or 0))
-        else:
-            lit = str(int(val)) if val else 'NULL'
-        lines.append('  @%s = %s' % (name, lit))
-    return 'EXEC %s\n%s' % (PROCEDURE, ',\n'.join(lines))
+_IDENT = re.compile(r'^[\w.\[\]]+$')
+_NUM = re.compile(r'^-?\d+(\.\d+)?$')
+NUMERIC = {'int', 'bigint', 'smallint', 'tinyint', 'bit', 'decimal', 'numeric',
+           'float', 'real', 'money', 'smallmoney'}
+UNICODE = {'nchar', 'nvarchar', 'ntext', 'xml', 'sysname'}
 
 
-_ARG = re.compile(r"@(\w+)\s*=\s*(NULL|N?'(?:[^']|'')*'|-?\d+)", re.I)
+def check_identifier(name):
+    """Procedure / database names are concatenated into T-SQL: trust boundary."""
+    if not name or not _IDENT.match(name):
+        raise ValueError('Invalid SQL identifier: %r' % (name,))
+    return name
 
 
-def parse_command(cmd):
-    fields = {n.lower(): f for n, f in PARAMS}
-    out = {}
-    for name, lit in _ARG.findall(cmd or ''):
-        field = fields.get(name.lower())
-        if not field:
-            continue
+def sql_literal(sql_type, value):
+    """Parameter value (text from the form) -> T-SQL literal; empty = NULL."""
+    if value in (False, None, ''):
+        return 'NULL'
+    t = (sql_type or '').lower()
+    if t in NUMERIC:
+        if not _NUM.match(value.strip()):
+            raise ValueError('%r is not a number (%s).' % (value, sql_type))
+        return value.strip()
+    quoted = "'%s'" % value.replace("'", "''")
+    return 'N' + quoted if t in UNICODE else quoted
+
+
+def build_exec(procedure, params):
+    """params: [(name, sql_type, value)] -> EXEC command of an ETL job step."""
+    check_identifier(procedure)
+    lines = ['  @%s = %s' % (n, sql_literal(t, v)) for n, t, v in params]
+    return 'EXEC %s' % procedure + ('\n' + ',\n'.join(lines) if lines else '')
+
+
+_ARG = re.compile(r"@(\w+)\s*=\s*(NULL|N?'(?:[^']|'')*'|-?\d+(?:\.\d+)?)", re.I)
+_EXEC = re.compile(r"^\s*EXEC(?:UTE)?\s+([\w.\[\]]+)(.*)$", re.I | re.S)
+
+
+def parse_exec(cmd):
+    """EXEC command -> (procedure, [(name, sql_type, value or False)]), None
+    when the step is anything but a single EXEC with literal arguments. The
+    type is guessed from the literal (Fetch parameters gets the real one)."""
+    m = _EXEC.match(cmd or '')
+    if not m:
+        return None
+    rest = m.group(2).strip().rstrip(';')
+    if _ARG.sub('', rest).replace(',', '').strip():
+        return None
+    out = []
+    for name, lit in _ARG.findall(rest):
         if lit.upper() == 'NULL':
-            out[field] = False if field == 'p_label' else 0
+            out.append((name, False, False))
         elif lit.endswith("'"):
-            out[field] = lit[lit.index("'") + 1:-1].replace("''", "'")
+            out.append((name, 'nvarchar' if lit[0] in 'nN' else 'varchar',
+                        lit[lit.index("'") + 1:-1].replace("''", "'")))
         else:
-            out[field] = int(lit)
-    return out
+            out.append((name, 'numeric', lit))
+    return m.group(1), out
 
 
-SSAS_STEP = 'Process SSAS'
 SSAS_REFRESH = ('full', 'automatic', 'dataOnly', 'calculate', 'clearValues')
 
 

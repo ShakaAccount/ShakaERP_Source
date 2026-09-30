@@ -3,13 +3,13 @@ from odoo import api, fields, models
 DEFAULT_INSTANCE = "MSSQLSERVER"  # the API's name for the default SSAS instance
 
 
-class RaesDwAgentJob(models.Model):
-    """SSAS instance / database pickers for the ETL job's "Process SSAS" step,
+class RaesDwAgentJobStep(models.Model):
+    """SSAS instance / database pickers for a job's SSAS process steps,
     fed by the BI server API's lists (win.access.option cache). They map onto
     the connector's plain ssas_server / ssas_database fields, which stay the
     source of truth: default instance -> empty server (= DW connection host),
     named instance -> HOST\\INSTANCE."""
-    _inherit = "raes.dw.agent.job"
+    _inherit = "raes.dw.agent.job.step"
 
     ssas_instance_id = fields.Many2one(
         "win.access.option", "SSAS instance", domain=[("kind", "=", "ssas_instance")],
@@ -34,7 +34,7 @@ class RaesDwAgentJob(models.Model):
         for rec in self:
             inst = rec.ssas_instance_id.name
             rec.ssas_server = (False if not inst or inst.upper() == DEFAULT_INSTANCE
-                               else "%s\\%s" % (rec.connection_id.host, inst))
+                               else "%s\\%s" % (rec.job_id.connection_id.host, inst))
             if rec.ssas_database_id:
                 rec.ssas_database = rec.ssas_database_id.name
 

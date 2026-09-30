@@ -38,16 +38,37 @@ assert s.schedule_params(base)['freq_type'] == 4
 assert s.schedule_params(dict(base, occurs='weekly', mon=True, wed=True))[
     'freq_interval'] == 2 | 8
 
-cmd = s.build_command(dict(p_company=0, p_data_source=3, p_module=0,
-                           p_entity=0, p_date=0, p_label="it's"))
+params = [('CompanyID', 'int', ''), ('DataSourceID', 'int', '3'),
+          ('Rate', 'decimal', '-1.5'), ('Label', 'nvarchar', "it's"),
+          ('Day', 'date', '2026-05-26')]
+cmd = s.build_exec('ETL.spGatheringData', params)
 assert "@CompanyID = NULL" in cmd and "@DataSourceID = 3" in cmd
-assert "@Label = N'it''s'" in cmd
-assert s.parse_command(cmd) == dict(p_company=0, p_data_source=3, p_module=0,
-                                    p_entity=0, p_date=0, p_label="it's")
+assert "@Label = N'it''s'" in cmd and "@Day = '2026-05-26'" in cmd
+assert s.parse_exec(cmd) == ('ETL.spGatheringData', [
+    ('CompanyID', False, False), ('DataSourceID', 'numeric', '3'),
+    ('Rate', 'numeric', '-1.5'), ('Label', 'nvarchar', "it's"),
+    ('Day', 'varchar', '2026-05-26')])
+# a Load -> Apply round trip reproduces the command
+proc, args = s.parse_exec(cmd)
+assert s.build_exec(proc, args) == cmd
 orig = ("EXEC ETL.spGatheringData\n  @CompanyID = NULL,\n  @DataSourceID = "
         "NULL,\n  @ModuleID = NULL,\n  @EntityID = NULL,\n  @DateID = 0,\n"
         "  @Label = NULL")
-assert s.parse_command(orig)['p_label'] is False
+assert s.build_exec(*s.parse_exec(orig)) == orig
+assert s.parse_exec('EXEC [ETL].[spX];') == ('[ETL].[spX]', [])
+assert s.parse_exec('TRUNCATE TABLE x') is None
+assert s.parse_exec('EXEC a.b @x = 1; DROP TABLE y') is None
+for bad in ('x; DROP TABLE y', "a'b", ''):
+    try:
+        s.check_identifier(bad)
+        raise AssertionError(bad)
+    except ValueError:
+        pass
+try:
+    s.sql_literal('int', '1; DROP TABLE y')
+    raise AssertionError('non-number accepted')
+except ValueError:
+    pass
 cmd = s.build_ssas_command('Sales', 'full')
 assert s.parse_ssas_command(cmd) == ('Sales', 'full')
 assert s.parse_ssas_command('<Process/>') == (False, 'full')

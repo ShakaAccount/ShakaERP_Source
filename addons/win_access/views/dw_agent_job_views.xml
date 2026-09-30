@@ -1,8 +1,8 @@
 <odoo>
     <record id="view_raes_dw_agent_job_form_ssas_pickers" model="ir.ui.view">
-        <field name="name">raes.dw.agent.job.form.ssas.pickers</field>
-        <field name="model">raes.dw.agent.job</field>
-        <field name="inherit_id" ref="raes_dw_connector.view_raes_dw_agent_job_form"/>
+        <field name="name">raes.dw.agent.job.step.form.ssas.pickers</field>
+        <field name="model">raes.dw.agent.job.step</field>
+        <field name="inherit_id" ref="raes_dw_connector.view_raes_dw_agent_job_step_form"/>
         <field name="arch" type="xml">
             <field name="ssas_server" position="attributes">
                 <attribute name="invisible">1</attribute>
@@ -12,9 +12,9 @@
             </field>
             <field name="ssas_server" position="before">
                 <field name="ssas_instance_id" options="{'no_create': True}"
-                       invisible="not ssas_enabled" required="ssas_enabled"/>
+                       required="step_type == 'ssas'"/>
                 <field name="ssas_database_id" options="{'no_create': True}"
-                       invisible="not ssas_enabled" required="ssas_enabled"
+                       required="step_type == 'ssas'"
                        domain="[('kind', '=', 'ssas_db'), ('parent_id', '=', ssas_instance_id)]"/>
             </field>
             <field name="ssas_refresh_type" position="after">
