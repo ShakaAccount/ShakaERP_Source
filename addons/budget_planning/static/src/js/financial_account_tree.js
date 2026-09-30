@@ -77,12 +77,7 @@ export class FinancialAccountTree extends Component {
         if (!this.state.open) return;
         const box = this.root.el.getBoundingClientRect();
         this.state.style = `position:fixed;top:${Math.min(box.bottom + 4, window.innerHeight - 340)}px;left:${Math.max(8, Math.min(box.left, window.innerWidth - 380))}px`;
-        // The selected account roots are global settings and may have changed
-        // while this statement form is still open. Refresh on every open so
-        // this widget never keeps showing an older grouping tree.
-        this.state.nodes = [];
-        this.state.expanded = {};
-        this.state.members = {};
+        if (this.state.nodes.length) return;
         this.state.loading = true;
         try {
             this.state.nodes = await this.orm.call(
