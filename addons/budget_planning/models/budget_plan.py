@@ -16,6 +16,22 @@ class BudgetPlanningNumberMixin(models.AbstractModel):
         last = self.sudo().search(domain, order='number desc, id desc', limit=1)
         return max(last.number or 0, 0) + 1
 
+    @api.model
+    def _assign_scoped_numbers(self, vals_list, scope_resolver):
+        """Allocate distinct numbers when one create call contains a batch.
+
+        The database does not contain earlier values in ``vals_list`` yet,
+        so querying the next number for every item would assign the same
+        number to all siblings in a one2many save.
+        """
+        next_by_scope = {}
+        for vals in vals_list:
+            scope_key, domain = scope_resolver(vals)
+            if scope_key not in next_by_scope:
+                next_by_scope[scope_key] = self._next_number(domain)
+            vals['number'] = next_by_scope[scope_key]
+            next_by_scope[scope_key] += 1
+
 
 class BudgetPlan(BudgetPlanningNumberMixin, models.Model):
     _name = 'budget.plan'
@@ -60,13 +76,19 @@ class BudgetPlan(BudgetPlanningNumberMixin, models.Model):
     def create(self, vals_list):
         self._shaka_check_workflow_access('draft', 'create')
         for vals in vals_list:
-            company_id = vals.get('company_id') or self.env.company.id
             fiscal_year_id = vals.get('fiscal_year_id')
             if not fiscal_year_id:
                 raise ValidationError('انتخاب سال مالی الزامی است.')
-            vals['number'] = self._next_number([
-                ('company_id', '=', company_id), ('fiscal_year_id', '=', fiscal_year_id),
-            ])
+        self._assign_scoped_numbers(
+            vals_list,
+            lambda vals: (
+                (vals.get('company_id') or self.env.company.id, vals['fiscal_year_id']),
+                [
+                    ('company_id', '=', vals.get('company_id') or self.env.company.id),
+                    ('fiscal_year_id', '=', vals['fiscal_year_id']),
+                ],
+            ),
+        )
         return super().create(vals_list)
 
     @api.onchange('company_id', 'fiscal_year_id')
@@ -164,9 +186,13 @@ class BudgetPlanStrategy(BudgetPlanChildMixin, models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        for vals in vals_list:
-            plan_id = vals.get('plan_id') or self.env.context.get('default_plan_id')
-            vals['number'] = self._next_number([('plan_id', '=', plan_id)])
+        self._assign_scoped_numbers(
+            vals_list,
+            lambda vals: (
+                vals.get('plan_id') or self.env.context.get('default_plan_id'),
+                [('plan_id', '=', vals.get('plan_id') or self.env.context.get('default_plan_id'))],
+            ),
+        )
         return super().create(vals_list)
 
     @api.constrains('horizon_start', 'horizon_end')
@@ -205,7 +231,13 @@ class BudgetPlanTarget(BudgetPlanChildMixin, models.Model):
         for vals in vals_list:
             strategy = self.env['budget.plan.strategy'].browse(vals.get('strategy_id'))
             vals['plan_id'] = strategy.plan_id.id
-            vals['number'] = self._next_number([('strategy_id', '=', strategy.id)])
+        self._assign_scoped_numbers(
+            vals_list,
+            lambda vals: (
+                vals.get('strategy_id'),
+                [('strategy_id', '=', vals.get('strategy_id'))],
+            ),
+        )
         return super().create(vals_list)
 
 
@@ -242,7 +274,13 @@ class BudgetPlanKpi(BudgetPlanChildMixin, models.Model):
         for vals in vals_list:
             target = self.env['budget.plan.target'].browse(vals.get('target_id'))
             vals['plan_id'] = target.plan_id.id
-            vals['number'] = self._next_number([('target_id', '=', target.id)])
+        self._assign_scoped_numbers(
+            vals_list,
+            lambda vals: (
+                vals.get('target_id'),
+                [('target_id', '=', vals.get('target_id'))],
+            ),
+        )
         return super().create(vals_list)
 
 
@@ -269,7 +307,13 @@ class BudgetPlanInitiative(BudgetPlanChildMixin, models.Model):
         for vals in vals_list:
             kpi = self.env['budget.plan.kpi'].browse(vals.get('kpi_id'))
             vals['plan_id'] = kpi.plan_id.id
-            vals['number'] = self._next_number([('kpi_id', '=', kpi.id)])
+        self._assign_scoped_numbers(
+            vals_list,
+            lambda vals: (
+                vals.get('kpi_id'),
+                [('kpi_id', '=', vals.get('kpi_id'))],
+            ),
+        )
         return super().create(vals_list)
 
 
@@ -305,7 +349,13 @@ class BudgetPlanProject(BudgetPlanChildMixin, models.Model):
         for vals in vals_list:
             initiative = self.env['budget.plan.initiative'].browse(vals.get('initiative_id'))
             vals['plan_id'] = initiative.plan_id.id
-            vals['number'] = self._next_number([('initiative_id', '=', initiative.id)])
+        self._assign_scoped_numbers(
+            vals_list,
+            lambda vals: (
+                vals.get('initiative_id'),
+                [('initiative_id', '=', vals.get('initiative_id'))],
+            ),
+        )
         return super().create(vals_list)
 
 
@@ -338,7 +388,13 @@ class BudgetPlanActivity(BudgetPlanChildMixin, models.Model):
         for vals in vals_list:
             project = self.env['budget.plan.project'].browse(vals.get('project_id'))
             vals['plan_id'] = project.plan_id.id
-            vals['number'] = self._next_number([('project_id', '=', project.id)])
+        self._assign_scoped_numbers(
+            vals_list,
+            lambda vals: (
+                vals.get('project_id'),
+                [('project_id', '=', vals.get('project_id'))],
+            ),
+        )
         return super().create(vals_list)
 
 
@@ -372,5 +428,11 @@ class BudgetPlanBudgetLine(BudgetPlanChildMixin, models.Model):
         for vals in vals_list:
             initiative = self.env['budget.plan.initiative'].browse(vals.get('initiative_id'))
             vals['plan_id'] = initiative.plan_id.id
-            vals['number'] = self._next_number([('initiative_id', '=', initiative.id)])
+        self._assign_scoped_numbers(
+            vals_list,
+            lambda vals: (
+                vals.get('initiative_id'),
+                [('initiative_id', '=', vals.get('initiative_id'))],
+            ),
+        )
         return super().create(vals_list)
