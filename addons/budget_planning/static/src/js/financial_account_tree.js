@@ -13,12 +13,19 @@ export class FinancialAccountTree extends Component {
         this.orm = useService("orm");
         this.notification = useService("notification");
         this.root = useRef("root");
+        this.treeRequestId = 0;
         this.state = useState({open: false, nodes: [], expanded: {}, members: {}, loading: false, style: "", search: ""});
         useExternalListener(document, "pointerdown", (ev) => {
             if (this.state.open && this.root.el && !this.root.el.contains(ev.target)) {
-                this.state.open = false;
+                this.closeDropdown();
             }
         });
+    }
+
+    closeDropdown() {
+        this.treeRequestId++;
+        this.state.open = false;
+        this.state.loading = false;
     }
 
     get companyId() {
@@ -74,19 +81,33 @@ export class FinancialAccountTree extends Component {
         }
         if (!this.root.el) return;
         this.state.open = !this.state.open;
-        if (!this.state.open) return;
+        if (!this.state.open) {
+            this.closeDropdown();
+            return;
+        }
         const box = this.root.el.getBoundingClientRect();
         this.state.style = `position:fixed;top:${Math.min(box.bottom + 4, window.innerHeight - 340)}px;left:${Math.max(8, Math.min(box.left, window.innerWidth - 380))}px`;
-        if (this.state.nodes.length) return;
+        const requestId = ++this.treeRequestId;
+        this.state.nodes = [];
+        this.state.expanded = {};
+        this.state.members = {};
+        this.state.search = "";
         this.state.loading = true;
         try {
-            this.state.nodes = await this.orm.call(
+            const nodes = await this.orm.call(
                 "budget.financial.statement.line", "account_tree", [this.companyId, this.props.record.data.section]);
+            if (requestId === this.treeRequestId && this.state.open) {
+                this.state.nodes = nodes;
+            }
         } catch (error) {
-            this.notification.add("بارگذاری گروه‌بندی حساب معین ممکن نشد.", {type: "danger"});
-            this.state.open = false;
+            if (requestId === this.treeRequestId) {
+                this.notification.add("بارگذاری گروه‌بندی حساب معین ممکن نشد.", {type: "danger"});
+                this.closeDropdown();
+            }
         } finally {
-            this.state.loading = false;
+            if (requestId === this.treeRequestId) {
+                this.state.loading = false;
+            }
         }
     }
 
