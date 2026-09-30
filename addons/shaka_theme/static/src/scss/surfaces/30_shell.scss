@@ -94,3 +94,21 @@
         }
     }
 }
+
+// Free-placement app grid (static/src/home_menu): gaps are invisible tiles,
+// outlined only while an app is being dragged.
+.o_home_menu .o_apps {
+    .o_shaka_cell_empty .o_app {
+        visibility: hidden;
+    }
+
+    &.o_shaka_dragging .o_shaka_cell_empty {
+        border-radius: var(--border-radius-lg);
+        outline: 1px dashed color-mix(in srgb, var(--shaka-on-wallpaper) 35%, transparent);
+        outline-offset: -4px;
+    }
+
+    .o_shaka_cell_dragged {
+        opacity: 0.4;
+    }
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Free-placement app grid (logic: home_menu_patch.js, styles: surfaces/30_shell.scss). -->
+    <t t-inherit="web_enterprise.HomeMenu" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_apps')]" position="before">
+            <div t-if="displayedApps.length and !env.isSmall" class="d-flex justify-content-end mt-4">
+                <button type="button" class="btn btn-sm btn-secondary o_shaka_auto_arrange" t-on-click="_onAutoArrange">
+                    <i class="fa fa-th me-1"/>Auto arrange
+                </button>
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('o_apps')]" position="attributes">
+            <attribute name="t-att-class">{ o_shaka_dragging: grid.dragged }</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('o_apps')]/div" position="replace">
+            <t t-foreach="cells" t-as="app" t-key="app ? app.id : 'empty_' + app_index">
+                <t t-set="appIdx" t-value="app ? displayedApps.indexOf(app) : -1"/>
+                <div class="col-3 col-md-2 mb-3 px-0"
+                    t-att-class="{ o_shaka_cell_empty: !app, o_shaka_cell_dragged: app and grid.dragged === app.xmlid }"
+                    t-att-draggable="app ? 'true' : 'false'"
+                    t-on-dragstart="(ev) => this._onCellDragStart(ev, app)"
+                    t-on-dragend="_onCellDragEnd"
+                    t-on-dragover.prevent=""
+                    t-on-drop.prevent="() => this._onCellDrop(app_index)">
+                    <a t-if="app" t-att-id="'result_app_' + appIdx"
+                        role="option"
+                        t-att-aria-selected="state.focusedIndex === appIdx ? 'true' : 'false'"
+                        class="o_app o_menuitem d-flex flex-column rounded-3 justify-content-start align-items-center w-100 p-1 p-md-2"
+                        t-att-class="{o_focused: state.focusedIndex === appIdx}"
+                        t-att-data-menu-xmlid="app.xmlid"
+                        t-att-href="app.href"
+                        t-on-click.prevent="() => this._onAppClick(app)"
+                        >
+                        <img t-if="app.webIconData" class="o_app_icon rounded-3"
+                            t-attf-src="{{app.webIconData}}"
+                        />
+                        <div t-else="" class="o_app_icon position-relative d-flex justify-content-center align-items-center p-2 rounded-3 ratio ratio-1x1"
+                            t-attf-style="background-color: {{app.webIcon.backgroundColor}};"
+                        >
+                            <i t-attf-class="{{app.webIcon.iconClass}} position-relative w-auto h-auto" t-attf-style="color: {{app.webIcon.color}};"/>
+                        </div>
+                        <div class="o_caption w-100 text-center text-truncate mt-2" t-esc="app.label or app.name"/>
+                    </a>
+                    <!-- Same box as a tile, so an all-empty row keeps its height. -->
+                    <div t-else="" class="o_app d-flex flex-column rounded-3 align-items-center w-100 p-1 p-md-2" aria-hidden="true">
+                        <div class="o_app_icon rounded-3"/>
+                        <div class="o_caption w-100 mt-2">&#160;</div>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </t>
+
+</templates>

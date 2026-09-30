@@ -50,6 +50,7 @@ Addon SCSS should use the ``var(--shaka-*)`` tokens, never dark-mode selectors.
             ('after', 'web/static/src/views/kanban/kanban_header.xml', 'shaka_theme/static/src/components/kanban_header.xml'),
             ('after', 'web/static/src/views/kanban/kanban_header.xml', 'shaka_theme/static/src/components/a11y.xml'),
             'shaka_theme/static/src/components/*',
+            'shaka_theme/static/src/home_menu/*',
         ],
         # Odoo appends its *.dark.scss after the backend bundle; re-append the
         # surface files so they win at equal specificity in dark mode too.
