@@ -41,6 +41,74 @@
                                     <field name="command_preview"
                                            string="Command" optional="hide"/>
                                 </list>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="name"/>
+                                                <field name="step_type" widget="radio"
+                                                       options="{'horizontal': true}"/>
+                                            </group>
+                                        </group>
+                                        <div invisible="step_type != 'etl'">
+                                            <group>
+                                                <group>
+                                                    <field name="database"
+                                                           placeholder="connection database"/>
+                                                    <field name="procedure"
+                                                           required="step_type == 'etl'"/>
+                                                </group>
+                                                <group>
+                                                    <button name="action_fetch_params"
+                                                            type="object" string="Fetch parameters"
+                                                            class="btn-secondary"
+                                                            help="Read the parameter list from the procedure on SQL Server."/>
+                                                </group>
+                                            </group>
+                                            <field name="param_ids">
+                                                <list editable="bottom">
+                                                    <field name="sequence" widget="handle"/>
+                                                    <field name="name"/>
+                                                    <field name="sql_type"/>
+                                                    <field name="value" placeholder="NULL"/>
+                                                </list>
+                                            </field>
+                                        </div>
+                                        <group invisible="step_type != 'custom'">
+                                            <group>
+                                                <field name="subsystem"
+                                                       required="step_type == 'custom'"/>
+                                                <field name="database"
+                                                       placeholder="connection database"
+                                                       invisible="subsystem != 'TSQL'"/>
+                                                <field name="server"
+                                                       placeholder="same as DW connection host"
+                                                       invisible="subsystem not in ('ANALYSISQUERY', 'ANALYSISCOMMAND')"/>
+                                            </group>
+                                        </group>
+                                        <div dir="ltr" invisible="step_type != 'custom'">
+                                            <field name="command" class="font-monospace w-100"
+                                                   required="step_type == 'custom'"
+                                                   placeholder="Command, sent to SQL Agent as typed"/>
+                                        </div>
+                                        <group invisible="step_type != 'ssas'">
+                                            <group>
+                                                <field name="ssas_server"
+                                                       placeholder="same as DW connection host"/>
+                                                <field name="ssas_database"
+                                                       required="step_type == 'ssas'"/>
+                                                <field name="ssas_refresh_type"/>
+                                            </group>
+                                        </group>
+                                        <div invisible="step_type == 'custom'">
+                                            <separator string="Job step command"/>
+                                            <div dir="ltr">
+                                                <field name="command_preview"
+                                                       class="font-monospace w-100"/>
+                                            </div>
+                                        </div>
+                                    </sheet>
+                                </form>
                             </field>
                             <div class="text-muted">
                                 Steps run top to bottom — drag to reorder. When
@@ -130,78 +198,6 @@
                     </notebook>
                 </sheet>
                 <chatter/>
-            </form>
-        </field>
-    </record>
-
-    <record id="view_raes_dw_agent_job_step_form" model="ir.ui.view">
-        <field name="name">raes.dw.agent.job.step.form</field>
-        <field name="model">raes.dw.agent.job.step</field>
-        <field name="arch" type="xml">
-            <form>
-                <sheet>
-                    <group>
-                        <group>
-                            <field name="name"/>
-                            <field name="step_type" widget="radio"
-                                   options="{'horizontal': true}"/>
-                        </group>
-                    </group>
-                    <div invisible="step_type != 'etl'">
-                        <group>
-                            <group>
-                                <field name="database"
-                                       placeholder="connection database"/>
-                                <field name="procedure"
-                                       required="step_type == 'etl'"/>
-                            </group>
-                            <group>
-                                <button name="action_fetch_params"
-                                        type="object" string="Fetch parameters"
-                                        class="btn-secondary"
-                                        help="Read the parameter list from the procedure on SQL Server."/>
-                            </group>
-                        </group>
-                        <field name="param_ids">
-                            <list editable="bottom">
-                                <field name="sequence" widget="handle"/>
-                                <field name="name"/>
-                                <field name="sql_type"/>
-                                <field name="value" placeholder="NULL"/>
-                            </list>
-                        </field>
-                    </div>
-                    <group invisible="step_type != 'custom'">
-                        <group>
-                            <field name="subsystem"
-                                   required="step_type == 'custom'"/>
-                            <field name="database"
-                                   placeholder="connection database"
-                                   invisible="subsystem != 'TSQL'"/>
-                            <field name="server"
-                                   placeholder="same as DW connection host"
-                                   invisible="subsystem not in ('ANALYSISQUERY', 'ANALYSISCOMMAND')"/>
-                        </group>
-                        <field name="command" colspan="2" nolabel="1"
-                               class="font-monospace"
-                               required="step_type == 'custom'"
-                               placeholder="Command, sent to SQL Agent as typed"/>
-                    </group>
-                    <group invisible="step_type != 'ssas'">
-                        <group>
-                            <field name="ssas_server"
-                                   placeholder="same as DW connection host"/>
-                            <field name="ssas_database"
-                                   required="step_type == 'ssas'"/>
-                            <field name="ssas_refresh_type"/>
-                        </group>
-                    </group>
-                    <group string="Job step command"
-                           invisible="step_type == 'custom'">
-                        <field name="command_preview" nolabel="1"
-                               colspan="2" class="font-monospace"/>
-                    </group>
-                </sheet>
             </form>
         </field>
     </record>

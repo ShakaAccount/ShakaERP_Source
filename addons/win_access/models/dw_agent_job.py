@@ -56,3 +56,13 @@ class RaesDwAgentJobStep(models.Model):
     def web_read(self, specification):
         self.env["win.access.option"].autorefresh()
         return super().web_read(specification)
+
+
+class RaesDwAgentJob(models.Model):
+    """Steps are edited inline in the job form, so refresh the SSAS option
+    lists when the job is read too."""
+    _inherit = "raes.dw.agent.job"
+
+    def web_read(self, specification):
+        self.env["win.access.option"].autorefresh()
+        return super().web_read(specification)

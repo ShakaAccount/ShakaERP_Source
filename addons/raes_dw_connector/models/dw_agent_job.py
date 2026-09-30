@@ -42,8 +42,13 @@ class RaesDwAgentJob(models.Model):
             Command.create(dict(
                 self.env['raes.dw.agent.job.step']._etl_defaults(
                     self.env['raes.dw.connection'].search([], limit=1)),
-                name='Run ETL', step_type='etl')),
-            Command.create({'name': 'Process SSAS', 'step_type': 'ssas'})])
+                name='Run ETL', step_type='etl', sequence=10,
+                ssas_refresh_type='full')),
+            # every value spelled out: the form's defaults for new rows don't
+            # apply to one2many default commands
+            Command.create({'name': 'Process SSAS', 'step_type': 'ssas',
+                            'sequence': 20, 'ssas_database': 'Shaka_SSAS',
+                            'ssas_refresh_type': 'full'})])
 
     # --- schedule, mirrors the SSMS "Job Schedule Properties" dialog -----
     schedule_name = fields.Char(required=True, default='ScheduleETL')
