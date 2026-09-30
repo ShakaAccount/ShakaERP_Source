@@ -36,19 +36,7 @@ class RaesDwAgentJob(models.Model):
     job_exists = fields.Boolean(readonly=True)
     last_sync = fields.Datetime(readonly=True)
     last_run_outcome = fields.Char(readonly=True)
-    step_ids = fields.One2many(
-        'raes.dw.agent.job.step', 'job_id', copy=True,
-        default=lambda self: [
-            Command.create(dict(
-                self.env['raes.dw.agent.job.step']._etl_defaults(
-                    self.env['raes.dw.connection'].search([], limit=1)),
-                name='Run ETL', step_type='etl', sequence=10,
-                ssas_refresh_type='full')),
-            # every value spelled out: the form's defaults for new rows don't
-            # apply to one2many default commands
-            Command.create({'name': 'Process SSAS', 'step_type': 'ssas',
-                            'sequence': 20, 'ssas_database': 'Shaka_SSAS',
-                            'ssas_refresh_type': 'full'})])
+    step_ids = fields.One2many('raes.dw.agent.job.step', 'job_id', copy=True)
 
     # --- schedule, mirrors the SSMS "Job Schedule Properties" dialog -----
     schedule_name = fields.Char(required=True, default='ScheduleETL')
