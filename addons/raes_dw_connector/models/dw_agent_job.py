@@ -9,6 +9,15 @@ SCHEDULE_FIELDS = [
     'recurs_every', 'monthly_mode', 'month_day', 'relative_week',
     'relative_day', 'subday_type', 'subday_interval', 'start_time',
     'end_time', 'start_date', 'end_date', *sched.WEEKDAYS]
+# ETL.spGatheringData's signature, pre-filled on a new job's ETL step
+# (empty value = NULL); Fetch parameters re-reads it from SQL Server.
+ETL_DEFAULT_PARAMS = [('CompanyID', 'int', False), ('DataSourceID', 'int', False),
+                      ('ModuleID', 'int', False), ('EntityID', 'int', False),
+                      ('DateID', 'int', '0'), ('Label', 'nvarchar', False)]
+# every SQL Agent subsystem, so any loaded step fits a "Custom" step
+SUBSYSTEMS = ['TSQL', 'CmdExec', 'PowerShell', 'SSIS', 'ANALYSISQUERY',
+              'ANALYSISCOMMAND', 'Distribution', 'Snapshot', 'LogReader',
+              'Merge', 'QueueReader']
 RUN_STATUS = {0: 'Failed', 1: 'Succeeded', 2: 'Retry', 3: 'Canceled',
               4: 'In progress'}
 
@@ -33,7 +42,12 @@ class RaesDwAgentJob(models.Model):
     step_ids = fields.One2many(
         'raes.dw.agent.job.step', 'job_id', copy=True,
         default=lambda self: [
-            Command.create({'name': 'Run ETL', 'step_type': 'etl'}),
+            Command.create({'name': 'Run ETL', 'step_type': 'etl',
+                            'param_ids': [Command.create(
+                                {'sequence': i, 'name': n, 'sql_type': t,
+                                 'value': v})
+                                for i, (n, t, v) in enumerate(
+                                    ETL_DEFAULT_PARAMS)]}),
             Command.create({'name': 'Process SSAS', 'step_type': 'ssas'})])
 
     # --- schedule, mirrors the SSMS "Job Schedule Properties" dialog -----
@@ -127,8 +141,6 @@ class RaesDwAgentJob(models.Model):
             return self._notify(_('Job "%s" not found on SQL Server — '
                                   'Apply will create it.', self.job_name))
         steps, schedule, outcome = found
-        # all-or-nothing: Apply rewrites every step, so an unknown one must
-        # stop us here rather than be silently dropped later
         cmds = [Command.clear()] + [Command.create(dict(
             self.env['raes.dw.agent.job.step']._from_msdb(row),
             sequence=row['step_id'])) for row in steps]
@@ -253,7 +265,8 @@ class RaesDwAgentJobStep(models.Model):
     sequence = fields.Integer(default=10)
     name = fields.Char('Step name', required=True)
     step_type = fields.Selection(
-        [('etl', 'ETL (stored procedure)'), ('ssas', 'SSAS process')],
+        [('etl', 'ETL (stored procedure)'), ('ssas', 'SSAS process'),
+         ('custom', 'Custom')],
         string='Type', required=True, default='etl')
 
     # --- ETL -------------------------------------------------------------
@@ -263,6 +276,12 @@ class RaesDwAgentJobStep(models.Model):
     param_ids = fields.One2many('raes.dw.agent.job.param', 'step_id',
                                 'Parameters', copy=True)
     command_preview = fields.Text(compute='_compute_command_preview')
+
+    # --- Custom: any subsystem, command sent as typed ------------------
+    subsystem = fields.Selection([(x, x) for x in SUBSYSTEMS], default='TSQL')
+    command = fields.Text()
+    server = fields.Char(help='Analysis Services server, for ANALYSIS* '
+                              'subsystems. Empty = the DW connection host.')
 
     # --- SSAS ------------------------------------------------------------
     ssas_server = fields.Char(
@@ -275,7 +294,7 @@ class RaesDwAgentJobStep(models.Model):
         [(t, t) for t in sched.SSAS_REFRESH], string='Refresh type',
         default='full', required=True)
 
-    @api.depends('step_type', 'procedure', 'param_ids.value',
+    @api.depends('step_type', 'command', 'procedure', 'param_ids.value',
                  'param_ids.name', 'param_ids.sql_type', 'ssas_database',
                  'ssas_refresh_type')
     def _compute_command_preview(self):
@@ -286,6 +305,8 @@ class RaesDwAgentJobStep(models.Model):
                 rec.command_preview = '-- %s' % e
 
     def _command(self):
+        if self.step_type == 'custom':
+            return self.command or ''
         if self.step_type == 'ssas':
             return sched.build_ssas_command(self.ssas_database,
                                             self.ssas_refresh_type)
@@ -295,6 +316,17 @@ class RaesDwAgentJobStep(models.Model):
     def _agent_args(self):
         """sp_add_jobstep arguments; ValueError on anything unsafe/missing."""
         conn = self.job_id.connection_id
+        if self.step_type == 'custom':
+            if not (self.subsystem and self.command):
+                raise ValueError('Step "%s": set the subsystem and command.'
+                                 % self.name)
+            tsql = self.subsystem == 'TSQL'
+            return {'name': self.name, 'subsystem': self.subsystem,
+                    'command': self.command,
+                    'database': sched.check_identifier(
+                        self.database or conn.database) if tsql else None,
+                    'server': (self.server or conn.host)
+                    if self.subsystem.startswith('ANALYSIS') else None}
         if self.step_type == 'ssas':
             if not self.ssas_database:
                 raise ValueError('Step "%s": set the SSAS database.' % self.name)
@@ -308,7 +340,8 @@ class RaesDwAgentJobStep(models.Model):
 
     @api.model
     def _from_msdb(self, row):
-        """sysjobsteps row -> create values; UserError on steps we can't edit."""
+        """sysjobsteps row -> create values. Anything that isn't a plain EXEC
+        or an SSAS refresh loads as a Custom step, kept verbatim."""
         vals = {'name': row['step_name']}
         if row['subsystem'] == 'ANALYSISCOMMAND':
             db, refresh = sched.parse_ssas_command(row['command'])
@@ -326,11 +359,10 @@ class RaesDwAgentJobStep(models.Model):
                                 {'name': n, 'sql_type': t, 'value': v,
                                  'sequence': i})
                                 for i, (n, t, v) in enumerate(args)])
-        raise UserError(_(
-            'Step %(id)s "%(name)s" (%(sub)s) is neither a single EXEC of a '
-            'procedure nor an SSAS refresh, so it can\'t be edited here. '
-            'Change it in SSMS.', id=row['step_id'], name=row['step_name'],
-            sub=row['subsystem']))
+        return dict(vals, step_type='custom', subsystem=row['subsystem'],
+                    command=row['command'],
+                    database=row['database_name'] or False,
+                    server=row['server'] or False)
 
     def action_fetch_params(self):
         """Rebuild the parameter rows from the procedure's signature

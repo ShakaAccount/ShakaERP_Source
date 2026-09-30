@@ -171,6 +171,22 @@
                             </list>
                         </field>
                     </div>
+                    <group invisible="step_type != 'custom'">
+                        <group>
+                            <field name="subsystem"
+                                   required="step_type == 'custom'"/>
+                            <field name="database"
+                                   placeholder="connection database"
+                                   invisible="subsystem != 'TSQL'"/>
+                            <field name="server"
+                                   placeholder="same as DW connection host"
+                                   invisible="subsystem not in ('ANALYSISQUERY', 'ANALYSISCOMMAND')"/>
+                        </group>
+                        <field name="command" colspan="2" nolabel="1"
+                               class="font-monospace"
+                               required="step_type == 'custom'"
+                               placeholder="Command, sent to SQL Agent as typed"/>
+                    </group>
                     <group invisible="step_type != 'ssas'">
                         <group>
                             <field name="ssas_server"
@@ -180,7 +196,8 @@
                             <field name="ssas_refresh_type"/>
                         </group>
                     </group>
-                    <group string="Job step command">
+                    <group string="Job step command"
+                           invisible="step_type == 'custom'">
                         <field name="command_preview" nolabel="1"
                                colspan="2" class="font-monospace"/>
                     </group>
